@@ -1,0 +1,575 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FocusBox</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #101522;
+    color: white;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 25px 20px 35px;
+    text-align: center;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.settings {
+    border: 0;
+    background: #20283a;
+    color: white;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    font-size: 20px;
+}
+
+/* Greeting */
+.greeting {
+    margin-top: 45px;
+}
+
+.greeting h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.greeting p {
+    color: #8993a7;
+}
+
+/* Timer */
+.timer-container {
+    width: 280px;
+    height: 280px;
+    margin: 45px auto 35px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+
+    background:
+        conic-gradient(
+            #8067ff var(--progress),
+            #252d40 var(--progress)
+        );
+
+    position: relative;
+}
+
+.timer-container::before {
+    content: "";
+    position: absolute;
+    width: 245px;
+    height: 245px;
+    border-radius: 50%;
+    background: #101522;
+}
+
+.timer {
+    position: relative;
+    z-index: 2;
+}
+
+.time {
+    font-size: 58px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.mode {
+    color: #8f99ad;
+    margin-top: 5px;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.control {
+    border: 0;
+    cursor: pointer;
+    border-radius: 18px;
+    font-weight: bold;
+}
+
+.main-btn {
+    width: 150px;
+    padding: 17px;
+    background: #8067ff;
+    color: white;
+    font-size: 17px;
+    box-shadow: 0 10px 30px rgba(128,103,255,.25);
+}
+
+.reset-btn {
+    width: 55px;
+    height: 55px;
+    background: #20283a;
+    color: white;
+    font-size: 20px;
+}
+
+/* Stats */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 40px;
+}
+
+.stat {
+    background: #181f2e;
+    padding: 18px;
+    border-radius: 20px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.stat-label {
+    color: #8993a7;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Task */
+.task-card {
+    margin-top: 20px;
+    background: #181f2e;
+    border-radius: 20px;
+    padding: 18px;
+    text-align: left;
+}
+
+.task-card label {
+    color: #8993a7;
+    font-size: 12px;
+}
+
+.task-card input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px;
+    border: 1px solid #30394d;
+    border-radius: 13px;
+    background: #101522;
+    color: white;
+    outline: none;
+}
+
+.task-card input:focus {
+    border-color: #8067ff;
+}
+
+/* Quote */
+.quote {
+    margin-top: 25px;
+    padding: 18px;
+    background: #181f2e;
+    border-radius: 20px;
+    color: #a8b0bf;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Mobile */
+@media(max-width:350px) {
+
+    .timer-container {
+        width: 240px;
+        height: 240px;
+    }
+
+    .timer-container::before {
+        width: 210px;
+        height: 210px;
+    }
+
+    .time {
+        font-size: 48px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+
+        <div class="logo">
+            🎯 FocusBox
+        </div>
+
+        <button class="settings" onclick="showMessage('Settings coming soon ⚙️')">
+            ⚙️
+        </button>
+
+    </header>
+
+
+    <section class="greeting">
+
+        <h1>Time to focus.</h1>
+
+        <p id="taskStatus">
+            One session at a time.
+        </p>
+
+    </section>
+
+
+    <!-- Timer -->
+
+    <div
+        class="timer-container"
+        id="timerCircle"
+        style="--progress: 0%"
+    >
+
+        <div class="timer">
+
+            <div
+                class="time"
+                id="time"
+            >
+                25:00
+            </div>
+
+            <div
+                class="mode"
+                id="mode"
+            >
+                Focus session
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Controls -->
+
+    <div class="controls">
+
+        <button
+            class="control reset-btn"
+            onclick="resetTimer()"
+            title="Reset"
+        >
+            ↻
+        </button>
+
+        <button
+            class="control main-btn"
+            id="startButton"
+            onclick="toggleTimer()"
+        >
+            Start Focus
+        </button>
+
+    </div>
+
+
+    <!-- Task -->
+
+    <div class="task-card">
+
+        <label>
+            WHAT ARE YOU WORKING ON?
+        </label>
+
+        <input
+            id="task"
+            type="text"
+            placeholder="e.g. Finish my project"
+            oninput="updateTask()"
+        >
+
+    </div>
+
+
+    <!-- Stats -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <span
+                class="stat-number"
+                id="sessions"
+            >
+                0
+            </span>
+
+            <span class="stat-label">
+                Sessions today
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <span
+                class="stat-number"
+                id="minutes"
+            >
+                0
+            </span>
+
+            <span class="stat-label">
+                Focus minutes
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="quote">
+        💡 Put your phone away, choose one task,
+        and give it your full attention.
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+    FocusBox
+    25-minute Pomodoro timer
+*/
+
+const FOCUS_TIME = 25 * 60;
+
+let remaining = FOCUS_TIME;
+let timer = null;
+let running = false;
+
+let sessions = 0;
+let minutes = 0;
+
+
+/* Update timer display */
+
+function updateDisplay() {
+
+    const mins = Math.floor(remaining / 60);
+
+    const secs = remaining % 60;
+
+    document.getElementById("time").innerText =
+        String(mins).padStart(2, "0") +
+        ":" +
+        String(secs).padStart(2, "0");
+
+
+    /* Progress ring */
+
+    const completed =
+        ((FOCUS_TIME - remaining) / FOCUS_TIME) * 100;
+
+    document
+        .getElementById("timerCircle")
+        .style.setProperty(
+            "--progress",
+            completed + "%"
+        );
+}
+
+
+/* Start / Pause */
+
+function toggleTimer() {
+
+    if (running) {
+
+        pauseTimer();
+
+    } else {
+
+        startTimer();
+
+    }
+}
+
+
+/* Start */
+
+function startTimer() {
+
+    running = true;
+
+    document.getElementById("startButton").innerText =
+        "Pause";
+
+    document.getElementById("mode").innerText =
+        "Focusing...";
+
+    timer = setInterval(() => {
+
+        remaining--;
+
+        updateDisplay();
+
+        if (remaining <= 0) {
+
+            finishSession();
+
+        }
+
+    }, 1000);
+}
+
+
+/* Pause */
+
+function pauseTimer() {
+
+    clearInterval(timer);
+
+    timer = null;
+
+    running = false;
+
+    document.getElementById("startButton").innerText =
+        "Resume";
+
+    document.getElementById("mode").innerText =
+        "Paused";
+}
+
+
+/* Finish */
+
+function finishSession() {
+
+    clearInterval(timer);
+
+    timer = null;
+
+    running = false;
+
+    sessions++;
+
+    minutes += 25;
+
+    document.getElementById("sessions").innerText =
+        sessions;
+
+    document.getElementById("minutes").innerText =
+        minutes;
+
+    document.getElementById("startButton").innerText =
+        "Start Again";
+
+    document.getElementById("mode").innerText =
+        "Session complete 🎉";
+
+    document.getElementById("taskStatus").innerText =
+        "Great work! Take a short break.";
+
+    alert(
+        "🎉 Focus session complete!\n\n" +
+        "Take a 5-minute break."
+    );
+
+    remaining = FOCUS_TIME;
+
+    updateDisplay();
+}
+
+
+/* Reset */
+
+function resetTimer() {
+
+    clearInterval(timer);
+
+    timer = null;
+
+    running = false;
+
+    remaining = FOCUS_TIME;
+
+    document.getElementById("startButton").innerText =
+        "Start Focus";
+
+    document.getElementById("mode").innerText =
+        "Focus session";
+
+    updateDisplay();
+}
+
+
+/* Task */
+
+function updateTask() {
+
+    const task =
+        document.getElementById("task").value.trim();
+
+    if (task) {
+
+        document.getElementById("taskStatus").innerText =
+            "Working on: " + task;
+
+    } else {
+
+        document.getElementById("taskStatus").innerText =
+            "One session at a time.";
+
+    }
+}
+
+
+/* Message */
+
+function showMessage(message) {
+
+    alert(message);
+
+}
+
+
+/* Initial */
+
+updateDisplay();
+
+</script>
+
+</body>
+</html>
