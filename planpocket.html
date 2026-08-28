@@ -1,0 +1,1935 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0f766e">
+<title>PlanPocket</title>
+
+<style>
+:root{
+    --bg:#f3f8f7;
+    --card:#fff;
+    --text:#172523;
+    --muted:#82908d;
+    --line:#e1e9e7;
+    --primary:#0f766e;
+    --primary2:#14b8a6;
+    --soft:#e4f7f4;
+    --gold:#f59e0b;
+    --goldSoft:#fff5dd;
+    --red:#dc2626;
+    --redSoft:#fff0f0;
+    --green:#16a34a;
+    --shadow:0 10px 30px rgba(24,55,51,.07);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:auto;
+    overflow:hidden;
+}
+
+/* HEADER */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 30px;
+    color:#fff;
+    background:
+        linear-gradient(
+            145deg,
+            #115e59,
+            #0f766e 55%,
+            #14b8a6
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header:before{
+    content:"";
+    position:absolute;
+    width:190px;
+    height:190px;
+    right:-90px;
+    top:-105px;
+    border-radius:50%;
+    background:rgba(255,255,255,.10);
+}
+
+.header:after{
+    content:"";
+    position:absolute;
+    width:140px;
+    height:140px;
+    left:-75px;
+    bottom:-95px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.brandIcon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    font-size:22px;
+}
+
+.brandName{
+    font-size:21px;
+    font-weight:850;
+}
+
+.themeBtn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    color:white;
+    font-size:17px;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:24px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    margin:8px 0 0;
+    max-width:330px;
+    color:rgba(255,255,255,.84);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+    padding:18px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:17px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:21px;
+    box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:15px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* DATE */
+
+.dateBox{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.dateIcon{
+    width:58px;
+    height:58px;
+    display:grid;
+    place-items:center;
+    flex-shrink:0;
+    border-radius:17px;
+    background:var(--soft);
+    color:var(--primary);
+}
+
+.dateDay{
+    font-size:27px;
+    font-weight:850;
+    line-height:1;
+}
+
+.dateMonth{
+    margin-top:4px;
+    font-size:10px;
+    font-weight:750;
+    text-transform:uppercase;
+}
+
+.dateInfo h3{
+    margin:0;
+    font-size:15px;
+}
+
+.dateInfo p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* PROGRESS */
+
+.progressTop{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.progressCircle{
+    width:65px;
+    height:65px;
+    flex-shrink:0;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:
+        conic-gradient(
+            var(--primary) var(--progress,0%),
+            #e6ecea 0
+        );
+    position:relative;
+}
+
+.progressCircle:after{
+    content:"";
+    position:absolute;
+    width:49px;
+    height:49px;
+    border-radius:50%;
+    background:var(--card);
+}
+
+.progressCircle strong{
+    position:relative;
+    z-index:2;
+    font-size:13px;
+}
+
+.progressText{
+    flex:1;
+}
+
+.progressText h3{
+    margin:0;
+    font-size:15px;
+}
+
+.progressText p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.45;
+}
+
+.progressBar{
+    height:8px;
+    margin-top:15px;
+    overflow:hidden;
+    border-radius:20px;
+    background:#e7edeb;
+}
+
+.progressFill{
+    width:0;
+    height:100%;
+    border-radius:inherit;
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--primary2)
+        );
+    transition:.3s;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:13px;
+}
+
+.stat{
+    padding:11px 5px;
+    text-align:center;
+    border-radius:14px;
+    background:var(--bg);
+}
+
+.stat strong{
+    display:block;
+    font-size:18px;
+}
+
+.stat span{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* SEARCH */
+
+.search{
+    position:relative;
+}
+
+.searchIcon{
+    position:absolute;
+    top:11px;
+    left:13px;
+}
+
+.search input{
+    width:100%;
+    padding:12px 12px 12px 37px;
+    border:1px solid var(--line);
+    border-radius:13px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.search input:focus{
+    border-color:var(--primary);
+}
+
+/* FILTERS */
+
+.filters{
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    padding:13px 0 3px;
+    scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{
+    display:none;
+}
+
+.filter{
+    flex-shrink:0;
+    padding:9px 12px;
+    border:0;
+    border-radius:11px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:10px;
+    font-weight:750;
+}
+
+.filter.active{
+    background:var(--primary);
+    color:white;
+}
+
+/* PLAN */
+
+.plan{
+    display:flex;
+    gap:11px;
+    padding:13px 0;
+    border-bottom:1px solid var(--line);
+}
+
+.plan:last-child{
+    border-bottom:0;
+}
+
+.planCheck{
+    width:25px;
+    height:25px;
+    flex-shrink:0;
+    display:grid;
+    place-items:center;
+    margin-top:2px;
+    border:2px solid #ccd8d5;
+    border-radius:8px;
+    background:transparent;
+    color:white;
+    font-size:13px;
+}
+
+.plan.done .planCheck{
+    border-color:var(--primary);
+    background:var(--primary);
+}
+
+.planBody{
+    flex:1;
+    min-width:0;
+}
+
+.planName{
+    font-size:13px;
+    font-weight:800;
+}
+
+.plan.done .planName{
+    color:var(--muted);
+    text-decoration:line-through;
+}
+
+.planMeta{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:5px;
+    margin-top:5px;
+}
+
+.badge{
+    padding:4px 7px;
+    border-radius:7px;
+    background:var(--soft);
+    color:var(--primary);
+    font-size:8px;
+    font-weight:800;
+}
+
+.priority{
+    background:var(--goldSoft);
+    color:var(--gold);
+}
+
+.time{
+    color:var(--muted);
+    font-size:9px;
+}
+
+.planDelete{
+    width:32px;
+    height:32px;
+    flex-shrink:0;
+    border:0;
+    border-radius:9px;
+    background:var(--bg);
+    color:var(--muted);
+}
+
+/* ADD */
+
+.addBtn{
+    width:100%;
+    margin-top:12px;
+    padding:14px;
+    border:0;
+    border-radius:14px;
+    background:var(--primary);
+    color:#fff;
+    font-weight:800;
+}
+
+/* EMPTY */
+
+.empty{
+    padding:30px 8px 17px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.emptyIcon{
+    font-size:41px;
+}
+
+.empty h3{
+    margin:8px 0 4px;
+    color:var(--text);
+    font-size:14px;
+}
+
+.empty p{
+    margin:0;
+    font-size:11px;
+}
+
+/* FAB */
+
+.fab{
+    position:fixed;
+    right:max(22px,calc((100vw - 430px)/2 + 22px));
+    bottom:23px;
+    z-index:10;
+    width:59px;
+    height:59px;
+    border:0;
+    border-radius:20px;
+    background:var(--primary);
+    color:#fff;
+    font-size:28px;
+    box-shadow:0 12px 28px rgba(15,118,110,.28);
+}
+
+/* MODAL */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(0,0,0,.48);
+}
+
+.overlay.show{
+    display:flex;
+}
+
+.modal{
+    width:min(430px,100%);
+    max-height:92vh;
+    overflow:auto;
+    padding:23px 18px 30px;
+    background:var(--card);
+    border-radius:28px 28px 0 0;
+}
+
+.modalHead{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:17px;
+}
+
+.modalHead h2{
+    margin:0;
+    font-size:19px;
+}
+
+.closeBtn{
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:10px;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.field{
+    margin-bottom:12px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:6px;
+    font-size:11px;
+    font-weight:750;
+}
+
+.field input,
+.field select{
+    width:100%;
+    padding:13px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:var(--primary);
+}
+
+.saveBtn{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:13px;
+    background:var(--primary);
+    color:white;
+    font-weight:800;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:92px;
+    z-index:50;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#172523;
+    color:#fff;
+    font-size:11px;
+    white-space:nowrap;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+    --bg:#0e1716;
+    --card:#172220;
+    --text:#edf7f5;
+    --muted:#91a3a0;
+    --line:#293936;
+    --soft:#153b36;
+    --shadow:0 12px 35px rgba(0,0,0,.22);
+}
+
+body.dark .progressBar{
+    background:#293633;
+}
+
+body.dark .progressCircle:after{
+    background:var(--card);
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(30,50,48,.12);
+    }
+}
+
+/* SMALL PHONE */
+
+@media(max-width:350px){
+
+    .content{
+        padding:14px;
+    }
+
+    .header{
+        padding:18px 15px 27px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brandIcon">
+                📅
+            </div>
+
+            <div class="brandName">
+                PlanPocket
+            </div>
+
+        </div>
+
+        <button
+            class="themeBtn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+    <div class="hero">
+
+        <h1>
+            Plan less.<br>
+            Do more.
+        </h1>
+
+        <p>
+            Keep today's plans clear, simple and right in your pocket.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- DATE CARD -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📆 Today
+        </h2>
+
+        <span id="todayLabel">
+            Today
+        </span>
+
+    </div>
+
+    <div class="dateBox">
+
+        <div class="dateIcon">
+
+            <div>
+
+                <div
+                    class="dateDay"
+                    id="dateDay"
+                >
+                    23
+                </div>
+
+                <div
+                    class="dateMonth"
+                    id="dateMonth"
+                >
+                    AUG
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="dateInfo">
+
+            <h3 id="weekday">
+                Sunday
+            </h3>
+
+            <p>
+                Make today count, one plan at a time.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PROGRESS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            🎯 Daily Progress
+        </h2>
+
+        <span id="progressStatus">
+            0%
+        </span>
+
+    </div>
+
+
+    <div class="progressTop">
+
+        <div
+            class="progressCircle"
+            id="progressCircle"
+        >
+
+            <strong id="progressPercent">
+                0%
+            </strong>
+
+        </div>
+
+
+        <div class="progressText">
+
+            <h3 id="progressTitle">
+                Ready when you are
+            </h3>
+
+            <p id="progressMessage">
+                Add a few plans and start your day.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="progressBar">
+
+        <div
+            class="progressFill"
+            id="progressFill"
+        ></div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <strong id="totalCount">
+                0
+            </strong>
+
+            <span>
+                Plans
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <strong id="doneCount">
+                0
+            </strong>
+
+            <span>
+                Done
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <strong id="leftCount">
+                0
+            </strong>
+
+            <span>
+                Left
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PLANS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📝 Today's Plans
+        </h2>
+
+        <span id="visibleCount">
+            0 plans
+        </span>
+
+    </div>
+
+
+    <div class="search">
+
+        <span class="searchIcon">
+            🔍
+        </span>
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Search plans..."
+            oninput="renderPlans()"
+        >
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="setFilter('all',this)"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('work',this)"
+        >
+            💼 Work
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('study',this)"
+        >
+            📚 Study
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('personal',this)"
+        >
+            🏠 Personal
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('other',this)"
+        >
+            📦 Other
+        </button>
+
+    </div>
+
+
+    <div id="planList"></div>
+
+
+    <button
+        class="addBtn"
+        onclick="openModal()"
+    >
+        ＋ Add New Plan
+    </button>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- FAB -->
+
+<button
+    class="fab"
+    onclick="openModal()"
+>
+    +
+</button>
+
+
+<!-- MODAL -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+    <div class="modal">
+
+        <div class="modalHead">
+
+            <h2>
+                Add New Plan
+            </h2>
+
+            <button
+                class="closeBtn"
+                onclick="closeModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Plan name
+            </label>
+
+            <input
+                id="planName"
+                type="text"
+                placeholder="e.g. Finish project"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Time
+            </label>
+
+            <input
+                id="planTime"
+                type="time"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Category
+            </label>
+
+            <select id="planCategory">
+
+                <option value="work">
+                    💼 Work
+                </option>
+
+                <option value="study">
+                    📚 Study
+                </option>
+
+                <option value="personal">
+                    🏠 Personal
+                </option>
+
+                <option value="other">
+                    📦 Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Priority
+            </label>
+
+            <select id="planPriority">
+
+                <option value="normal">
+                    Normal
+                </option>
+
+                <option value="high">
+                    ⭐ High Priority
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <button
+            class="saveBtn"
+            onclick="savePlan()"
+        >
+            📅 Add Plan
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+
+/* =========================
+   DATA
+========================= */
+
+let plans =
+    JSON.parse(
+        localStorage.getItem("planPocketPlans") || "[]"
+    );
+
+let activeFilter = "all";
+
+let toastTimer;
+
+
+/* =========================
+   DEFAULT PLANS
+========================= */
+
+if(plans.length === 0){
+
+    plans = [
+
+        {
+            id:Date.now()+1,
+            name:"Review today's priorities",
+            time:"09:00",
+            category:"work",
+            priority:"high",
+            done:false
+        },
+
+        {
+            id:Date.now()+2,
+            name:"Study for 30 minutes",
+            time:"11:00",
+            category:"study",
+            priority:"normal",
+            done:false
+        },
+
+        {
+            id:Date.now()+3,
+            name:"Go for a short walk",
+            time:"17:30",
+            category:"personal",
+            priority:"normal",
+            done:false
+        },
+
+        {
+            id:Date.now()+4,
+            name:"Plan tomorrow",
+            time:"21:00",
+            category:"other",
+            priority:"high",
+            done:false
+        }
+
+    ];
+
+    savePlans();
+
+}
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function savePlans(){
+
+    localStorage.setItem(
+        "planPocketPlans",
+        JSON.stringify(plans)
+    );
+
+}
+
+
+/* =========================
+   CATEGORY
+========================= */
+
+function categoryIcon(category){
+
+    const icons = {
+
+        work:"💼",
+        study:"📚",
+        personal:"🏠",
+        other:"📦"
+
+    };
+
+    return icons[category] || "📦";
+
+}
+
+
+function categoryName(category){
+
+    const names = {
+
+        work:"Work",
+        study:"Study",
+        personal:"Personal",
+        other:"Other"
+
+    };
+
+    return names[category] || "Other";
+
+}
+
+
+/* =========================
+   TIME
+========================= */
+
+function formatTime(value){
+
+    if(!value){
+        return "Anytime";
+    }
+
+    const parts =
+        value.split(":");
+
+    let hour =
+        Number(parts[0]);
+
+    const minute =
+        parts[1];
+
+    const suffix =
+        hour >= 12
+            ? "PM"
+            : "AM";
+
+    hour =
+        hour % 12 || 12;
+
+    return `${hour}:${minute} ${suffix}`;
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function renderPlans(){
+
+    const container =
+        document.getElementById("planList");
+
+    const query =
+        document.getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        plans.filter(plan => {
+
+            const searchMatch =
+                plan.name
+                    .toLowerCase()
+                    .includes(query);
+
+            const categoryMatch =
+                activeFilter === "all" ||
+                plan.category === activeFilter;
+
+            return searchMatch && categoryMatch;
+
+        });
+
+
+    document.getElementById("visibleCount")
+        .textContent =
+        filtered.length +
+        (
+            filtered.length === 1
+                ? " plan"
+                : " plans"
+        );
+
+
+    if(filtered.length === 0){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="emptyIcon">
+                    📅
+                </div>
+
+                <h3>
+                    No plans found
+                </h3>
+
+                <p>
+                    Add a plan and organize your day.
+                </p>
+
+            </div>
+
+        `;
+
+    }else{
+
+        container.innerHTML =
+            filtered.map(plan => `
+
+                <div
+                    class="plan ${
+                        plan.done
+                            ? "done"
+                            : ""
+                    }"
+                >
+
+                    <button
+                        class="planCheck"
+                        onclick="togglePlan(${plan.id})"
+                    >
+                        ${
+                            plan.done
+                                ? "✓"
+                                : ""
+                        }
+                    </button>
+
+
+                    <div class="planBody">
+
+                        <div class="planName">
+                            ${escapeHTML(plan.name)}
+                        </div>
+
+
+                        <div class="planMeta">
+
+                            <span class="badge">
+                                ${categoryIcon(plan.category)}
+                                ${categoryName(plan.category)}
+                            </span>
+
+
+                            <span class="time">
+                                ⏰ ${formatTime(plan.time)}
+                            </span>
+
+
+                            ${
+                                plan.priority === "high"
+                                ? `
+                                    <span class="badge priority">
+                                        ⭐ Priority
+                                    </span>
+                                `
+                                : ""
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="planDelete"
+                        onclick="deletePlan(${plan.id})"
+                        title="Delete"
+                    >
+                        🗑️
+                    </button>
+
+                </div>
+
+            `).join("");
+
+    }
+
+
+    updateProgress();
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function updateProgress(){
+
+    const total =
+        plans.length;
+
+    const done =
+        plans.filter(
+            plan => plan.done
+        ).length;
+
+    const left =
+        total - done;
+
+
+    const percent =
+        total === 0
+            ? 0
+            : Math.round(
+                done / total * 100
+            );
+
+
+    document.getElementById("totalCount")
+        .textContent = total;
+
+    document.getElementById("doneCount")
+        .textContent = done;
+
+    document.getElementById("leftCount")
+        .textContent = left;
+
+    document.getElementById("progressPercent")
+        .textContent =
+        percent + "%";
+
+    document.getElementById("progressStatus")
+        .textContent =
+        percent + "%";
+
+
+    document.getElementById("progressFill")
+        .style.width =
+        percent + "%";
+
+
+    document.getElementById("progressCircle")
+        .style.setProperty(
+            "--progress",
+            percent + "%"
+        );
+
+
+    const title =
+        document.getElementById("progressTitle");
+
+    const message =
+        document.getElementById("progressMessage");
+
+
+    if(total === 0){
+
+        title.textContent =
+            "Ready when you are";
+
+        message.textContent =
+            "Add a few plans and start your day.";
+
+    }else if(percent === 100){
+
+        title.textContent =
+            "🎉 Day complete!";
+
+        message.textContent =
+            "Amazing work. You finished everything.";
+
+    }else if(percent >= 70){
+
+        title.textContent =
+            "Almost there!";
+
+        message.textContent =
+            "You're doing great. Finish the last few plans.";
+
+    }else if(percent > 0){
+
+        title.textContent =
+            "Nice progress!";
+
+        message.textContent =
+            "Keep moving through your plans.";
+
+    }else{
+
+        title.textContent =
+            "Ready when you are";
+
+        message.textContent =
+            "Start with one small plan.";
+
+    }
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(filter,button){
+
+    activeFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(
+            item =>
+                item.classList.remove("active")
+        );
+
+
+    button.classList.add("active");
+
+    renderPlans();
+
+}
+
+
+/* =========================
+   TOGGLE
+========================= */
+
+function togglePlan(id){
+
+    const plan =
+        plans.find(
+            item => item.id === id
+        );
+
+    if(!plan) return;
+
+
+    plan.done =
+        !plan.done;
+
+
+    savePlans();
+
+    renderPlans();
+
+
+    showToast(
+        plan.done
+            ? "✓ Plan completed!"
+            : "Plan marked incomplete."
+    );
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deletePlan(id){
+
+    const plan =
+        plans.find(
+            item => item.id === id
+        );
+
+    if(!plan) return;
+
+
+    if(
+        !confirm(
+            `Delete "${plan.name}"?`
+        )
+    ){
+        return;
+    }
+
+
+    plans =
+        plans.filter(
+            item => item.id !== id
+        );
+
+
+    savePlans();
+
+    renderPlans();
+
+    showToast(
+        "Plan deleted."
+    );
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(){
+
+    document.getElementById("planName")
+        .value = "";
+
+    document.getElementById("planTime")
+        .value = "";
+
+    document.getElementById("planCategory")
+        .value = "work";
+
+    document.getElementById("planPriority")
+        .value = "normal";
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+
+    setTimeout(
+        () =>
+            document
+                .getElementById("planName")
+                .focus(),
+        50
+    );
+
+}
+
+
+function closeModal(){
+
+    document.getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+function savePlan(){
+
+    const name =
+        document.getElementById("planName")
+            .value
+            .trim();
+
+    const time =
+        document.getElementById("planTime")
+            .value;
+
+    const category =
+        document.getElementById("planCategory")
+            .value;
+
+    const priority =
+        document.getElementById("planPriority")
+            .value;
+
+
+    if(!name){
+
+        showToast(
+            "Please enter a plan name."
+        );
+
+        return;
+
+    }
+
+
+    plans.push({
+
+        id:Date.now(),
+
+        name:name,
+
+        time:time,
+
+        category:category,
+
+        priority:priority,
+
+        done:false
+
+    });
+
+
+    plans.sort(
+        (a,b) =>
+            (a.time || "99:99")
+                .localeCompare(
+                    b.time || "99:99"
+                )
+    );
+
+
+    savePlans();
+
+    closeModal();
+
+    renderPlans();
+
+    showToast(
+        "📅 Plan added!"
+    );
+
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function setDate(){
+
+    const date =
+        new Date();
+
+
+    document.getElementById("dateDay")
+        .textContent =
+        date.getDate();
+
+
+    document.getElementById("dateMonth")
+        .textContent =
+        date.toLocaleDateString(
+            undefined,
+            {
+                month:"short"
+            }
+        ).toUpperCase();
+
+
+    document.getElementById("weekday")
+        .textContent =
+        date.toLocaleDateString(
+            undefined,
+            {
+                weekday:"long"
+            }
+        );
+
+
+    document.getElementById("todayLabel")
+        .textContent =
+        date.toLocaleDateString(
+            undefined,
+            {
+                month:"short",
+                day:"numeric"
+            }
+        );
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+
+    const dark =
+        document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "planPocketDark",
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById("themeBtn")
+        .textContent =
+        dark
+            ? "☀️"
+            : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            "planPocketDark"
+        ) === "1";
+
+
+    if(dark){
+
+        document.body.classList.add("dark");
+
+        document.getElementById("themeBtn")
+            .textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+                toast.classList.remove("show");
+            },
+            2200
+        );
+
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   MODAL EVENTS
+========================= */
+
+document
+    .getElementById("overlay")
+    .addEventListener(
+        "click",
+        event => {
+
+            if(
+                event.target.id === "overlay"
+            ){
+                closeModal();
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Escape"){
+            closeModal();
+        }
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+setDate();
+
+renderPlans();
+
+</script>
+
+</body>
+</html>

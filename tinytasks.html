@@ -1,0 +1,1046 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TinyTasks</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f6f8;
+    color: #20242d;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 90px;
+}
+
+/* Header */
+
+.header {
+    padding: 27px 20px 25px;
+    background: linear-gradient(135deg, #222733, #3b4352);
+    color: white;
+    border-radius: 0 0 30px 30px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.date {
+    color: #aeb5c1;
+    font-size: 12px;
+}
+
+.header h1 {
+    font-size: 29px;
+    margin: 28px 0 5px;
+}
+
+.header p {
+    color: #b5bcc8;
+    margin: 0;
+}
+
+/* Progress */
+
+.progress-card {
+    margin: -3px 20px 0;
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 7px 20px rgba(0,0,0,.08);
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.progress-top small {
+    color: #818997;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #e9ebef;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #333b4b;
+    border-radius: 20px;
+    transition: .3s;
+}
+
+/* Content */
+
+.content {
+    padding: 20px;
+}
+
+/* Search */
+
+.search {
+    position: relative;
+}
+
+.search input {
+    width: 100%;
+    border: none;
+    background: white;
+    padding: 15px 18px 15px 45px;
+    border-radius: 16px;
+    outline: none;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.05);
+}
+
+.search span {
+    position: absolute;
+    left: 16px;
+    top: 14px;
+}
+
+/* Tabs */
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 17px 0 5px;
+}
+
+.tab {
+    white-space: nowrap;
+    border: none;
+    background: white;
+    color: #697180;
+    padding: 10px 15px;
+    border-radius: 13px;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #2e3543;
+    color: white;
+}
+
+/* Tasks */
+
+.tasks {
+    margin-top: 10px;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    padding: 15px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+}
+
+.check {
+    width: 23px;
+    height: 23px;
+    border: 2px solid #c8cdd5;
+    border-radius: 8px;
+    background: white;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.task.done .check {
+    background: #2e3543;
+    border-color: #2e3543;
+}
+
+.task.done .check::after {
+    content: "✓";
+    color: white;
+    display: block;
+    text-align: center;
+    line-height: 19px;
+    font-size: 13px;
+}
+
+.task-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-title {
+    font-size: 14px;
+    font-weight: bold;
+    word-break: break-word;
+}
+
+.task.done .task-title {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.task-meta {
+    margin-top: 5px;
+    color: #9299a6;
+    font-size: 10px;
+}
+
+.priority {
+    font-size: 10px;
+    font-weight: bold;
+    padding: 5px 7px;
+    border-radius: 8px;
+}
+
+.high {
+    background: #fff0f0;
+    color: #e34d4d;
+}
+
+.medium {
+    background: #fff6df;
+    color: #c98900;
+}
+
+.low {
+    background: #edf8f1;
+    color: #29945c;
+}
+
+.more {
+    border: none;
+    background: transparent;
+    color: #999;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Empty */
+
+.empty {
+    text-align: center;
+    color: #8c929c;
+    padding: 55px 20px;
+}
+
+.empty-icon {
+    font-size: 50px;
+}
+
+/* Floating */
+
+.add {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 20px;
+    background: #2e3543;
+    color: white;
+    font-size: 30px;
+    box-shadow: 0 10px 25px rgba(46,53,67,.3);
+    cursor: pointer;
+}
+
+/* Modal */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(420px,100%);
+    background: white;
+    padding: 24px 20px 30px;
+    border-radius: 28px 28px 0 0;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal input,
+.modal select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 13px;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.save {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: #2e3543;
+    color: white;
+    font-weight: bold;
+}
+
+.cancel {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 14px;
+    color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <div class="header-top">
+
+            <div class="logo">
+                ✅ TinyTasks
+            </div>
+
+            <div
+                class="date"
+                id="date"
+            ></div>
+
+        </div>
+
+        <h1>Keep it simple.</h1>
+
+        <p>
+            Small tasks. Big progress.
+        </p>
+
+    </header>
+
+
+    <!-- Progress -->
+
+    <section class="progress-card">
+
+        <div class="progress-top">
+
+            <strong>
+                Today's progress
+            </strong>
+
+            <small id="progressText">
+                0%
+            </small>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <main class="content">
+
+        <!-- Search -->
+
+        <div class="search">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                id="search"
+                type="text"
+                placeholder="Search tasks..."
+                oninput="renderTasks()"
+            >
+
+        </div>
+
+
+        <!-- Tabs -->
+
+        <div class="tabs">
+
+            <button
+                class="tab active"
+                onclick="setTab('today', this)"
+            >
+                Today
+            </button>
+
+            <button
+                class="tab"
+                onclick="setTab('upcoming', this)"
+            >
+                Upcoming
+            </button>
+
+            <button
+                class="tab"
+                onclick="setTab('completed', this)"
+            >
+                Completed
+            </button>
+
+            <button
+                class="tab"
+                onclick="setTab('all', this)"
+            >
+                All
+            </button>
+
+        </div>
+
+
+        <!-- Tasks -->
+
+        <section
+            class="tasks"
+            id="tasks"
+        ></section>
+
+    </main>
+
+</div>
+
+
+<!-- Add -->
+
+<button
+    class="add"
+    onclick="openModal()"
+>
+    +
+</button>
+
+
+<!-- Modal -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+    <div class="modal">
+
+        <h2 id="modalTitle">
+            New Task
+        </h2>
+
+        <input
+            id="taskName"
+            type="text"
+            placeholder="What needs to be done?"
+        >
+
+        <input
+            id="taskDate"
+            type="date"
+        >
+
+        <select id="taskPriority">
+
+            <option value="low">
+                🟢 Low priority
+            </option>
+
+            <option value="medium">
+                🟡 Medium priority
+            </option>
+
+            <option value="high">
+                🔴 High priority
+            </option>
+
+        </select>
+
+        <button
+            class="save"
+            onclick="saveTask()"
+        >
+            Save Task
+        </button>
+
+        <button
+            class="cancel"
+            onclick="closeModal()"
+        >
+            Cancel
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+    TinyTasks
+    Simple todo application
+*/
+
+
+const today =
+    new Date()
+        .toISOString()
+        .split("T")[0];
+
+
+let tasks =
+    JSON.parse(
+        localStorage.getItem("tinyTasks")
+    ) || [
+
+        {
+            id: 1,
+            name: "Plan the day",
+            date: today,
+            priority: "high",
+            done: false
+        },
+
+        {
+            id: 2,
+            name: "Drink some water",
+            date: today,
+            priority: "low",
+            done: true
+        }
+
+    ];
+
+
+let activeTab = "today";
+
+let editingId = null;
+
+
+/* Date */
+
+document.getElementById("date").innerText =
+    new Date().toLocaleDateString(
+        undefined,
+        {
+            month: "short",
+            day: "numeric"
+        }
+    );
+
+
+/* Save */
+
+function saveData() {
+
+    localStorage.setItem(
+        "tinyTasks",
+        JSON.stringify(tasks)
+    );
+
+}
+
+
+/* Render */
+
+function renderTasks() {
+
+    const container =
+        document.getElementById("tasks");
+
+    const query =
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    let filtered =
+        tasks.filter(task => {
+
+            const matchesSearch =
+                task.name
+                    .toLowerCase()
+                    .includes(query);
+
+
+            let matchesTab = true;
+
+
+            if (activeTab === "today") {
+
+                matchesTab =
+                    task.date === today;
+
+            }
+
+            else if (activeTab === "upcoming") {
+
+                matchesTab =
+                    task.date > today &&
+                    !task.done;
+
+            }
+
+            else if (activeTab === "completed") {
+
+                matchesTab =
+                    task.done;
+
+            }
+
+
+            return (
+                matchesSearch &&
+                matchesTab
+            );
+
+        });
+
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🎉
+                </div>
+
+                <h3>
+                    Nothing here
+                </h3>
+
+                <p>
+                    Add a new task to get started.
+                </p>
+
+            </div>
+
+        `;
+
+    } else {
+
+        container.innerHTML =
+            filtered.map(task => `
+
+                <article
+                    class="task ${task.done ? "done" : ""}"
+                >
+
+                    <button
+                        class="check"
+                        onclick="toggleTask(${task.id})"
+                    ></button>
+
+                    <div class="task-info">
+
+                        <div class="task-title">
+                            ${escapeHTML(task.name)}
+                        </div>
+
+                        <div class="task-meta">
+                            ${formatDate(task.date)}
+                        </div>
+
+                    </div>
+
+                    <span
+                        class="priority ${task.priority}"
+                    >
+                        ${task.priority}
+                    </span>
+
+                    <button
+                        class="more"
+                        onclick="editTask(${task.id})"
+                    >
+                        ⋮
+                    </button>
+
+                </article>
+
+            `).join("");
+
+    }
+
+
+    updateProgress();
+
+}
+
+
+/* Change tab */
+
+function setTab(tab, button) {
+
+    activeTab = tab;
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+    renderTasks();
+
+}
+
+
+/* Toggle */
+
+function toggleTask(id) {
+
+    const task =
+        tasks.find(
+            task => task.id === id
+        );
+
+
+    if (!task) return;
+
+
+    task.done =
+        !task.done;
+
+
+    saveData();
+
+    renderTasks();
+
+}
+
+
+/* Progress */
+
+function updateProgress() {
+
+    const todayTasks =
+        tasks.filter(
+            task => task.date === today
+        );
+
+
+    const completed =
+        todayTasks.filter(
+            task => task.done
+        );
+
+
+    let percentage = 0;
+
+
+    if (todayTasks.length > 0) {
+
+        percentage =
+            Math.round(
+                (completed.length /
+                    todayTasks.length) *
+                100
+            );
+
+    }
+
+
+    document.getElementById("progressText").innerText =
+        percentage + "%";
+
+
+    document.getElementById("progressFill").style.width =
+        percentage + "%";
+
+}
+
+
+/* Open modal */
+
+function openModal() {
+
+    editingId = null;
+
+    document.getElementById("modalTitle").innerText =
+        "New Task";
+
+    document.getElementById("taskName").value =
+        "";
+
+    document.getElementById("taskDate").value =
+        today;
+
+    document.getElementById("taskPriority").value =
+        "low";
+
+    document
+        .getElementById("overlay")
+        .classList.add("show");
+
+    document
+        .getElementById("taskName")
+        .focus();
+
+}
+
+
+/* Close */
+
+function closeModal() {
+
+    document
+        .getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* Save task */
+
+function saveTask() {
+
+    const name =
+        document
+            .getElementById("taskName")
+            .value
+            .trim();
+
+    const date =
+        document
+            .getElementById("taskDate")
+            .value;
+
+    const priority =
+        document
+            .getElementById("taskPriority")
+            .value;
+
+
+    if (!name) {
+
+        alert("Please enter a task.");
+
+        return;
+
+    }
+
+
+    if (editingId !== null) {
+
+        const task =
+            tasks.find(
+                task => task.id === editingId
+            );
+
+
+        if (task) {
+
+            task.name = name;
+
+            task.date =
+                date || today;
+
+            task.priority =
+                priority;
+
+        }
+
+    } else {
+
+        tasks.unshift({
+
+            id: Date.now(),
+
+            name: name,
+
+            date:
+                date || today,
+
+            priority:
+                priority,
+
+            done: false
+
+        });
+
+    }
+
+
+    saveData();
+
+    closeModal();
+
+    renderTasks();
+
+}
+
+
+/* Edit */
+
+function editTask(id) {
+
+    const task =
+        tasks.find(
+            task => task.id === id
+        );
+
+
+    if (!task) return;
+
+
+    editingId = id;
+
+
+    document.getElementById("modalTitle").innerText =
+        "Edit Task";
+
+
+    document.getElementById("taskName").value =
+        task.name;
+
+
+    document.getElementById("taskDate").value =
+        task.date;
+
+
+    document.getElementById("taskPriority").value =
+        task.priority;
+
+
+    document
+        .getElementById("overlay")
+        .classList.add("show");
+
+}
+
+
+/* Format date */
+
+function formatDate(date) {
+
+    if (date === today) {
+
+        return "Today";
+
+    }
+
+
+    const tomorrow =
+        new Date();
+
+    tomorrow.setDate(
+        tomorrow.getDate() + 1
+    );
+
+
+    const tomorrowString =
+        tomorrow
+            .toISOString()
+            .split("T")[0];
+
+
+    if (date === tomorrowString) {
+
+        return "Tomorrow";
+
+    }
+
+
+    return new Date(date)
+        .toLocaleDateString(
+            undefined,
+            {
+                month: "short",
+                day: "numeric"
+            }
+        );
+
+}
+
+
+/* Escape HTML */
+
+function escapeHTML(text) {
+
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* Close modal outside */
+
+document
+    .getElementById("overlay")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === this) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+/* Start */
+
+renderTasks();
+
+</script>
+
+</body>
+</html>

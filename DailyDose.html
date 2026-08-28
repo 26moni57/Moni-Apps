@@ -1,0 +1,666 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DailyDose</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eaf8f0;
+    color: #173426;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 40px;
+}
+
+/* Header */
+
+.header {
+    padding: 28px 20px 22px;
+    background: linear-gradient(135deg, #24a96b, #62c991);
+    color: white;
+    border-radius: 0 0 30px 30px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.settings {
+    border: 0;
+    background: rgba(255,255,255,.18);
+    color: white;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    font-size: 18px;
+}
+
+.header h1 {
+    margin: 30px 0 5px;
+    font-size: 30px;
+}
+
+.header p {
+    margin: 0;
+    opacity: .82;
+}
+
+/* Streak */
+
+.streak {
+    margin: 20px;
+    margin-top: -5px;
+    background: white;
+    border-radius: 22px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 25px rgba(35,100,65,.10);
+}
+
+.fire {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    background: #fff1df;
+    border-radius: 17px;
+    font-size: 28px;
+}
+
+.streak-info {
+    flex: 1;
+}
+
+.streak-info strong {
+    display: block;
+    font-size: 20px;
+}
+
+.streak-info small {
+    color: #89958e;
+}
+
+/* Main */
+
+.content {
+    padding: 0 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    margin: 22px 0 12px;
+}
+
+/* Challenge */
+
+.challenge {
+    background: white;
+    border-radius: 27px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 7px 25px rgba(35,100,65,.08);
+}
+
+.challenge-icon {
+    width: 82px;
+    height: 82px;
+    margin: auto;
+    border-radius: 25px;
+    display: grid;
+    place-items: center;
+    background: #e9f8ef;
+    font-size: 45px;
+}
+
+.challenge h2 {
+    margin: 18px 0 8px;
+    font-size: 22px;
+}
+
+.challenge p {
+    color: #6d7d74;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.complete {
+    width: 100%;
+    padding: 16px;
+    border: 0;
+    border-radius: 15px;
+    background: #24a96b;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.complete:active {
+    transform: scale(.98);
+}
+
+/* Progress */
+
+.progress-card {
+    background: white;
+    border-radius: 22px;
+    padding: 18px;
+    margin-top: 16px;
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.progress-top small {
+    color: #77857d;
+}
+
+.progress-bar {
+    height: 9px;
+    background: #e8eee9;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #24a96b;
+    border-radius: 20px;
+    transition: .3s;
+}
+
+/* Categories */
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+}
+
+.category {
+    border: 0;
+    background: white;
+    border-radius: 18px;
+    padding: 16px;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(35,100,65,.05);
+}
+
+.category span {
+    display: block;
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.category strong {
+    font-size: 13px;
+}
+
+.category small {
+    display: block;
+    color: #8b968f;
+    margin-top: 4px;
+}
+
+/* Message */
+
+.message {
+    margin-top: 18px;
+    text-align: center;
+    color: #62806e;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <div class="header-top">
+
+            <div class="logo">
+                🌱 DailyDose
+            </div>
+
+            <button
+                class="settings"
+                onclick="showMessage('Settings coming soon ⚙️')"
+            >
+                ⚙️
+            </button>
+
+        </div>
+
+        <h1>Small steps.</h1>
+
+        <p>
+            One simple challenge every day.
+        </p>
+
+    </header>
+
+
+    <!-- Streak -->
+
+    <div class="streak">
+
+        <div class="fire">
+            🔥
+        </div>
+
+        <div class="streak-info">
+
+            <strong id="streak">
+                0 days
+            </strong>
+
+            <small>
+                Current streak
+            </small>
+
+        </div>
+
+        <div>
+            🏆
+        </div>
+
+    </div>
+
+
+    <main class="content">
+
+        <h2 class="section-title">
+            Today's Challenge
+        </h2>
+
+
+        <!-- Challenge -->
+
+        <section class="challenge">
+
+            <div
+                class="challenge-icon"
+                id="challengeIcon"
+            >
+                💧
+            </div>
+
+            <h2 id="challengeTitle">
+                Drink a glass of water
+            </h2>
+
+            <p id="challengeDescription">
+                Take a short moment to hydrate.
+                A tiny action can make your day better.
+            </p>
+
+            <button
+                class="complete"
+                id="completeButton"
+                onclick="completeChallenge()"
+            >
+                I Did It ✓
+            </button>
+
+        </section>
+
+
+        <!-- Progress -->
+
+        <section class="progress-card">
+
+            <div class="progress-top">
+
+                <strong>
+                    Weekly progress
+                </strong>
+
+                <small id="progressText">
+                    0 / 7
+                </small>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div
+                    class="progress-fill"
+                    id="progressFill"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Categories -->
+
+        <h2 class="section-title">
+            Choose a Challenge
+        </h2>
+
+        <div class="categories">
+
+            <button
+                class="category"
+                onclick="changeChallenge('health')"
+            >
+                <span>💪</span>
+                <strong>Health</strong>
+                <small>Move & hydrate</small>
+            </button>
+
+            <button
+                class="category"
+                onclick="changeChallenge('mind')"
+            >
+                <span>🧠</span>
+                <strong>Mind</strong>
+                <small>Relax & reflect</small>
+            </button>
+
+            <button
+                class="category"
+                onclick="changeChallenge('productivity')"
+            >
+                <span>⚡</span>
+                <strong>Productivity</strong>
+                <small>Get things done</small>
+            </button>
+
+            <button
+                class="category"
+                onclick="changeChallenge('kindness')"
+            >
+                <span>💚</span>
+                <strong>Kindness</strong>
+                <small>Help someone</small>
+            </button>
+
+        </div>
+
+
+        <div
+            class="message"
+            id="message"
+        >
+            Make today 1% better.
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/*
+    DailyDose
+    Simple daily challenge application
+*/
+
+
+const challenges = {
+
+    health: {
+
+        icon: "💧",
+
+        title: "Drink a glass of water",
+
+        description:
+            "Take a short moment to hydrate. A tiny action can make your day better."
+
+    },
+
+    mind: {
+
+        icon: "🧘",
+
+        title: "Take 5 quiet minutes",
+
+        description:
+            "Put your phone away and spend five peaceful minutes doing nothing."
+
+    },
+
+    productivity: {
+
+        icon: "⚡",
+
+        title: "Finish one small task",
+
+        description:
+            "Choose one task you've been avoiding and finish it before moving on."
+
+    },
+
+    kindness: {
+
+        icon: "💚",
+
+        title: "Send a kind message",
+
+        description:
+            "Send someone a short message telling them that you appreciate them."
+
+    }
+
+};
+
+
+/* Load saved data */
+
+let streak =
+    Number(
+        localStorage.getItem("dailyDoseStreak")
+    ) || 0;
+
+let completed =
+    Number(
+        localStorage.getItem("dailyDoseCompleted")
+    ) || 0;
+
+let completedToday =
+    localStorage.getItem("dailyDoseToday") ===
+    getToday();
+
+
+/* Get date */
+
+function getToday() {
+
+    return new Date()
+        .toISOString()
+        .split("T")[0];
+
+}
+
+
+/* Complete challenge */
+
+function completeChallenge() {
+
+    if (completedToday) {
+
+        showMessage(
+            "You've already completed today's challenge 🌱"
+        );
+
+        return;
+    }
+
+
+    streak++;
+
+    completed++;
+
+    completedToday = true;
+
+
+    localStorage.setItem(
+        "dailyDoseStreak",
+        streak
+    );
+
+    localStorage.setItem(
+        "dailyDoseCompleted",
+        completed
+    );
+
+    localStorage.setItem(
+        "dailyDoseToday",
+        getToday()
+    );
+
+
+    document
+        .getElementById("completeButton")
+        .innerText =
+        "Completed Today ✓";
+
+    document
+        .getElementById("completeButton")
+        .style.background =
+        "#168653";
+
+
+    updateUI();
+
+
+    showMessage(
+        "Amazing! Keep the streak going 🔥"
+    );
+
+}
+
+
+/* Change challenge */
+
+function changeChallenge(category) {
+
+    const challenge =
+        challenges[category];
+
+
+    document
+        .getElementById("challengeIcon")
+        .innerText =
+        challenge.icon;
+
+
+    document
+        .getElementById("challengeTitle")
+        .innerText =
+        challenge.title;
+
+
+    document
+        .getElementById("challengeDescription")
+        .innerText =
+        challenge.description;
+
+
+    showMessage(
+        category.charAt(0).toUpperCase() +
+        category.slice(1) +
+        " challenge selected"
+    );
+
+}
+
+
+/* Update UI */
+
+function updateUI() {
+
+    document
+        .getElementById("streak")
+        .innerText =
+        streak +
+        (streak === 1 ? " day" : " days");
+
+
+    const weekly =
+        Math.min(completed, 7);
+
+
+    document
+        .getElementById("progressText")
+        .innerText =
+        weekly + " / 7";
+
+
+    document
+        .getElementById("progressFill")
+        .style.width =
+        ((weekly / 7) * 100) + "%";
+
+
+    if (completedToday) {
+
+        document
+            .getElementById("completeButton")
+            .innerText =
+            "Completed Today ✓";
+
+        document
+            .getElementById("completeButton")
+            .style.background =
+            "#168653";
+    }
+
+}
+
+
+/* Message */
+
+function showMessage(message) {
+
+    document
+        .getElementById("message")
+        .innerText =
+        message;
+
+}
+
+
+/* Start */
+
+updateUI();
+
+</script>
+
+</body>
+</html>

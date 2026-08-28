@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>MindPocket</title>
+
+<style>
+:root{
+    --bg:#f4f7fc;
+    --card:#fff;
+    --text:#182033;
+    --muted:#8490a5;
+    --line:#e4e9f2;
+    --primary:#2563eb;
+    --primary2:#3b82f6;
+    --soft:#eaf1ff;
+    --green:#16a34a;
+    --greenSoft:#eaf8ef;
+    --red:#dc2626;
+    --redSoft:#fff0f0;
+    --yellow:#f59e0b;
+    --yellowSoft:#fff6df;
+    --shadow:0 12px 32px rgba(30,55,100,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:auto;
+    overflow:hidden;
+}
+
+/* HEADER */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 31px;
+    color:white;
+    background:
+        linear-gradient(
+            145deg,
+            #1d4ed8,
+            #2563eb 55%,
+            #60a5fa
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header:before,
+.header:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.1);
+}
+
+.header:before{
+    width:190px;
+    height:190px;
+    right:-90px;
+    top:-110px;
+}
+
+.header:after{
+    width:140px;
+    height:140px;
+    left:-80px;
+    bottom:-100px;
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.brandIcon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    font-size:22px;
+}
+
+.brandName{
+    font-size:21px;
+    font-weight:850;
+}
+
+.themeBtn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    color:#fff;
+    font-size:17px;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:24px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    margin:8px 0 0;
+    max-width:335px;
+    color:rgba(255,255,255,.84);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+    padding:18px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:17px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:21px;
+    box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:15px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.stat{
+    padding:13px 5px;
+    text-align:center;
+    border-radius:15px;
+    background:var(--bg);
+}
+
+.statIcon{
+    font-size:18px;
+}
+
+.stat strong{
+    display:block;
+    margin-top:4px;
+    font-size:19px;
+}
+
+.stat span{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* GAMES */
+
+.games{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.game{
+    position:relative;
+    padding:15px;
+    min-height:128px;
+    border:1px solid var(--line);
+    border-radius:17px;
+    background:var(--card);
+    text-align:left;
+    color:var(--text);
+    transition:.18s;
+}
+
+.game:hover{
+    transform:translateY(-2px);
+}
+
+.game.active{
+    border-color:var(--primary2);
+    background:var(--soft);
+}
+
+.gameIcon{
+    font-size:28px;
+}
+
+.game h3{
+    margin:9px 0 4px;
+    font-size:12px;
+}
+
+.game p{
+    margin:0;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.4;
+}
+
+.gameArrow{
+    position:absolute;
+    right:12px;
+    bottom:12px;
+    color:var(--primary);
+    font-weight:800;
+}
+
+/* GAME AREA */
+
+.gameArea{
+    text-align:center;
+}
+
+.gameMessage{
+    min-height:36px;
+    margin:0 0 15px;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.5;
+}
+
+.startBtn,
+.actionBtn{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:13px;
+    background:var(--primary);
+    color:#fff;
+    font-weight:800;
+}
+
+.secondaryBtn{
+    width:100%;
+    margin-top:8px;
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    background:var(--bg);
+    color:var(--text);
+    font-size:11px;
+    font-weight:750;
+}
+
+/* REACTION */
+
+.reactionBox{
+    height:170px;
+    display:grid;
+    place-items:center;
+    margin-bottom:13px;
+    border-radius:19px;
+    background:#dfe5ef;
+    color:#4c566b;
+    font-size:14px;
+    font-weight:800;
+    user-select:none;
+}
+
+.reactionBox.waiting{
+    background:#ef4444;
+    color:#fff;
+}
+
+.reactionBox.ready{
+    background:#16a34a;
+    color:#fff;
+}
+
+/* NUMBER */
+
+.numberDisplay{
+    min-height:100px;
+    display:grid;
+    place-items:center;
+    margin-bottom:12px;
+    border-radius:17px;
+    background:var(--soft);
+    color:var(--primary);
+    font-size:34px;
+    font-weight:900;
+    letter-spacing:3px;
+}
+
+.answerInput{
+    width:100%;
+    padding:13px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+    text-align:center;
+    font-size:18px;
+    letter-spacing:2px;
+}
+
+.answerInput:focus{
+    border-color:var(--primary);
+}
+
+/* MEMORY */
+
+.memoryGrid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:7px;
+    margin-bottom:13px;
+}
+
+.memoryCard{
+    aspect-ratio:1;
+    border:0;
+    border-radius:12px;
+    background:var(--primary);
+    color:white;
+    font-size:20px;
+    font-weight:800;
+}
+
+.memoryCard.open,
+.memoryCard.matched{
+    background:var(--soft);
+    color:var(--text);
+}
+
+.memoryCard.matched{
+    outline:2px solid var(--green);
+}
+
+/* RESULT */
+
+.result{
+    display:none;
+    padding:17px;
+    margin-top:12px;
+    border-radius:15px;
+    background:var(--greenSoft);
+    color:var(--green);
+}
+
+.result.show{
+    display:block;
+}
+
+.result strong{
+    display:block;
+    font-size:23px;
+}
+
+.result span{
+    font-size:10px;
+}
+
+/* BADGE */
+
+.badge{
+    display:inline-block;
+    padding:5px 8px;
+    border-radius:8px;
+    background:var(--soft);
+    color:var(--primary);
+    font-size:8px;
+    font-weight:800;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    z-index:50;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#182033;
+    color:#fff;
+    font-size:11px;
+    white-space:nowrap;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+    --bg:#0d1422;
+    --card:#151e2f;
+    --text:#f0f4fa;
+    --muted:#8d9ab0;
+    --line:#283449;
+    --soft:#172e55;
+    --shadow:0 12px 35px rgba(0,0,0,.25);
+}
+
+body.dark .reactionBox{
+    background:#273449;
+    color:#aab6c8;
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(30,50,80,.12);
+    }
+}
+
+/* SMALL */
+
+@media(max-width:350px){
+    .content{
+        padding:14px;
+    }
+
+    .header{
+        padding:18px 15px 27px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brandIcon">
+                ??
+            </div>
+
+            <div class="brandName">
+                MindPocket
+            </div>
+
+        </div>
+
+        <button
+            class="themeBtn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            ??
+        </button>
+
+    </div>
+
+
+    <div class="hero">
+
+        <h1>
+            Train your brain.<br>
+            One minute at a time.
+        </h1>
+
+        <p>
+            Quick challenges designed for memory, speed and focus.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- STATS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            ?? Your Progress
+        </h2>
+
+        <span>
+            Today
+        </span>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ?
+            </div>
+
+            <strong id="score">
+                0
+            </strong>
+
+            <span>
+                Score
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ??
+            </div>
+
+            <strong id="streak">
+                0
+            </strong>
+
+            <span>
+                Streak
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ??
+            </div>
+
+            <strong id="best">
+                0
+            </strong>
+
+            <span>
+                Best
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- GAME SELECTOR -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            ?? Brain Games
+        </h2>
+
+        <span>
+            3 challenges
+        </span>
+
+    </div>
+
+
+    <div class="games">
+
+        <button
+            class="game active"
+            onclick="selectGame('reaction',this)"
+        >
+
+            <div class="gameIcon">
+                ?
+            </div>
+
+            <h3>
+                Reaction Rush
+            </h3>
+
+            <p>
+                Test how quickly you can react.
+            </p>
+
+            <div class="gameArrow">
+                ?
+            </div>
+
+        </button>
+
+
+        <button
+            class="game"
+            onclick="selectGame('number',this)"
+        >
+
+            <div class="gameIcon">
+                ??
+            </div>
+
+            <h3>
+                Number Memory
+            </h3>
+
+            <p>
+                Remember an increasingly long number.
+            </p>
+
+            <div class="gameArrow">
+                ?
+            </div>
+
+        </button>
+
+
+        <button
+            class="game"
+            onclick="selectGame('memory',this)"
+        >
+
+            <div class="gameIcon">
+                ??
+            </div>
+
+            <h3>
+                Memory Match
+            </h3>
+
+            <p>
+                Find all matching pairs.
+            </p>
+
+            <div class="gameArrow">
+                ?
+            </div>
+
+        </button>
+
+
+        <button
+            class="game"
+            onclick="randomGame()"
+        >
+
+            <div class="gameIcon">
+                ??
+            </div>
+
+            <h3>
+                Surprise Me
+            </h3>
+
+            <p>
+                Start a random challenge.
+            </p>
+
+            <div class="gameArrow">
+                ?
+            </div>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- GAME AREA -->
+
+<section class="card gameArea">
+
+    <div class="sectionTitle">
+
+        <h2 id="gameTitle">
+            ? Reaction Rush
+        </h2>
+
+        <span
+            class="badge"
+            id="gameBadge"
+        >
+            Speed
+        </span>
+
+    </div>
+
+
+    <p
+        class="gameMessage"
+        id="gameMessage"
+    >
+        Tap start, wait for green, then tap as quickly as possible.
+    </p>
+
+
+    <!-- REACTION -->
+
+    <div
+        id="reactionGame"
+    >
+
+        <div
+            class="reactionBox"
+            id="reactionBox"
+            onclick="reactionTap()"
+        >
+            Press Start
+        </div>
+
+        <button
+            class="startBtn"
+            id="reactionStart"
+            onclick="startReaction()"
+        >
+            ? Start Reaction Test
+        </button>
+
+    </div>
+
+
+    <!-- NUMBER -->
+
+    <div
+        id="numberGame"
+        style="display:none"
+    >
+
+        <div
+            class="numberDisplay"
+            id="numberDisplay"
+        >
+            ?
+        </div>
+
+        <input
+            class="answerInput"
+            id="numberInput"
+            inputmode="numeric"
+            placeholder="Enter the number"
+        >
+
+        <button
+            class="actionBtn"
+            style="margin-top:10px"
+            onclick="checkNumber()"
+        >
+            ? Check Answer
+        </button>
+
+        <button
+            class="secondaryBtn"
+            onclick="startNumberGame()"
+        >
+            ?? New Number
+        </button>
+
+    </div>
+
+
+    <!-- MEMORY -->
+
+    <div
+        id="memoryGame"
+        style="display:none"
+    >
+
+        <div
+            class="memoryGrid"
+            id="memoryGrid"
+        ></div>
+
+        <button
+            class="actionBtn"
+            onclick="startMemoryGame()"
+        >
+            ?? New Memory Game
+        </button>
+
+    </div>
+
+
+    <div
+        class="result"
+        id="result"
+    >
+
+        <strong id="resultScore">
+            +0
+        </strong>
+
+        <span id="resultText">
+            Great job!
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- TIP -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            ?? Brain Tip
+        </h2>
+
+        <span>
+            Daily
+        </span>
+
+    </div>
+
+    <p
+        id="brainTip"
+        style="
+            margin:0;
+            color:var(--muted);
+            font-size:11px;
+            line-height:1.6;
+        "
+    >
+        Short, focused practice is often easier to maintain than long sessions.
+    </p>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================
+   STATE
+========================= */
+
+let score =
+    Number(
+        localStorage.getItem("mindPocketScore") || 0
+    );
+
+let best =
+    Number(
+        localStorage.getItem("mindPocketBest") || 0
+    );
+
+let streak =
+    Number(
+        localStorage.getItem("mindPocketStreak") || 0
+    );
+
+let currentGame = "reaction";
+
+let toastTimer;
+
+
+/* =========================
+   SAVE
+========================= */
+
+function saveStats(){
+
+    localStorage.setItem(
+        "mindPocketScore",
+        score
+    );
+
+    localStorage.setItem(
+        "mindPocketBest",
+        best
+    );
+
+    localStorage.setItem(
+        "mindPocketStreak",
+        streak
+    );
+
+    updateStats();
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats(){
+
+    document.getElementById("score")
+        .textContent = score;
+
+    document.getElementById("streak")
+        .textContent = streak;
+
+    document.getElementById("best")
+        .textContent = best;
+
+}
+
+
+/* =========================
+   GAME SELECT
+========================= */
+
+function selectGame(game,button){
+
+    currentGame = game;
+
+
+    document
+        .querySelectorAll(".game")
+        .forEach(
+            item =>
+                item.classList.remove("active")
+        );
+
+
+    if(button){
+        button.classList.add("active");
+    }
+
+
+    document.getElementById("reactionGame")
+        .style.display =
+        game === "reaction"
+            ? "block"
+            : "none";
+
+    document.getElementById("numberGame")
+        .style.display =
+        game === "number"
+            ? "block"
+            : "none";
+
+    document.getElementById("memoryGame")
+        .style.display =
+        game === "memory"
+            ? "block"
+            : "none";
+
+
+    const title =
+        document.getElementById("gameTitle");
+
+    const badge =
+        document.getElementById("gameBadge");
+
+    const message =
+        document.getElementById("gameMessage");
+
+
+    if(game === "reaction"){
+
+        title.textContent =
+            "? Reaction Rush";
+
+        badge.textContent =
+            "Speed";
+
+        message.textContent =
+            "Tap start, wait for green, then tap as quickly as possible.";
+
+    }
+
+    if(game === "number"){
+
+        title.textContent =
+            "?? Number Memory";
+
+        badge.textContent =
+            "Memory";
+
+        message.textContent =
+            "Remember the number before it disappears.";
+
+        startNumberGame();
+
+    }
+
+    if(game === "memory"){
+
+        title.textContent =
+            "?? Memory Match";
+
+        badge.textContent =
+            "Focus";
+
+        message.textContent =
+            "Find every matching pair using as few moves as possible.";
+
+        startMemoryGame();
+
+    }
+
+
+    hideResult();
+
+}
+
+
+/* =========================
+   RANDOM GAME
+========================= */
+
+function randomGame(){
+
+    const games =
+        ["reaction","number","memory"];
+
+    const game =
+        games[
+            Math.floor(
+                Math.random() * games.length
+            )
+        ];
+
+    const buttons =
+        document.querySelectorAll(".game");
+
+    const index =
+        games.indexOf(game);
+
+    selectGame(
+        game,
+        buttons[index]
+    );
+
+}
+
+
+/* =========================
+   REACTION GAME
+========================= */
+
+let reactionTimeout = null;
+let reactionStartTime = 0;
+let reactionState = "idle";
+
+
+function startReaction(){
+
+    clearTimeout(reactionTimeout);
+
+    const box =
+        document.getElementById("reactionBox");
+
+    const button =
+        document.getElementById("reactionStart");
+
+
+    reactionState = "waiting";
+
+    box.className =
+        "reactionBox waiting";
+
+    box.textContent =
+        "Wait for GREEN...";
+
+    button.disabled = true;
+
+    button.style.opacity = ".55";
+
+
+    const delay =
+        1500 +
+        Math.random() * 3500;
+
+
+    reactionTimeout =
+        setTimeout(
+            () => {
+
+                reactionState = "ready";
+
+                box.className =
+                    "reactionBox ready";
+
+                box.textContent =
+                    "TAP NOW!";
+
+                reactionStartTime =
+                    performance.now();
+
+            },
+            delay
+        );
+
+}
+
+
+function reactionTap(){
+
+    const box =
+        document.getElementById("reactionBox");
+
+    const button =
+        document.getElementById("reactionStart");
+
+
+    if(reactionState === "waiting"){
+
+        clearTimeout(reactionTimeout);
+
+        reactionState = "idle";
+
+        box.className =
+            "reactionBox";
+
+        box.textContent =
+            "Too early!";
+
+        button.disabled = false;
+
+        button.style.opacity = "1";
+
+        showToast(
+            "? Too early!"
+        );
+
+        return;
+
+    }
+
+
+    if(reactionState !== "ready"){
+        return;
+    }
+
+
+    const time =
+        Math.round(
+            performance.now() -
+            reactionStartTime
+        );
+
+
+    reactionState = "idle";
+
+    box.className =
+        "reactionBox";
+
+    box.textContent =
+        time + " ms";
+
+
+    button.disabled = false;
+
+    button.style.opacity = "1";
+
+
+    let points = 0;
+
+
+    if(time < 200){
+        points = 100;
+    }else if(time < 300){
+        points = 80;
+    }else if(time < 400){
+        points = 60;
+    }else if(time < 600){
+        points = 40;
+    }else{
+        points = 20;
+    }
+
+
+    addScore(
+        points,
+        `Reaction time: ${time} ms`
+    );
+
+}
+
+
+/* =========================
+   NUMBER MEMORY
+========================= */
+
+let numberAnswer = "";
+
+
+function startNumberGame(){
+
+    hideResult();
+
+
+    const length =
+        3 +
+        Math.min(
+            4,
+            Math.floor(score / 100)
+        );
+
+
+    numberAnswer = "";
+
+
+    for(
+        let i = 0;
+        i < length;
+        i++
+    ){
+
+        numberAnswer +=
+            Math.floor(
+                Math.random() * 10
+            );
+
+    }
+
+
+    const display =
+        document.getElementById(
+            "numberDisplay"
+        );
+
+    const input =
+        document.getElementById(
+            "numberInput"
+        );
+
+
+    display.textContent =
+        numberAnswer;
+
+    input.value = "";
+
+    input.disabled = true;
+
+
+    setTimeout(
+        () => {
+
+            display.textContent =
+                "••••";
+
+            input.disabled = false;
+
+            input.focus();
+
+        },
+        1800
+    );
+
+}
+
+
+function checkNumber(){
+
+    const input =
+        document.getElementById(
+            "numberInput"
+        );
+
+
+    if(!numberAnswer){
+        return;
+    }
+
+
+    const answer =
+        input.value.trim();
+
+
+    if(answer === numberAnswer){
+
+        const points =
+            numberAnswer.length * 20;
+
+
+        addScore(
+            points,
+            "Perfect memory!"
+        );
+
+
+        document.getElementById(
+            "numberDisplay"
+        ).textContent =
+            numberAnswer;
+
+    }else{
+
+        showResult(
+            0,
+            "Not quite. The answer was " +
+            numberAnswer
+        );
+
+        showToast(
+            "Try again!"
+        );
+
+    }
+
+
+    input.disabled = true;
+
+}
+
+
+/* =========================
+   MEMORY MATCH
+========================= */
+
+const memorySymbols = [
+    "??",
+    "??",
+    "??",
+    "??",
+    "??",
+    "??"
+];
+
+let memoryCards = [];
+let firstCard = null;
+let secondCard = null;
+let memoryLock = false;
+let memoryMoves = 0;
+let memoryMatches = 0;
+
+
+function startMemoryGame(){
+
+    hideResult();
+
+
+    memoryCards =
+        [
+            ...memorySymbols,
+            ...memorySymbols
+        ]
+        .sort(
+            () =>
+                Math.random() - .5
+        );
+
+
+    firstCard = null;
+    secondCard = null;
+    memoryLock = false;
+    memoryMoves = 0;
+    memoryMatches = 0;
+
+
+    const grid =
+        document.getElementById(
+            "memoryGrid"
+        );
+
+
+    grid.innerHTML =
+        memoryCards
+            .map(
+                (symbol,index) => `
+
+                    <button
+                        class="memoryCard"
+                        id="memory-${index}"
+                        onclick="flipMemory(${index})"
+                    >
+                        ?
+                    </button>
+
+                `
+            )
+            .join("");
+
+}
+
+
+function flipMemory(index){
+
+    if(memoryLock){
+        return;
+    }
+
+
+    const card =
+        document.getElementById(
+            "memory-" + index
+        );
+
+
+    if(
+        card.classList.contains("open") ||
+        card.classList.contains("matched")
+    ){
+        return;
+    }
+
+
+    card.classList.add("open");
+
+    card.textContent =
+        memoryCards[index];
+
+
+    if(firstCard === null){
+
+        firstCard = index;
+
+        return;
+
+    }
+
+
+    secondCard = index;
+
+    memoryMoves++;
+
+    memoryLock = true;
+
+
+    if(
+        memoryCards[firstCard] ===
+        memoryCards[secondCard]
+    ){
+
+        document
+            .getElementById(
+                "memory-" + firstCard
+            )
+            .classList.add("matched");
+
+        document
+            .getElementById(
+                "memory-" + secondCard
+            )
+            .classList.add("matched");
+
+
+        memoryMatches++;
+
+        firstCard = null;
+        secondCard = null;
+        memoryLock = false;
+
+
+        if(memoryMatches === memorySymbols.length){
+
+            const points =
+                Math.max(
+                    40,
+                    160 -
+                    memoryMoves * 8
+                );
+
+
+            addScore(
+                points,
+                "All pairs matched in " +
+                memoryMoves +
+                " moves!"
+            );
+
+        }
+
+    }else{
+
+        setTimeout(
+            () => {
+
+                const first =
+                    document.getElementById(
+                        "memory-" + firstCard
+                    );
+
+                const second =
+                    document.getElementById(
+                        "memory-" + secondCard
+                    );
+
+
+                first.classList.remove("open");
+
+                second.classList.remove("open");
+
+                first.textContent = "?";
+
+                second.textContent = "?";
+
+
+                firstCard = null;
+                secondCard = null;
+                memoryLock = false;
+
+            },
+            700
+        );
+
+    }
+
+}
+
+
+/* =========================
+   SCORE
+========================= */
+
+function addScore(points,message){
+
+    score += points;
+
+    if(score > best){
+        best = score;
+    }
+
+
+    streak++;
+
+    saveStats();
+
+    showResult(
+        points,
+        message
+    );
+
+}
+
+
+function showResult(points,message){
+
+    const result =
+        document.getElementById(
+            "result"
+        );
+
+    document.getElementById(
+        "resultScore"
+    ).textContent =
+        points > 0
+            ? "+" + points
+            : "Try Again";
+
+
+    document.getElementById(
+        "resultText"
+    ).textContent =
+        message;
+
+
+    result.classList.add("show");
+
+}
+
+
+function hideResult(){
+
+    document.getElementById(
+        "result"
+    ).classList.remove("show");
+
+}
+
+
+/* =========================
+   BRAIN TIP
+========================= */
+
+const tips = [
+
+    "Short, focused practice is often easier to maintain than long sessions.",
+
+    "Try a challenge before checking your phone in the morning.",
+
+    "Memory improves when you actively recall information instead of rereading it.",
+
+    "A few minutes of focused practice can be a useful mental warm-up.",
+
+    "Try to solve a challenge without distractions for an extra focus boost.",
+
+    "Getting enough rest is important for memory and concentration."
+
+];
+
+
+document.getElementById("brainTip")
+    .textContent =
+    tips[
+        new Date().getDate()
+        % tips.length
+    ];
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+
+    const dark =
+        document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "mindPocketDark",
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById("themeBtn")
+        .textContent =
+        dark
+            ? "??"
+            : "??";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            "mindPocketDark"
+        ) === "1";
+
+
+    if(dark){
+
+        document.body.classList.add("dark");
+
+        document.getElementById("themeBtn")
+            .textContent = "??";
+
+    }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () =>
+                toast.classList.remove("show"),
+            2200
+        );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+updateStats();
+
+</script>
+
+</body>
+</html>

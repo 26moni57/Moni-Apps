@@ -1,0 +1,458 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>gymcompanion</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #121214;
+    color: #e2e8f0;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 90px;
+}
+
+/* Header */
+.header {
+    padding: 27px 20px 23px;
+    background: linear-gradient(135deg, #f43f5e, #be123c);
+    color: white;
+    border-radius: 0 0 30px 30px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.count {
+    background: rgba(255,255,255,.2);
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.header h1 {
+    margin: 28px 0 5px;
+    font-size: 29px;
+}
+
+.header p {
+    margin: 0;
+    opacity: .85;
+}
+
+/* Content */
+.content {
+    padding: 20px;
+}
+
+/* Search */
+.search {
+    position: relative;
+}
+
+.search input {
+    width: 100%;
+    padding: 16px 18px 16px 46px;
+    border: none;
+    border-radius: 17px;
+    background: #1e1e24;
+    box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    outline: none;
+    font-size: 14px;
+    color: white;
+}
+
+.search input::placeholder {
+    color: #718096;
+}
+
+.search-icon {
+    position: absolute;
+    left: 17px;
+    top: 15px;
+    color: #718096;
+}
+
+/* Filter Tags */
+.filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 15px 0 4px;
+}
+
+.filter {
+    white-space: nowrap;
+    border: 0;
+    padding: 10px 14px;
+    border-radius: 13px;
+    background: #1e1e24;
+    color: #a0aec0;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.filter.active {
+    background: #f43f5e;
+    color: white;
+}
+
+/* Exercise Card */
+.item {
+    background: #1e1e24;
+    border-radius: 21px;
+    padding: 17px;
+    margin-top: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
+}
+
+.item-top {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.item-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: #2d2d3a;
+    border-radius: 15px;
+    font-size: 24px;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-info strong {
+    display: block;
+    font-size: 16px;
+    color: white;
+}
+
+.item-info small {
+    color: #718096;
+    font-size: 11px;
+}
+
+.status-btn {
+    border: 0;
+    background: none;
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.details {
+    margin-top: 13px;
+    padding: 13px;
+    background: #16161a;
+    border-radius: 13px;
+    font-size: 14px;
+    border-left: 3px solid #f43f5e;
+    color: #cbd5e1;
+}
+
+.details span {
+    color: #718096;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.item-actions button {
+    flex: 1;
+    border: 0;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.edit {
+    background: #2d2d3a;
+    color: #f43f5e;
+}
+
+.delete {
+    background: #2d1e22;
+    color: #ef4444;
+}
+
+/* Floating Action Button */
+.add {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 60px;
+    height: 60px;
+    border: 0;
+    border-radius: 20px;
+    background: #f43f5e;
+    color: white;
+    font-size: 30px;
+    box-shadow: 0 10px 25px rgba(244,63,94,.4);
+    cursor: pointer;
+}
+
+/* Modal Bottom Sheet */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(420px,100%);
+    background: #1e1e24;
+    padding: 24px 20px 30px;
+    border-radius: 28px 28px 0 0;
+    color: white;
+}
+
+.modal h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.modal input,
+.modal select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #2d2d3a;
+    border-radius: 13px;
+    margin-bottom: 10px;
+    outline: none;
+    background: #121214;
+    color: white;
+}
+
+.save {
+    width: 100%;
+    padding: 15px;
+    border: 0;
+    border-radius: 14px;
+    background: #f43f5e;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: 14px;
+    color: #a0aec0;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Header Block -->
+    <header class="header">
+        <div class="header-top">
+            <div class="logo">⚡ gymcompanion</div>
+            <div class="count" id="count">0 left</div>
+        </div>
+        <h1>No excuses.</h1>
+        <p>Log your targets and crushing routines.</p>
+    </header>
+
+    <main class="content">
+        <!-- Search -->
+        <div class="search">
+            <span class="search-icon">🔍</span>
+            <input id="search" type="text" placeholder="Search workout or target..." oninput="renderWorkouts()">
+        </div>
+
+        <!-- Routine Filters -->
+        <div class="filters">
+            <button class="filter active" onclick="setFilter('All', this)">All</button>
+            <button class="filter" onclick="setFilter('Remaining', this)">🔥 Remaining</button>
+            <button class="filter" onclick="setFilter('Strength', this)">💪 Strength</button>
+            <button class="filter" onclick="setFilter('Cardio', this)">🏃 Cardio</button>
+            <button class="filter" onclick="setFilter('Core', this)">🧘 Core</button>
+        </div>
+
+        <!-- Render Target Grid -->
+        <section id="workouts"></section>
+    </main>
+
+</div>
+
+<!-- Floating Action Button -->
+<button class="add" onclick="openModal()">+</button>
+
+<!-- Slide Up Form Sheet -->
+<div class="overlay" id="overlay">
+    <div class="modal">
+        <h2 id="modalTitle">Log Exercise Target</h2>
+        <input id="exName" type="text" placeholder="Exercise (e.g. Bench Press)">
+        <input id="exTarget" type="text" placeholder="Target Sets/Reps (e.g. 4 Sets x 12 Reps)">
+        <select id="exCategory">
+            <option value="Strength">💪 Strength</option>
+            <option value="Cardio">🏃 Cardio</option>
+            <option value="Core">🧘 Core</option>
+        </select>
+        <button class="save" onclick="saveWorkout()">Save Workout</button>
+        <button class="cancel" onclick="closeModal()">Cancel</button>
+    </div>
+</div>
+
+<script>
+/*
+    gymcompanion
+    App 54 - Workout Routine Sync Engine
+*/
+
+const defaultWorkouts = [
+    {
+        id: 1,
+        name: "Dumbbell Incline Press",
+        target: "4 Sets x 10 Reps (30kg)",
+        category: "Strength",
+        done: false,
+        date: "Today"
+    },
+    {
+        id: 2,
+        name: "Treadmill HIIT Run",
+        target: "20 Minutes (Interval)",
+        category: "Cardio",
+        done: true,
+        date: "Yesterday"
+    }
+];
+
+let workouts = JSON.parse(localStorage.getItem("gymcompanion_data")) || defaultWorkouts;
+let activeFilter = "All";
+let editingId = null;
+
+function saveData() {
+    localStorage.setItem("gymcompanion_data", JSON.stringify(workouts));
+}
+
+function getIcon(category) {
+    if (category === "Strength") return "💪";
+    if (category === "Cardio") return "🏃";
+    if (category === "Core") return "🧘";
+    return "⚡";
+}
+
+function renderWorkouts() {
+    const container = document.getElementById("workouts");
+    const query = document.getElementById("search").value.toLowerCase();
+    
+    let filtered = workouts.filter(w => {
+        const matchesSearch = w.name.toLowerCase().includes(query) || 
+                              w.target.toLowerCase().includes(query);
+        const matchesFilter = activeFilter === "All" || 
+                              (activeFilter === "Remaining" && !w.done) || 
+                              w.category === activeFilter;
+        return matchesSearch && matchesFilter;
+    });
+
+    const leftCount = workouts.filter(w => !w.done).length;
+    document.getElementById("count").innerText = `${leftCount} left`;
+
+    container.innerHTML = "";
+
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="empty" style="text-align:center; padding:65px 20px; color:#718096;">
+                <div style="font-size:55px;">🏋️</div>
+                <p>No workout matching this view.</p>
+            </div>`;
+        return;
+    }
+
+    filtered.forEach(w => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.style.opacity = w.done ? "0.5" : "1";
+        div.innerHTML = `
+            <div class="item-top">
+                <div class="item-icon">${getIcon(w.category)}</div>
+                <div class="item-info">
+                    <strong style="${w.done ? 'text-decoration: line-through;' : ''}">${w.name}</strong>
+                    <small>${w.category} • ${w.date}</small>
+                </div>
+                <button class="status-btn" onclick="toggleStatus(${w.id})">
+                    ${w.done ? "✅" : "⭕"}
+                </button>
+            </div>
+            <div class="details">
+                <span>🎯 REPS & SETS CONFIG</span>
+                ${w.target}
+            </div>
+            <div class="item-actions">
+                <button class="edit" onclick="editWorkout(${w.id})">Modify</button>
+                <button class="delete" onclick="deleteWorkout(${w.id})">Remove</button>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+function setFilter(category, button) {
+    activeFilter = category;
+    document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    renderWorkouts();
+}
+
+function toggleStatus(id) {
+    workouts = workouts.map(w => w.id === id ? { ...w, done: !w.done } : w);
+    saveData();
+    renderWorkouts();
+}
+
+function deleteWorkout(id) {
+    if (confirm("Discard this exercise set?")) {
+        workouts = workouts.filter(w => w.id !== id);
+        saveData();
+        renderWorkouts();
+    }
+}
+
+function openModal() {editingId = null;document.getElementById("modalTitle").innerText = "Log Exercise Target";document.getElementById("exName").value = "";document.getElementById("exTarget").value = "";document.getElementById("exCategory").value = "Strength";document.getElementById("overlay").classList.add("show");}function closeModal() {document.getElementById("overlay").classList.remove("show");}function editWorkout(id) {const w = workouts.find(work => work.id === id);if (!w) return;editingId = id;document.getElementById("modalTitle").innerText = "Update Config";document.getElementById("exName").value = w.name;document.getElementById("exTarget").value = w.target;document.getElementById("exCategory").value = w.category;document.getElementById("overlay").classList.add("show");}function saveWorkout() {const name = document.getElementById("exName").value.trim();const target = document.getElementById("exTarget").value.trim();const category = document.getElementById("exCategory").value;if (!name || !target) {alert("Please specify the routine name and layout targets.");return;}if (editingId !== null) {workouts = workouts.map(w => w.id === editingId ? { ...w, name, target, category } : w);} else {const newWorkout = {id: Date.now(),name,target,category,done: false,date: "Today"};workouts.unshift(newWorkout);}saveData();closeModal();renderWorkouts();}renderWorkouts();</script></body></html>

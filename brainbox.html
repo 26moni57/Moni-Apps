@@ -1,0 +1,1067 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainBox</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f4ef;
+    color: #292820;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 100px;
+}
+
+/* Header */
+
+.header {
+    padding: 28px 20px 28px;
+    color: white;
+    background: linear-gradient(135deg, #5546a8, #7566d1);
+    border-radius: 0 0 30px 30px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.count {
+    padding: 7px 11px;
+    background: rgba(255,255,255,.18);
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+.header h1 {
+    font-size: 30px;
+    margin: 27px 0 5px;
+}
+
+.header p {
+    margin: 0;
+    opacity: .82;
+}
+
+/* Content */
+
+.content {
+    padding: 20px;
+}
+
+.search {
+    position: relative;
+}
+
+.search input {
+    width: 100%;
+    border: 0;
+    outline: none;
+    padding: 16px 17px 16px 45px;
+    border-radius: 17px;
+    background: white;
+    box-shadow: 0 5px 18px rgba(50,45,20,.06);
+}
+
+.search span {
+    position: absolute;
+    left: 16px;
+    top: 14px;
+}
+
+/* Filters */
+
+.filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 15px 0 4px;
+}
+
+.filter {
+    white-space: nowrap;
+    border: 0;
+    padding: 10px 14px;
+    background: white;
+    color: #77756c;
+    border-radius: 13px;
+    cursor: pointer;
+}
+
+.filter.active {
+    background: #5546a8;
+    color: white;
+}
+
+/* Notes */
+
+.notes {
+    margin-top: 10px;
+}
+
+.note-card {
+    background: white;
+    padding: 17px;
+    border-radius: 20px;
+    margin-bottom: 11px;
+    box-shadow: 0 4px 16px rgba(50,45,20,.05);
+}
+
+.note-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.note-icon {
+    width: 43px;
+    height: 43px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: #f1effb;
+    font-size: 21px;
+    flex-shrink: 0;
+}
+
+.note-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.note-title {
+    font-weight: 800;
+    font-size: 15px;
+    word-break: break-word;
+}
+
+.note-date {
+    color: #9a978d;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.favorite {
+    border: 0;
+    background: transparent;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.note-text {
+    margin-top: 13px;
+    color: #6d6a61;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.note-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 13px;
+}
+
+.note-actions button {
+    border: 0;
+    background: #f5f4ef;
+    color: #77756c;
+    padding: 7px 10px;
+    border-radius: 9px;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+/* Empty */
+
+.empty {
+    text-align: center;
+    padding: 55px 20px;
+    color: #929087;
+}
+
+.empty-icon {
+    font-size: 50px;
+}
+
+/* Add */
+
+.add {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 60px;
+    height: 60px;
+    border: 0;
+    border-radius: 20px;
+    background: #5546a8;
+    color: white;
+    font-size: 30px;
+    box-shadow: 0 10px 25px rgba(85,70,168,.3);
+    cursor: pointer;
+}
+
+/* Modal */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(420px,100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    padding: 24px 20px 30px;
+    border-radius: 28px 28px 0 0;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+    width: 100%;
+    border: 1px solid #e2e0d8;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    outline: none;
+    font-family: inherit;
+}
+
+.modal textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.save {
+    width: 100%;
+    padding: 15px;
+    border: 0;
+    border-radius: 14px;
+    background: #5546a8;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: 14px;
+    color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <div class="header-top">
+
+            <div class="logo">
+                🧠 BrainBox
+            </div>
+
+            <div
+                class="count"
+                id="count"
+            >
+                0 notes
+            </div>
+
+        </div>
+
+        <h1>Save your thoughts.</h1>
+
+        <p>
+            Ideas disappear. BrainBox remembers.
+        </p>
+
+    </header>
+
+
+    <main class="content">
+
+        <!-- Search -->
+
+        <div class="search">
+
+            <span>🔍</span>
+
+            <input
+                id="search"
+                type="text"
+                placeholder="Search your brain..."
+                oninput="renderNotes()"
+            >
+
+        </div>
+
+
+        <!-- Filters -->
+
+        <div class="filters">
+
+            <button
+                class="filter active"
+                onclick="setFilter('all', this)"
+            >
+                All
+            </button>
+
+            <button
+                class="filter"
+                onclick="setFilter('idea', this)"
+            >
+                💡 Ideas
+            </button>
+
+            <button
+                class="filter"
+                onclick="setFilter('todo', this)"
+            >
+                ✅ To-do
+            </button>
+
+            <button
+                class="filter"
+                onclick="setFilter('quote', this)"
+            >
+                💬 Quotes
+            </button>
+
+            <button
+                class="filter"
+                onclick="setFilter('favorite', this)"
+            >
+                ⭐ Favorites
+            </button>
+
+        </div>
+
+
+        <!-- Notes -->
+
+        <section
+            class="notes"
+            id="notes"
+        ></section>
+
+    </main>
+
+</div>
+
+
+<!-- Floating Add -->
+
+<button
+    class="add"
+    onclick="openModal()"
+>
+    +
+</button>
+
+
+<!-- Modal -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+    <div class="modal">
+
+        <h2 id="modalTitle">
+            New Brain Note
+        </h2>
+
+        <input
+            id="title"
+            type="text"
+            placeholder="Give your thought a title..."
+        >
+
+        <select id="category">
+
+            <option value="idea">
+                💡 Idea
+            </option>
+
+            <option value="todo">
+                ✅ To-do
+            </option>
+
+            <option value="quote">
+                💬 Quote
+            </option>
+
+            <option value="other">
+                📝 Other
+            </option>
+
+        </select>
+
+        <textarea
+            id="text"
+            placeholder="Write anything you want to remember..."
+        ></textarea>
+
+        <button
+            class="save"
+            onclick="saveNote()"
+        >
+            Save to BrainBox
+        </button>
+
+        <button
+            class="cancel"
+            onclick="closeModal()"
+        >
+            Cancel
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+    BrainBox
+    Simple notes / memory application
+*/
+
+
+const categoryInfo = {
+
+    idea: {
+        icon: "💡",
+        name: "Idea"
+    },
+
+    todo: {
+        icon: "✅",
+        name: "To-do"
+    },
+
+    quote: {
+        icon: "💬",
+        name: "Quote"
+    },
+
+    other: {
+        icon: "📝",
+        name: "Note"
+    }
+
+};
+
+
+const defaultNotes = [
+
+    {
+        id: 1,
+        title: "Website idea",
+        category: "idea",
+        text: "Create a simple website that helps people organize small daily goals.",
+        favorite: true,
+        date: "2026-08-23"
+    },
+
+    {
+        id: 2,
+        title: "Remember",
+        category: "todo",
+        text: "Check the project files before starting the next update.",
+        favorite: false,
+        date: "2026-08-22"
+    }
+
+];
+
+
+let notes =
+    JSON.parse(
+        localStorage.getItem("brainBoxNotes")
+    ) || defaultNotes;
+
+
+let activeFilter =
+    "all";
+
+
+let editingId =
+    null;
+
+
+/* Save */
+
+function saveData() {
+
+    localStorage.setItem(
+        "brainBoxNotes",
+        JSON.stringify(notes)
+    );
+
+}
+
+
+/* Render */
+
+function renderNotes() {
+
+    const container =
+        document.getElementById("notes");
+
+
+    const query =
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        notes.filter(note => {
+
+            const matchesSearch =
+                note.title
+                    .toLowerCase()
+                    .includes(query)
+
+                ||
+
+                note.text
+                    .toLowerCase()
+                    .includes(query);
+
+
+            let matchesFilter =
+                true;
+
+
+            if (
+                activeFilter !== "all" &&
+                activeFilter !== "favorite"
+            ) {
+
+                matchesFilter =
+                    note.category ===
+                    activeFilter;
+
+            }
+
+
+            if (
+                activeFilter === "favorite"
+            ) {
+
+                matchesFilter =
+                    note.favorite === true;
+
+            }
+
+
+            return (
+                matchesSearch &&
+                matchesFilter
+            );
+
+        });
+
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🧠
+                </div>
+
+                <h3>
+                    Your BrainBox is empty
+                </h3>
+
+                <p>
+                    Tap + and save your first thought.
+                </p>
+
+            </div>
+
+        `;
+
+        updateCount();
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        filtered.map(note => {
+
+            const info =
+                categoryInfo[note.category]
+                || categoryInfo.other;
+
+
+            return `
+
+                <article class="note-card">
+
+                    <div class="note-top">
+
+                        <div class="note-icon">
+                            ${info.icon}
+                        </div>
+
+                        <div class="note-info">
+
+                            <div class="note-title">
+                                ${escapeHTML(note.title)}
+                            </div>
+
+                            <div class="note-date">
+                                ${info.name}
+                                ·
+                                ${formatDate(note.date)}
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="favorite"
+                            onclick="toggleFavorite(${note.id})"
+                        >
+                            ${note.favorite ? "⭐" : "☆"}
+                        </button>
+
+                    </div>
+
+
+                    <div class="note-text">
+                        ${escapeHTML(note.text)}
+                    </div>
+
+
+                    <div class="note-actions">
+
+                        <button
+                            onclick="editNote(${note.id})"
+                        >
+                            ✏️ Edit
+                        </button>
+
+                        <button
+                            onclick="deleteNote(${note.id})"
+                        >
+                            🗑️ Delete
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }).join("");
+
+
+    updateCount();
+
+}
+
+
+/* Filter */
+
+function setFilter(filter, button) {
+
+    activeFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(item =>
+            item.classList.remove("active")
+        );
+
+
+    button.classList.add("active");
+
+
+    renderNotes();
+
+}
+
+
+/* Count */
+
+function updateCount() {
+
+    const count =
+        notes.length;
+
+
+    document.getElementById("count").innerText =
+        count +
+        (count === 1
+            ? " note"
+            : " notes");
+
+}
+
+
+/* Open */
+
+function openModal() {
+
+    editingId =
+        null;
+
+
+    document.getElementById("modalTitle").innerText =
+        "New Brain Note";
+
+
+    document.getElementById("title").value =
+        "";
+
+    document.getElementById("category").value =
+        "idea";
+
+    document.getElementById("text").value =
+        "";
+
+
+    document
+        .getElementById("overlay")
+        .classList.add("show");
+
+
+    document
+        .getElementById("title")
+        .focus();
+
+}
+
+
+/* Close */
+
+function closeModal() {
+
+    document
+        .getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* Save */
+
+function saveNote() {
+
+    const title =
+        document
+            .getElementById("title")
+            .value
+            .trim();
+
+
+    const category =
+        document
+            .getElementById("category")
+            .value;
+
+
+    const text =
+        document
+            .getElementById("text")
+            .value
+            .trim();
+
+
+    if (!title || !text) {
+
+        alert(
+            "Please enter a title and note."
+        );
+
+        return;
+
+    }
+
+
+    const date =
+        new Date()
+            .toISOString()
+            .split("T")[0];
+
+
+    if (editingId !== null) {
+
+        const note =
+            notes.find(
+                note =>
+                    note.id === editingId
+            );
+
+
+        if (note) {
+
+            note.title =
+                title;
+
+            note.category =
+                category;
+
+            note.text =
+                text;
+
+        }
+
+    } else {
+
+        notes.unshift({
+
+            id: Date.now(),
+
+            title: title,
+
+            category: category,
+
+            text: text,
+
+            favorite: false,
+
+            date: date
+
+        });
+
+    }
+
+
+    saveData();
+
+    closeModal();
+
+    renderNotes();
+
+}
+
+
+/* Edit */
+
+function editNote(id) {
+
+    const note =
+        notes.find(
+            note => note.id === id
+        );
+
+
+    if (!note) return;
+
+
+    editingId =
+        id;
+
+
+    document.getElementById("modalTitle").innerText =
+        "Edit Brain Note";
+
+
+    document.getElementById("title").value =
+        note.title;
+
+
+    document.getElementById("category").value =
+        note.category;
+
+
+    document.getElementById("text").value =
+        note.text;
+
+
+    document
+        .getElementById("overlay")
+        .classList.add("show");
+
+}
+
+
+/* Favorite */
+
+function toggleFavorite(id) {
+
+    const note =
+        notes.find(
+            note => note.id === id
+        );
+
+
+    if (!note) return;
+
+
+    note.favorite =
+        !note.favorite;
+
+
+    saveData();
+
+    renderNotes();
+
+}
+
+
+/* Delete */
+
+function deleteNote(id) {
+
+    const note =
+        notes.find(
+            note => note.id === id
+        );
+
+
+    if (!note) return;
+
+
+    if (
+        !confirm(
+            'Delete "' +
+            note.title +
+            '"?'
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    notes =
+        notes.filter(
+            note => note.id !== id
+        );
+
+
+    saveData();
+
+    renderNotes();
+
+}
+
+
+/* Format date */
+
+function formatDate(date) {
+
+    const today =
+        new Date()
+            .toISOString()
+            .split("T")[0];
+
+
+    if (date === today) {
+
+        return "Today";
+
+    }
+
+
+    return new Date(date)
+        .toLocaleDateString(
+            undefined,
+            {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
+
+}
+
+
+/* Escape HTML */
+
+function escapeHTML(text) {
+
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* Close modal outside */
+
+document
+    .getElementById("overlay")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === this) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+/* Start */
+
+renderNotes();
+
+</script>
+
+</body>
+</html>

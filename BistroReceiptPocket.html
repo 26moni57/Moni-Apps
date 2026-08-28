@@ -1,0 +1,507 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+<title>Bistro ReceiptPocket</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Bistro Wine Red & Menu Charcoal High-End Aesthetic Look */
+:root{
+--bg:#18181b;
+--card:#27272a;
+--text:#fafafa;
+--muted:#a1a1aa;
+--line:#3f3f46;
+--primary:#991b1b;
+--primary2:#f43f5e;
+--soft:#451a03;
+--green:#10b981;
+--danger:#ef4444;
+--shadow:0 12px 35px rgba(0,0,0,0.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Georgia, serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - RICH BISTRO CRIMSOM TO TEXTURED CHARCOAL */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#7f1d1d,#18181b 65%,#27272a);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(153,27,27,0.12);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:28px;
+line-height:1.15;
+letter-spacing:-.5px;
+font-weight:normal
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+font-family:system-ui, -apple-system, sans-serif;
+color:rgba(255,255,255,.65)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+.title span{
+font-size:11px;
+color:var(--muted)
+}
+
+/* OVERVIEW MATRICS BLOCK SPREAD */
+.stats-grid {
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-bottom:4px
+}
+
+.stat-node {
+padding:14px 6px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:14px;
+text-align:center
+}
+
+.stat-node strong {
+display:block;
+font-size:22px;
+font-weight:900;
+color:var(--primary2);
+font-family:"Courier New",Courier,monospace
+}
+
+.stat-node span {
+display:block;
+margin-top:4px;
+font-size:9px;
+color:var(--muted);
+text-transform:uppercase;
+font-weight:750;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+/* RECEIPT ITEMS MATRIX STACK LIST */
+.slip-row-item {
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px 0;
+border-bottom:1px solid var(--line)
+}
+.slip-row-item:last-child { border-bottom:0 }
+
+.slip-icon {
+width:40px;
+height:40px;
+border-radius:12px;
+background:var(--bg);
+display:grid;
+place-items:center;
+font-size:18px;
+flex-shrink:0;
+border:1px solid var(--line)
+}
+
+.slip-details {
+flex:1;
+min-width:0
+}
+
+.slip-title {
+font-size:14px;
+font-weight:700;
+color:var(--text);
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis
+}
+
+.slip-meta {
+font-size:10px;
+color:var(--muted);
+margin-top:3px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.slip-price-col {
+text-align:right;
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:4px
+}
+
+.slip-amount {
+font-size:15px;
+font-weight:900;
+color:var(--text);
+font-family:"Courier New",Courier,monospace
+}
+
+.btn-remove-row {
+background:transparent;
+border:0;
+color:var(--danger);
+font-size:10px;
+font-weight:700;
+padding:2px 4px;
+font-family:system-ui, -apple-system, sans-serif;
+cursor:pointer
+}
+
+/* FLOATING FAB ACTION KEYS CONTROLLER BUTTON */
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:50%;
+background:var(--primary);
+color:white;
+font-size:28px;
+box-shadow:0 12px 28px rgba(153,27,27,.35);
+z-index:10;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+/* MODAL DRAWER OVERLAY WRAPPERS SHEETS */
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(2px)
+}
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0;
+border-top:2px solid var(--line)
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.modal-head h2{
+margin:0;
+font-size:18px;
+font-weight:800
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:50%;
+background:var(--bg);
+color:var(--text)
+}
+
+.field{margin-bottom:12px; font-family:system-ui, -apple-system, sans-serif}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field input,
+.field select{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-family:Georgia, serif
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:white;
+font-weight:800;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.empty-state {
+text-align:center;
+padding:35px 15px;
+color:var(--muted);
+font-family:system-ui, -apple-system, sans-serif
+}
+.empty-icon { font-size:40px; margin-bottom:6px; }
+
+/* REFINED LITERARY LIGHT INVERSION SKIN OVERRIDE */
+body.light-theme {
+--bg:#fafafa;
+--card:#ffffff;
+--text:#1c1917;
+--muted:#716764;
+--line:#e7e5e4;
+--shadow:0 10px 25px rgba(153,27,27,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🧾</div>
+<div class="brand-name">BistroReceipt</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Log Expenses.<br>Simplify Accounting.</h1>
+<p>Log purchase entries, track category ratios, and manage accounting files locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- CORES OVERVIEW COUNTERS PANEL -->
+<section class="card">
+<div class="stats-grid">
+<div class="stat-node">
+<div id="lblGrandTotalSum" class="stat-node strong">$0.00</div>
+<span>Total Outlays</span>
+</div>
+<div class="stat-node">
+<div id="lblSlipsLoggedCount" class="stat-node strong">0 Slips</div>
+<span>Registered Count</span>
+</div>
+</div>
+</section>
+
+<!-- LEDGER ENTRIES LIST BLOCK CARD -->
+<section class="card">
+<div class="title">
+<h2>📊 Ledger Entry Stream</h2>
+<span id="lblLedgerCountSpan">0 items</span>
+</div>
+<div id="receiptsLogListContainer">
+<!-- Dynamic entry cards injected by JavaScript -->
+</div>
+</section>
+
+</main>
+
+<!-- FLOATING FAB INJECTION INTERACTION KEY TRIGGER -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- SLIP CAPTURE DRAWER OVERLAY CONTROL PANEL SHEET -->
+<div class="overlay" id="overlay">
+<div class="modal">
+<div class="modal-head">
+<h2>Log Purchase Slip</h2>
+<button class="close" onclick="closeModal()">✕</button>
+</div>
+
+<div class="field">
+<label>Merchant / Establishment Name</label>
+<input type="text" id="inputSlipMerchant" placeholder="e.g., Bistro Café Le Paris">
+</div>
+
+<div class="field">
+<label>Purchase Total Amount ($)</label>
+<input type="number" id="inputSlipAmount" placeholder="0.00" step="0.01" min="0">
+</div>
+
+<div class="field">
+<label>Log Category Allocation</label>
+<select id="selectSlipCategory">
+<option value="Dining">🍷 Fine Dining & Food</option>
+<option value="Supply">💼 Core Business Supply</option>
+<option value="Travel">✈️ Transit & Logistics</option>
+<option value="Utility">🔌 Office Utilities</option>
+</select>
+</div>
+
+<button class="save" onclick="commitReceiptSlipNode()">Lock Entry to Ledger</button>
+</div>
+</div>
+
+</div>
+
+<script>
+const categoryEmojiConfig = { Dining: "🍷", Supply: "💼", Travel: "✈️", Utility: "🔌" };
+
+// Fetch data log matrix straight from local memory storage lists sandbox
+let expensesListArray = JSON.parse(localStorage.getItem("bistro_receipt_slips")) || [
+    { id: 1, merchant: "Le Paris Restaurant", amount: 124.50, category: "Dining", date: "2026-08-25" },
+    { id: 2, font: "HQ Stationers Supply", merchant: "HQ Stationers Supply", amount: 45.12, category: "Supply", date: "2026-08-26" }
+];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function openModal() { document.getElementById("overlay").classList.add("show"); }
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+
+function commitReceiptSlipNode() {
+    const merchant = document.getElementById("inputSlipMerchant").value.trim();
+    const amount = parseFloat(document.getElementById("inputSlipAmount").value);
+    const category = document.getElementById("selectSlipCategory").value;
+
+    if (!merchant || isNaN(amount) || amount <= 0) {
+        return alert("Please fulfill complete, correct receipt layout details lines.");
+    }
+
+    const todayDateStr = new Date().toISOString().split('T')[0];
+
+    expensesListArray.unshift({
+        id: Date.now(),
+        merchant,
+        amount,
+        category,
+date: todayDateStr});saveAndRedrawLedgerView();closeModal();document.getElementById("inputSlipMerchant").value = "";document.getElementById("inputSlipAmount").value = "";}function deleteReceiptNode(id) {expensesListArray = expensesListArray.filter(item => item.id !== id);saveAndRedrawLedgerView();}function saveAndRedrawLedgerView() {localStorage.setItem("bistro_receipt_slips", JSON.stringify(expensesListArray));render();}function render() {const container = document.getElementById("receiptsLogListContainer");// Accumulate total calculation calculations pipeline execution loopconst combinedTotalSum = expensesListArray.reduce((acc, curr) => acc + curr.amount, 0);document.getElementById("lblGrandTotalSum").innerText = $${combinedTotalSum.toFixed(2)};document.getElementById("lblSlipsLoggedCount").innerText = ${expensesListArray.length} Slips;document.getElementById("lblLedgerCountSpan").innerText = ${expensesListArray.length} logged;if (expensesListArray.length === 0) {container.innerHTML =  <div class="empty-state"> <div class="empty-icon">📉</div> <h3>Ledger Book Clear</h3> <p>Tap the wine-red plus actuator to append your first expense item pass.</p> </div>;return;}container.innerHTML = expensesListArray.map(item => <div class="slip-row-item"> <div class="slip-icon">${categoryEmojiConfig[item.category] || "📦"}</div> <div class="slip-details"> <div class="slip-title">${item.merchant}</div> <div class="slip-meta">${item.date} • ${item.category}</div> </div> <div class="slip-price-col"> <div class="slip-amount">$${item.amount.toFixed(2)}</div> <button class="btn-remove-row" onclick="deleteReceiptNode(${item.id})">Wipe</button> </div> </div>).join("");}// Initial structural rendering loop initialization pass configurationsrender(); </script> </body> </html>

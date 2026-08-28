@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#1e3a8a">
+<title>UnitFlip Studio</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Deep Navy Blueprint & Bright Orange Scientific Look */
+:root{
+--bg:#0b0f19;
+--card:#111827;
+--text:#f8fafc;
+--muted:#38bdf8;
+--line:#1e293b;
+--primary:#ea580c;
+--primary2:#f97316;
+--soft:#1e3a8a;
+--soft-glow:rgba(56,189,248,0.15);
+--green:#10b981;
+--danger:#ef4444;
+--shadow:0 12px 35px rgba(11,15,25,0.6)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - TRANQUIL NAVY TO INTENSE SUNSET ORANGE */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#111827 55%,#ea580c);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:2px solid var(--muted)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(56,189,248,0.08);
+border:1px dashed var(--muted)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.15);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.06);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* SCIENTIFIC DROPDOWN & FORM SELECT FIELD INTERFACE */
+.field{
+margin-bottom:12px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field select,
+.field input{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-weight:700
+}
+
+.field select:focus,
+.field input:focus{
+border-color:var(--muted);
+box-shadow:0 0 10px var(--soft-glow)
+}
+
+/* METRICS VALUE BREAKDOWN RESULTS SPLIT PANEL */
+.conversion-matrix-split {
+display:grid;
+grid-template-columns:1fr;
+gap:12px;
+margin:5px 0
+}
+
+.matrix-output-node {
+padding:14px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:14px;
+text-align:center
+}
+
+.matrix-digits {
+font-size:28px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--primary2);
+word-break:break-all
+}
+
+.matrix-label {
+display:block;
+margin-top:4px;
+font-size:9.5px;
+color:var(--muted);
+text-transform:uppercase;
+font-weight:750
+}
+
+/* CLEAN ELECTRIC ALLOY skin LIGHT INVERSION OVERRIDE */
+body.light-theme {
+--bg:#f0f4f8;
+--card:#ffffff;
+--text:#1e293b;
+--muted:#0284c7;
+--line:#cbd5e1;
+--shadow:0 10px 25px rgba(2,132,199,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🔄</div>
+<div class="brand-name">UnitFlip</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Conversion Core.<br>Scientific Multi-Pass.</h1>
+<p>Transform technical weights, spatial lengths, or temperature dimensions locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- CONVERSION TRACK SELECTION MODAL BLOCK -->
+<section class="card">
+<div class="field">
+<label>TRANSLATION METRIC TRACK</label>
+<select id="conversionTypeNode" onchange="synchronizeConverterCategoryUnitsPool()">
+<option value="length">📏 Spatial Length (m, cm, inch, ft)</option>
+<option value="weight">⚖️ Mass Weights (kg, g, lb, oz)</option>
+<option value="temp">🌡️ Temperature (C, F, K)</option>
+</select>
+</div>
+</section>
+
+<!-- VARIABLE VALUE DATA INPUT CARD -->
+<section class="card">
+<div class="field">
+<label id="inputSourceLabelNode">INPUT VALUE SOURCE QUANTITY</label>
+<input type="number" id="unitInputValueNode" placeholder="Enter quantity value..." value="1" oninput="executeConversionMatrixProcessing()">
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+<div class="field">
+<label>FROM UNIT</label>
+<select id="sourceUnitSelectNode" onchange="executeConversionMatrixProcessing()"></select>
+</div>
+<div class="field">
+<label>TO UNIT</label>
+<select id="targetUnitSelectNode" onchange="executeConversionMatrixProcessing()"></select>
+</div>
+</div>
+</section>
+
+<!-- REPORT COMPUTATIONAL MATRIX BOX BREAKDOWN -->
+<section class="card">
+<div class="title">
+<h2>📊 Evaluated Conversion Summary</h2>
+</div>
+<div class="conversion-matrix-split">
+<div class="matrix-output-node">
+<div id="lblCalculatedMatrixOutcomeDigits" class="matrix-digits">0.00</div>
+<span id="lblCalculatedMatrixOutcomeLabel" class="matrix-label">Result Outcome</span>
+</div>
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+// Structural units dictionary registry maps setups
+const unitsConfigPool = {
+    length: {
+        labels: ["Meters (m)", "Centimeters (cm)", "Inches (in)", "Feet (ft)"],
+        keys: ["m", "cm", "in", "ft"],
+        ratios: { m: 1, cm: 100, in: 39.3701, ft: 3.28084 } // Base index relative metric: Meters
+    },
+    weight: {
+        labels: ["Kilograms (kg)", "Grams (g)", "Pounds (lbs)", "Ounces (oz)"],
+        keys: ["kg", "g", "lb", "oz"],
+        ratios: { kg: 1, g: 1000, lb: 2.20462, oz: 35.274 } // Base index relative metric: Kilograms
+    },
+    temp: {
+        labels: ["Celsius (°C)", "Fahrenheit (°F)", "Kelvin (K)"],
+        keys: ["C", "F", "K"]
+    }
+};
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function synchronizeConverterCategoryUnitsPool() {
+    const selectedCategoryKey = document.getElementById("conversionTypeNode").value;
+    const config = unitsConfigPool[selectedCategoryKey];
+
+    const srcSelect = document.getElementById("sourceUnitSelectNode");
+    const tgtSelect = document.getElementById("targetUnitSelectNode");
+
+    srcSelect.innerHTML = "";
+    tgtSelect.innerHTML = "";
+
+    config.keys.forEach((key, indexIdx) => {
+        const optionLabel = config.labels[indexIdx];
+        
+        let srcOptionNode = new Option(optionLabel, key);
+        let tgtOptionNode = new Option(optionLabel, key);
+        
+        srcSelect.add(srcOptionNode);
+        tgtSelect.add(tgtOptionNode);
+    });
+
+    // Preset standard offset selections variations out of index parameters ease look
+    if(tgtSelect.options.length > 1) {
+        tgtSelect.selectedIndex = 1;
+    }
+
+    executeConversionMatrixProcessing();
+}
+
+function executeConversionMatrixProcessing() {
+    const category = document.getElementById("conversionTypeNode").value;
+    const srcUnit = document.getElementById("sourceUnitSelectNode").value;
+    const tgtUnit = document.getElementById("targetUnitSelectNode").value;
+    const rawVal = parseFloat(document.getElementById("unitInputValueNode").value);
+
+    const digitsDisplay = document.getElementById("lblCalculatedMatrixOutcomeDigits");
+    const labelDisplay = document.getElementById("lblCalculatedMatrixOutcomeLabel");
+
+    if (isNaN(rawVal)) {
+        digitsDisplay.innerText = "0.00";
+        labelDisplay.innerText = "Awaiting Complete Input Matrix";
+        return;
+    }
+
+    let calculationOutcomeResultInt = 0;
+
+    // Intercept separate Temperature computation formulas loops blocks
+    if (category === "temp") {
+        calculationOutcomeResultInt = processTemperatureConversionFormulas(rawVal, srcUnit, tgtUnit);
+    } else {
+        // Enforce generic baseline matrix division ratios calculations
+        const trackingConfig = unitsConfigPool[category].ratios;
+        const valueInBaseMetricStandard = rawVal / trackingConfig[srcUnit];
+        calculationOutcomeResultInt = valueInBaseMetricStandard * trackingConfig[tgtUnit];
+    }
+
+    // Format leaking fraction floats lengths cleanly
+    let finalFormattedOutputString = Number.isInteger(calculationOutcomeResultInt) ? 
+        calculationOutcomeResultInt.toString() : 
+        parseFloat(calculationOutcomeResultInt.toFixed(4)).toString();
+
+    digitsDisplay.innerText = finalFormattedOutputString;
+    labelDisplay.innerText = `${srcUnit.toUpperCase()} transformed to ${tgtUnit.toUpperCase()}`;
+}
+
+function processTemperatureConversionFormulas(valueInput, fromUnit, toUnit) {
+    if (fromUnit === toUnit) return valueInput;
+
+    let valueInCelsius = 0;
+    // Step 1: Normalize everything straight down to Celsius baseline standard context values
+    if (fromUnit === "C") valueInCelsius = valueInput;
+    else if (fromUnit === "F") valueInCelsius = (valueInput - 32) * (5 / 9);
+    else if (fromUnit === "K") valueInCelsius = valueInput - 273.15;
+
+    // Step 2: Convert outward from Celsius metric straight into target choices mappings
+    if (toUnit === "C") return valueInCelsius;
+    else if (toUnit === "F") return (valueInCelsius * (9 / 5)) + 32;
+    else if (toUnit === "K") return valueInCelsius + 273.15;
+    
+    return 0;
+}
+
+// Initial structural rendering loop initialization synchronization run pass configurations triggers on launch
+synchronizeConverterCategoryUnitsPool(); </script> </body> </html>

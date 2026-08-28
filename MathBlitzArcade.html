@@ -1,0 +1,440 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#a3e635">
+<title>MathBlitz Arcade</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Racing Carbon Black & Safety Volt Green Performance Look */
+:root{
+--bg:#090d16;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#a3e635;
+--primary2:#bef264;
+--soft:#1c2d0c;
+--soft-glow:rgba(163,230,53,0.25);
+--danger:#ef4444;
+--shadow:0 12px 35px rgba(163,230,53,0.12)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text);
+user-select:none
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - SPEEDWAY ACCENT RUN GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e293b,#090d16 65%,#4d7c0f);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(163,230,53,.06);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+/* ARCADE PERFORMANCE MONITOR METRICS GRID SPREAD */
+.stats-split-row {
+display:grid;
+grid-template-columns:repeat(3, 1fr);
+gap:8px;
+margin-bottom:4px
+}
+
+.stat-node-box {
+padding:12px 4px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:14px;
+text-align:center
+}
+
+.stat-node-box strong {
+display:block;
+font-size:20px;
+color:var(--primary2);
+font-family:"Courier New",Courier,monospace
+}
+
+.stat-node-box span {
+display:block;
+margin-top:3px;
+font-size:8.5px;
+color:var(--muted);
+text-transform:uppercase;
+font-weight:750
+}
+
+/* EQUATION CENTRAL SCREEN DISPLAY */
+.equation-panel {
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:25px 0;
+text-align:center
+}
+
+.equation-text {
+font-size:48px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--primary);
+letter-spacing:2px;
+text-shadow:0 0 15px var(--soft-glow);
+margin-bottom:6px
+}
+
+/* FIELD MODIFICATION INPUT FORM */
+.field{
+margin-bottom:14px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field input{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-weight:900;
+font-size:20px;
+font-family:"Courier New",Courier,monospace;
+text-align:center
+}
+.field input:focus{
+border-color:var(--primary)
+}
+
+.btn-trigger-action {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:var(--bg);
+font-weight:950;
+font-size:15px;
+text-transform:uppercase;
+transition:opacity 0.2s
+}
+.btn-trigger-action:active { opacity:0.9 }
+
+/* PERFORMANCE LIGHT OVERRIDE SKIN STYLE */
+body.light-theme {
+--bg:#f8fafc;
+--card:#ffffff;
+--text:#090d16;
+--muted:#475569;
+--line:#cbd5e1;
+--shadow:0 10px 25px rgba(163,230,53,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">⚡</div>
+<div class="brand-name">MathBlitz</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Blitz Arithmetics.<br>60-Second Challenge.</h1>
+<p>Solve high-speed mathematical statement generation loops locally via system probability matrices.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- ROUND METRICS STATISTICS CARD -->
+<section class="card">
+<div class="stats-split-row">
+<div class="stat-node-box">
+<strong id="lblTimeRemaining">60s</strong>
+<span>Time Left</span>
+</div>
+<div class="stat-node-box">
+<strong id="lblPlayerScore">0</strong>
+<span>Total Score</span>
+</div>
+<div class="stat-node-box">
+<strong id="lblActiveStreak">0</strong>
+<span>Rep Streak</span>
+</div>
+</div>
+</section>
+
+<!-- MATH EQUATION PREVIEW PANEL AREA -->
+<section class="card">
+<div class="equation-panel">
+<div id="lblActiveEquation" class="equation-text">0 + 0</div>
+<span style="font-size:10px; font-weight:800; text-transform:uppercase; color:var(--muted); letter-spacing:0.5px;">Compute Equation Target</span>
+</div>
+</section>
+
+<!-- RESPONSE ENTRY CAPTURE INTERFACE CARD -->
+<section class="card">
+<div class="field">
+<label>Type Your Integer Answer</label>
+<input type="number" id="inputPlayerAnswer" placeholder="?" autocomplete="off" onkeydown="handleInputKeyDown(event)">
+</div>
+<button id="masterGameActionBtn" class="btn-trigger-action" onclick="handleMasterGameBtnAction()">Launch Challenge</button>
+</section>
+
+</main>
+
+</div>
+
+<script>
+const CHALLENGE_TOTAL_TIME = 60;
+
+let gameTimerIntervalId = null;
+let currentRemainingSeconds = CHALLENGE_TOTAL_TIME;
+let playerScorePoints = 0;
+let playerActiveStreak = 0;
+let computedCorrectAnswerValue = 0;
+let isChallengeActiveState = false;
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function handleInputKeyDown(event) {
+    if (event.key === "Enter" && isChallengeActiveState) {
+        verifyPlayerAnswerSubmission();
+    }
+}
+
+function handleMasterGameBtnAction() {
+    if (!isChallengeActiveState) {
+        startBlitzChallengeSession();
+    } else {
+        terminateChallengeSession(true);
+    }
+}
+
+function startBlitzChallengeSession() {
+    isChallengeActiveState = true;
+    playerScorePoints = 0;
+    playerActiveStreak = 0;
+    currentRemainingSeconds = CHALLENGE_TOTAL_TIME;
+
+    document.getElementById("masterGameActionBtn").innerText = "Abort Challenge";
+    document.getElementById("masterGameActionBtn").style.background = "var(--danger)";
+    document.getElementById("masterGameActionBtn").style.color = "white";
+    document.getElementById("inputPlayerAnswer").value = "";
+    document.getElementById("inputPlayerAnswer").focus();
+
+    redrawScoreboardDisplay();
+    deployNewEquationMatrix();
+    triggerTactileAudioChime(660, 0.08);
+
+    gameTimerIntervalId = setInterval(() => {
+        currentRemainingSeconds--;
+        document.getElementById("lblTimeRemaining").innerText = `${currentRemainingSeconds}s`;
+
+        if (currentRemainingSeconds <= 0) {
+            terminateChallengeSession(false);
+        }
+    }, 1000);
+}
+
+function deployNewEquationMatrix() {
+    const digitAlpha = Math.floor(Math.random() * 12) + 2;
+    const digitBeta = Math.floor(Math.random() * 12) + 2;
+    const operatorsPool = ["+", "-", "*"];
+    const activeOperator = operatorsPool[Math.floor(Math.random() * operatorsPool.length)];
+
+    let equationString = "";
+    if (activeOperator === "+") {
+        computedCorrectAnswerValue = digitAlpha + digitBeta;
+        equationString = `${digitAlpha} + ${digitBeta}`;
+    } else if (activeOperator === "-") {
+        // Clamp subtraction ranges to stop negative allocations ease look
+        const primary = Math.max(digitAlpha, digitBeta);
+        const secondary = Math.min(digitAlpha, digitBeta);
+        computedCorrectAnswerValue = primary - secondary;
+        equationString = `${primary} - ${secondary}`;
+    } else {
+        computedCorrectAnswerValue = digitAlpha * digitBeta;
+        equationString = `${digitAlpha} × ${digitBeta}`;
+    }
+
+    document.getElementById("lblActiveEquation").innerText = equationString;
+}
+
+function verifyPlayerAnswerSubmission() {
+    const inputField = document.getElementById("inputPlayerAnswer");
+    const parsedAnswer = parseInt(inputField.value);
+
+    if (isNaN(parsedAnswer)) return;
+
+    if (parsedAnswer === computedCorrectAnswerValue) {
+        playerScorePoints += 10 + Math.floor(playerActiveStreak / 3); // Dynamic score multiplier tracking
+        playerActiveStreak++;
+        triggerTactileAudioChime(880, 0.05); // High crisp hit chime
+    } else {
+        playerActiveStreak = 0;
+        triggerTactileAudioChime(220, 0.15); // Flat buzz mismatch chime
+    }
+
+    inputField.value = "";
+    redrawScoreboardDisplay();
+    deployNewEquationMatrix();
+}
+
+function terminateChallengeSession(wasAborted) {
+    clearInterval(gameTimerIntervalId);
+    isChallengeActiveState = false;
+
+    document.getElementById("masterGameActionBtn").innerText = "Launch Challenge";
+    document.getElementById("masterGameActionBtn").style.background = "var(--primary)";
+    document.getElementById("masterGameActionBtn").style.color = "var(--bg)";
+    document.getElementById("lblActiveEquation").innerText = "0 + 0";
+    document.getElementById("lblTimeRemaining").innerText = `${CHALLENGE_TOTAL_TIME}s`;
+    
+    triggerTactileAudioChime(440, 0.25);
+
+if (!wasAborted) {alert(🏁 TIME UP! Blitz session finalized.\nTotal Earned Score: ${playerScorePoints} Points.);}}function redrawScoreboardDisplay() {document.getElementById("lblPlayerScore").innerText = playerScorePoints;document.getElementById("lblActiveStreak").innerText = playerActiveStreak;}function triggerTactileAudioChime(frequencyHzValue, durationSecondsValue) {if (window.AudioContext || window.webkitAudioContext) {try {const ctx = new (window.AudioContext || window.webkitAudioContext)();const osc = ctx.createOscillator();const gain = ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type = "sine";osc.frequency.setValueAtTime(frequencyHzValue, ctx.currentTime);gain.gain.setValueAtTime(0.1, ctx.currentTime);osc.start();osc.stop(ctx.currentTime + durationSecondsValue);} catch (e) {}}}</script></body></html>

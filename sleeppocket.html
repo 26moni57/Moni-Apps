@@ -1,0 +1,2451 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#312e81">
+<title>SleepPocket</title>
+
+<style>
+:root{
+    --bg:#f5f5ff;
+    --card:#ffffff;
+    --text:#24213b;
+    --muted:#88849d;
+    --line:#e7e5f2;
+    --primary:#4f46e5;
+    --primary2:#7c3aed;
+    --soft:#ecebff;
+    --blue:#2563eb;
+    --green:#16a34a;
+    --greenSoft:#eaf8ef;
+    --yellow:#f59e0b;
+    --yellowSoft:#fff7df;
+    --red:#dc2626;
+    --shadow:0 12px 32px rgba(48,42,110,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+textarea,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:auto;
+    overflow:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 31px;
+    color:#fff;
+    background:
+        linear-gradient(
+            145deg,
+            #1e1b4b,
+            #312e81 48%,
+            #6d5ce7
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header:before,
+.header:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+}
+
+.header:before{
+    width:210px;
+    height:210px;
+    right:-100px;
+    top:-125px;
+}
+
+.header:after{
+    width:155px;
+    height:155px;
+    left:-95px;
+    bottom:-115px;
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.brandIcon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:rgba(255,255,255,.15);
+    font-size:21px;
+}
+
+.brandName{
+    font-size:21px;
+    font-weight:850;
+}
+
+.themeBtn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.15);
+    color:#fff;
+    font-size:17px;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:24px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    max-width:340px;
+    margin:8px 0 0;
+    color:rgba(255,255,255,.82);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    padding:18px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:17px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:21px;
+    box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:15px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* =========================
+   SLEEP SUMMARY
+========================= */
+
+.sleepMain{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.sleepCircle{
+    position:relative;
+    width:88px;
+    height:88px;
+    flex:0 0 88px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:
+        conic-gradient(
+            var(--primary)
+            0deg,
+            var(--primary)
+            var(--sleepProgress,0deg),
+            var(--soft)
+            var(--sleepProgress,0deg),
+            var(--soft)
+            360deg
+        );
+}
+
+.sleepCircle:after{
+    content:"";
+    position:absolute;
+    inset:7px;
+    border-radius:50%;
+    background:var(--card);
+}
+
+.sleepNumber{
+    position:relative;
+    z-index:2;
+    text-align:center;
+}
+
+.sleepNumber strong{
+    display:block;
+    font-size:18px;
+    line-height:1;
+}
+
+.sleepNumber span{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.sleepSummary{
+    flex:1;
+}
+
+.sleepSummary strong{
+    display:block;
+    font-size:14px;
+}
+
+.sleepSummary p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.5;
+}
+
+.sleepTimes{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:14px;
+}
+
+.timeBox{
+    padding:12px;
+    border-radius:14px;
+    background:var(--bg);
+}
+
+.timeBox span{
+    display:block;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.timeBox strong{
+    display:block;
+    margin-top:4px;
+    font-size:16px;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:12px;
+}
+
+.stat{
+    padding:11px 4px;
+    border-radius:14px;
+    background:var(--bg);
+    text-align:center;
+}
+
+.statIcon{
+    font-size:17px;
+}
+
+.stat strong{
+    display:block;
+    margin-top:3px;
+    font-size:17px;
+}
+
+.stat span{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.formGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+.field{
+    margin-bottom:11px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.field label{
+    display:block;
+    margin-bottom:5px;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:750;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+textarea{
+    min-height:75px;
+    resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:var(--primary);
+}
+
+.saveBtn{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    background:var(--primary);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+}
+
+/* =========================
+   QUALITY
+========================= */
+
+.qualityRow{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:6px;
+}
+
+.qualityBtn{
+    padding:9px 2px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:8px;
+    text-align:center;
+}
+
+.qualityBtn .emoji{
+    display:block;
+    margin-bottom:3px;
+    font-size:18px;
+}
+
+.qualityBtn.active{
+    border-color:var(--primary);
+    background:var(--soft);
+    color:var(--primary);
+    font-weight:800;
+}
+
+/* =========================
+   ROUTINE
+========================= */
+
+.routine{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.routineItem{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:11px;
+    border:1px solid var(--line);
+    border-radius:13px;
+    background:var(--card);
+}
+
+.routineCheck{
+    width:28px;
+    height:28px;
+    flex:0 0 28px;
+    display:grid;
+    place-items:center;
+    border:2px solid #d2d0dd;
+    border-radius:9px;
+    background:transparent;
+    color:transparent;
+    font-weight:900;
+}
+
+.routineItem.done{
+    background:var(--greenSoft);
+    border-color:#cbe9d4;
+}
+
+.routineItem.done .routineCheck{
+    border-color:var(--green);
+    background:var(--green);
+    color:#fff;
+}
+
+.routineInfo{
+    flex:1;
+}
+
+.routineInfo strong{
+    display:block;
+    font-size:11px;
+}
+
+.routineInfo span{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.deleteRoutine{
+    width:27px;
+    height:27px;
+    border:0;
+    border-radius:8px;
+    background:var(--bg);
+    color:var(--red);
+    font-size:10px;
+}
+
+.addRoutine{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:7px;
+    margin-top:10px;
+}
+
+.addRoutine button{
+    padding:0 14px;
+    border:0;
+    border-radius:11px;
+    background:var(--primary);
+    color:#fff;
+    font-size:10px;
+    font-weight:800;
+}
+
+/* =========================
+   WEEK
+========================= */
+
+.week{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:5px;
+}
+
+.day{
+    padding:8px 3px;
+    border-radius:11px;
+    background:var(--bg);
+    text-align:center;
+}
+
+.dayName{
+    color:var(--muted);
+    font-size:7px;
+}
+
+.dayMoon{
+    margin:5px 0;
+    font-size:16px;
+}
+
+.dayHours{
+    font-size:8px;
+    font-weight:800;
+}
+
+.day.good{
+    background:var(--soft);
+}
+
+.day.best{
+    background:#e0e7ff;
+}
+
+/* =========================
+   NOTES
+========================= */
+
+.note{
+    padding:13px;
+    border-radius:14px;
+    background:var(--soft);
+}
+
+.note strong{
+    display:block;
+    font-size:11px;
+}
+
+.note p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.5;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    z-index:100;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#24213b;
+    color:#fff;
+    font-size:11px;
+    white-space:nowrap;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark{
+    --bg:#0e0e1d;
+    --card:#18182a;
+    --text:#f3f2ff;
+    --muted:#a09db3;
+    --line:#2b2b40;
+    --soft:#25234b;
+    --shadow:0 12px 35px rgba(0,0,0,.3);
+}
+
+body.dark .routineItem.done{
+    background:#112319;
+    border-color:#245132;
+}
+
+body.dark .day.best{
+    background:#252851;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media(min-width:700px){
+
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(30,25,80,.12);
+    }
+}
+
+/* =========================
+   SMALL
+========================= */
+
+@media(max-width:350px){
+
+    .content{
+        padding:14px;
+    }
+
+    .header{
+        padding:18px 15px 27px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+
+    .qualityBtn{
+        font-size:7px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brandIcon">
+                🌙
+            </div>
+
+            <div class="brandName">
+                SleepPocket
+            </div>
+
+        </div>
+
+        <button
+            class="themeBtn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+            aria-label="Toggle dark mode"
+        >
+            🌙
+        </button>
+
+    </div>
+
+
+    <div class="hero">
+
+        <h1>
+            Rest better.<br>
+            Wake brighter.
+        </h1>
+
+        <p>
+            Track your sleep, build a relaxing bedtime routine and understand your nightly habits.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- =========================
+     TODAY SUMMARY
+========================= -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            😴 Last Night
+        </h2>
+
+        <span id="todayLabel">
+            Today
+        </span>
+
+    </div>
+
+
+    <div class="sleepMain">
+
+        <div
+            class="sleepCircle"
+            id="sleepCircle"
+        >
+
+            <div class="sleepNumber">
+
+                <strong id="sleepDuration">
+                    0h 0m
+                </strong>
+
+                <span>
+                    sleep
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="sleepSummary">
+
+            <strong id="sleepMessage">
+                Ready for better sleep?
+            </strong>
+
+            <p id="sleepDescription">
+                Set your bedtime and wake-up time to calculate your sleep duration.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="sleepTimes">
+
+        <div class="timeBox">
+
+            <span>
+                🌙 Bedtime
+            </span>
+
+            <strong id="bedtimeDisplay">
+                --:--
+            </strong>
+
+        </div>
+
+
+        <div class="timeBox">
+
+            <span>
+                ☀️ Wake up
+            </span>
+
+            <strong id="wakeDisplay">
+                --:--
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="statIcon">
+                💤
+            </div>
+
+            <strong id="avgSleep">
+                0h
+            </strong>
+
+            <span>
+                Avg sleep
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ⭐
+            </div>
+
+            <strong id="qualityScore">
+                -
+            </strong>
+
+            <span>
+                Quality
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                🔥
+            </div>
+
+            <strong id="streak">
+                0
+            </strong>
+
+            <span>
+                Streak
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SLEEP LOG
+========================= -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📝 Sleep Log
+        </h2>
+
+        <span>
+            Last night
+        </span>
+
+    </div>
+
+
+    <div class="formGrid">
+
+        <div class="field">
+
+            <label>
+                BEDTIME
+            </label>
+
+            <input
+                type="time"
+                id="bedtime"
+                value="23:00"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                WAKE UP
+            </label>
+
+            <input
+                type="time"
+                id="wakeTime"
+                value="07:00"
+            >
+
+        </div>
+
+
+        <div class="field full">
+
+            <label>
+                SLEEP QUALITY
+            </label>
+
+
+            <div class="qualityRow">
+
+                <button
+                    class="qualityBtn"
+                    data-quality="1"
+                    onclick="selectQuality(1)"
+                >
+                    <span class="emoji">
+                        😫
+                    </span>
+                    Poor
+                </button>
+
+                <button
+                    class="qualityBtn"
+                    data-quality="2"
+                    onclick="selectQuality(2)"
+                >
+                    <span class="emoji">
+                        😕
+                    </span>
+                    Low
+                </button>
+
+                <button
+                    class="qualityBtn"
+                    data-quality="3"
+                    onclick="selectQuality(3)"
+                >
+                    <span class="emoji">
+                        😐
+                    </span>
+                    Okay
+                </button>
+
+                <button
+                    class="qualityBtn"
+                    data-quality="4"
+                    onclick="selectQuality(4)"
+                >
+                    <span class="emoji">
+                        🙂
+                    </span>
+                    Good
+                </button>
+
+                <button
+                    class="qualityBtn"
+                    data-quality="5"
+                    onclick="selectQuality(5)"
+                >
+                    <span class="emoji">
+                        😴
+                    </span>
+                    Great
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="field full">
+
+            <label>
+                NOTE
+            </label>
+
+            <textarea
+                id="sleepNote"
+                maxlength="300"
+                placeholder="How did you sleep?"
+            ></textarea>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="saveBtn"
+        onclick="saveSleep()"
+    >
+        💾 Save Sleep Log
+    </button>
+
+</section>
+
+
+<!-- =========================
+     ROUTINE
+========================= -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            🌙 Bedtime Routine
+        </h2>
+
+        <span id="routineProgress">
+            0 / 0
+        </span>
+
+    </div>
+
+
+    <div
+        class="routine"
+        id="routine"
+    ></div>
+
+
+    <div class="addRoutine">
+
+        <input
+            id="routineInput"
+            type="text"
+            maxlength="80"
+            placeholder="Add a routine step..."
+        >
+
+        <button
+            onclick="addRoutine()"
+        >
+            Add
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     WEEKLY OVERVIEW
+========================= -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📊 This Week
+        </h2>
+
+        <span>
+            Sleep hours
+        </span>
+
+    </div>
+
+
+    <div
+        class="week"
+        id="week"
+    ></div>
+
+</section>
+
+
+<!-- =========================
+     TIP
+========================= -->
+
+<section class="card">
+
+    <div class="note">
+
+        <strong>
+            💡 Sleep Tip
+        </strong>
+
+        <p id="tipText">
+            Keeping a consistent sleep and wake time can make your routine easier to maintain.
+        </p>
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================
+   STORAGE
+========================= */
+
+const STORAGE_LOGS =
+    "sleepPocketLogs";
+
+const STORAGE_ROUTINE =
+    "sleepPocketRoutine";
+
+const STORAGE_THEME =
+    "sleepPocketDark";
+
+
+let logs =
+    JSON.parse(
+        localStorage.getItem(
+            STORAGE_LOGS
+        ) || "[]"
+    );
+
+
+let routine =
+    JSON.parse(
+        localStorage.getItem(
+            STORAGE_ROUTINE
+        ) || "null"
+    );
+
+
+let selectedQuality = 0;
+
+let toastTimer;
+
+
+/* =========================
+   DEFAULT ROUTINE
+========================= */
+
+if(!Array.isArray(routine)){
+
+    routine = [
+
+        {
+            id:makeId(),
+            name:"Put phone away",
+            detail:"30 minutes before bed",
+            done:false
+        },
+
+        {
+            id:makeId(),
+            name:"Brush teeth",
+            detail:"Start your bedtime routine",
+            done:false
+        },
+
+        {
+            id:makeId(),
+            name:"Dim the lights",
+            detail:"Create a calm environment",
+            done:false
+        },
+
+        {
+            id:makeId(),
+            name:"Relax for 5 minutes",
+            detail:"Breathe, stretch or read",
+            done:false
+        }
+
+    ];
+
+    saveRoutine();
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function makeId(){
+
+    return (
+        Date.now().toString() +
+        Math.random()
+            .toString(16)
+            .slice(2)
+    );
+
+}
+
+
+function todayKey(){
+
+    const d = new Date();
+
+    return (
+        d.getFullYear() +
+        "-" +
+        String(
+            d.getMonth()+1
+        ).padStart(2,"0") +
+        "-" +
+        String(
+            d.getDate()
+        ).padStart(2,"0")
+    );
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+function saveLogs(){
+
+    localStorage.setItem(
+        STORAGE_LOGS,
+        JSON.stringify(logs)
+    );
+
+}
+
+
+function saveRoutine(){
+
+    localStorage.setItem(
+        STORAGE_ROUTINE,
+        JSON.stringify(routine)
+    );
+
+}
+
+
+/* =========================
+   TIME CALCULATION
+========================= */
+
+function calculateMinutes(
+    bedtime,
+    wakeTime
+){
+
+    if(
+        !bedtime ||
+        !wakeTime
+    ){
+
+        return 0;
+
+    }
+
+
+    const [bh,bm] =
+        bedtime
+        .split(":")
+        .map(Number);
+
+
+    const [wh,wm] =
+        wakeTime
+        .split(":")
+        .map(Number);
+
+
+    let start =
+        bh * 60 + bm;
+
+    let end =
+        wh * 60 + wm;
+
+
+    if(end <= start){
+
+        end += 24 * 60;
+
+    }
+
+
+    return end - start;
+
+}
+
+
+function formatDuration(
+    minutes
+){
+
+    if(!minutes){
+
+        return "0h 0m";
+
+    }
+
+
+    const h =
+        Math.floor(
+            minutes / 60
+        );
+
+    const m =
+        minutes % 60;
+
+
+    return (
+        h +
+        "h " +
+        m +
+        "m"
+    );
+
+}
+
+
+/* =========================
+   SAVE SLEEP
+========================= */
+
+function saveSleep(){
+
+    const bedtime =
+        document.getElementById(
+            "bedtime"
+        ).value;
+
+
+    const wakeTime =
+        document.getElementById(
+            "wakeTime"
+        ).value;
+
+
+    const note =
+        document.getElementById(
+            "sleepNote"
+        ).value.trim();
+
+
+    const minutes =
+        calculateMinutes(
+            bedtime,
+            wakeTime
+        );
+
+
+    if(!bedtime || !wakeTime){
+
+        showToast(
+            "⚠️ Set bedtime and wake-up time."
+        );
+
+        return;
+
+    }
+
+
+    const today =
+        todayKey();
+
+
+    const existing =
+        logs.find(
+            x =>
+                x.date === today
+        );
+
+
+    if(existing){
+
+        existing.bedtime =
+            bedtime;
+
+        existing.wakeTime =
+            wakeTime;
+
+        existing.minutes =
+            minutes;
+
+        existing.quality =
+            selectedQuality;
+
+        existing.note =
+            note;
+
+    }else{
+
+        logs.push({
+
+            id:makeId(),
+
+            date:today,
+
+            bedtime:bedtime,
+
+            wakeTime:wakeTime,
+
+            minutes:minutes,
+
+            quality:selectedQuality,
+
+            note:note
+
+        });
+
+    }
+
+
+    saveLogs();
+
+    render();
+
+    showToast(
+        "🌙 Sleep log saved!"
+    );
+
+}
+
+
+/* =========================
+   QUALITY
+========================= */
+
+function selectQuality(
+    quality
+){
+
+    selectedQuality =
+        quality;
+
+
+    document
+        .querySelectorAll(
+            ".qualityBtn"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "active",
+                    Number(
+                        button.dataset.quality
+                    ) === quality
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================
+   LOAD TODAY
+========================= */
+
+function loadToday(){
+
+    const today =
+        todayKey();
+
+
+    const log =
+        logs.find(
+            x =>
+                x.date === today
+        );
+
+
+    if(log){
+
+        document.getElementById(
+            "bedtime"
+        ).value =
+            log.bedtime || "23:00";
+
+
+        document.getElementById(
+            "wakeTime"
+        ).value =
+            log.wakeTime || "07:00";
+
+
+        document.getElementById(
+            "sleepNote"
+        ).value =
+            log.note || "";
+
+
+        selectedQuality =
+            log.quality || 0;
+
+
+        selectQuality(
+            selectedQuality
+        );
+
+    }
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+    renderSummary();
+
+    renderRoutine();
+
+    renderWeek();
+
+}
+
+
+/* =========================
+   SUMMARY
+========================= */
+
+function renderSummary(){
+
+    const today =
+        todayKey();
+
+
+    const log =
+        logs.find(
+            x =>
+                x.date === today
+        );
+
+
+    const minutes =
+        log
+            ? log.minutes
+            : 0;
+
+
+    const quality =
+        log
+            ? log.quality
+            : 0;
+
+
+    document.getElementById(
+        "sleepDuration"
+    ).textContent =
+        formatDuration(
+            minutes
+        );
+
+
+    document.getElementById(
+        "bedtimeDisplay"
+    ).textContent =
+        log
+            ? formatTime(
+                log.bedtime
+            )
+            : "--:--";
+
+
+    document.getElementById(
+        "wakeDisplay"
+    ).textContent =
+        log
+            ? formatTime(
+                log.wakeTime
+            )
+            : "--:--";
+
+
+    const percent =
+        Math.min(
+            100,
+            Math.round(
+                minutes /
+                480 *
+                100
+            )
+        );
+
+
+    document
+        .getElementById(
+            "sleepCircle"
+        )
+        .style.setProperty(
+            "--sleepProgress",
+            percent * 3.6 + "deg"
+        );
+
+
+    updateSleepMessage(
+        minutes
+    );
+
+
+    const avg =
+        calculateAverage();
+
+
+    document.getElementById(
+        "avgSleep"
+    ).textContent =
+        avg
+            ? formatHoursShort(avg)
+            : "0h";
+
+
+    document.getElementById(
+        "qualityScore"
+    ).textContent =
+        quality
+            ? quality + "/5"
+            : "-";
+
+
+    document.getElementById(
+        "streak"
+    ).textContent =
+        calculateStreak();
+
+}
+
+
+/* =========================
+   SLEEP MESSAGE
+========================= */
+
+function updateSleepMessage(
+    minutes
+){
+
+    const title =
+        document.getElementById(
+            "sleepMessage"
+        );
+
+    const description =
+        document.getElementById(
+            "sleepDescription"
+        );
+
+
+    if(!minutes){
+
+        title.textContent =
+            "Ready for better sleep?";
+
+        description.textContent =
+            "Save your bedtime and wake-up time to start tracking.";
+
+        return;
+
+    }
+
+
+    if(minutes >= 480){
+
+        title.textContent =
+            "Great sleep window! 🌙";
+
+        description.textContent =
+            "You reached 8 hours or more last night.";
+
+        return;
+
+    }
+
+
+    if(minutes >= 420){
+
+        title.textContent =
+            "Looking good! 😴";
+
+        description.textContent =
+            "You got a solid amount of sleep.";
+
+        return;
+
+    }
+
+
+    if(minutes >= 360){
+
+        title.textContent =
+            "Could use a little more. 🌙";
+
+        description.textContent =
+            "Try giving yourself some extra time tonight.";
+
+        return;
+
+    }
+
+
+    title.textContent =
+        "Short night. 💜";
+
+    description.textContent =
+        "Consider making tonight a little longer.";
+
+}
+
+
+/* =========================
+   FORMAT TIME
+========================= */
+
+function formatTime(
+    value
+){
+
+    if(!value){
+
+        return "--:--";
+
+    }
+
+
+    const [h,m] =
+        value
+        .split(":")
+        .map(Number);
+
+
+    const suffix =
+        h >= 12
+            ? "PM"
+            : "AM";
+
+
+    let hour =
+        h % 12;
+
+
+    if(hour === 0){
+
+        hour = 12;
+
+    }
+
+
+    return (
+        hour +
+        ":" +
+        String(m).padStart(2,"0") +
+        " " +
+        suffix
+    );
+
+}
+
+
+/* =========================
+   AVERAGE
+========================= */
+
+function calculateAverage(){
+
+    const recent =
+        logs
+            .filter(
+                x =>
+                    x.minutes > 0
+            )
+            .slice(-7);
+
+
+    if(!recent.length){
+
+        return 0;
+
+    }
+
+
+    const total =
+        recent.reduce(
+            (sum,x) =>
+                sum + x.minutes,
+            0
+        );
+
+
+    return Math.round(
+        total /
+        recent.length
+    );
+
+}
+
+
+function formatHoursShort(
+    minutes
+){
+
+    const h =
+        Math.floor(
+            minutes / 60
+        );
+
+
+    const m =
+        minutes % 60;
+
+
+    if(m < 10){
+
+        return h + "h";
+
+    }
+
+
+    return h + "h " +
+        Math.round(m / 10) +
+        "m";
+
+}
+
+
+/* =========================
+   STREAK
+========================= */
+
+function calculateStreak(){
+
+    const dates =
+        new Set(
+            logs
+                .filter(
+                    x =>
+                        x.minutes > 0
+                )
+                .map(
+                    x =>
+                        x.date
+                )
+        );
+
+
+    let streak = 0;
+
+    const date =
+        new Date();
+
+
+    while(true){
+
+        const key =
+            date.getFullYear() +
+            "-" +
+            String(
+                date.getMonth()+1
+            ).padStart(2,"0") +
+            "-" +
+            String(
+                date.getDate()
+            ).padStart(2,"0");
+
+
+        if(
+            dates.has(key)
+        ){
+
+            streak++;
+
+            date.setDate(
+                date.getDate() - 1
+            );
+
+        }else{
+
+            break;
+
+        }
+
+    }
+
+
+    return streak;
+
+}
+
+
+/* =========================
+   ROUTINE
+========================= */
+
+function renderRoutine(){
+
+    const container =
+        document.getElementById(
+            "routine"
+        );
+
+
+    const done =
+        routine.filter(
+            x =>
+                x.done
+        ).length;
+
+
+    document.getElementById(
+        "routineProgress"
+    ).textContent =
+        done +
+        " / " +
+        routine.length;
+
+
+    if(!routine.length){
+
+        container.innerHTML = `
+
+            <div class="note">
+
+                <strong>
+                    🌙 Empty routine
+                </strong>
+
+                <p>
+                    Add a simple bedtime habit below.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        routine
+        .map(
+            item => `
+
+                <div
+                    class="routineItem ${
+                        item.done
+                            ? "done"
+                            : ""
+                    }"
+                >
+
+                    <button
+                        class="routineCheck"
+                        onclick="toggleRoutine('${item.id}')"
+                    >
+                        ✓
+                    </button>
+
+
+                    <div class="routineInfo">
+
+                        <strong>
+                            ${escapeHTML(item.name)}
+                        </strong>
+
+                        <span>
+                            ${escapeHTML(item.detail || "Bedtime habit")}
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="deleteRoutine"
+                        onclick="deleteRoutine('${item.id}')"
+                        aria-label="Delete routine"
+                    >
+                        🗑
+                    </button>
+
+                </div>
+
+            `
+        )
+        .join("");
+
+}
+
+
+function toggleRoutine(id){
+
+    const item =
+        routine.find(
+            x =>
+                x.id === id
+        );
+
+
+    if(!item){
+
+        return;
+
+    }
+
+
+    item.done =
+        !item.done;
+
+
+    saveRoutine();
+
+    renderRoutine();
+
+
+    showToast(
+        item.done
+            ? "✅ Routine completed."
+            : "↩️ Routine reopened."
+    );
+
+}
+
+
+function addRoutine(){
+
+    const input =
+        document.getElementById(
+            "routineInput"
+        );
+
+
+    const name =
+        input.value.trim();
+
+
+    if(!name){
+
+        showToast(
+            "⚠️ Enter a routine step."
+        );
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    routine.push({
+
+        id:makeId(),
+
+        name:name,
+
+        detail:"Added to bedtime routine",
+
+        done:false
+
+    });
+
+
+    saveRoutine();
+
+    input.value = "";
+
+    renderRoutine();
+
+    showToast(
+        "🌙 Routine step added."
+    );
+
+}
+
+
+function deleteRoutine(id){
+
+    routine =
+        routine.filter(
+            x =>
+                x.id !== id
+        );
+
+
+    saveRoutine();
+
+    renderRoutine();
+
+    showToast(
+        "🗑️ Routine step removed."
+    );
+
+}
+
+
+/* =========================
+   WEEK VIEW
+========================= */
+
+function renderWeek(){
+
+    const container =
+        document.getElementById(
+            "week"
+        );
+
+
+    const today =
+        new Date();
+
+
+    const day =
+        today.getDay();
+
+
+    const mondayOffset =
+        day === 0
+            ? -6
+            : 1 - day;
+
+
+    const monday =
+        new Date(today);
+
+
+    monday.setDate(
+        today.getDate() +
+        mondayOffset
+    );
+
+
+    let html = "";
+
+
+    for(let i=0;i<7;i++){
+
+        const date =
+            new Date(monday);
+
+
+        date.setDate(
+            monday.getDate() +
+            i
+        );
+
+
+        const key =
+            date.getFullYear() +
+            "-" +
+            String(
+                date.getMonth()+1
+            ).padStart(2,"0") +
+            "-" +
+            String(
+                date.getDate()
+            ).padStart(2,"0");
+
+
+        const log =
+            logs.find(
+                x =>
+                    x.date === key
+            );
+
+
+        const hours =
+            log
+                ? log.minutes / 60
+                : 0;
+
+
+        const dayName =
+            date.toLocaleDateString(
+                undefined,
+                {
+                    weekday:"short"
+                }
+            ).slice(0,2);
+
+
+        let cls = "";
+
+
+        if(hours >= 7){
+
+            cls = "good";
+
+        }
+
+
+        if(hours >= 8){
+
+            cls = "best";
+
+        }
+
+
+        html += `
+
+            <div class="day ${cls}">
+
+                <div class="dayName">
+                    ${dayName}
+                </div>
+
+                <div class="dayMoon">
+                    ${getMoon(hours)}
+                </div>
+
+                <div class="dayHours">
+                    ${
+                        hours
+                            ? hours.toFixed(1) + "h"
+                            : "-"
+                    }
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+function getMoon(hours){
+
+    if(hours >= 8){
+
+        return "🌕";
+
+    }
+
+    if(hours >= 7){
+
+        return "🌖";
+
+    }
+
+    if(hours >= 5){
+
+        return "🌗";
+
+    }
+
+    if(hours > 0){
+
+        return "🌘";
+
+    }
+
+    return "🌑";
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body
+        .classList
+        .toggle("dark");
+
+
+    const dark =
+        document.body
+            .classList
+            .contains("dark");
+
+
+    localStorage.setItem(
+        STORAGE_THEME,
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById(
+        "themeBtn"
+    ).textContent =
+        dark
+            ? "☀️"
+            : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            STORAGE_THEME
+        ) === "1";
+
+
+    if(dark){
+
+        document.body
+            .classList
+            .add("dark");
+
+
+        document.getElementById(
+            "themeBtn"
+        ).textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TIPS
+========================= */
+
+const tips = [
+
+    "Keeping a consistent sleep and wake time can make your routine easier to maintain.",
+
+    "Dim bright lights before bed to help your environment feel calmer.",
+
+    "Try putting your phone away a little earlier and replacing scrolling with reading or relaxing.",
+
+    "A cool, quiet and comfortable bedroom can make it easier to settle down.",
+
+    "Create a short routine you actually enjoy. Consistency matters more than complexity.",
+
+    "If your mind is busy, write tomorrow's tasks down before getting into bed.",
+
+    "Give yourself enough time in bed rather than trying to squeeze sleep into a busy schedule."
+
+];
+
+
+document.getElementById(
+    "tipText"
+).textContent =
+    tips[
+        new Date().getDate()
+        % tips.length
+    ];
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(
+    message
+){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () =>
+                toast.classList.remove(
+                    "show"
+                ),
+            2200
+        );
+
+}
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.getElementById(
+    "routineInput"
+).addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter"
+        ){
+
+            addRoutine();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+loadToday();
+
+render();
+
+</script>
+
+</body>
+</html>

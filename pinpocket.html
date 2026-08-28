@@ -1,0 +1,1634 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#db2777">
+<title>PinPocket</title>
+
+<style>
+:root{
+    --bg:#fdf5f9;
+    --card:#fff;
+    --text:#241a21;
+    --muted:#95858e;
+    --line:#eee2e8;
+    --primary:#db2777;
+    --primary2:#ec4899;
+    --soft:#fce7f3;
+    --green:#16a34a;
+    --red:#dc2626;
+    --shadow:0 12px 32px rgba(100,35,70,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+textarea,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:auto;
+    overflow:hidden;
+}
+
+/* HEADER */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 30px;
+    color:#fff;
+    background:
+        linear-gradient(
+            145deg,
+            #9d174d,
+            #db2777 55%,
+            #f472b6
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header:before,
+.header:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.1);
+}
+
+.header:before{
+    width:190px;
+    height:190px;
+    right:-90px;
+    top:-110px;
+}
+
+.header:after{
+    width:140px;
+    height:140px;
+    left:-80px;
+    bottom:-100px;
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.brandIcon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    font-size:22px;
+}
+
+.brandName{
+    font-size:21px;
+    font-weight:850;
+}
+
+.themeBtn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    color:#fff;
+    font-size:17px;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:24px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    margin:8px 0 0;
+    max-width:335px;
+    color:rgba(255,255,255,.84);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+    padding:18px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:17px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:21px;
+    box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:15px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.stat{
+    padding:13px 5px;
+    text-align:center;
+    border-radius:15px;
+    background:var(--bg);
+}
+
+.statIcon{
+    font-size:18px;
+}
+
+.stat strong{
+    display:block;
+    margin-top:4px;
+    font-size:18px;
+}
+
+.stat span{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* ADD FORM */
+
+.form{
+    display:none;
+}
+
+.form.open{
+    display:block;
+}
+
+.field{
+    margin-bottom:10px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:5px;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:700;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    border:1px solid var(--line);
+    outline:none;
+    border-radius:12px;
+    padding:11px 12px;
+    background:var(--bg);
+    color:var(--text);
+}
+
+textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:var(--primary2);
+}
+
+.formButtons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.primaryBtn,
+.secondaryBtn{
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.primaryBtn{
+    background:var(--primary);
+    color:#fff;
+}
+
+.secondaryBtn{
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* ADD BUTTON */
+
+.addBtn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    padding:13px;
+    border:0;
+    border-radius:13px;
+    background:var(--primary);
+    color:#fff;
+    font-size:12px;
+    font-weight:800;
+    box-shadow:0 7px 18px rgba(219,39,119,.18);
+}
+
+/* SEARCH */
+
+.search{
+    position:relative;
+    margin-bottom:12px;
+}
+
+.searchIcon{
+    position:absolute;
+    left:12px;
+    top:10px;
+}
+
+.search input{
+    padding-left:36px;
+}
+
+/* FILTER */
+
+.filters{
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    padding-bottom:2px;
+    scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{
+    display:none;
+}
+
+.filter{
+    flex:0 0 auto;
+    border:0;
+    padding:7px 10px;
+    border-radius:9px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:9px;
+    font-weight:750;
+}
+
+.filter.active{
+    background:var(--primary);
+    color:#fff;
+}
+
+/* PIN CARDS */
+
+.pinList{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.pin{
+    position:relative;
+    padding:14px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:var(--card);
+}
+
+.pinTop{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.pinTitle{
+    margin:0;
+    font-size:13px;
+    font-weight:850;
+    word-break:break-word;
+}
+
+.pinType{
+    flex:0 0 auto;
+    padding:4px 7px;
+    border-radius:7px;
+    background:var(--soft);
+    color:var(--primary);
+    font-size:8px;
+    font-weight:800;
+}
+
+.pinContent{
+    margin:8px 0;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.5;
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+.pinDate{
+    color:var(--muted);
+    font-size:8px;
+}
+
+.pinActions{
+    display:flex;
+    gap:6px;
+    margin-top:10px;
+}
+
+.pinAction{
+    flex:1;
+    padding:8px;
+    border:0;
+    border-radius:9px;
+    background:var(--bg);
+    color:var(--text);
+    font-size:9px;
+    font-weight:700;
+}
+
+.pinAction.delete{
+    color:var(--red);
+}
+
+.pinAction.favorite{
+    color:var(--primary);
+}
+
+.favoritePin{
+    border-color:var(--primary2);
+    background:#fff9fc;
+}
+
+/* EMPTY */
+
+.empty{
+    padding:30px 15px;
+    text-align:center;
+}
+
+.emptyIcon{
+    font-size:35px;
+}
+
+.empty h3{
+    margin:9px 0 5px;
+    font-size:14px;
+}
+
+.empty p{
+    margin:0;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.5;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    z-index:100;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#241a21;
+    color:#fff;
+    font-size:11px;
+    white-space:nowrap;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+    --bg:#120d14;
+    --card:#1d1620;
+    --text:#f8edf3;
+    --muted:#a2929e;
+    --line:#332532;
+    --soft:#3a1b2e;
+    --shadow:0 12px 35px rgba(0,0,0,.28);
+}
+
+body.dark .favoritePin{
+    background:#21131c;
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(70,30,55,.12);
+    }
+}
+
+/* SMALL */
+
+@media(max-width:350px){
+
+    .content{
+        padding:14px;
+    }
+
+    .header{
+        padding:18px 15px 27px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brandIcon">
+                📌
+            </div>
+
+            <div class="brandName">
+                PinPocket
+            </div>
+
+        </div>
+
+        <button
+            class="themeBtn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+
+    <div class="hero">
+
+        <h1>
+            Save it now.<br>
+            Find it later.
+        </h1>
+
+        <p>
+            Your tiny offline pocket for links, notes, ideas and important things.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- STATS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📊 Your Pocket
+        </h2>
+
+        <span>
+            Offline
+        </span>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="statIcon">
+                📌
+            </div>
+
+            <strong id="totalCount">
+                0
+            </strong>
+
+            <span>
+                Saved
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ❤️
+            </div>
+
+            <strong id="favoriteCount">
+                0
+            </strong>
+
+            <span>
+                Favorites
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                🔗
+            </div>
+
+            <strong id="linkCount">
+                0
+            </strong>
+
+            <span>
+                Links
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ADD -->
+
+<section class="card">
+
+    <button
+        class="addBtn"
+        onclick="toggleForm()"
+        id="addButton"
+    >
+        ＋ Save Something
+    </button>
+
+
+    <div
+        class="form"
+        id="form"
+    >
+
+        <div
+            style="height:15px"
+        ></div>
+
+
+        <div class="field">
+
+            <label>
+                TITLE
+            </label>
+
+            <input
+                id="title"
+                type="text"
+                maxlength="100"
+                placeholder="e.g. Useful website"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                TYPE
+            </label>
+
+            <select id="type">
+
+                <option value="Note">
+                    📝 Note
+                </option>
+
+                <option value="Link">
+                    🔗 Link
+                </option>
+
+                <option value="Idea">
+                    💡 Idea
+                </option>
+
+                <option value="Quote">
+                    💬 Quote
+                </option>
+
+                <option value="Important">
+                    ⭐ Important
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                CONTENT / URL
+            </label>
+
+            <textarea
+                id="contentInput"
+                maxlength="2000"
+                placeholder="Paste a link or write something..."
+            ></textarea>
+
+        </div>
+
+
+        <div class="formButtons">
+
+            <button
+                class="secondaryBtn"
+                onclick="closeForm()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="primaryBtn"
+                onclick="savePin()"
+            >
+                📌 Save Pin
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- SAVED ITEMS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📂 Saved Items
+        </h2>
+
+        <span id="resultCount">
+            0 items
+        </span>
+
+    </div>
+
+
+    <div class="search">
+
+        <span class="searchIcon">
+            🔍
+        </span>
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Search your pocket..."
+            oninput="renderPins()"
+        >
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="setFilter('All',this)"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Link',this)"
+        >
+            🔗 Links
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Note',this)"
+        >
+            📝 Notes
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Idea',this)"
+        >
+            💡 Ideas
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('favorite',this)"
+        >
+            ❤️ Favorites
+        </button>
+
+    </div>
+
+
+    <div
+        style="height:13px"
+    ></div>
+
+
+    <div
+        class="pinList"
+        id="pinList"
+    ></div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+
+/* =========================
+   DATA
+========================= */
+
+let pins =
+    JSON.parse(
+        localStorage.getItem("pinPocketPins") || "[]"
+    );
+
+let currentFilter = "All";
+
+let toastTimer;
+
+
+/* =========================
+   SAVE DATA
+========================= */
+
+function saveData(){
+
+    localStorage.setItem(
+        "pinPocketPins",
+        JSON.stringify(pins)
+    );
+
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+function toggleForm(){
+
+    const form =
+        document.getElementById("form");
+
+    if(form.classList.contains("open")){
+
+        closeForm();
+
+    }else{
+
+        form.classList.add("open");
+
+        document.getElementById("addButton")
+            .textContent =
+            "✕ Close Form";
+
+        document.getElementById("title")
+            .focus();
+
+    }
+
+}
+
+
+function closeForm(){
+
+    document.getElementById("form")
+        .classList.remove("open");
+
+    document.getElementById("addButton")
+        .textContent =
+        "＋ Save Something";
+
+}
+
+
+function clearForm(){
+
+    document.getElementById("title")
+        .value = "";
+
+    document.getElementById("contentInput")
+        .value = "";
+
+    document.getElementById("type")
+        .value = "Note";
+
+}
+
+
+/* =========================
+   ADD PIN
+========================= */
+
+function savePin(){
+
+    const title =
+        document.getElementById("title")
+            .value
+            .trim();
+
+    const type =
+        document.getElementById("type")
+            .value;
+
+    const content =
+        document.getElementById("contentInput")
+            .value
+            .trim();
+
+
+    if(!title){
+
+        showToast(
+            "⚠️ Please enter a title."
+        );
+
+        document.getElementById("title")
+            .focus();
+
+        return;
+
+    }
+
+
+    if(!content){
+
+        showToast(
+            "⚠️ Please add some content."
+        );
+
+        document.getElementById("contentInput")
+            .focus();
+
+        return;
+
+    }
+
+
+    const pin = {
+
+        id:
+            Date.now().toString() +
+            Math.random()
+                .toString(16)
+                .slice(2),
+
+        title:title,
+
+        type:type,
+
+        content:content,
+
+        favorite:false,
+
+        date:
+            new Date().toISOString()
+
+    };
+
+
+    pins.unshift(pin);
+
+    saveData();
+
+    clearForm();
+
+    closeForm();
+
+    renderPins();
+
+    showToast(
+        "📌 Saved to PinPocket!"
+    );
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(filter,button){
+
+    currentFilter = filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(
+            item =>
+                item.classList.remove("active")
+        );
+
+
+    button.classList.add("active");
+
+
+    renderPins();
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function renderPins(){
+
+    const list =
+        document.getElementById("pinList");
+
+    const query =
+        document.getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    let filtered =
+        pins.filter(pin => {
+
+            const matchesSearch =
+                pin.title
+                    .toLowerCase()
+                    .includes(query) ||
+
+                pin.content
+                    .toLowerCase()
+                    .includes(query);
+
+
+            let matchesFilter = true;
+
+
+            if(currentFilter !== "All"){
+
+                if(currentFilter === "favorite"){
+
+                    matchesFilter =
+                        pin.favorite === true;
+
+                }else{
+
+                    matchesFilter =
+                        pin.type === currentFilter;
+
+                }
+
+            }
+
+
+            return (
+                matchesSearch &&
+                matchesFilter
+            );
+
+        });
+
+
+    document.getElementById("resultCount")
+        .textContent =
+        filtered.length +
+        (
+            filtered.length === 1
+                ? " item"
+                : " items"
+        );
+
+
+    if(filtered.length === 0){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="emptyIcon">
+                    📌
+                </div>
+
+                <h3>
+                    Your pocket is empty
+                </h3>
+
+                <p>
+                    Save your first note, link, idea or important snippet.
+                </p>
+
+            </div>
+
+        `;
+
+        updateStats();
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        filtered
+            .map(
+                pin => {
+
+                    const date =
+                        formatDate(pin.date);
+
+
+                    const safeTitle =
+                        escapeHTML(pin.title);
+
+                    const safeContent =
+                        escapeHTML(pin.content);
+
+
+                    return `
+
+                        <article
+                            class="pin ${
+                                pin.favorite
+                                    ? "favoritePin"
+                                    : ""
+                            }"
+                        >
+
+                            <div class="pinTop">
+
+                                <h3 class="pinTitle">
+                                    ${safeTitle}
+                                </h3>
+
+                                <span class="pinType">
+                                    ${typeIcon(pin.type)}
+                                    ${escapeHTML(pin.type)}
+                                </span>
+
+                            </div>
+
+
+                            <div class="pinContent">
+                                ${safeContent}
+                            </div>
+
+
+                            <div class="pinDate">
+                                Saved ${date}
+                            </div>
+
+
+                            <div class="pinActions">
+
+                                ${
+                                    pin.type === "Link"
+                                    ? `
+                                        <button
+                                            class="pinAction"
+                                            onclick="openLink('${pin.id}')"
+                                        >
+                                            🔗 Open
+                                        </button>
+                                    `
+                                    : ""
+                                }
+
+
+                                <button
+                                    class="pinAction favorite"
+                                    onclick="toggleFavorite('${pin.id}')"
+                                >
+                                    ${
+                                        pin.favorite
+                                            ? "❤️ Saved"
+                                            : "♡ Favorite"
+                                    }
+                                </button>
+
+
+                                <button
+                                    class="pinAction"
+                                    onclick="copyPin('${pin.id}')"
+                                >
+                                    📋 Copy
+                                </button>
+
+
+                                <button
+                                    class="pinAction delete"
+                                    onclick="deletePin('${pin.id}')"
+                                >
+                                    🗑 Delete
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    updateStats();
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats(){
+
+    document.getElementById("totalCount")
+        .textContent =
+        pins.length;
+
+
+    document.getElementById("favoriteCount")
+        .textContent =
+        pins.filter(
+            pin => pin.favorite
+        ).length;
+
+
+    document.getElementById("linkCount")
+        .textContent =
+        pins.filter(
+            pin => pin.type === "Link"
+        ).length;
+
+}
+
+
+/* =========================
+   FAVORITE
+========================= */
+
+function toggleFavorite(id){
+
+    const pin =
+        pins.find(
+            item => item.id === id
+        );
+
+
+    if(!pin){
+        return;
+    }
+
+
+    pin.favorite =
+        !pin.favorite;
+
+
+    saveData();
+
+    renderPins();
+
+
+    showToast(
+        pin.favorite
+            ? "❤️ Added to favorites."
+            : "♡ Removed from favorites."
+    );
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deletePin(id){
+
+    const pin =
+        pins.find(
+            item => item.id === id
+        );
+
+
+    if(!pin){
+        return;
+    }
+
+
+    if(
+        !confirm(
+            "Delete \"" +
+            pin.title +
+            "\"?"
+        )
+    ){
+        return;
+    }
+
+
+    pins =
+        pins.filter(
+            item => item.id !== id
+        );
+
+
+    saveData();
+
+    renderPins();
+
+    showToast(
+        "🗑 Pin deleted."
+    );
+
+}
+
+
+/* =========================
+   COPY
+========================= */
+
+async function copyPin(id){
+
+    const pin =
+        pins.find(
+            item => item.id === id
+        );
+
+
+    if(!pin){
+        return;
+    }
+
+
+    const text =
+        pin.title +
+        "\n\n" +
+        pin.content;
+
+
+    try{
+
+        await navigator.clipboard.writeText(
+            text
+        );
+
+        showToast(
+            "📋 Copied!"
+        );
+
+    }catch(error){
+
+        showToast(
+            "Could not copy automatically."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   OPEN LINK
+========================= */
+
+function openLink(id){
+
+    const pin =
+        pins.find(
+            item => item.id === id
+        );
+
+
+    if(!pin){
+        return;
+    }
+
+
+    let url =
+        pin.content.trim();
+
+
+    if(
+        !url.startsWith("http://") &&
+        !url.startsWith("https://")
+    ){
+
+        url =
+            "https://" +
+            url;
+
+    }
+
+
+    try{
+
+        const parsed =
+            new URL(url);
+
+
+        if(
+            parsed.protocol !== "http:" &&
+            parsed.protocol !== "https:"
+        ){
+            throw new Error();
+        }
+
+
+        window.open(
+            parsed.href,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+    }catch(error){
+
+        showToast(
+            "⚠️ This doesn't look like a valid link."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function typeIcon(type){
+
+    const icons = {
+
+        Note:"📝",
+
+        Link:"🔗",
+
+        Idea:"💡",
+
+        Quote:"💬",
+
+        Important:"⭐"
+
+    };
+
+
+    return icons[type] || "📌";
+
+}
+
+
+function formatDate(date){
+
+    const d =
+        new Date(date);
+
+
+    return d.toLocaleDateString(
+        undefined,
+        {
+            month:"short",
+            day:"numeric",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+
+    const dark =
+        document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "pinPocketDark",
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById("themeBtn")
+        .textContent =
+        dark ? "☀️" : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            "pinPocketDark"
+        ) === "1";
+
+
+    if(dark){
+
+        document.body.classList.add("dark");
+
+        document.getElementById("themeBtn")
+            .textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () =>
+                toast.classList.remove("show"),
+            2200
+        );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+renderPins();
+
+</script>
+
+</body>
+</html>

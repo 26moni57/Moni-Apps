@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>MedicinePocket — Medicine Organizer</title>
+<style>
+:root{--bg:#f6f5fb;--card:#fff;--text:#1e1b2e;--muted:#77738a;--line:#e7e4ef;--primary:#7c3aed;--primary2:#6d28d9;--soft:#f0eafd;--green:#16a34a;--red:#dc2626;--amber:#d97706;--shadow:0 14px 40px rgba(55,30,90,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}.app{max-width:650px;margin:auto;min-height:100vh}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.header{padding:18px 18px 27px;color:#fff;background:linear-gradient(145deg,#4c1d95,#7c3aed 58%,#a855f7);border-radius:0 0 30px 30px;position:relative;overflow:hidden}.header:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-120px;top:-160px;background:rgba(255,255,255,.1)}
+.top{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center}.brand{display:flex;align-items:center;gap:10px}.logo{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:rgba(255,255,255,.16);font-size:21px}.brand b{display:block;font-size:18px}.brand span{font-size:7px;color:#ede9fe;letter-spacing:.5px}.theme{width:40px;height:40px;border:0;border-radius:12px;background:rgba(255,255,255,.15);color:#fff}
+.hero{position:relative;z-index:1;margin-top:20px}.eyebrow{font-size:8px;font-weight:800;color:#ddd6fe}.title{font-size:29px;font-weight:900;letter-spacing:-1px;margin-top:4px}.hero p{font-size:8px;color:#ede9fe;margin:7px 0 0}
+.content{padding:15px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:13px;box-shadow:var(--shadow)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{text-align:center;background:var(--bg);padding:11px 4px;border-radius:14px}.stat .i{font-size:16px}.stat b{display:block;font-size:13px;margin-top:3px}.stat span{display:block;color:var(--muted);font-size:6.5px;margin-top:3px}
+.head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.head h2{font-size:14px;margin:0}.head span{font-size:8px;color:var(--muted)}
+.search{position:relative}.search input{width:100%;height:42px;border:1px solid var(--line);border-radius:11px;background:var(--bg);padding:0 38px;outline:0;font-size:9px;color:var(--text)}.search i{position:absolute;left:13px;top:12px;font-style:normal}.search button{position:absolute;right:4px;top:4px;width:32px;height:32px;border:0;background:transparent;color:var(--muted)}
+.filters{display:flex;gap:6px;overflow:auto;padding:9px 0 2px}.filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:20px;padding:7px 11px;font-size:7px;font-weight:800}.filter.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.primary{width:100%;height:40px;border:0;border-radius:10px;background:var(--primary);color:#fff;font-size:8px;font-weight:900;margin-top:9px}.primary:hover{background:var(--primary2)}
+.med-list{display:flex;flex-direction:column;gap:10px}.med{border:1px solid var(--line);border-radius:17px;padding:13px;background:var(--card)}.med-top{display:flex;gap:10px;align-items:flex-start}.pill{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:var(--soft);font-size:21px}.med-main{flex:1;min-width:0}.med-name{font-size:12px;font-weight:900}.med-dose{font-size:8px;color:var(--muted);margin-top:3px}.star{border:0;background:transparent;font-size:19px;color:#c4bfce}.star.on{color:#f59e0b}.badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}.badge{padding:5px 7px;border-radius:7px;background:var(--bg);font-size:6px;font-weight:800;color:var(--muted)}.badge.good{background:#eaf8ee;color:var(--green)}.badge.warn{background:#fff7e8;color:var(--amber)}.badge.danger{background:#fff0f0;color:var(--red)}
+.times{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.time{padding:6px 8px;border-radius:8px;background:var(--soft);color:var(--primary);font-size:7px;font-weight:800}.med-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:11px}.stock{font-size:7px;color:var(--muted)}.actions{display:flex;gap:5px}.small{width:31px;height:30px;border:0;border-radius:8px;background:var(--bg);color:var(--muted)}.small:hover{color:var(--primary);background:var(--soft)}
+.empty{text-align:center;padding:32px 10px}.empty .emoji{font-size:40px}.empty b{display:block;font-size:10px;margin-top:7px}.empty p{font-size:8px;color:var(--muted);max-width:280px;margin:5px auto;line-height:1.5}
+.progress{height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:9px}.progress span{display:block;height:100%;background:var(--primary);border-radius:99px;width:0}
+.modal{position:fixed;inset:0;z-index:20;display:none;align-items:flex-end;justify-content:center;padding:15px;background:rgba(20,10,35,.6);backdrop-filter:blur(5px)}.modal.show{display:flex}.box{width:100%;max-width:590px;max-height:93vh;overflow:auto;background:var(--card);border-radius:24px;padding:18px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modal-head h3{font-size:15px;margin:0}.close{width:32px;height:32px;border:0;border-radius:9px;background:var(--bg);color:var(--muted)}.field{margin-bottom:11px}.field label{display:block;font-size:8px;font-weight:900;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);outline:0;padding:10px;font-size:9px}.field input,.field select{height:40px}.field textarea{min-height:65px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.modal-actions{display:flex;gap:7px;margin-top:15px}.modal-actions button{flex:1;height:40px;border:0;border-radius:10px;font-size:9px;font-weight:900}.cancel{background:var(--bg);color:var(--text)}.save{background:var(--primary);color:#fff}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detail{padding:10px;background:var(--bg);border-radius:11px}.detail span{display:block;color:var(--muted);font-size:6px}.detail b{display:block;font-size:8px;margin-top:4px}.section{margin-top:13px}.section h4{font-size:9px;margin:0 0 7px}.note{padding:11px;border-radius:11px;background:var(--bg);font-size:8px;line-height:1.5}
+.dose-row{display:flex;align-items:center;gap:8px;padding:8px;border-radius:10px;background:var(--bg);margin-top:6px}.dose-row span{font-size:8px;flex:1}.taken{border:0;border-radius:8px;padding:7px 9px;background:var(--primary);color:#fff;font-size:7px;font-weight:800}.taken.done{background:var(--green)}
+.toast{position:fixed;left:50%;bottom:20px;z-index:50;background:#21182d;color:#fff;padding:11px 15px;border-radius:11px;font-size:9px;opacity:0;pointer-events:none;transform:translate(-50%,20px);transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+body.dark{--bg:#111017;--card:#1b1821;--text:#f7f4fa;--muted:#a7a1b1;--line:#302b38;--soft:#2a2040;--shadow:0 15px 40px rgba(0,0,0,.35)}
+body.dark .badge.good{background:#14271b}body.dark .badge.warn{background:#2b2415}body.dark .badge.danger{background:#2b1818}
+@media(min-width:700px){body{padding:20px 0}.app{min-height:calc(100vh - 40px);border-radius:30px;overflow:hidden;box-shadow:0 20px 60px rgba(55,30,90,.14)}.modal{align-items:center}}
+@media(max-width:420px){.two{grid-template-columns:1fr;gap:0}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+  <div class="top">
+    <div class="brand"><div class="logo">💊</div><div><b>MedicinePocket</b><span>YOUR OFFLINE MEDICINE ORGANIZER</span></div></div>
+    <button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+  </div>
+  <div class="hero"><div class="eyebrow">ORGANIZE • REMEMBER • TRACK</div><div class="title">MedicinePocket</div><p>Keep your medicine information and personal dose notes organized on your device.</p></div>
+</header>
+
+<main class="content">
+<section class="card">
+  <div class="stats">
+    <div class="stat"><div class="i">💊</div><b id="medCount">0</b><span>Medicines</span></div>
+    <div class="stat"><div class="i">⏰</div><b id="todayCount">0</b><span>Today's Doses</span></div>
+    <div class="stat"><div class="i">⚠️</div><b id="lowCount">0</b><span>Low Stock</span></div>
+  </div>
+  <div class="progress"><span id="progressBar"></span></div>
+</section>
+
+<section class="card">
+  <div class="head"><h2>💊 My Medicines</h2><span id="resultCount">0 medicines</span></div>
+  <div class="search"><i>🔍</i><input id="search" placeholder="Search medicines..." oninput="render()"><button onclick="clearSearch()">×</button></div>
+  <div class="filters" id="filters"></div>
+  <button class="primary" onclick="openEditor()">+ Add Medicine</button>
+</section>
+
+<section class="card"><div class="med-list" id="medList"></div></section>
+</main>
+<footer style="padding:5px 15px 25px;text-align:center;color:var(--muted);font-size:7px">🔒 Your information stays in this browser using local storage.</footer>
+</div>
+
+<div class="modal" id="editorModal"><div class="box">
+  <div class="modal-head"><h3 id="editorTitle">💊 Add Medicine</h3><button class="close" onclick="closeEditor()">×</button></div>
+  <div class="field"><label>MEDICINE NAME</label><input id="name" maxlength="100" placeholder="e.g. Vitamin D"></div>
+  <div class="two">
+    <div class="field"><label>DOSAGE</label><input id="dose" maxlength="60" placeholder="e.g. 1 tablet"></div>
+    <div class="field"><label>FREQUENCY</label><select id="frequency"><option>Once daily</option><option>Twice daily</option><option>Three times daily</option><option>As needed</option><option>Weekly</option><option>Custom</option></select></div>
+  </div>
+  <div class="field"><label>DOSE TIMES</label><input id="times" placeholder="e.g. 08:00, 20:00"></div>
+  <div class="two">
+    <div class="field"><label>START DATE</label><input id="start" type="date"></div>
+    <div class="field"><label>END DATE</label><input id="end" type="date"></div>
+  </div>
+  <div class="two">
+    <div class="field"><label>STOCK / QUANTITY</label><input id="stock" type="number" min="0" step="1" placeholder="e.g. 30"></div>
+    <div class="field"><label>LOW-STOCK AT</label><input id="lowAt" type="number" min="0" step="1" placeholder="e.g. 5"></div>
+  </div>
+  <div class="field"><label>INSTRUCTIONS</label><textarea id="instructions" maxlength="700" placeholder="Personal instructions or reminders..."></textarea></div>
+  <div class="field"><label>NOTES</label><textarea id="notes" maxlength="1000" placeholder="Anything else you want to remember..."></textarea></div>
+  <div class="modal-actions"><button class="cancel" onclick="closeEditor()">Cancel</button><button class="save" onclick="saveMedicine()">Save Medicine</button></div>
+</div></div>
+
+<div class="modal" id="detailModal"><div class="box">
+  <div class="modal-head"><h3>📋 Medicine Details</h3><button class="close" onclick="closeDetail()">×</button></div>
+  <div id="detailContent"></div>
+  <div class="modal-actions"><button class="cancel" onclick="closeDetail()">Close</button><button class="save" id="editDetail">✏️ Edit</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY="medicinePocketData", THEME="medicinePocketTheme";
+let data=JSON.parse(localStorage.getItem(KEY)||"null")||{medicines:[],doses:{}};
+if(!Array.isArray(data.medicines))data.medicines=[];
+if(!data.doses||typeof data.doses!=="object")data.doses={};
+let editingId=null,filter="All",detailId=null;
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function toast(m){let t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),2200)}
+function todayKey(){return new Date().toISOString().slice(0,10)}
+function fmtDate(v){if(!v)return"Not set";let d=new Date(v+"T00:00:00");return Number.isNaN(d.getTime())?v:d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"})}
+function active(m){let t=todayKey();return (!m.start||t>=m.start)&&(!m.end||t<=m.end)}
+function doseTimes(m){return (m.times||"").split(",").map(x=>x.trim()).filter(Boolean)}
+function doseKey(id,time){return todayKey()+"|"+id+"|"+time}
+function isTaken(id,time){return !!data.doses[doseKey(id,time)]}
+function status(m){if(!active(m))return"Inactive";if(Number(m.stock)>0&&Number(m.stock)<=Number(m.lowAt||0))return"Low stock";return"Active"}
+
+function renderFilters(){
+ document.getElementById("filters").innerHTML=["All","Active","Low stock","Inactive"].map(x=>`<button class="filter ${filter===x?"active":""}" onclick="setFilter('${x}')">${x}</button>`).join("");
+}
+function setFilter(x){filter=x;renderFilters();render()}
+
+function renderStats(){
+ let activeM=data.medicines.filter(active), doses=0,taken=0;
+ activeM.forEach(m=>doseTimes(m).forEach(t=>{doses++;if(isTaken(m.id,t))taken++}));
+ document.getElementById("medCount").textContent=data.medicines.length;
+ document.getElementById("todayCount").textContent=doses;
+ document.getElementById("lowCount").textContent=data.medicines.filter(m=>active(m)&&Number(m.stock)<=Number(m.lowAt||0)).length;
+ document.getElementById("progressBar").style.width=(doses?Math.round(taken/doses*100):0)+"%";
+}
+
+function render(){
+ renderStats();
+ let q=document.getElementById("search").value.trim().toLowerCase();
+ let arr=data.medicines.filter(m=>{
+   let txt=[m.name,m.dose,m.frequency,m.instructions,m.notes].join(" ").toLowerCase();
+   let okQ=!q||txt.includes(q);
+   let s=status(m);
+   return okQ&&(filter==="All"||s===filter);
+ });
+ document.getElementById("resultCount").textContent=`${arr.length} ${arr.length===1?"medicine":"medicines"}`;
+ let list=document.getElementById("medList");
+ if(!arr.length){list.innerHTML=`<div class="empty"><div class="emoji">💊</div><b>No medicines found</b><p>Add a medicine to start organizing your personal information and reminders.</p></div>`;return}
+ list.innerHTML=arr.map(m=>{
+   let st=status(m),times=doseTimes(m);
+   let low=st==="Low stock";
+   return `<article class="med">
+    <div class="med-top"><div class="pill">💊</div><div class="med-main"><div class="med-name">${esc(m.name)}</div><div class="med-dose">${esc(m.dose||"Dose not specified")} · ${esc(m.frequency)}</div></div>
+    <button class="star ${m.favorite?"on":""}" onclick="toggleFav('${m.id}')">${m.favorite?"★":"☆"}</button></div>
+    <div class="badges"><span class="badge ${st==="Active"?"good":st==="Inactive"?"danger":"warn"}">${esc(st)}</span>${m.start||m.end?`<span class="badge">📅 ${fmtDate(m.start)}${m.end?" → "+fmtDate(m.end):""}</span>`:""}</div>
+    ${times.length?`<div class="times">${times.map(t=>`<span class="time">${isTaken(m.id,t)?"✓ ":"⏰ "}${esc(t)}</span>`).join("")}</div>`:""}
+    <div class="med-bottom"><div class="stock">${m.stock!==""&&m.stock!=null?`📦 ${esc(m.stock)} remaining`:"📦 Stock not set"}</div><div class="actions"><button class="small" onclick="openDetail('${m.id}')">👁️</button><button class="small" onclick="openEditor(data.medicines.find(x=>x.id==='${m.id}'))">✏️</button><button class="small" onclick="removeMed('${m.id}')">🗑️</button></div></div>
+   </article>`;
+ }).join("");
+}
+
+function openEditor(m=null){
+ editingId=m?.id||null;
+ document.getElementById("editorTitle").textContent=m?"✏️ Edit Medicine":"💊 Add Medicine";
+ ["name","dose","times","start","end","stock","lowAt","instructions","notes"].forEach(id=>document.getElementById(id).value=m?.[id]??"");
+ document.getElementById("frequency").value=m?.frequency||"Once daily";
+ document.getElementById("editorModal").classList.add("show");
+}
+function closeEditor(){document.getElementById("editorModal").classList.remove("show");editingId=null}
+function saveMedicine(){
+ let m={id:editingId||uid(),name:document.getElementById("name").value.trim(),dose:document.getElementById("dose").value.trim(),frequency:document.getElementById("frequency").value,times:document.getElementById("times").value.trim(),start:document.getElementById("start").value,end:document.getElementById("end").value,stock:document.getElementById("stock").value,lowAt:document.getElementById("lowAt").value,instructions:document.getElementById("instructions").value.trim(),notes:document.getElementById("notes").value.trim(),favorite:false};
+ if(!m.name){toast("Please enter a medicine name.");return}
+ let old=editingId&&data.medicines.find(x=>x.id===editingId);
+ if(old)m.favorite=old.favorite;
+ if(editingId){let i=data.medicines.findIndex(x=>x.id===editingId);if(i>=0)data.medicines[i]=m;toast("✏️ Medicine updated.")}else{data.medicines.unshift(m);toast("💊 Medicine added.")}
+ save();closeEditor();render();
+}
+function toggleFav(id){let m=data.medicines.find(x=>x.id===id);if(!m)return;m.favorite=!m.favorite;save();render();toast(m.favorite?"⭐ Added to favorites":"☆ Removed from favorites")}
+function removeMed(id){let m=data.medicines.find(x=>x.id===id);if(!m)return;if(!confirm(`Delete "${m.name}"?`))return;data.medicines=data.medicines.filter(x=>x.id!==id);Object.keys(data.doses).filter(k=>k.includes("|"+id+"|")).forEach(k=>delete data.doses[k]);save();closeDetail();render();toast("🗑️ Medicine deleted.")}
+function clearSearch(){document.getElementById("search").value="";render()}
+
+function openDetail(id){
+ let m=data.medicines.find(x=>x.id===id);if(!m)return;detailId=id;
+ let times=doseTimes(m);
+ document.getElementById("detailContent").innerHTML=`
+ <div class="detail-grid">
+  <div class="detail"><span>Medicine</span><b>${esc(m.name)}</b></div><div class="detail"><span>Status</span><b>${esc(status(m))}</b></div>
+  <div class="detail"><span>Dosage</span><b>${esc(m.dose||"Not set")}</b></div><div class="detail"><span>Frequency</span><b>${esc(m.frequency)}</b></div>
+  <div class="detail"><span>Start</span><b>${fmtDate(m.start)}</b></div><div class="detail"><span>End</span><b>${fmtDate(m.end)}</b></div>
+  <div class="detail"><span>Stock</span><b>${m.stock!==""?esc(m.stock):"Not set"}</b></div><div class="detail"><span>Low-stock level</span><b>${m.lowAt!==""?esc(m.lowAt):"Not set"}</b></div>
+ </div>
+ <div class="section"><h4>⏰ Today's Dose Checklist</h4>${times.length?times.map(t=>`<div class="dose-row"><span>⏰ ${esc(t)}</span><button class="taken ${isTaken(m.id,t)?"done":""}" onclick="toggleDose('${m.id}','${esc(t)}')">${isTaken(m.id,t)?"✓ Taken":"Mark taken"}</button></div>`).join(""):`<div class="note">No dose times added.</div>`}</div>
+ <div class="section"><h4>📝 Instructions</h4><div class="note">${m.instructions?esc(m.instructions):"Nothing added."}</div></div>
+ ${m.notes?`<div class="section"><h4>📌 Notes</h4><div class="note">${esc(m.notes)}</div></div>`:""}`;
+ document.getElementById("editDetail").onclick=()=>{closeDetail();openEditor(m)};
+ document.getElementById("detailModal").classList.add("show");
+}
+function closeDetail(){document.getElementById("detailModal").classList.remove("show");detailId=null}
+function toggleDose(id,time){let k=doseKey(id,time);if(data.doses[k])delete data.doses[k];else data.doses[k]=Date.now();save();renderStats();openDetail(id);toast(data.doses[k]?"✓ Dose marked taken":"↩ Dose marked not taken")}
+function toggleTheme(){document.body.classList.toggle("dark");let d=document.body.classList.contains("dark");localStorage.setItem(THEME,d?"1":"0");document.getElementById("themeBtn").textContent=d?"☀️":"🌙"}
+function loadTheme(){if(localStorage.getItem(THEME)==="1"){document.body.classList.add("dark");document.getElementById("themeBtn").textContent="☀️"}}
+document.getElementById("editorModal").onclick=e=>{if(e.target.id==="editorModal")closeEditor()};
+document.getElementById("detailModal").onclick=e=>{if(e.target.id==="detailModal")closeDetail()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeEditor();closeDetail()}});
+loadTheme();renderFilters();render();
+</script>
+</body>
+</html>

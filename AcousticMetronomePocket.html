@@ -1,0 +1,433 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#78350f">
+<title>Acoustic Metronome Pocket</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Mahogany Woodgrain & Ivory Sheet Acoustic Look */
+:root{
+--bg:#291305;
+--card:#451a03;
+--text:#fdfcfa;
+--muted:#d97706;
+--line:#78350f;
+--primary:#f59e0b;
+--primary2:#fbbf24;
+--soft:#fef3c7;
+--green:#10b981;
+--danger:#ef4444;
+--shadow:0 12px 32px rgba(41,19,5,.6)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Georgia, serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - WARM WOOD GRAIN LUXURY ACCENT GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#78350f,#451a03 55%,#291305);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(245,158,11,0.06);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px;
+font-weight:normal
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+font-family:system-ui, -apple-system, sans-serif;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+/* VISUAL FLASH TICK MONITOR BAR */
+.flash-beacon-track {
+width:100%;
+height:16px;
+background:var(--bg);
+border-radius:20px;
+border:1px solid var(--line);
+overflow:hidden;
+position:relative
+}
+
+.flash-fill-node {
+width:100%;
+height:100%;
+background:var(--primary);
+opacity:0;
+transition:opacity 0.05s ease-out;
+box-shadow:0 0 15px var(--primary2)
+}
+.flash-fill-node.pulse-active {
+opacity:1
+}
+
+/* TEMPO BIG DISPLAY */
+.tempo-display-panel {
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:20px 0 10px;
+text-align:center
+}
+
+.tempo-digits {
+font-size:62px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--primary);
+margin-bottom:4px;
+text-shadow:0 0 12px rgba(245,158,11,0.2)
+}
+
+/* RANGE SLIDER TRACK CONTROLS */
+.field {
+margin-bottom:12px;
+display:flex;
+flex-direction:column;
+gap:6px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.slider-wrapper {
+display:flex;
+align-items:center;
+gap:12px
+}
+
+.slider-wrapper input[type="range"]{
+flex:1;
+accent-color:var(--primary);
+cursor:pointer
+}
+
+/* MICRO CONFIGURATION STEP BUTTONS ROWS */
+.increment-actions-grid {
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:2px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.btn-tempo-step {
+padding:11px 2px;
+border:1px solid var(--line);
+border-radius:12px;
+background:var(--bg);
+color:var(--text);
+font-size:12px;
+font-weight:800;
+text-align:center;
+transition:background 0.1s
+}
+.btn-tempo-step:active {
+background:var(--line);
+color:var(--primary2)
+}
+
+/* ENGINE RUNTIME TRIGGER ACTION KEY */
+.btn-audio-trigger {
+width:100%;
+padding:15px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:var(--bg);
+font-weight:900;
+font-size:15px;
+letter-spacing:0.5px;
+text-transform:uppercase;
+font-family:system-ui, -apple-system, sans-serif;
+transition:opacity 0.2s
+}
+.btn-audio-trigger.playing-active {
+background:var(--danger);
+color:white
+}
+.btn-audio-trigger:active { opacity:0.9 }
+
+/* LIGHT SHEET CREAM IVORY OVERRIDE SKIN */
+body.light-theme {
+--bg:#fdfcfa;
+--card:#f5f2eb;
+--text:#451a03;
+--muted:#78350f;
+--line:#d9770644;
+--shadow:0 10px 25px rgba(120,53,15,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">⏳</div>
+<div class="brand-name">AcousticTempo</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Rhythm Engine.<br>Acoustic Pulse Clicker.</h1>
+<p>Maintain precision timing sequences locally via synthesized click oscillation loops.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- VISUAL PULSE ACCENT BEACON TRACK -->
+<section class="card" style="padding:12px 17px;">
+<div class="flash-beacon-track">
+<div id="flashBeaconNode" class="flash-fill-node"></div>
+</div>
+</section>
+
+<!-- DIGITS METRICS MONITOR MAIN CARD -->
+<section class="card">
+<div class="tempo-display-panel">
+<div id="tempoDigitsDisplayNode" class="tempo-digits">120</div>
+<span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--muted); letter-spacing:0.5px; font-family:system-ui, -apple-system, sans-serif;">Target Beats Per Minute</span>
+</div>
+</section>
+
+<!-- RANGE CONTROLLER SLIDER PANEL -->
+<section class="card">
+<div class="field">
+<label>Adjust Tempo Cadence Range (BPM)</label>
+<div class="slider-wrapper">
+<input type="range" id="bpmSliderRangeInput" min="40" max="245" value="120" oninput="synchronizeMetronomeBpmValue(this.value)">
+</div>
+</div>
+
+<!-- MICRO PLUG PRESET INCREMENT TWEAKS -->
+<div class="increment-actions-grid">
+<button class="btn-tempo-step" onclick="nudgeBpmValue(-5)">-5</button>
+<button class="btn-tempo-step" onclick="nudgeBpmValue(-1)">-1</button>
+<button class="btn-tempo-step" onclick="nudgeBpmValue(1)">+1</button>
+<button class="btn-tempo-step" onclick="nudgeBpmValue(5)">+5</button>
+</div>
+</section>
+
+<!-- ENGINE INTERACTIVE PLAYBACK ACTIVATOR TRIGGER -->
+<section class="card">
+<button id="masterMetronomeTriggerBtn" class="btn-audio-trigger" onclick="toggleMetronomePulseEngineState()">Start Rhythm Click</button>
+</section>
+
+</main>
+
+</div>
+
+<script>
+let audioContextInstance = null;
+let pulseIntervalEngineTimerId = null;
+
+let beatsPerMinuteTargetVal = 120;
+let isMetronomeEngineCurrentlyRunning = false;
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function synchronizeMetronomeBpmValue(rawBpmValue) {
+    beatsPerMinuteTargetVal = Math.max(40, Math.min(245, parseInt(rawBpmValue)));
+    document.getElementById("tempoDigitsDisplayNode").innerText = beatsPerMinuteTargetVal;
+    document.getElementById("bpmSliderRangeInput").value = beatsPerMinuteTargetVal;
+
+    // Hot-swap speed calculations on the fly if generator loop is active
+    if (isMetronomeEngineCurrentlyRunning) {
+        clearInterval(pulseIntervalEngineTimerId);
+        launchMetronomeIntervalTimerLoop();
+    }
+}
+
+function nudgeBpmValue(offsetDeltaValue) {
+    synchronizeMetronomeBpmValue(beatsPerMinuteTargetVal + offsetDeltaValue);
+}
+
+function toggleMetronomePulseEngineState() {
+    const triggerBtn = document.getElementById("masterMetronomeTriggerBtn");
+
+    if (isMetronomeEngineCurrentlyRunning) {
+        // Disconnect interval loop cleanly
+        clearInterval(pulseIntervalEngineTimerId);
+        isMetronomeEngineCurrentlyRunning = false;
+        triggerBtn.innerText = "Start Rhythm Click";
+        triggerBtn.classList.remove("playing-active");
+        document.getElementById("flashBeaconNode").classList.remove("pulse-active");
+    } else {
+        // Safe activation mapping straight to hardware audio thread components
+        if (!audioContextInstance) {
+            audioContextInstance = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContextInstance.state === 'suspended') {
+            audioContextInstance.resume();
+        }
+
+        isMetronomeEngineCurrentlyRunning = true;
+        triggerBtn.innerText = "Halt Rhythm Click";
+        triggerBtn.className = "btn-audio-trigger playing-active";
+
+        launchMetronomeIntervalTimerLoop();
+    }
+}
+
+function launchMetronomeIntervalTimerLoop() {
+    // Formula calculation: 60,000 Milliseconds / BPM rate = delay interval step spacing
+    const calculatedIntervalMs = (60000 / beatsPerMinuteTargetVal);
+    
+    // Fire initial tactile indicator block immediately before the timeline interval attaches
+    executeSingleMetronomeTick();
+    
+    pulseIntervalEngineTimerId = setInterval(executeSingleMetronomeTick, calculatedIntervalMs);
+}
+
+function executeSingleMetronomeTick() {
+    const beacon = document.getElementById("flashBeaconNode");
+    
+    // Trigger visual beacon state toggles flash
+    beacon.classList.add("pulse-active");
+    setTimeout(() => {
+        beacon.classList.remove("pulse-active");
+    }, 45);
+
+    // Audio click synthesis module logic calculation paths
+    if (audioContextInstance) {
+        try {
+            const now = audioContextInstance.currentTime;
+            const osc = audioContextInstance.createOscillator();
+            const gain = audioContextInstance.createGain();
+      osc.connect(gain);gain.connect(audioContextInstance.destination);osc.type = "sine";osc.frequency.setValueAtTime(1046.50, now); // Sharp, high crystal clean woodblock chime pitch (C6)gain.gain.setValueAtTime(0.35, now);gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05); // Short, punchy decay trailosc.start(now);osc.stop(now + 0.05);} catch(audioError) {}}} </script></body></html>      

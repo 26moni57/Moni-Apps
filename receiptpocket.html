@@ -1,0 +1,2335 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>ReceiptPocket</title>
+
+<style>
+:root{
+  --bg:#f5f7fb;
+  --card:#fff;
+  --text:#172033;
+  --muted:#7d8798;
+  --line:#e5e9f0;
+  --primary:#2563eb;
+  --primary-dark:#1d4ed8;
+  --soft:#eaf1ff;
+  --danger:#dc2626;
+  --warning:#f59e0b;
+  --shadow:0 12px 30px rgba(30,50,90,.08);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+  width:100%;
+  max-width:460px;
+  min-height:100vh;
+  margin:auto;
+}
+
+/* HEADER */
+
+.header{
+  position:relative;
+  overflow:hidden;
+  padding:20px 18px 28px;
+  color:#fff;
+  background:linear-gradient(145deg,#1e3a8a,#2563eb 58%,#60a5fa);
+  border-radius:0 0 30px 30px;
+}
+
+.header:before,
+.header:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+
+.header:before{
+  width:250px;
+  height:250px;
+  right:-120px;
+  top:-160px;
+}
+
+.header:after{
+  width:130px;
+  height:130px;
+  left:-70px;
+  bottom:-90px;
+}
+
+.topbar{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.16);
+  font-size:21px;
+}
+
+.brand b{
+  font-size:21px;
+}
+
+.theme{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  background:rgba(255,255,255,.16);
+  color:#fff;
+}
+
+.hero{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:30px;
+  line-height:1.08;
+  letter-spacing:-.8px;
+}
+
+.hero p{
+  margin:8px 0 0;
+  color:rgba(255,255,255,.82);
+  font-size:11px;
+  line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+  padding:16px;
+}
+
+.card{
+  margin-bottom:14px;
+  padding:15px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+}
+
+/* SUMMARY */
+
+.summary{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:8px;
+}
+
+.total{
+  padding:15px;
+  border-radius:16px;
+  background:var(--primary);
+  color:#fff;
+}
+
+.total small{
+  font-size:8px;
+  opacity:.8;
+}
+
+.total strong{
+  display:block;
+  margin-top:5px;
+  font-size:25px;
+}
+
+.total span{
+  display:block;
+  margin-top:4px;
+  font-size:8px;
+  opacity:.8;
+}
+
+.miniStats{
+  display:grid;
+  gap:8px;
+}
+
+.mini{
+  padding:10px;
+  border-radius:14px;
+  background:var(--bg);
+}
+
+.mini b{
+  display:block;
+  font-size:16px;
+}
+
+.mini span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* SEARCH */
+
+.search{
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  padding:12px 40px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:10px;
+}
+
+.search input:focus{
+  border-color:var(--primary);
+}
+
+.search span{
+  position:absolute;
+  left:13px;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+.search button{
+  position:absolute;
+  right:6px;
+  top:50%;
+  transform:translateY(-50%);
+  width:29px;
+  height:29px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+}
+
+/* FILTER */
+
+.filters{
+  display:flex;
+  gap:6px;
+  overflow:auto;
+}
+
+.filters::-webkit-scrollbar{
+  display:none;
+}
+
+.filter{
+  flex:0 0 auto;
+  padding:8px 11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--card);
+  color:var(--muted);
+  font-size:8px;
+}
+
+.filter.active{
+  border-color:var(--primary);
+  background:var(--soft);
+  color:var(--primary);
+  font-weight:800;
+}
+
+/* RECEIPTS */
+
+.receipts{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.receipt{
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--card);
+}
+
+.receiptTop{
+  display:flex;
+  gap:10px;
+}
+
+.receiptIcon{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:var(--soft);
+  font-size:20px;
+}
+
+.receiptInfo{
+  min-width:0;
+  flex:1;
+}
+
+.receiptName{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:800;
+}
+
+.receiptDate{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.receiptAmount{
+  font-size:13px;
+  font-weight:900;
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+  margin-left:auto;
+}
+
+.iconBtn{
+  width:29px;
+  height:29px;
+  border:0;
+  border-radius:9px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.iconBtn.favorite.active{
+  color:var(--warning);
+  background:#fff6da;
+}
+
+.receiptBottom{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-top:10px;
+}
+
+.category{
+  padding:4px 7px;
+  border-radius:7px;
+  background:var(--soft);
+  color:var(--primary);
+  font-size:7px;
+  font-weight:800;
+}
+
+.note{
+  overflow:hidden;
+  flex:1;
+  color:var(--muted);
+  font-size:8px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.photoBadge{
+  font-size:10px;
+}
+
+/* EMPTY */
+
+.empty{
+  padding:30px 10px;
+  text-align:center;
+}
+
+.emptyIcon{
+  font-size:38px;
+}
+
+.empty b{
+  display:block;
+  margin-top:7px;
+  font-size:11px;
+}
+
+.empty p{
+  margin:5px auto 0;
+  max-width:270px;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.5;
+}
+
+/* FAB */
+
+.fab{
+  position:fixed;
+  right:max(calc((100vw - 460px)/2 + 18px),18px);
+  bottom:20px;
+  width:56px;
+  height:56px;
+  border:0;
+  border-radius:18px;
+  background:var(--primary);
+  color:#fff;
+  font-size:26px;
+  box-shadow:0 12px 28px rgba(37,99,235,.35);
+  z-index:20;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(10,20,40,.62);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalBox{
+  width:100%;
+  max-width:460px;
+  max-height:92vh;
+  overflow:auto;
+  padding:20px;
+  border-radius:25px 25px 0 0;
+  background:var(--card);
+}
+
+.modalHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+
+.modalHead h2{
+  margin:0;
+  font-size:17px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.field{
+  margin-bottom:12px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  color:var(--muted);
+  font-size:8px;
+  font-weight:800;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:10px;
+}
+
+.field textarea{
+  min-height:75px;
+  resize:vertical;
+}
+
+.saveBtn{
+  width:100%;
+  padding:12px;
+  border:0;
+  border-radius:12px;
+  background:var(--primary);
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+
+.fileBox{
+  padding:12px;
+  border:1.5px dashed #b8c7e8;
+  border-radius:12px;
+  text-align:center;
+  background:var(--soft);
+}
+
+.fileBox input{
+  display:none;
+}
+
+.fileLabel{
+  display:inline-block;
+  padding:9px 12px;
+  border-radius:9px;
+  background:var(--primary);
+  color:#fff;
+  font-size:9px;
+  font-weight:800;
+}
+
+.preview{
+  width:100%;
+  max-height:180px;
+  object-fit:cover;
+  border-radius:11px;
+  margin-top:9px;
+  display:none;
+}
+
+/* DARK */
+
+body.dark{
+  --bg:#0e1420;
+  --card:#182131;
+  --text:#f3f6fb;
+  --muted:#9ca8b9;
+  --line:#293547;
+  --soft:#172d51;
+  --shadow:0 14px 35px rgba(0,0,0,.3);
+}
+
+body.dark .iconBtn.favorite.active{
+  background:#3d3217;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  z-index:100;
+  transform:translate(-50%,20px);
+  opacity:0;
+  padding:11px 15px;
+  border-radius:12px;
+  background:#172033;
+  color:#fff;
+  font-size:9px;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+@media(min-width:700px){
+  body{padding:20px 0}
+  .app{
+    min-height:calc(100vh - 40px);
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(30,50,90,.15);
+  }
+  .modal{
+    align-items:center;
+    padding:20px;
+  }
+  .modalBox{
+    border-radius:24px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+  <div class="topbar">
+
+    <div class="brand">
+      <div class="logo">🧾</div>
+      <b>ReceiptPocket</b>
+    </div>
+
+    <button
+      class="theme"
+      id="themeBtn"
+      onclick="toggleTheme()"
+    >
+      🌙
+    </button>
+
+  </div>
+
+  <div class="hero">
+    <h1>
+      Keep every<br>
+      receipt organized.
+    </h1>
+
+    <p>
+      Track purchases, expenses and receipt photos in one simple pocket.
+    </p>
+  </div>
+
+</header>
+
+
+<main class="content">
+
+  <!-- SUMMARY -->
+
+  <section class="card">
+
+    <div class="summary">
+
+      <div class="total">
+
+        <small>
+          TOTAL SPENDING
+        </small>
+
+        <strong id="totalAmount">
+          ৳0
+        </strong>
+
+        <span>
+          All saved receipts
+        </span>
+
+      </div>
+
+      <div class="miniStats">
+
+        <div class="mini">
+          <b id="receiptCount">0</b>
+          <span>Receipts</span>
+        </div>
+
+        <div class="mini">
+          <b id="monthAmount">৳0</b>
+          <span>This month</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SEARCH -->
+
+  <section class="card">
+
+    <div class="search">
+
+      <span>🔎</span>
+
+      <input
+        id="search"
+        type="search"
+        placeholder="Search receipts..."
+        oninput="render()"
+      >
+
+      <button
+        onclick="clearSearch()"
+      >
+        ×
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- FILTERS -->
+
+  <section class="card">
+
+    <div
+      class="filters"
+      id="filters"
+    >
+
+      <button
+        class="filter active"
+        data-filter="All"
+        onclick="setFilter('All')"
+      >
+        All
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Food"
+        onclick="setFilter('Food')"
+      >
+        🍔 Food
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Shopping"
+        onclick="setFilter('Shopping')"
+      >
+        🛍️ Shopping
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Transport"
+        onclick="setFilter('Transport')"
+      >
+        🚗 Transport
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Bills"
+        onclick="setFilter('Bills')"
+      >
+        💡 Bills
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Other"
+        onclick="setFilter('Other')"
+      >
+        📁 Other
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Favorites"
+        onclick="setFilter('Favorites')"
+      >
+        ⭐ Favorites
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- RECEIPTS -->
+
+  <section class="card">
+
+    <div
+      style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:11px;
+      "
+    >
+
+      <h2
+        style="
+          margin:0;
+          font-size:14px;
+        "
+      >
+        🧾 My Receipts
+      </h2>
+
+      <small
+        id="filterText"
+        style="
+          color:var(--muted);
+          font-size:8px;
+        "
+      >
+        All
+      </small>
+
+    </div>
+
+    <div
+      class="receipts"
+      id="receipts"
+    ></div>
+
+  </section>
+
+</main>
+
+</div>
+
+
+<!-- FAB -->
+
+<button
+  class="fab"
+  onclick="openReceiptModal()"
+>
+  +
+</button>
+
+
+<!-- ADD / EDIT MODAL -->
+
+<div
+  class="modal"
+  id="receiptModal"
+  onclick="outsideClose(event)"
+>
+
+  <div
+    class="modalBox"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modalHead">
+
+      <h2 id="modalTitle">
+        ➕ Add Receipt
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeReceiptModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        MERCHANT / STORE
+      </label>
+
+      <input
+        id="merchant"
+        maxlength="70"
+        placeholder="e.g. Shwapno"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        AMOUNT
+      </label>
+
+      <input
+        id="amount"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="0.00"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        DATE
+      </label>
+
+      <input
+        id="date"
+        type="date"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        CATEGORY
+      </label>
+
+      <select id="category">
+
+        <option value="Food">
+          🍔 Food
+        </option>
+
+        <option value="Shopping">
+          🛍️ Shopping
+        </option>
+
+        <option value="Transport">
+          🚗 Transport
+        </option>
+
+        <option value="Bills">
+          💡 Bills
+        </option>
+
+        <option value="Other">
+          📁 Other
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        NOTES
+      </label>
+
+      <textarea
+        id="notes"
+        maxlength="300"
+        placeholder="What was this purchase for?"
+      ></textarea>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        RECEIPT PHOTO
+      </label>
+
+      <div class="fileBox">
+
+        <label
+          class="fileLabel"
+          for="receiptPhoto"
+        >
+          📸 Choose Photo
+        </label>
+
+        <input
+          id="receiptPhoto"
+          type="file"
+          accept="image/*"
+          onchange="previewPhoto(event)"
+        >
+
+        <img
+          id="preview"
+          class="preview"
+          alt="Receipt preview"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="field"
+      style="
+        display:flex;
+        align-items:center;
+        gap:8px;
+      "
+    >
+
+      <input
+        id="favorite"
+        type="checkbox"
+        style="width:auto"
+      >
+
+      <label
+        for="favorite"
+        style="
+          margin:0;
+          color:var(--text);
+          font-size:9px;
+        "
+      >
+        ⭐ Mark as important
+      </label>
+
+    </div>
+
+
+    <button
+      class="saveBtn"
+      onclick="saveReceipt()"
+    >
+      💾 Save Receipt
+    </button>
+
+  </div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+
+/* =========================
+   STORAGE
+========================= */
+
+const STORAGE_KEY =
+  "receiptPocketData";
+
+
+let receipts =
+  JSON.parse(
+    localStorage.getItem(
+      STORAGE_KEY
+    ) || "[]"
+  );
+
+
+let currentFilter =
+  "All";
+
+
+let editingId =
+  null;
+
+
+let newPhoto =
+  null;
+
+
+let toastTimer;
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function saveData(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(receipts)
+  );
+
+}
+
+
+function makeId(){
+
+  return (
+    Date.now().toString(36) +
+    Math.random()
+      .toString(36)
+      .slice(2)
+  );
+
+}
+
+
+function money(value){
+
+  return "৳" +
+    Number(value || 0)
+      .toLocaleString(
+        "en-BD",
+        {
+          minimumFractionDigits:2,
+          maximumFractionDigits:2
+        }
+      );
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function formatDate(value){
+
+  if(!value){
+    return "";
+  }
+
+  const d =
+    new Date(
+      value + "T00:00:00"
+    );
+
+  return d.toLocaleDateString(
+    undefined,
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
+
+}
+
+
+function today(){
+
+  const d =
+    new Date();
+
+  const month =
+    String(
+      d.getMonth()+1
+    ).padStart(2,"0");
+
+  const day =
+    String(
+      d.getDate()
+    ).padStart(2,"0");
+
+  return (
+    d.getFullYear() +
+    "-" +
+    month +
+    "-" +
+    day
+  );
+
+}
+
+
+/* =========================
+   SAMPLE DATA
+========================= */
+
+if(!receipts.length){
+
+  receipts = [
+
+    {
+      id:makeId(),
+      merchant:"Daily Grocery",
+      amount:1250,
+      date:today(),
+      category:"Shopping",
+      notes:"Weekly groceries",
+      photo:"",
+      favorite:true,
+      created:Date.now()
+    },
+
+    {
+      id:makeId(),
+      merchant:"Cafe Corner",
+      amount:420,
+      date:today(),
+      category:"Food",
+      notes:"Lunch and coffee",
+      photo:"",
+      favorite:false,
+      created:Date.now()-5000
+    },
+
+    {
+      id:makeId(),
+      merchant:"Ride Share",
+      amount:280,
+      date:today(),
+      category:"Transport",
+      notes:"Trip to office",
+      photo:"",
+      favorite:false,
+      created:Date.now()-9000
+    }
+
+  ];
+
+  saveData();
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(filter){
+
+  currentFilter =
+    filter;
+
+
+  document
+    .querySelectorAll(
+      ".filter"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.filter ===
+          filter
+        );
+
+      }
+    );
+
+
+  document.getElementById(
+    "filterText"
+  ).textContent =
+    filter;
+
+
+  render();
+
+}
+
+
+function clearSearch(){
+
+  document.getElementById(
+    "search"
+  ).value = "";
+
+  render();
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+  const query =
+    document.getElementById(
+      "search"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+  let list =
+    [...receipts];
+
+
+  if(
+    currentFilter ===
+    "Favorites"
+  ){
+
+    list =
+      list.filter(
+        receipt =>
+          receipt.favorite
+      );
+
+  }
+  else if(
+    currentFilter !==
+    "All"
+  ){
+
+    list =
+      list.filter(
+        receipt =>
+          receipt.category ===
+          currentFilter
+      );
+
+  }
+
+
+  if(query){
+
+    list =
+      list.filter(
+        receipt => {
+
+          const text =
+            [
+              receipt.merchant,
+              receipt.category,
+              receipt.notes,
+              receipt.date
+            ]
+            .join(" ")
+            .toLowerCase();
+
+
+          return text.includes(
+            query
+          );
+
+        }
+      );
+
+  }
+
+
+  list.sort(
+    (a,b) =>
+      (b.favorite - a.favorite) ||
+      ((b.date || "")
+       .localeCompare(
+         a.date || ""
+       )) ||
+      (b.created-a.created)
+  );
+
+
+  renderSummary();
+
+  renderReceipts(
+    list
+  );
+
+}
+
+
+function renderSummary(){
+
+  const total =
+    receipts.reduce(
+      (sum,r) =>
+        sum +
+        Number(
+          r.amount || 0
+        ),
+      0
+    );
+
+
+  const now =
+    new Date();
+
+
+  const month =
+    now.getMonth();
+
+
+  const year =
+    now.getFullYear();
+
+
+  const monthly =
+    receipts.reduce(
+      (sum,r) => {
+
+        if(!r.date){
+          return sum;
+        }
+
+
+        const d =
+          new Date(
+            r.date +
+            "T00:00:00"
+          );
+
+
+        if(
+          d.getMonth() === month &&
+          d.getFullYear() === year
+        ){
+
+          return (
+            sum +
+            Number(
+              r.amount || 0
+            )
+          );
+
+        }
+
+
+        return sum;
+
+      },
+      0
+    );
+
+
+  document.getElementById(
+    "totalAmount"
+  ).textContent =
+    money(total);
+
+
+  document.getElementById(
+    "receiptCount"
+  ).textContent =
+    receipts.length;
+
+
+  document.getElementById(
+    "monthAmount"
+  ).textContent =
+    money(monthly);
+
+}
+
+
+function renderReceipts(list){
+
+  const container =
+    document.getElementById(
+      "receipts"
+    );
+
+
+  if(!list.length){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emptyIcon">
+          🧾
+        </div>
+
+        <b>
+          No receipts found
+        </b>
+
+        <p>
+          Add a receipt or try another search/filter.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    list
+      .map(
+        receipt => `
+
+          <article class="receipt">
+
+            <div class="receiptTop">
+
+              <div class="receiptIcon">
+                ${getCategoryIcon(
+                  receipt.category
+                )}
+              </div>
+
+
+              <div class="receiptInfo">
+
+                <div class="receiptName">
+                  ${escapeHTML(
+                    receipt.merchant
+                  )}
+                </div>
+
+                <div class="receiptDate">
+                  ${formatDate(
+                    receipt.date
+                  )}
+                </div>
+
+              </div>
+
+
+              <div>
+
+                <div class="receiptAmount">
+                  ${money(
+                    receipt.amount
+                  )}
+                </div>
+
+                <div class="actions">
+
+                  <button
+                    class="iconBtn favorite ${
+                      receipt.favorite
+                        ? "active"
+                        : ""
+                    }"
+                    onclick="toggleFavorite('${receipt.id}')"
+                    title="Favorite"
+                  >
+                    ${
+                      receipt.favorite
+                        ? "★"
+                        : "☆"
+                    }
+                  </button>
+
+                  <button
+                    class="iconBtn"
+                    onclick="editReceipt('${receipt.id}')"
+                    title="Edit"
+                  >
+                    ✎
+                  </button>
+
+                  <button
+                    class="iconBtn"
+                    onclick="deleteReceipt('${receipt.id}')"
+                    title="Delete"
+                  >
+                    🗑
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="receiptBottom">
+
+              <span class="category">
+                ${escapeHTML(
+                  receipt.category
+                )}
+              </span>
+
+              ${
+                receipt.notes
+                  ? `
+                    <span class="note">
+                      ${escapeHTML(
+                        receipt.notes
+                      )}
+                    </span>
+                  `
+                  : ""
+              }
+
+              ${
+                receipt.photo
+                  ? `
+                    <span
+                      class="photoBadge"
+                      title="Has photo"
+                    >
+                      📸
+                    </span>
+                  `
+                  : ""
+              }
+
+            </div>
+
+          </article>
+
+        `
+      )
+      .join("");
+
+}
+
+
+function getCategoryIcon(category){
+
+  const icons = {
+
+    Food:"🍔",
+
+    Shopping:"🛍️",
+
+    Transport:"🚗",
+
+    Bills:"💡",
+
+    Other:"📁"
+
+  };
+
+
+  return (
+    icons[category] ||
+    "🧾"
+  );
+
+}
+
+
+/* =========================
+   ADD
+========================= */
+
+function openReceiptModal(){
+
+  editingId =
+    null;
+
+  newPhoto =
+    null;
+
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    "➕ Add Receipt";
+
+
+  document.getElementById(
+    "merchant"
+  ).value = "";
+
+
+  document.getElementById(
+    "amount"
+  ).value = "";
+
+
+  document.getElementById(
+    "date"
+  ).value =
+    today();
+
+
+  document.getElementById(
+    "category"
+  ).value =
+    "Food";
+
+
+  document.getElementById(
+    "notes"
+  ).value = "";
+
+
+  document.getElementById(
+    "favorite"
+  ).checked =
+    false;
+
+
+  document.getElementById(
+    "receiptPhoto"
+  ).value = "";
+
+
+  hidePreview();
+
+
+  document.getElementById(
+    "receiptModal"
+  )
+  .classList
+  .add("show");
+
+
+  setTimeout(
+    () =>
+      document.getElementById(
+        "merchant"
+      ).focus(),
+    100
+  );
+
+}
+
+
+/* =========================
+   EDIT
+========================= */
+
+function editReceipt(id){
+
+  const receipt =
+    receipts.find(
+      r =>
+        r.id === id
+    );
+
+
+  if(!receipt){
+    return;
+  }
+
+
+  editingId =
+    id;
+
+
+  newPhoto =
+    receipt.photo ||
+    null;
+
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    "✏️ Edit Receipt";
+
+
+  document.getElementById(
+    "merchant"
+  ).value =
+    receipt.merchant;
+
+
+  document.getElementById(
+    "amount"
+  ).value =
+    receipt.amount;
+
+
+  document.getElementById(
+    "date"
+  ).value =
+    receipt.date;
+
+
+  document.getElementById(
+    "category"
+  ).value =
+    receipt.category;
+
+
+  document.getElementById(
+    "notes"
+  ).value =
+    receipt.notes || "";
+
+
+  document.getElementById(
+    "favorite"
+  ).checked =
+    !!receipt.favorite;
+
+
+  document.getElementById(
+    "receiptPhoto"
+  ).value = "";
+
+
+  if(receipt.photo){
+
+    showPreview(
+      receipt.photo
+    );
+
+  }
+  else{
+
+    hidePreview();
+
+  }
+
+
+  document.getElementById(
+    "receiptModal"
+  )
+  .classList
+  .add("show");
+
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+function previewPhoto(event){
+
+  const file =
+    event.target.files[0];
+
+
+  if(!file){
+    return;
+  }
+
+
+  if(
+    !file.type.startsWith(
+      "image/"
+    )
+  ){
+
+    showToast(
+      "Please choose an image."
+    );
+
+    return;
+
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(){
+
+      newPhoto =
+        reader.result;
+
+      showPreview(
+        newPhoto
+      );
+
+    };
+
+
+  reader.readAsDataURL(
+    file
+  );
+
+}
+
+
+function showPreview(src){
+
+  const preview =
+    document.getElementById(
+      "preview"
+    );
+
+
+  preview.src =
+    src;
+
+
+  preview.style.display =
+    "block";
+
+}
+
+
+function hidePreview(){
+
+  const preview =
+    document.getElementById(
+      "preview"
+    );
+
+
+  preview.removeAttribute(
+    "src"
+  );
+
+
+  preview.style.display =
+    "none";
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+function saveReceipt(){
+
+  const merchant =
+    document.getElementById(
+      "merchant"
+    )
+    .value
+    .trim();
+
+
+  const amount =
+    Number(
+      document.getElementById(
+        "amount"
+      ).value
+    );
+
+
+  const date =
+    document.getElementById(
+      "date"
+    ).value;
+
+
+  const category =
+    document.getElementById(
+      "category"
+    ).value;
+
+
+  const notes =
+    document.getElementById(
+      "notes"
+    )
+    .value
+    .trim();
+
+
+  const favorite =
+    document.getElementById(
+      "favorite"
+    ).checked;
+
+
+  if(!merchant){
+
+    showToast(
+      "⚠️ Enter the merchant name."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !Number.isFinite(amount) ||
+    amount < 0
+  ){
+
+    showToast(
+      "⚠️ Enter a valid amount."
+    );
+
+    return;
+
+  }
+
+
+  if(!date){
+
+    showToast(
+      "⚠️ Choose a date."
+    );
+
+    return;
+
+  }
+
+
+  if(editingId){
+
+    const receipt =
+      receipts.find(
+        r =>
+          r.id ===
+          editingId
+      );
+
+
+    if(!receipt){
+      return;
+    }
+
+
+    receipt.merchant =
+      merchant;
+
+    receipt.amount =
+      amount;
+
+    receipt.date =
+      date;
+
+    receipt.category =
+      category;
+
+    receipt.notes =
+      notes;
+
+    receipt.favorite =
+      favorite;
+
+    receipt.photo =
+      newPhoto ||
+      receipt.photo ||
+      "";
+
+
+    receipt.updated =
+      Date.now();
+
+
+    showToast(
+      "🧾 Receipt updated."
+    );
+
+  }
+  else{
+
+    receipts.unshift({
+
+      id:makeId(),
+
+      merchant,
+
+      amount,
+
+      date,
+
+      category,
+
+      notes,
+
+      favorite,
+
+      photo:newPhoto || "",
+
+      created:Date.now(),
+
+      updated:Date.now()
+
+    });
+
+
+    showToast(
+      "🧾 Receipt saved."
+    );
+
+  }
+
+
+  saveData();
+
+  closeReceiptModal();
+
+  render();
+
+}
+
+
+/* =========================
+   FAVORITE
+========================= */
+
+function toggleFavorite(id){
+
+  const receipt =
+    receipts.find(
+      r =>
+        r.id === id
+    );
+
+
+  if(!receipt){
+    return;
+  }
+
+
+  receipt.favorite =
+    !receipt.favorite;
+
+
+  receipt.updated =
+    Date.now();
+
+
+  saveData();
+
+  render();
+
+
+  showToast(
+    receipt.favorite
+      ? "⭐ Added to favorites."
+      : "☆ Removed from favorites."
+  );
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteReceipt(id){
+
+  const receipt =
+    receipts.find(
+      r =>
+        r.id === id
+    );
+
+
+  if(!receipt){
+    return;
+  }
+
+
+  if(
+    !confirm(
+      `Delete "${receipt.merchant}" receipt?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  receipts =
+    receipts.filter(
+      r =>
+        r.id !== id
+    );
+
+
+  saveData();
+
+  render();
+
+
+  showToast(
+    "🗑️ Receipt deleted."
+  );
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function closeReceiptModal(){
+
+  document.getElementById(
+    "receiptModal"
+  )
+  .classList
+  .remove("show");
+
+
+  editingId =
+    null;
+
+  newPhoto =
+    null;
+
+}
+
+
+function outsideClose(event){
+
+  if(
+    event.target.id ===
+    "receiptModal"
+  ){
+
+    closeReceiptModal();
+
+  }
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function toggleTheme(){
+
+  document.body
+    .classList
+    .toggle("dark");
+
+
+  const dark =
+    document.body
+      .classList
+      .contains("dark");
+
+
+  localStorage.setItem(
+    "receiptPocketTheme",
+    dark ? "1" : "0"
+  );
+
+
+  document.getElementById(
+    "themeBtn"
+  ).textContent =
+    dark
+      ? "☀️"
+      : "🌙";
+
+}
+
+
+function loadTheme(){
+
+  const dark =
+    localStorage.getItem(
+      "receiptPocketTheme"
+    ) === "1";
+
+
+  if(dark){
+
+    document.body
+      .classList
+      .add("dark");
+
+
+    document.getElementById(
+      "themeBtn"
+    ).textContent =
+      "☀️";
+
+  }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+
+  toast.textContent =
+    message;
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      () => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      2200
+    );
+
+}
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Escape"
+    ){
+
+      closeReceiptModal();
+
+    }
+
+
+    if(
+      event.ctrlKey &&
+      event.key.toLowerCase() ===
+      "n"
+    ){
+
+      event.preventDefault();
+
+      openReceiptModal();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+render();
+
+</script>
+
+</body>
+</html>

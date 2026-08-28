@@ -1,0 +1,1617 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>SafePass — Password Manager</title>
+
+<style>
+:root {
+    --bg: #f4f7f7;
+    --card: #ffffff;
+    --text: #172321;
+    --muted: #71807d;
+    --line: #e1e9e7;
+    --primary: #0f766e;
+    --primary-2: #14b8a6;
+    --primary-soft: #e5f6f3;
+    --danger: #dc4c4c;
+    --shadow: 0 12px 35px rgba(20, 55, 50, .08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--bg);
+    overflow-x: hidden;
+}
+
+/* Header */
+
+.header {
+    position: relative;
+    padding: 22px 18px 30px;
+    color: #fff;
+    background: linear-gradient(145deg, #115e59, #0f766e 55%, #14b8a6);
+    border-radius: 0 0 30px 30px;
+    overflow: hidden;
+}
+
+.header::before,
+.header::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,.08);
+    pointer-events: none;
+}
+
+.header::before {
+    width: 190px;
+    height: 190px;
+    right: -90px;
+    top: -105px;
+}
+
+.header::after {
+    width: 130px;
+    height: 130px;
+    left: -70px;
+    bottom: -90px;
+}
+
+.topbar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+
+.brand-icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 13px;
+    background: rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.15);
+    font-size: 21px;
+}
+
+.brand-name {
+    font-size: 21px;
+    font-weight: 850;
+    white-space: nowrap;
+}
+
+.theme-btn {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 13px;
+    background: rgba(255,255,255,.16);
+    color: #fff;
+    font-size: 18px;
+}
+
+.header-copy {
+    position: relative;
+    z-index: 2;
+    margin-top: 25px;
+}
+
+.header-copy h1 {
+    margin: 0;
+    font-size: 29px;
+    line-height: 1.08;
+    letter-spacing: -.8px;
+}
+
+.header-copy p {
+    margin: 8px 0 0;
+    color: rgba(255,255,255,.82);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Content */
+
+.content {
+    padding: 18px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 21px;
+    padding: 17px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.section-title h2 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.section-title span {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+/* Generator */
+
+.password-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    background: var(--bg);
+}
+
+.password-output {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 14px;
+    font-weight: 700;
+    word-break: break-all;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 12px;
+    background: var(--primary-soft);
+    color: var(--primary);
+}
+
+.generate-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px;
+    border: 0;
+    border-radius: 13px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: #fff;
+    font-weight: 800;
+}
+
+.strength {
+    margin-top: 12px;
+}
+
+.strength-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.strength-label {
+    font-weight: 800;
+}
+
+.strength-bars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+}
+
+.strength-bar {
+    height: 5px;
+    border-radius: 10px;
+    background: var(--line);
+    transition: .2s;
+}
+
+.strength-bar.on {
+    background: var(--primary-2);
+}
+
+/* Slider */
+
+.range-wrap {
+    margin-top: 17px;
+}
+
+.range-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.range-row label {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.length-value {
+    padding: 5px 9px;
+    border-radius: 9px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--primary);
+}
+
+/* Options */
+
+.options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-top: 16px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.option input {
+    accent-color: var(--primary);
+}
+
+/* Search */
+
+.search {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 13px;
+    top: 12px;
+    font-size: 14px;
+}
+
+.search input {
+    width: 100%;
+    padding: 12px 13px 12px 37px;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    outline: none;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Saved item */
+
+.saved {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.saved:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.saved-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.site-icon {
+    width: 39px;
+    height: 39px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-size: 18px;
+}
+
+.saved-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.saved-name {
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.saved-user {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.saved-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.small-btn {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.password-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 9px 10px;
+    border-radius: 11px;
+    background: var(--bg);
+}
+
+.dots {
+    flex: 1;
+    letter-spacing: 2px;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.empty {
+    padding: 24px 5px 8px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.empty-icon {
+    font-size: 38px;
+}
+
+.empty h3 {
+    margin: 9px 0 4px;
+    color: var(--text);
+    font-size: 14px;
+}
+
+.empty p {
+    margin: 0;
+    font-size: 11px;
+}
+
+/* Floating button */
+
+.fab {
+    position: fixed;
+    right: max(22px, calc((100vw - 430px) / 2 + 22px));
+    bottom: 23px;
+    width: 58px;
+    height: 58px;
+    border: 0;
+    border-radius: 19px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 27px;
+    box-shadow: 0 12px 28px rgba(15,118,110,.28);
+}
+
+/* Modal */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    background: rgba(0,0,0,.48);
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(430px, 100%);
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 22px 18px 30px;
+    background: var(--card);
+    border-radius: 27px 27px 0 0;
+}
+
+.modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 17px;
+}
+
+.modal-head h2 {
+    margin: 0;
+    font-size: 19px;
+}
+
+.close-btn {
+    width: 35px;
+    height: 35px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--bg);
+}
+
+.field {
+    margin-bottom: 12px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.field input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    outline: none;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.modal-save {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 13px;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 800;
+}
+
+/* Toast */
+
+.toast {
+    position: fixed;
+    z-index: 50;
+    left: 50%;
+    bottom: 91px;
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    pointer-events: none;
+    padding: 11px 15px;
+    border-radius: 12px;
+    background: #172321;
+    color: #fff;
+    font-size: 11px;
+    transition: .25s ease;
+    white-space: nowrap;
+}
+
+.toast.show {
+    transform: translate(-50%, 0);
+    opacity: 1;
+}
+
+/* Dark */
+
+body.dark {
+    --bg: #0e1716;
+    --card: #14201e;
+    --text: #edf8f5;
+    --muted: #91a39f;
+    --line: #263734;
+    --primary-soft: #173b37;
+    --shadow: 0 12px 35px rgba(0,0,0,.2);
+}
+
+body.dark .password-box,
+body.dark .search input,
+body.dark .saved .password-preview,
+body.dark .option,
+body.dark .small-btn,
+body.dark .close-btn {
+    background: #101a18;
+}
+
+/* Desktop */
+
+@media (min-width: 700px) {
+    body {
+        padding: 20px 0;
+    }
+
+    .app {
+        min-height: calc(100vh - 40px);
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(20,40,38,.12);
+        overflow: hidden;
+    }
+}
+
+/* Tiny screens */
+
+@media (max-width: 350px) {
+    .content {
+        padding: 14px;
+    }
+
+    .header {
+        padding: 18px 15px 27px;
+    }
+
+    .brand-name {
+        font-size: 19px;
+    }
+
+    .header-copy h1 {
+        font-size: 26px;
+    }
+
+    .options {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">🔐</div>
+            <div class="brand-name">SafePass</div>
+        </div>
+
+        <button
+            class="theme-btn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+            aria-label="Toggle theme"
+        >🌙</button>
+
+    </div>
+
+    <div class="header-copy">
+        <h1>Your passwords.<br>Safer & simpler.</h1>
+        <p>Generate strong passwords and keep your login details organized.</p>
+    </div>
+
+</header>
+
+
+<main class="content">
+
+    <!-- GENERATOR -->
+
+    <section class="card">
+
+        <div class="section-title">
+            <h2>🔑 Password Generator</h2>
+            <span>Instant & secure</span>
+        </div>
+
+        <div class="password-box">
+
+            <div
+                class="password-output"
+                id="passwordOutput"
+            >
+                Click Generate
+            </div>
+
+            <button
+                class="icon-btn"
+                onclick="copyGenerated()"
+                title="Copy password"
+            >
+                📋
+            </button>
+
+        </div>
+
+        <button
+            class="generate-btn"
+            onclick="generatePassword()"
+        >
+            ⚡ Generate Password
+        </button>
+
+        <div class="strength">
+
+            <div class="strength-top">
+                <span>Password strength</span>
+                <span
+                    class="strength-label"
+                    id="strengthLabel"
+                >
+                    —
+                </span>
+            </div>
+
+            <div class="strength-bars">
+                <div class="strength-bar" id="bar1"></div>
+                <div class="strength-bar" id="bar2"></div>
+                <div class="strength-bar" id="bar3"></div>
+                <div class="strength-bar" id="bar4"></div>
+            </div>
+
+        </div>
+
+        <div class="range-wrap">
+
+            <div class="range-row">
+                <label>Password length</label>
+
+                <span
+                    class="length-value"
+                    id="lengthValue"
+                >
+                    16
+                </span>
+            </div>
+
+            <input
+                id="length"
+                type="range"
+                min="6"
+                max="40"
+                value="16"
+                oninput="updateLength()"
+            >
+
+        </div>
+
+        <div class="options">
+
+            <label class="option">
+                <input
+                    id="uppercase"
+                    type="checkbox"
+                    checked
+                    onchange="generatePassword()"
+                >
+                A–Z Uppercase
+            </label>
+
+            <label class="option">
+                <input
+                    id="lowercase"
+                    type="checkbox"
+                    checked
+                    onchange="generatePassword()"
+                >
+                a–z Lowercase
+            </label>
+
+            <label class="option">
+                <input
+                    id="numbers"
+                    type="checkbox"
+                    checked
+                    onchange="generatePassword()"
+                >
+                0–9 Numbers
+            </label>
+
+            <label class="option">
+                <input
+                    id="symbols"
+                    type="checkbox"
+                    checked
+                    onchange="generatePassword()"
+                >
+                !@# Symbols
+            </label>
+
+        </div>
+
+    </section>
+
+
+    <!-- SAVED PASSWORDS -->
+
+    <section class="card">
+
+        <div class="section-title">
+            <h2>🔒 Saved Logins</h2>
+
+            <span id="savedCount">
+                0 saved
+            </span>
+        </div>
+
+        <div class="search">
+
+            <span class="search-icon">🔍</span>
+
+            <input
+                id="search"
+                type="search"
+                placeholder="Search accounts..."
+                oninput="renderSaved()"
+            >
+
+        </div>
+
+        <div id="savedList"></div>
+
+    </section>
+
+</main>
+
+</div>
+
+
+<button
+    class="fab"
+    onclick="openModal()"
+    aria-label="Add login"
+>
+    +
+</button>
+
+
+<!-- ADD / EDIT MODAL -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+    <div class="modal">
+
+        <div class="modal-head">
+
+            <h2 id="modalTitle">
+                Add Login
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="field">
+
+            <label>Website / App</label>
+
+            <input
+                id="site"
+                type="text"
+                placeholder="e.g. Google"
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label>Username / Email</label>
+
+            <input
+                id="username"
+                type="text"
+                placeholder="you@example.com"
+                autocomplete="off"
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label>Password</label>
+
+            <input
+                id="savedPassword"
+                type="text"
+                placeholder="Enter password"
+                autocomplete="new-password"
+            >
+
+        </div>
+
+        <button
+            class="modal-save"
+            onclick="saveLogin()"
+        >
+            💾 Save Login
+        </button>
+
+    </div>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================
+   DATA
+========================= */
+
+let savedLogins =
+    JSON.parse(
+        localStorage.getItem("safePassLogins") || "[]"
+    );
+
+let editingId = null;
+
+let generatedPassword = "";
+
+
+/* =========================
+   PASSWORD GENERATOR
+========================= */
+
+const chars = {
+    uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    lowercase: "abcdefghijklmnopqrstuvwxyz",
+    numbers: "0123456789",
+    symbols: "!@#$%^&*()-_=+[]{};:,.?"
+};
+
+function secureRandom(max) {
+    if (
+        window.crypto &&
+        window.crypto.getRandomValues
+    ) {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        return array[0] % max;
+    }
+
+    return Math.floor(Math.random() * max);
+}
+
+function generatePassword() {
+
+    const length =
+        Number(
+            document.getElementById("length").value
+        );
+
+    const selected = [];
+
+    if (
+        document.getElementById("uppercase").checked
+    ) {
+        selected.push(chars.uppercase);
+    }
+
+    if (
+        document.getElementById("lowercase").checked
+    ) {
+        selected.push(chars.lowercase);
+    }
+
+    if (
+        document.getElementById("numbers").checked
+    ) {
+        selected.push(chars.numbers);
+    }
+
+    if (
+        document.getElementById("symbols").checked
+    ) {
+        selected.push(chars.symbols);
+    }
+
+    if (selected.length === 0) {
+        showToast("Select at least one character type.");
+        document.getElementById("lowercase").checked = true;
+        selected.push(chars.lowercase);
+    }
+
+    let password = "";
+
+    /* Guarantee one character from every selected set. */
+
+    selected.forEach(set => {
+        password += set[secureRandom(set.length)];
+    });
+
+    const all =
+        selected.join("");
+
+    while (password.length < length) {
+        password += all[secureRandom(all.length)];
+    }
+
+    /* Fisher-Yates shuffle */
+
+    const array = password.split("");
+
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = secureRandom(i + 1);
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+
+    generatedPassword =
+        array.join("");
+
+    document.getElementById("passwordOutput")
+        .textContent =
+        generatedPassword;
+
+    updateStrength(generatedPassword);
+}
+
+
+/* =========================
+   LENGTH
+========================= */
+
+function updateLength() {
+
+    const value =
+        document.getElementById("length").value;
+
+    document.getElementById("lengthValue")
+        .textContent =
+        value;
+
+    generatePassword();
+}
+
+
+/* =========================
+   STRENGTH
+========================= */
+
+function updateStrength(password) {
+
+    let score = 0;
+
+    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    let level = 0;
+    let label = "Weak";
+
+    if (score <= 2) {
+        level = 1;
+        label = "Weak";
+    } else if (score === 3) {
+        level = 2;
+        label = "Fair";
+    } else if (score === 4) {
+        level = 3;
+        label = "Good";
+    } else {
+        level = 4;
+        label = "Strong";
+    }
+
+    document.getElementById("strengthLabel")
+        .textContent =
+        label;
+
+    for (let i = 1; i <= 4; i++) {
+        document.getElementById("bar" + i)
+            .classList.toggle(
+                "on",
+                i <= level
+            );
+    }
+}
+
+
+/* =========================
+   COPY
+========================= */
+
+async function copyText(text) {
+
+    if (!text) return;
+
+    try {
+        await navigator.clipboard.writeText(text);
+        showToast("Copied to clipboard.");
+    } catch {
+        showToast("Copy failed. Please copy manually.");
+    }
+}
+
+function copyGenerated() {
+
+    if (!generatedPassword) {
+        generatePassword();
+    }
+
+    copyText(generatedPassword);
+}
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function saveData() {
+
+    localStorage.setItem(
+        "safePassLogins",
+        JSON.stringify(savedLogins)
+    );
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(id = null) {
+
+    editingId = id;
+
+    const title =
+        document.getElementById("modalTitle");
+
+    if (id === null) {
+
+        title.textContent =
+            "Add Login";
+
+        document.getElementById("site").value = "";
+        document.getElementById("username").value = "";
+        document.getElementById("savedPassword").value =
+            generatedPassword || "";
+
+    } else {
+
+        const item =
+            savedLogins.find(
+                x => x.id === id
+            );
+
+        if (!item) return;
+
+        title.textContent =
+            "Edit Login";
+
+        document.getElementById("site").value =
+            item.site;
+
+        document.getElementById("username").value =
+            item.username;
+
+        document.getElementById("savedPassword").value =
+            item.password;
+    }
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+    setTimeout(() => {
+        document.getElementById("site").focus();
+    }, 50);
+}
+
+
+function closeModal() {
+
+    document.getElementById("overlay")
+        .classList.remove("show");
+
+    editingId = null;
+}
+
+
+/* =========================
+   SAVE LOGIN
+========================= */
+
+function saveLogin() {
+
+    const site =
+        document.getElementById("site")
+            .value
+            .trim();
+
+    const username =
+        document.getElementById("username")
+            .value
+            .trim();
+
+    const password =
+        document.getElementById("savedPassword")
+            .value;
+
+    if (!site) {
+        showToast("Enter a website or app name.");
+        return;
+    }
+
+    if (!username) {
+        showToast("Enter a username or email.");
+        return;
+    }
+
+    if (!password) {
+        showToast("Enter a password.");
+        return;
+    }
+
+    if (editingId !== null) {
+
+        const item =
+            savedLogins.find(
+                x => x.id === editingId
+            );
+
+        if (item) {
+            item.site = site;
+            item.username = username;
+            item.password = password;
+            item.updated = Date.now();
+        }
+
+        showToast("Login updated.");
+
+    } else {
+
+        savedLogins.unshift({
+            id: Date.now(),
+            site,
+            username,
+            password,
+            created: Date.now()
+        });
+
+        showToast("Login saved.");
+    }
+
+    saveData();
+    closeModal();
+    renderSaved();
+}
+
+
+/* =========================
+   RENDER SAVED LOGINS
+========================= */
+
+function renderSaved() {
+
+    const container =
+        document.getElementById("savedList");
+
+    const query =
+        document.getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+    const filtered =
+        savedLogins.filter(item =>
+            (
+                item.site +
+                " " +
+                item.username
+            )
+            .toLowerCase()
+            .includes(query)
+        );
+
+    document.getElementById("savedCount")
+        .textContent =
+        savedLogins.length +
+        (
+            savedLogins.length === 1
+                ? " saved"
+                : " saved"
+        );
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">🔐</div>
+                <h3>
+                    ${
+                        query
+                            ? "No matches found"
+                            : "No saved logins"
+                    }
+                </h3>
+                <p>
+                    ${
+                        query
+                            ? "Try another search."
+                            : "Tap + to save your first login."
+                    }
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        filtered.map(item => {
+
+            return `
+                <div class="saved">
+
+                    <div class="saved-top">
+
+                        <div class="site-icon">
+                            ${getSiteIcon(item.site)}
+                        </div>
+
+                        <div class="saved-info">
+
+                            <div class="saved-name">
+                                ${escapeHTML(item.site)}
+                            </div>
+
+                            <div class="saved-user">
+                                ${escapeHTML(item.username)}
+                            </div>
+
+                        </div>
+
+                        <div class="saved-actions">
+
+                            <button
+                                class="small-btn"
+                                onclick="copyText(${JSON.stringify(item.password)})"
+                                title="Copy password"
+                            >
+                                📋
+                            </button>
+
+                            <button
+                                class="small-btn"
+                                onclick="openModal(${item.id})"
+                                title="Edit"
+                            >
+                                ✏️
+                            </button>
+
+                            <button
+                                class="small-btn"
+                                onclick="deleteLogin(${item.id})"
+                                title="Delete"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="password-preview">
+
+                        <div
+                            class="dots"
+                            id="dots-${item.id}"
+                        >
+                            ••••••••••••
+                        </div>
+
+                        <button
+                            class="small-btn"
+                            onclick="togglePassword(${item.id})"
+                            id="view-${item.id}"
+                        >
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+}
+
+
+/* =========================
+   SHOW / HIDE SAVED PASSWORD
+========================= */
+
+function togglePassword(id) {
+
+    const item =
+        savedLogins.find(
+            x => x.id === id
+        );
+
+    if (!item) return;
+
+    const el =
+        document.getElementById(
+            "dots-" + id
+        );
+
+    const button =
+        document.getElementById(
+            "view-" + id
+        );
+
+    if (
+        el.dataset.visible === "true"
+    ) {
+
+        el.textContent =
+            "••••••••••••";
+
+        el.dataset.visible =
+            "false";
+
+        button.textContent =
+            "👁️";
+
+    } else {
+
+        el.textContent =
+            item.password;
+
+        el.dataset.visible =
+            "true";
+
+        button.textContent =
+            "🙈";
+    }
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteLogin(id) {
+
+    const item =
+        savedLogins.find(
+            x => x.id === id
+        );
+
+    if (!item) return;
+
+    const ok =
+        confirm(
+            `Delete "${item.site}" login?`
+        );
+
+    if (!ok) return;
+
+    savedLogins =
+        savedLogins.filter(
+            x => x.id !== id
+        );
+
+    saveData();
+    renderSaved();
+
+    showToast("Login deleted.");
+}
+
+
+/* =========================
+   SITE ICON
+========================= */
+
+function getSiteIcon(site) {
+
+    const s =
+        site.toLowerCase();
+
+    if (s.includes("google")) return "G";
+    if (s.includes("facebook")) return "f";
+    if (s.includes("instagram")) return "◎";
+    if (s.includes("youtube")) return "▶";
+    if (s.includes("github")) return "⌘";
+    if (s.includes("amazon")) return "a";
+    if (s.includes("microsoft")) return "▦";
+    if (s.includes("apple")) return "●";
+    if (s.includes("gmail")) return "✉";
+
+    return "🔐";
+}
+
+
+/* =========================
+   ESCAPE
+========================= */
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer;
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent =
+        message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2200);
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function toggleTheme() {
+
+    document.body.classList.toggle("dark");
+
+    const dark =
+        document.body.classList.contains("dark");
+
+    localStorage.setItem(
+        "safePassDark",
+        dark ? "1" : "0"
+    );
+
+    document.getElementById("themeBtn")
+        .textContent =
+        dark ? "☀️" : "🌙";
+}
+
+function loadTheme() {
+
+    const dark =
+        localStorage.getItem("safePassDark") === "1";
+
+    if (dark) {
+        document.body.classList.add("dark");
+        document.getElementById("themeBtn")
+            .textContent = "☀️";
+    }
+}
+
+
+/* =========================
+   MODAL OUTSIDE CLICK
+========================= */
+
+document
+    .getElementById("overlay")
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id === "overlay"
+            ) {
+                closeModal();
+            }
+        }
+    );
+
+
+/* ESCAPE KEY */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+            closeModal();
+        }
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+generatePassword();
+renderSaved();
+
+</script>
+
+</body>
+</html>

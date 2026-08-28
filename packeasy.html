@@ -1,0 +1,2145 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>PackEasy</title>
+
+<style>
+:root {
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --text: #172033;
+    --muted: #7b8494;
+    --line: #e5eaf1;
+    --primary: #2563eb;
+    --primary2: #38bdf8;
+    --soft: #eaf2ff;
+    --danger: #dc4c4c;
+    --shadow: 0 10px 30px rgba(35,55,90,.07);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--bg);
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    position: relative;
+    padding: 21px 18px 31px;
+    color: white;
+    background:
+        linear-gradient(
+            145deg,
+            #1d4ed8,
+            #2563eb 55%,
+            #38bdf8
+        );
+    border-radius: 0 0 31px 31px;
+    overflow: hidden;
+}
+
+.header::before {
+    content: "";
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    right: -90px;
+    top: -100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.10);
+}
+
+.header::after {
+    content: "";
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    left: -65px;
+    bottom: -85px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.08);
+}
+
+.topbar {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+
+.brand-icon {
+    width: 41px;
+    height: 41px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.17);
+    border: 1px solid rgba(255,255,255,.14);
+
+    font-size: 22px;
+}
+
+.brand-name {
+    font-size: 21px;
+    font-weight: 850;
+    white-space: nowrap;
+}
+
+.theme-btn {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    border: 0;
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.17);
+    color: white;
+
+    font-size: 18px;
+}
+
+.header-copy {
+    position: relative;
+    z-index: 2;
+
+    margin-top: 25px;
+}
+
+.header-copy h1 {
+    margin: 0;
+
+    font-size: 30px;
+    line-height: 1.08;
+
+    letter-spacing: -.8px;
+}
+
+.header-copy p {
+    max-width: 310px;
+
+    margin: 8px 0 0;
+
+    color: rgba(255,255,255,.84);
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.content {
+    padding: 18px;
+}
+
+.card {
+    margin-bottom: 14px;
+
+    padding: 17px;
+
+    background: var(--card);
+
+    border: 1px solid var(--line);
+    border-radius: 21px;
+
+    box-shadow: var(--shadow);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+}
+
+.section-title h2 {
+    margin: 0;
+
+    font-size: 15px;
+}
+
+.section-title span {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+
+/* =========================
+   TRIP CARD
+========================= */
+
+.trip-name {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.trip-icon {
+    width: 44px;
+    height: 44px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 14px;
+
+    background: var(--soft);
+
+    font-size: 22px;
+}
+
+.trip-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.trip-info h3 {
+    margin: 0;
+
+    font-size: 16px;
+}
+
+.trip-info p {
+    margin: 4px 0 0;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-wrap {
+    margin-top: 17px;
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    font-size: 11px;
+}
+
+.progress-top span:last-child {
+    color: var(--primary);
+    font-weight: 800;
+}
+
+.progress {
+    width: 100%;
+    height: 9px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: #e8edf4;
+}
+
+.progress-bar {
+    width: 0;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--primary2)
+        );
+
+    transition: width .3s ease;
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 8px;
+
+    margin-top: 14px;
+}
+
+.stat {
+    padding: 10px;
+
+    text-align: center;
+
+    border-radius: 13px;
+
+    background: var(--bg);
+}
+
+.stat strong {
+    display: block;
+
+    font-size: 17px;
+}
+
+.stat span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+
+    left: 13px;
+    top: 11px;
+
+    font-size: 14px;
+}
+
+.search input {
+    width: 100%;
+
+    padding: 12px 13px 12px 37px;
+
+    border: 1px solid var(--line);
+    border-radius: 13px;
+
+    outline: none;
+
+    background: var(--bg);
+    color: var(--text);
+}
+
+.search input:focus {
+    border-color: var(--primary);
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters {
+    display: flex;
+
+    gap: 7px;
+
+    overflow-x: auto;
+
+    padding: 14px 0 3px;
+
+    scrollbar-width: none;
+}
+
+.filters::-webkit-scrollbar {
+    display: none;
+}
+
+.filter {
+    flex-shrink: 0;
+
+    padding: 9px 12px;
+
+    border: 0;
+    border-radius: 11px;
+
+    background: var(--bg);
+
+    color: var(--muted);
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.filter.active {
+    background: var(--primary);
+    color: white;
+}
+
+
+/* =========================
+   ITEM
+========================= */
+
+.item {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.item:last-child {
+    border-bottom: 0;
+}
+
+.check {
+    width: 25px;
+    height: 25px;
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border: 2px solid #ccd5e1;
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 13px;
+
+    transition: .2s;
+}
+
+.item.packed .check {
+    border-color: var(--primary);
+    background: var(--primary);
+}
+
+.item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.item-name {
+    font-size: 13px;
+    font-weight: 750;
+
+    transition: .2s;
+}
+
+.item.packed .item-name {
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.item-category {
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+}
+
+.delete-item {
+    width: 32px;
+    height: 32px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: var(--bg);
+
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty {
+    padding: 35px 10px 20px;
+
+    text-align: center;
+
+    color: var(--muted);
+}
+
+.empty-icon {
+    font-size: 43px;
+}
+
+.empty h3 {
+    margin: 9px 0 5px;
+
+    color: var(--text);
+
+    font-size: 14px;
+}
+
+.empty p {
+    margin: 0;
+
+    font-size: 11px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.add-main {
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 14px;
+
+    border: 0;
+    border-radius: 14px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-weight: 800;
+}
+
+.clear-btn {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 0;
+    border-radius: 13px;
+
+    background: #fff0f0;
+
+    color: var(--danger);
+
+    font-size: 11px;
+    font-weight: 750;
+}
+
+
+/* =========================
+   FLOATING BUTTON
+========================= */
+
+.fab {
+    position: fixed;
+
+    right:
+        max(
+            22px,
+            calc((100vw - 430px) / 2 + 22px)
+        );
+
+    bottom: 23px;
+
+    width: 59px;
+    height: 59px;
+
+    border: 0;
+    border-radius: 20px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 28px;
+
+    box-shadow:
+        0 12px 28px rgba(37,99,235,.28);
+
+    z-index: 10;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 20;
+
+    display: none;
+
+    align-items: flex-end;
+    justify-content: center;
+
+    background: rgba(0,0,0,.48);
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(430px, 100%);
+
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    padding: 23px 18px 30px;
+
+    background: var(--card);
+
+    border-radius: 28px 28px 0 0;
+}
+
+.modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 17px;
+}
+
+.modal-head h2 {
+    margin: 0;
+
+    font-size: 19px;
+}
+
+.close-btn {
+    width: 35px;
+    height: 35px;
+
+    border: 0;
+    border-radius: 10px;
+
+    background: var(--bg);
+
+    color: var(--text);
+}
+
+.field {
+    margin-bottom: 12px;
+}
+
+.field label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.field input,
+.field select {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid var(--line);
+    border-radius: 12px;
+
+    outline: none;
+
+    background: var(--bg);
+    color: var(--text);
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: var(--primary);
+}
+
+.save-btn {
+    width: 100%;
+
+    padding: 14px;
+
+    border: 0;
+    border-radius: 13px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-weight: 800;
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    position: fixed;
+
+    left: 50%;
+    bottom: 92px;
+
+    z-index: 50;
+
+    transform:
+        translate(-50%, 20px);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    padding: 11px 15px;
+
+    border-radius: 12px;
+
+    background: #172033;
+
+    color: white;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    transition: .25s ease;
+}
+
+.toast.show {
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark {
+    --bg: #0e151c;
+    --card: #151e27;
+    --text: #edf4fa;
+    --muted: #91a0ad;
+    --line: #283440;
+    --soft: #172d45;
+    --shadow: 0 12px 35px rgba(0,0,0,.20);
+}
+
+body.dark .clear-btn {
+    background: #321e21;
+}
+
+body.dark .progress {
+    background: #27333f;
+}
+
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width: 700px) {
+
+    body {
+        padding: 20px 0;
+    }
+
+    .app {
+        min-height: calc(100vh - 40px);
+
+        border-radius: 30px;
+
+        box-shadow:
+            0 20px 60px rgba(20,40,70,.12);
+
+        overflow: hidden;
+    }
+}
+
+
+/* =========================
+   SMALL PHONE
+========================= */
+
+@media (max-width: 350px) {
+
+    .header {
+        padding: 18px 15px 27px;
+    }
+
+    .content {
+        padding: 14px;
+    }
+
+    .brand-name {
+        font-size: 19px;
+    }
+
+    .header-copy h1 {
+        font-size: 26px;
+    }
+
+    .stats {
+        gap: 5px;
+    }
+
+    .stat {
+        padding: 9px 5px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🎒
+            </div>
+
+            <div class="brand-name">
+                PackEasy
+            </div>
+
+        </div>
+
+        <button
+            class="theme-btn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+
+    <div class="header-copy">
+
+        <h1>
+            Pack smart.<br>
+            Travel light.
+        </h1>
+
+        <p>
+            Everything you need, nothing you forget.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+
+<!-- TRIP SUMMARY -->
+
+<section class="card">
+
+    <div class="trip-name">
+
+        <div class="trip-icon">
+            ✈️
+        </div>
+
+        <div class="trip-info">
+
+            <h3 id="tripTitle">
+                My Trip
+            </h3>
+
+            <p id="tripSubtitle">
+                Ready to pack
+            </p>
+
+        </div>
+
+        <button
+            class="delete-item"
+            onclick="editTrip()"
+            title="Edit trip"
+        >
+            ✏️
+        </button>
+
+    </div>
+
+
+    <div class="progress-wrap">
+
+        <div class="progress-top">
+
+            <span>
+                Packing progress
+            </span>
+
+            <span id="progressText">
+                0%
+            </span>
+
+        </div>
+
+        <div class="progress">
+
+            <div
+                class="progress-bar"
+                id="progressBar"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <strong id="totalCount">
+                0
+            </strong>
+
+            <span>
+                Total
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <strong id="packedCount">
+                0
+            </strong>
+
+            <span>
+                Packed
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <strong id="leftCount">
+                0
+            </strong>
+
+            <span>
+                Left
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ITEMS -->
+
+<section class="card">
+
+    <div class="section-title">
+
+        <h2>
+            🧳 Packing List
+        </h2>
+
+        <span id="visibleCount">
+            0 items
+        </span>
+
+    </div>
+
+
+    <div class="search">
+
+        <span class="search-icon">
+            🔍
+        </span>
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Search items..."
+            oninput="renderItems()"
+        >
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="setFilter('all', this)"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('clothes', this)"
+        >
+            👕 Clothes
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('toiletries', this)"
+        >
+            🧴 Toiletries
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('electronics', this)"
+        >
+            🔌 Electronics
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('documents', this)"
+        >
+            📄 Documents
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('other', this)"
+        >
+            📦 Other
+        </button>
+
+    </div>
+
+
+    <div id="items"></div>
+
+
+    <button
+        class="add-main"
+        onclick="openModal()"
+    >
+        ＋ Add Item
+    </button>
+
+</section>
+
+
+<!-- CLEAR -->
+
+<section class="card">
+
+    <button
+        class="clear-btn"
+        onclick="clearPacked()"
+    >
+        🧹 Clear Packed Items
+    </button>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- FLOATING BUTTON -->
+
+<button
+    class="fab"
+    onclick="openModal()"
+>
+    +
+</button>
+
+
+<!-- ADD ITEM MODAL -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+<div class="modal">
+
+    <div class="modal-head">
+
+        <h2>
+            Add Packing Item
+        </h2>
+
+        <button
+            class="close-btn"
+            onclick="closeModal()"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <div class="field">
+
+        <label>
+            Item name
+        </label>
+
+        <input
+            id="itemName"
+            type="text"
+            placeholder="e.g. T-shirts"
+        >
+
+    </div>
+
+
+    <div class="field">
+
+        <label>
+            Category
+        </label>
+
+        <select id="itemCategory">
+
+            <option value="clothes">
+                👕 Clothes
+            </option>
+
+            <option value="toiletries">
+                🧴 Toiletries
+            </option>
+
+            <option value="electronics">
+                🔌 Electronics
+            </option>
+
+            <option value="documents">
+                📄 Documents
+            </option>
+
+            <option value="other">
+                📦 Other
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="field">
+
+        <label>
+            Quantity
+        </label>
+
+        <input
+            id="itemQuantity"
+            type="number"
+            min="1"
+            max="99"
+            value="1"
+        >
+
+    </div>
+
+
+    <button
+        class="save-btn"
+        onclick="saveItem()"
+    >
+        💾 Add to Packing List
+    </button>
+
+</div>
+
+</div>
+
+
+<!-- TRIP MODAL -->
+
+<div
+    class="overlay"
+    id="tripOverlay"
+>
+
+<div class="modal">
+
+    <div class="modal-head">
+
+        <h2>
+            Trip Details
+        </h2>
+
+        <button
+            class="close-btn"
+            onclick="closeTripModal()"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <div class="field">
+
+        <label>
+            Trip name
+        </label>
+
+        <input
+            id="tripNameInput"
+            type="text"
+            placeholder="e.g. Cox's Bazar Trip"
+        >
+
+    </div>
+
+
+    <div class="field">
+
+        <label>
+            Destination
+        </label>
+
+        <input
+            id="tripDestinationInput"
+            type="text"
+            placeholder="e.g. Cox's Bazar"
+        >
+
+    </div>
+
+
+    <button
+        class="save-btn"
+        onclick="saveTrip()"
+    >
+        💾 Save Trip
+    </button>
+
+</div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+
+/* =========================
+   DATA
+========================= */
+
+let items =
+    JSON.parse(
+        localStorage.getItem("packEasyItems") || "[]"
+    );
+
+let trip =
+    JSON.parse(
+        localStorage.getItem("packEasyTrip") ||
+        "null"
+    ) || {
+        name: "My Trip",
+        destination: ""
+    };
+
+let activeFilter = "all";
+
+let toastTimer;
+
+
+/* =========================
+   DEFAULT ITEMS
+========================= */
+
+if (items.length === 0) {
+
+    items = [
+
+        {
+            id: Date.now() + 1,
+            name: "T-shirts",
+            category: "clothes",
+            quantity: 3,
+            packed: false
+        },
+
+        {
+            id: Date.now() + 2,
+            name: "Toothbrush",
+            category: "toiletries",
+            quantity: 1,
+            packed: false
+        },
+
+        {
+            id: Date.now() + 3,
+            name: "Phone charger",
+            category: "electronics",
+            quantity: 1,
+            packed: false
+        },
+
+        {
+            id: Date.now() + 4,
+            name: "ID / Passport",
+            category: "documents",
+            quantity: 1,
+            packed: false
+        }
+
+    ];
+
+    saveItems();
+}
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function saveItems() {
+
+    localStorage.setItem(
+        "packEasyItems",
+        JSON.stringify(items)
+    );
+
+}
+
+function saveTripData() {
+
+    localStorage.setItem(
+        "packEasyTrip",
+        JSON.stringify(trip)
+    );
+
+}
+
+
+/* =========================
+   CATEGORY
+========================= */
+
+function categoryName(category) {
+
+    const names = {
+
+        clothes: "Clothes",
+
+        toiletries: "Toiletries",
+
+        electronics: "Electronics",
+
+        documents: "Documents",
+
+        other: "Other"
+
+    };
+
+    return names[category] || "Other";
+}
+
+
+/* =========================
+   CATEGORY ICON
+========================= */
+
+function categoryIcon(category) {
+
+    const icons = {
+
+        clothes: "👕",
+
+        toiletries: "🧴",
+
+        electronics: "🔌",
+
+        documents: "📄",
+
+        other: "📦"
+
+    };
+
+    return icons[category] || "📦";
+}
+
+
+/* =========================
+   RENDER ITEMS
+========================= */
+
+function renderItems() {
+
+    const container =
+        document.getElementById("items");
+
+    const query =
+        document.getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        items.filter(item => {
+
+            const matchesSearch =
+                item.name
+                    .toLowerCase()
+                    .includes(query);
+
+            const matchesFilter =
+                activeFilter === "all" ||
+                item.category === activeFilter;
+
+            return (
+                matchesSearch &&
+                matchesFilter
+            );
+
+        });
+
+
+    document.getElementById("visibleCount")
+        .textContent =
+        filtered.length +
+        (
+            filtered.length === 1
+                ? " item"
+                : " items"
+        );
+
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🎒
+                </div>
+
+                <h3>
+                    Nothing here yet
+                </h3>
+
+                <p>
+                    Add something to your packing list.
+                </p>
+
+            </div>
+
+        `;
+
+    } else {
+
+        container.innerHTML =
+            filtered
+                .map(item => {
+
+                    const quantity =
+                        Number(item.quantity) > 1
+                            ? ` × ${item.quantity}`
+                            : "";
+
+                    return `
+
+                        <div
+                            class="item ${
+                                item.packed
+                                    ? "packed"
+                                    : ""
+                            }"
+                        >
+
+                            <button
+                                class="check"
+                                onclick="togglePacked(${item.id})"
+                            >
+                                ${
+                                    item.packed
+                                        ? "✓"
+                                        : ""
+                                }
+                            </button>
+
+
+                            <div class="item-info">
+
+                                <div class="item-name">
+
+                                    ${escapeHTML(item.name)}
+                                    ${quantity}
+
+                                </div>
+
+                                <div class="item-category">
+
+                                    ${categoryIcon(item.category)}
+                                    ${categoryName(item.category)}
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="delete-item"
+                                onclick="deleteItem(${item.id})"
+                                title="Delete"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    `;
+
+                })
+                .join("");
+
+    }
+
+
+    updateStats();
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats() {
+
+    const total =
+        items.reduce(
+            (sum, item) =>
+                sum + Number(item.quantity || 1),
+            0
+        );
+
+    const packed =
+        items
+            .filter(item => item.packed)
+            .reduce(
+                (sum, item) =>
+                    sum + Number(item.quantity || 1),
+                0
+            );
+
+    const left =
+        total - packed;
+
+
+    const percent =
+        total === 0
+            ? 0
+            : Math.round(
+                packed / total * 100
+            );
+
+
+    document.getElementById("totalCount")
+        .textContent =
+        total;
+
+    document.getElementById("packedCount")
+        .textContent =
+        packed;
+
+    document.getElementById("leftCount")
+        .textContent =
+        left;
+
+    document.getElementById("progressText")
+        .textContent =
+        percent + "%";
+
+    document.getElementById("progressBar")
+        .style.width =
+        percent + "%";
+
+
+    document.getElementById("tripTitle")
+        .textContent =
+        trip.name || "My Trip";
+
+    document.getElementById("tripSubtitle")
+        .textContent =
+        trip.destination
+            ? trip.destination
+            : "Ready to pack";
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(filter, button) {
+
+    activeFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(
+            element =>
+                element.classList.remove("active")
+        );
+
+
+    button.classList.add("active");
+
+    renderItems();
+
+}
+
+
+/* =========================
+   TOGGLE PACKED
+========================= */
+
+function togglePacked(id) {
+
+    const item =
+        items.find(
+            x => x.id === id
+        );
+
+    if (!item) return;
+
+    item.packed =
+        !item.packed;
+
+
+    saveItems();
+
+    renderItems();
+
+
+    showToast(
+        item.packed
+            ? "✓ Item packed!"
+            : "Item marked as unpacked."
+    );
+
+}
+
+
+/* =========================
+   ADD ITEM
+========================= */
+
+function openModal() {
+
+    document.getElementById("itemName")
+        .value = "";
+
+    document.getElementById("itemCategory")
+        .value = "clothes";
+
+    document.getElementById("itemQuantity")
+        .value = "1";
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+
+    setTimeout(
+        () =>
+            document
+                .getElementById("itemName")
+                .focus(),
+        50
+    );
+
+}
+
+
+function closeModal() {
+
+    document.getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   SAVE ITEM
+========================= */
+
+function saveItem() {
+
+    const name =
+        document.getElementById("itemName")
+            .value
+            .trim();
+
+    const category =
+        document.getElementById("itemCategory")
+            .value;
+
+    const quantity =
+        Math.max(
+            1,
+            Math.min(
+                99,
+                Number(
+                    document
+                        .getElementById("itemQuantity")
+                        .value
+                ) || 1
+            )
+        );
+
+
+    if (!name) {
+
+        showToast(
+            "Please enter an item name."
+        );
+
+        return;
+    }
+
+
+    items.unshift({
+
+        id: Date.now(),
+
+        name,
+
+        category,
+
+        quantity,
+
+        packed: false
+
+    });
+
+
+    saveItems();
+
+    closeModal();
+
+    renderItems();
+
+    showToast(
+        "🎒 Item added!"
+    );
+
+}
+
+
+/* =========================
+   DELETE ITEM
+========================= */
+
+function deleteItem(id) {
+
+    const item =
+        items.find(
+            x => x.id === id
+        );
+
+    if (!item) return;
+
+
+    if (
+        !confirm(
+            `Delete "${item.name}"?`
+        )
+    ) {
+        return;
+    }
+
+
+    items =
+        items.filter(
+            x => x.id !== id
+        );
+
+
+    saveItems();
+
+    renderItems();
+
+    showToast(
+        "Item deleted."
+    );
+
+}
+
+
+/* =========================
+   CLEAR PACKED
+========================= */
+
+function clearPacked() {
+
+    const packed =
+        items.filter(
+            item => item.packed
+        );
+
+
+    if (packed.length === 0) {
+
+        showToast(
+            "No packed items to clear."
+        );
+
+        return;
+    }
+
+
+    if (
+        !confirm(
+            `Remove ${packed.length} packed item(s)?`
+        )
+    ) {
+        return;
+    }
+
+
+    items =
+        items.filter(
+            item => !item.packed
+        );
+
+
+    saveItems();
+
+    renderItems();
+
+    showToast(
+        "Packed items cleared."
+    );
+
+}
+
+
+/* =========================
+   TRIP EDIT
+========================= */
+
+function editTrip() {
+
+    document.getElementById("tripNameInput")
+        .value =
+        trip.name || "";
+
+    document.getElementById("tripDestinationInput")
+        .value =
+        trip.destination || "";
+
+
+    document.getElementById("tripOverlay")
+        .classList.add("show");
+
+}
+
+
+function closeTripModal() {
+
+    document.getElementById("tripOverlay")
+        .classList.remove("show");
+
+}
+
+
+function saveTrip() {
+
+    const name =
+        document.getElementById("tripNameInput")
+            .value
+            .trim();
+
+    const destination =
+        document.getElementById("tripDestinationInput")
+            .value
+            .trim();
+
+
+    trip.name =
+        name || "My Trip";
+
+    trip.destination =
+        destination;
+
+
+    saveTripData();
+
+    closeTripModal();
+
+    updateStats();
+
+    showToast(
+        "Trip details saved."
+    );
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function toggleTheme() {
+
+    document.body.classList.toggle("dark");
+
+    const dark =
+        document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "packEasyDark",
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById("themeBtn")
+        .textContent =
+        dark ? "☀️" : "🌙";
+
+}
+
+
+function loadTheme() {
+
+    const dark =
+        localStorage.getItem(
+            "packEasyDark"
+        ) === "1";
+
+
+    if (dark) {
+
+        document.body.classList.add("dark");
+
+        document.getElementById("themeBtn")
+            .textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+                toast.classList.remove("show");
+            },
+            2200
+        );
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================
+   MODAL OUTSIDE CLICK
+========================= */
+
+document
+    .getElementById("overlay")
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id === "overlay"
+            ) {
+                closeModal();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("tripOverlay")
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id === "tripOverlay"
+            ) {
+                closeTripModal();
+            }
+
+        }
+    );
+
+
+/* =========================
+   ESC KEY
+========================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Escape") {
+
+            closeModal();
+            closeTripModal();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   START APP
+========================= */
+
+loadTheme();
+
+renderItems();
+
+</script>
+
+</body>
+</html>

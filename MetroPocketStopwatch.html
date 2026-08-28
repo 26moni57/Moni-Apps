@@ -1,0 +1,370 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#22c55e">
+<title>MetroPocket Stopwatch</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Carbon Matrix & Racing Green High-Performance Look */
+:root{
+--bg:#090d0a;
+--card:#141a15;
+--text:#f2f7f3;
+--muted:#6b7c70;
+--line:#243026;
+--primary:#22c55e;
+--primary2:#4ade80;
+--soft:#14532d;
+--green:#22c55e;
+--green-soft:#052e16;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(9,13,10,.7)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - PERFORMANCE MONOCHROME & EMERALD GLOW */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#16a34a,#0f1712 60%,#141a15);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:2px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(34,197,94,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.08);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* PRECISION DISPLAY GRAPHICS CHRONO PANEL */
+.chrono-display-panel {
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:20px 0;
+position:relative
+}
+
+.chrono-digits {
+font-size:52px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--text);
+letter-spacing:1px;
+text-shadow:0 0 10px rgba(34,197,94,0.2)
+}
+
+/* DOUBLE CONTROLS ACTIONS BUTTON ROWS */
+.controls-row{
+display:flex;
+gap:8px;
+margin-top:5px
+}
+
+.btn-control-action {
+flex:1;
+padding:14px;
+border:0;
+border-radius:14px;
+font-weight:800;
+font-size:14px;
+color:white;
+transition:opacity 0.15s
+}
+.btn-control-action:active { opacity:0.85 }
+
+.btn-start-run { background:var(--green); color:var(--bg); font-weight:900; }
+.btn-pause-run { background:var(--danger); }
+.btn-lap-record { background:var(--line); color:var(--text); border:1px solid var(--muted); }
+
+/* LAP FEED GRID MATRIX STACK */
+.lap-row {
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:11px 0;
+border-bottom:1px solid var(--line);
+font-size:13px
+}
+.lap-row:last-child { border-bottom:0 }
+
+.lap-label { font-weight:800; color:var(--primary2); }
+.lap-time { font-family:"Courier New",Courier,monospace; font-weight:700; color:var(--text); }
+
+/* MINIMAL LIGHT ALLOY SKIN OVERRIDE INVERSION */
+body.light-theme {
+--bg:#f4f7f5;
+--card:#ffffff;
+--text:#141a15;
+--muted:#7c8c80;
+--line:#e2eae4;
+--soft:#dcffe7;
+--shadow:0 10px 30px rgba(22,163,74,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">⏱️</div>
+<div class="brand-name">MetroPocket</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Split Precision.<br>Lap Timing Engine.</h1>
+<p>Measure performance metrics with low-overhead client system time clocks loops.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- CHRONOMETER CENTRAL DASHBOARD BOARD -->
+<section class="card">
+<div class="chrono-display-panel">
+<div id="chronoDigitsDisplayNode" class="chrono-digits">00:00.00</div>
+</div>
+</section>
+
+<!-- CONTROLLERS TRIGGERS KEY REGION -->
+<section class="card">
+<div class="controls-row">
+<button id="startPauseBtnNode" class="btn-control-action btn-start-run" onclick="toggleStopwatchTrackingState()">Start Chrono</button>
+<button id="lapResetBtnNode" class="btn-control-action btn-lap-record" onclick="handleLapOrResetActionTrigger()">Lap Split</button>
+</div>
+</section>
+
+<!-- LAP MATRIX TRACKER STACK FEED -->
+<section class="card">
+<div class="title">
+<h2>🏎️ Lap Split Split Ledger</h2>
+</div>
+<div id="lapsHistoryLogBox">
+<!-- Generated dynamically via Javascript actions loops execution -->
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+let executionIntervalTimerId = null;
+let timeElapsedInMilliseconds = 0;
+let isStopwatchRunningState = false;
+let recordedLapsDataArray = [];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function updateChronometerDisplayString() {
+    const totalSeconds = Math.floor(timeElapsedInMilliseconds / 1000);
+    const minutesPart = Math.floor(totalSeconds / 60);
+    const secondsPart = totalSeconds % 60;
+    const centisecondsPart = Math.floor((timeElapsedInMilliseconds % 1000) / 10);
+
+    const formattedString = 
+        String(minutesPart).padStart(2, '0') + ":" + 
+        String(secondsPart).padStart(2, '0') + "." + 
+        String(centisecondsPart).padStart(2, '0');
+        
+    document.getElementById("chronoDigitsDisplayNode").innerText = formattedString;
+    return formattedString;
+}
+
+function toggleStopwatchTrackingState() {
+    const startPauseBtn = document.getElementById("startPauseBtnNode");
+    const lapResetBtn = document.getElementById("lapResetBtnNode");
+
+    if (isStopwatchRunningState) {
+        // Halt Execution Loop State
+        clearInterval(executionIntervalTimerId);
+        isStopwatchRunningState = false;
+        startPauseBtn.innerText = "Resume Run";
+        startPauseBtn.className = "btn-control-action btn-start-run";
+        lapResetBtn.innerText = "Reset Chrono";
+    } else {
+        // Launch Thread Counter execution
+        isStopwatchRunningState = true;
+        startPauseBtn.innerText = "Halt Timer";
+        startPauseBtn.className = "btn-control-action btn-pause-run";
+        lapResetBtn.innerText = "Lap Split";
+
+        let lastTimestampMoment = performance.now();
+        executionIntervalTimerId = setInterval(() => {
+            const currentTimestampMoment = performance.now();
+            const timeDelta = currentTimestampMoment - lastTimestampMoment;
+            timeElapsedInMilliseconds += timeDelta;
+            lastTimestampMoment = currentTimestampMoment;
+            updateChronometerDisplayString();
+        }, 10);
+    }
+}
+
+function handleLapOrResetActionTrigger() {
+    if (isStopwatchRunningState) {
+        // Inject active runtime string straight to ledger lists stack
+        const currentLapTimeString = updateChronometerDisplayString();
+        recordedLapsDataArray.unshift({
+            index: recordedLapsDataArray.length + 1,
+            timeString: currentLapTimeString
+        });
+        redrawLapsLogView();
+    } else {
+        // Complete clear layout hard parameters resetting structural actions
+        timeElapsedInMilliseconds = 0;
+        recordedLapsDataArray = [];
+        document.getElementById("startPauseBtnNode").innerText = "Start Chrono";
+        document.getElementById("lapResetBtnNode").innerText = "Lap Split";
+        updateChronometerDisplayString();
+        redrawLapsLogView();
+    }
+}
+
+function redrawLapsLogView() {
+    const container = document.getElementById("lapsHistoryLogBox");
+    
+    if (recordedLapsDataArray.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:10px; color:var(--muted); font-size:12px;">Trigger splits while active to stack lap arrays.</div>`;
+        return;
+    }
+    
+    // Clamp slice array items limits to preserve look heights footprint bounds safely
+    const visibilitySlices = recordedLapsDataArray.slice(0, 4);
+    container.innerHTML = visibilitySlices.map(lap => `
+        <div class="lap-row">
+            <span class="lap-label">🏁 Lap Split #${String(lap.index).padStart(2, '0')}</span>
+            <span class="lap-time">${lap.timeString}</span>
+        </div>
+    `).join("");
+}
+
+// Initial initialization boot drawing checks configurations parameters setups
+redrawLapsLogView();
+</script>
+
+</body>
+</html>

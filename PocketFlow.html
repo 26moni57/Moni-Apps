@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PocketFlow</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f4f8;
+    color: #1d2433;
+}
+
+.app {
+    width: 100%;
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    background: #f8f9fc;
+    padding-bottom: 30px;
+}
+
+/* Header */
+.header {
+    background: linear-gradient(135deg, #6c5ce7, #8e7dff);
+    color: white;
+    padding: 28px 22px;
+    border-radius: 0 0 30px 30px;
+}
+
+.header small {
+    opacity: 0.8;
+}
+
+.header h1 {
+    margin: 8px 0 22px;
+    font-size: 28px;
+}
+
+.balance {
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 18px;
+}
+
+.balance span {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.balance h2 {
+    margin: 7px 0 0;
+    font-size: 30px;
+}
+
+/* Content */
+.content {
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    margin: 8px 0 14px;
+}
+
+/* Quick buttons */
+.quick {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 9px;
+}
+
+.quick button {
+    border: none;
+    background: white;
+    border-radius: 18px;
+    padding: 14px 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    cursor: pointer;
+}
+
+.quick-icon {
+    display: block;
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
+.quick-label {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Card */
+.card {
+    background: white;
+    border-radius: 22px;
+    padding: 18px;
+    margin-top: 20px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.05);
+}
+
+/* Form */
+input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #e0e3ea;
+    border-radius: 14px;
+    outline: none;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+input:focus {
+    border-color: #6c5ce7;
+}
+
+.add-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: #6c5ce7;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Expenses */
+.expense {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.expense:last-child {
+    border-bottom: none;
+}
+
+.expense-icon {
+    width: 43px;
+    height: 43px;
+    background: #eeeaff;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+}
+
+.expense-info {
+    flex: 1;
+}
+
+.expense-info strong {
+    display: block;
+    font-size: 14px;
+}
+
+.expense-info small {
+    color: #8a92a3;
+}
+
+.amount {
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+/* Floating button */
+.fab {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 58px;
+    height: 58px;
+    border: none;
+    border-radius: 19px;
+    background: #6c5ce7;
+    color: white;
+    font-size: 30px;
+    box-shadow: 0 10px 25px rgba(108,92,231,0.35);
+    cursor: pointer;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 95px;
+    transform: translate(-50%, 20px);
+    background: #202534;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+        <small>Sunday, August 23</small>
+        <h1>PocketFlow 👋</h1>
+
+        <div class="balance">
+            <span>Total spending</span>
+            <h2 id="total">৳ 0</h2>
+        </div>
+    </header>
+
+    <main class="content">
+
+        <h2 class="section-title">Quick Actions</h2>
+
+        <div class="quick">
+
+            <button onclick="focusAmount()">
+                <span class="quick-icon">➕</span>
+                <span class="quick-label">Add</span>
+            </button>
+
+            <button onclick="showToast('📷 Scanner coming soon')">
+                <span class="quick-icon">📷</span>
+                <span class="quick-label">Scan</span>
+            </button>
+
+            <button onclick="showToast('🎯 Monthly goal: ৳10,000')">
+                <span class="quick-icon">🎯</span>
+                <span class="quick-label">Goal</span>
+            </button>
+
+            <button onclick="showToast('📊 Report coming soon')">
+                <span class="quick-icon">📊</span>
+                <span class="quick-label">Report</span>
+            </button>
+
+        </div>
+
+        <!-- Add Expense -->
+        <div class="card">
+
+            <h2 class="section-title">Add Expense</h2>
+
+            <input
+                id="name"
+                type="text"
+                placeholder="Expense name"
+            >
+
+            <input
+                id="amountInput"
+                type="number"
+                placeholder="Amount (৳)"
+            >
+
+            <button class="add-btn" onclick="addExpense()">
+                Add Expense
+            </button>
+
+        </div>
+
+        <!-- Recent Expenses -->
+        <div class="card">
+
+            <h2 class="section-title">Recent Activity</h2>
+
+            <div id="expenses">
+
+                <div class="expense">
+                    <div class="expense-icon">☕</div>
+
+                    <div class="expense-info">
+                        <strong>Coffee</strong>
+                        <small>Today</small>
+                    </div>
+
+                    <div class="amount">
+                        − ৳120
+                    </div>
+                </div>
+
+                <div class="expense">
+                    <div class="expense-icon">🚌</div>
+
+                    <div class="expense-info">
+                        <strong>Transport</strong>
+                        <small>Today</small>
+                    </div>
+
+                    <div class="amount">
+                        − ৳80
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<button class="fab" onclick="focusAmount()">+</button>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+let total = 200;
+
+/* Add expense */
+function addExpense() {
+
+    const name = document.getElementById("name").value.trim();
+    const amount = Number(
+        document.getElementById("amountInput").value
+    );
+
+    if (!name) {
+        showToast("Please enter an expense name");
+        return;
+    }
+
+    if (!amount || amount <= 0) {
+        showToast("Please enter a valid amount");
+        return;
+    }
+
+    total += amount;
+
+    document.getElementById("total").innerText =
+        "৳ " + total.toLocaleString();
+
+    const expense = document.createElement("div");
+
+    expense.className = "expense";
+
+    expense.innerHTML = `
+        <div class="expense-icon">💸</div>
+
+        <div class="expense-info">
+            <strong>${escapeHTML(name)}</strong>
+            <small>Just now</small>
+        </div>
+
+        <div class="amount">
+            − ৳${amount.toLocaleString()}
+        </div>
+    `;
+
+    document
+        .getElementById("expenses")
+        .prepend(expense);
+
+    document.getElementById("name").value = "";
+    document.getElementById("amountInput").value = "";
+
+    showToast("Expense added ✓");
+}
+
+/* Focus amount form */
+function focusAmount() {
+    document.getElementById("name").focus();
+
+    window.scrollTo({
+        top: 300,
+        behavior: "smooth"
+    });
+}
+
+/* Toast */
+function showToast(message) {
+
+    const toast = document.getElementById("toast");
+
+    toast.innerText = message;
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 1800);
+}
+
+/* Basic HTML escaping */
+function escapeHTML(text) {
+
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+</script>
+
+</body>
+</html>

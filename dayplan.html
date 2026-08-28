@@ -1,0 +1,1168 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DayPlan</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #202733;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 100px;
+}
+
+/* HEADER */
+
+.header {
+    padding: 28px 20px 27px;
+    color: white;
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    border-radius: 0 0 30px 30px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.date-badge {
+    padding: 8px 11px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.18);
+    font-size: 10px;
+}
+
+.header h1 {
+    margin: 27px 0 5px;
+    font-size: 30px;
+}
+
+.header p {
+    margin: 0;
+    opacity: .85;
+}
+
+/* PROGRESS */
+
+.progress-card {
+    margin: -2px 20px 0;
+    padding: 18px;
+    background: white;
+    border-radius: 21px;
+    box-shadow: 0 8px 25px rgba(40,70,110,.10);
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress-title {
+    font-weight: bold;
+}
+
+.progress-percent {
+    color: #3b82f6;
+    font-weight: bold;
+}
+
+.progress-bar {
+    height: 9px;
+    margin-top: 12px;
+    border-radius: 20px;
+    background: #e8edf5;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #3b82f6;
+    border-radius: 20px;
+    transition: .3s;
+}
+
+/* CONTENT */
+
+.content {
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    margin: 8px 0 13px;
+}
+
+/* DAY FILTER */
+
+.day-switch {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding-bottom: 3px;
+}
+
+.day-button {
+    min-width: 55px;
+    border: 0;
+    padding: 10px 7px;
+    border-radius: 14px;
+    background: white;
+    color: #7d8593;
+    cursor: pointer;
+}
+
+.day-button strong {
+    display: block;
+    color: #303844;
+    font-size: 14px;
+}
+
+.day-button small {
+    font-size: 9px;
+}
+
+.day-button.active {
+    background: #3b82f6;
+    color: white;
+}
+
+.day-button.active strong {
+    color: white;
+}
+
+/* TASK */
+
+.task {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    margin-top: 10px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 4px 15px rgba(40,70,110,.05);
+}
+
+.check {
+    width: 25px;
+    height: 25px;
+    border-radius: 9px;
+    border: 2px solid #d5dce7;
+    background: white;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.check.done {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+.task-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-title {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.task.done .task-title {
+    text-decoration: line-through;
+    color: #9aa1ad;
+}
+
+.task-meta {
+    display: flex;
+    gap: 7px;
+    margin-top: 6px;
+}
+
+.time {
+    color: #7d8593;
+    font-size: 10px;
+}
+
+.priority {
+    font-size: 9px;
+    padding: 4px 7px;
+    border-radius: 7px;
+}
+
+.priority.high {
+    background: #fff0ef;
+    color: #e4554d;
+}
+
+.priority.medium {
+    background: #fff8e6;
+    color: #c48a18;
+}
+
+.priority.low {
+    background: #eef7ff;
+    color: #3b82f6;
+}
+
+.task-actions {
+    display: flex;
+    gap: 3px;
+}
+
+.task-actions button {
+    border: 0;
+    background: transparent;
+    color: #a1a8b4;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* EMPTY */
+
+.empty {
+    text-align: center;
+    color: #8c95a3;
+    padding: 45px 15px;
+}
+
+.empty-icon {
+    font-size: 45px;
+}
+
+/* ADD */
+
+.add {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 60px;
+    height: 60px;
+    border: 0;
+    border-radius: 20px;
+    background: #3b82f6;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(59,130,246,.3);
+}
+
+/* MODAL */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(420px,100%);
+    background: white;
+    padding: 24px 20px 30px;
+    border-radius: 28px 28px 0 0;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal input,
+.modal select {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #dce2ea;
+    border-radius: 13px;
+    outline: none;
+    font-family: inherit;
+    background: white;
+}
+
+.modal-row {
+    display: flex;
+    gap: 8px;
+}
+
+.modal-row > * {
+    flex: 1;
+}
+
+.save {
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    border-radius: 14px;
+    background: #3b82f6;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #777f8c;
+    padding: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="top">
+
+            <div class="logo">
+                🌤️ DayPlan
+            </div>
+
+            <div
+                class="date-badge"
+                id="headerDate"
+            >
+                Today
+            </div>
+
+        </div>
+
+        <h1>
+            Make today count.
+        </h1>
+
+        <p>
+            One task at a time.
+        </p>
+
+    </header>
+
+
+    <!-- PROGRESS -->
+
+    <section class="progress-card">
+
+        <div class="progress-top">
+
+            <div class="progress-title">
+                Today's progress
+            </div>
+
+            <div
+                class="progress-percent"
+                id="progressPercent"
+            >
+                0%
+            </div>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <main class="content">
+
+        <!-- DAYS -->
+
+        <h2 class="section-title">
+            Your week
+        </h2>
+
+        <div
+            class="day-switch"
+            id="daySwitch"
+        ></div>
+
+
+        <!-- TASKS -->
+
+        <h2 class="section-title">
+            <span id="taskHeading">
+                Today's tasks
+            </span>
+        </h2>
+
+        <section id="tasks"></section>
+
+    </main>
+
+</div>
+
+
+<!-- ADD -->
+
+<button
+    class="add"
+    onclick="openModal()"
+>
+    +
+</button>
+
+
+<!-- MODAL -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+    <div class="modal">
+
+        <h2 id="modalTitle">
+            Add Task
+        </h2>
+
+        <input
+            id="taskTitle"
+            type="text"
+            placeholder="What needs to be done?"
+        >
+
+        <div class="modal-row">
+
+            <input
+                id="taskTime"
+                type="time"
+            >
+
+            <select id="priority">
+
+                <option value="high">
+                    🔴 High
+                </option>
+
+                <option value="medium" selected>
+                    🟡 Medium
+                </option>
+
+                <option value="low">
+                    🔵 Low
+                </option>
+
+            </select>
+
+        </div>
+
+        <input
+            id="taskDate"
+            type="date"
+        >
+
+        <button
+            class="save"
+            onclick="saveTask()"
+        >
+            Save Task
+        </button>
+
+        <button
+            class="cancel"
+            onclick="closeModal()"
+        >
+            Cancel
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+    DayPlan
+    Simple daily planner
+*/
+
+
+let tasks =
+    JSON.parse(
+        localStorage.getItem("dayPlanTasks")
+    ) || [];
+
+
+let selectedDate =
+    getDateKey();
+
+
+let editingId =
+    null;
+
+
+/* DATE */
+
+function getDateKey(date = new Date()) {
+
+    return date
+        .toISOString()
+        .split("T")[0];
+
+}
+
+
+/* FORMAT */
+
+function formatDate(date) {
+
+    return new Date(date)
+        .toLocaleDateString(
+            undefined,
+            {
+                month: "short",
+                day: "numeric"
+            }
+        );
+
+}
+
+
+/* DAYS */
+
+function renderDays() {
+
+    const container =
+        document.getElementById("daySwitch");
+
+    const today =
+        new Date();
+
+    let html = "";
+
+
+    for (let i = 0; i < 7; i++) {
+
+        const date =
+            new Date(today);
+
+        date.setDate(
+            today.getDate() + i
+        );
+
+
+        const key =
+            getDateKey(date);
+
+
+        const dayName =
+            i === 0
+                ? "Today"
+                : date.toLocaleDateString(
+                    undefined,
+                    { weekday: "short" }
+                );
+
+
+        const number =
+            date.getDate();
+
+
+        html += `
+
+            <button
+                class="day-button ${
+                    key === selectedDate
+                        ? "active"
+                        : ""
+                }"
+                onclick="selectDay('${key}')"
+            >
+
+                <strong>
+                    ${number}
+                </strong>
+
+                <small>
+                    ${dayName}
+                </small>
+
+            </button>
+
+        `;
+
+    }
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+/* SELECT DAY */
+
+function selectDay(date) {
+
+    selectedDate =
+        date;
+
+    renderDays();
+
+    renderTasks();
+
+}
+
+
+/* RENDER TASKS */
+
+function renderTasks() {
+
+    const container =
+        document.getElementById("tasks");
+
+
+    const dayTasks =
+        tasks
+            .filter(
+                task =>
+                    task.date === selectedDate
+            )
+            .sort(
+                (a,b) => {
+
+                    if (!a.time) return 1;
+
+                    if (!b.time) return -1;
+
+                    return a.time
+                        .localeCompare(b.time);
+
+                }
+            );
+
+
+    const isToday =
+        selectedDate ===
+        getDateKey();
+
+
+    document.getElementById("taskHeading")
+        .innerText =
+        isToday
+            ? "Today's tasks"
+            : "Tasks for " +
+              formatDate(selectedDate);
+
+
+    if (dayTasks.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ☀️
+                </div>
+
+                <h3>
+                    No tasks yet
+                </h3>
+
+                <p>
+                    Tap + to plan this day.
+                </p>
+
+            </div>
+
+        `;
+
+        updateProgress();
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        dayTasks
+            .map(task => `
+
+                <article
+                    class="task ${
+                        task.done ? "done" : ""
+                    }"
+                >
+
+                    <button
+                        class="check ${
+                            task.done ? "done" : ""
+                        }"
+                        onclick="toggleTask(${task.id})"
+                    >
+                        ${
+                            task.done
+                                ? "✓"
+                                : ""
+                        }
+                    </button>
+
+                    <div class="task-info">
+
+                        <div class="task-title">
+                            ${escapeHTML(task.title)}
+                        </div>
+
+                        <div class="task-meta">
+
+                            ${
+                                task.time
+                                    ?
+                                    `<span class="time">
+                                        🕐 ${task.time}
+                                    </span>`
+                                    :
+                                    ""
+                            }
+
+                            <span
+                                class="priority ${task.priority}"
+                            >
+                                ${task.priority}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="task-actions">
+
+                        <button
+                            onclick="editTask(${task.id})"
+                        >
+                            ✏️
+                        </button>
+
+                        <button
+                            onclick="deleteTask(${task.id})"
+                        >
+                            🗑️
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `)
+            .join("");
+
+
+    updateProgress();
+
+}
+
+
+/* PROGRESS */
+
+function updateProgress() {
+
+    const dayTasks =
+        tasks.filter(
+            task =>
+                task.date === selectedDate
+        );
+
+
+    const completed =
+        dayTasks.filter(
+            task => task.done
+        ).length;
+
+
+    const percent =
+        dayTasks.length
+            ? Math.round(
+                completed /
+                dayTasks.length *
+                100
+            )
+            : 0;
+
+
+    document.getElementById("progressPercent")
+        .innerText =
+        percent + "%";
+
+
+    document.getElementById("progressFill")
+        .style.width =
+        percent + "%";
+
+}
+
+
+/* OPEN MODAL */
+
+function openModal() {
+
+    editingId =
+        null;
+
+
+    document.getElementById("modalTitle")
+        .innerText =
+        "Add Task";
+
+
+    document.getElementById("taskTitle")
+        .value =
+        "";
+
+    document.getElementById("taskTime")
+        .value =
+        "";
+
+    document.getElementById("priority")
+        .value =
+        "medium";
+
+    document.getElementById("taskDate")
+        .value =
+        selectedDate;
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+
+    document.getElementById("taskTitle")
+        .focus();
+
+}
+
+
+/* CLOSE */
+
+function closeModal() {
+
+    document.getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* SAVE */
+
+function saveTask() {
+
+    const title =
+        document.getElementById("taskTitle")
+            .value
+            .trim();
+
+
+    const time =
+        document.getElementById("taskTime")
+            .value;
+
+
+    const priority =
+        document.getElementById("priority")
+            .value;
+
+
+    const date =
+        document.getElementById("taskDate")
+            .value;
+
+
+    if (!title || !date) {
+
+        alert(
+            "Please enter a task and date."
+        );
+
+        return;
+
+    }
+
+
+    if (editingId !== null) {
+
+        const task =
+            tasks.find(
+                task =>
+                    task.id === editingId
+            );
+
+
+        if (task) {
+
+            task.title =
+                title;
+
+            task.time =
+                time;
+
+            task.priority =
+                priority;
+
+            task.date =
+                date;
+
+        }
+
+    } else {
+
+        tasks.push({
+
+            id: Date.now(),
+
+            title: title,
+
+            time: time,
+
+            priority: priority,
+
+            date: date,
+
+            done: false
+
+        });
+
+    }
+
+
+    saveData();
+
+    selectedDate =
+        date;
+
+    closeModal();
+
+    renderAll();
+
+}
+
+
+/* TOGGLE */
+
+function toggleTask(id) {
+
+    const task =
+        tasks.find(
+            task =>
+                task.id === id
+        );
+
+
+    if (!task) return;
+
+
+    task.done =
+        !task.done;
+
+
+    saveData();
+
+    renderTasks();
+
+}
+
+
+/* EDIT */
+
+function editTask(id) {
+
+    const task =
+        tasks.find(
+            task =>
+                task.id === id
+        );
+
+
+    if (!task) return;
+
+
+    editingId =
+        id;
+
+
+    document.getElementById("modalTitle")
+        .innerText =
+        "Edit Task";
+
+
+    document.getElementById("taskTitle")
+        .value =
+        task.title;
+
+
+    document.getElementById("taskTime")
+        .value =
+        task.time || "";
+
+
+    document.getElementById("priority")
+        .value =
+        task.priority;
+
+
+    document.getElementById("taskDate")
+        .value =
+        task.date;
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+}
+
+
+/* DELETE */
+
+function deleteTask(id) {
+
+    const task =
+        tasks.find(
+            task =>
+                task.id === id
+        );
+
+
+    if (!task) return;
+
+
+    if (
+        !confirm(
+            'Delete "' +
+            task.title +
+            '"?'
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    tasks =
+        tasks.filter(
+            task =>
+                task.id !== id
+        );
+
+
+    saveData();
+
+    renderTasks();
+
+}
+
+
+/* SAVE DATA */
+
+function saveData() {
+
+    localStorage.setItem(
+        "dayPlanTasks",
+        JSON.stringify(tasks)
+    );
+
+}
+
+
+/* ESCAPE */
+
+function escapeHTML(text) {
+
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* ALL */
+
+function renderAll() {
+
+    renderDays();
+
+    renderTasks();
+
+}
+
+
+/* OUTSIDE MODAL */
+
+document.getElementById("overlay")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === this) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+/* HEADER DATE */
+
+document.getElementById("headerDate")
+    .innerText =
+    new Date()
+        .toLocaleDateString(
+            undefined,
+            {
+                month: "short",
+                day: "numeric"
+            }
+        );
+
+
+/* START */
+
+renderAll();
+
+</script>
+
+</body>
+</html>

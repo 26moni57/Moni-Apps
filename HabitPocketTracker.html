@@ -1,0 +1,478 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>HabitPocket Tracker</title>
+
+<style>
+/* UNIFORM MIDNIGHT OCEAN STYLE */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#2563eb;
+--primary2:#3b82f6;
+--soft:#1e3a8a;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(15,23,42,.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#2563eb 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+.title span{
+font-size:10px;
+color:var(--muted)
+}
+
+/* HABIT ENTRY FEED ROW ITEMS */
+.habit-item {
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px 0;
+border-bottom:1px solid var(--line)
+}
+.habit-item:last-child{border-bottom:0}
+
+.habit-btn-check {
+width:32px;
+height:32px;
+border:2px solid var(--line);
+border-radius:10px;
+background:transparent;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:16px;
+transition:background 0.25s, border-color 0.25s;
+padding:0
+}
+.habit-item.done .habit-btn-check {
+background:var(--green);
+border-color:var(--green)
+}
+
+.habit-details {
+flex:1;
+min-width:0
+}
+
+.habit-name {
+font-size:14px;
+font-weight:750;
+color:var(--text);
+word-wrap:break-word
+}
+.habit-item.done .habit-name {
+color:var(--muted);
+text-decoration:line-through
+}
+
+.habit-streak {
+font-size:10px;
+color:var(--primary2);
+font-weight:800;
+margin-top:3px;
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+.habit-item.done .habit-streak {
+color:var(--green)
+}
+
+.btn-remove-habit {
+background:transparent;
+border:0;
+color:var(--danger);
+font-size:11px;
+font-weight:700;
+padding:4px
+}
+
+/* FLOATING TRIGGER FAB ACTUATOR */
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:20px;
+background:var(--primary);
+color:white;
+font-size:28px;
+box-shadow:0 12px 28px rgba(37,99,235,.28);
+z-index:10;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+/* MODAL CONTAINER DRAWER OVERLAY */
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(0,0,0,.6)
+}
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0;
+border-top:1px solid var(--line)
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px
+}
+
+.modal-head h2{
+margin:0;
+font-size:19px
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:10px;
+background:var(--bg);
+color:var(--text)
+}
+
+.field{margin-bottom:12px}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+font-weight:750;
+color:var(--muted)
+}
+
+.field input{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text)
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:white;
+font-weight:800
+}
+
+.empty-state {
+text-align:center;
+padding:35px 15px;
+color:var(--muted)
+}
+.empty-icon { font-size:40px; margin-bottom:6px; }
+
+/* LIGHT SKIN INVERSION OVERRIDE STYLE */
+body.light-theme {
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#dbeafe;
+--shadow:0 10px 30px rgba(51,65,85,0.06)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">⚡</div>
+<div class="brand-name">HabitPocket</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Build Habits.<br>Forge Routine.</h1>
+<p>Log performance increments, track continuous streak counts, and grow daily.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- ACTIVE HABITS MANAGER INTERFACE CARD -->
+<section class="card">
+<div class="title">
+<h2>🔥 Daily Routines Tracking</h2>
+<span id="habitCountSpan">0 active</span>
+</div>
+
+<div id="habitsLogContainer">
+<!-- Rendered dynamically by JavaScript initialization engine loops -->
+</div>
+</section>
+
+</main>
+
+<!-- FLOATING INJECTION FAB CONTROLLER ACTION -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- ADD HABIT FORM DRAWER SHEET POPUP PANEL -->
+<div class="overlay" id="overlay">
+<div class="modal">
+<div class="modal-head">
+<h2>Track New Daily Habit</h2>
+<button class="close" onclick="closeModal()">✕</button>
+</div>
+
+<div class="field">
+<label>HABIT PRACTICE DEFINITION NAME</label>
+<input type="text" id="habitName" placeholder="e.g., Read 10 Pages of Code">
+</div>
+
+<button class="save" onclick="createNewHabitEntry()">Commit Habit Route</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// Load default fallback array configuration properties directly out of data sandbox
+let habitList = JSON.parse(localStorage.getItem("habit_pocket_routines")) || [
+    { id: 1, name: "Morning Exercise & Stretching", streak: 5, done: true },
+    { id: 2, name: "Drink 3 Liters Water Intake", streak: 12, done: false },
+    { id: 3, name: "Write Clean JavaScript Code", streak: 28, done: false }
+];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function openModal() { document.getElementById("overlay").classList.add("show"); }
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+
+function createNewHabitEntry() {
+    const name = document.getElementById("habitName").value.trim();
+    if (!name) return alert("Please clarify a target habit activity title label entry.");
+
+    habitList.push({ id: Date.now(), name, streak: 0, done: false });
+    saveAndRender();
+    closeModal();
+
+    // Clear background value fields parameters placeholders text
+    document.getElementById("habitName").value = "";
+}
+
+function toggleHabitStatus(id) {
+    const item = habitList.find(h => h.id === id);
+    if(item) {
+        item.done = !item.done;
+        // Dynamically increment streak validation values metrics based on active confirmation choice toggles
+        if (item.done) {
+            item.streak++;
+        } else {
+            item.streak = Math.max(0, item.streak - 1);
+        }
+        saveAndRender();
+    }
+}
+
+function removeHabitEntry(id) {
+    if(confirm("Permanently remove this task check framework out of tracking records?")) {
+        habitList = habitList.filter(h => h.id !== id);
+        saveAndRender();
+    }
+}
+
+function saveAndRender() {
+    localStorage.setItem("habit_pocket_routines", JSON.stringify(habitList));
+    render();
+}
+
+function render() {
+    const container = document.getElementById("habitsLogContainer");
+    document.getElementById("habitCountSpan").innerText = habitList.length + " active";
+
+    if (habitList.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">🌱</div>
+                <h3>No Habits Active</h3>
+                <p>Tap the action cross switch button below to add your first daily habit streak check.</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = habitList.map(h => `
+        <div class="habit-item ${h.done ? 'done' : ''}">
+            <button class="habit-btn-check" onclick="toggleHabitStatus(${h.id})">
+                ${h.done ? '✓' : ''}
+            </button>
+            <div class="habit-details">
+                <div class="habit-name">${h.name}</div>
+                <div class="habit-streak">🔥 Streak: ${h.streak} Days</div>
+            </div>
+            <button class="btn-remove-habit" onclick="removeHabitEntry(${h.id})">✕</button>
+        </div>
+    `).join("");
+}
+
+// Fire rendering operations immediately on launching lifecycle layout triggers runtime activation
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,921 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudySnap</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef4ff;
+    color: #172033;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 40px;
+}
+
+/* Header */
+
+.header {
+    background: linear-gradient(135deg, #377dff, #6b9cff);
+    color: white;
+    padding: 26px 20px 25px;
+    border-radius: 0 0 30px 30px;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.count {
+    background: rgba(255,255,255,.2);
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.header h1 {
+    margin: 28px 0 5px;
+    font-size: 29px;
+}
+
+.header p {
+    margin: 0;
+    opacity: .82;
+}
+
+/* Content */
+
+.content {
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    margin: 8px 0 13px;
+}
+
+/* Search */
+
+.search {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.search input {
+    width: 100%;
+    padding: 15px 17px 15px 44px;
+    border: none;
+    border-radius: 16px;
+    outline: none;
+    background: white;
+    box-shadow: 0 5px 18px rgba(35,75,140,.08);
+    font-size: 14px;
+}
+
+.search span {
+    position: absolute;
+    left: 16px;
+    top: 14px;
+}
+
+/* Flashcard */
+
+.flashcard {
+    min-height: 250px;
+    background: white;
+    border-radius: 25px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(35,75,140,.10);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-label {
+    color: #6d7d99;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: .5px;
+}
+
+.question {
+    font-size: 22px;
+    line-height: 1.4;
+    font-weight: 700;
+    margin: 20px 0;
+}
+
+.answer {
+    display: none;
+    color: #4f6c9c;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.answer.show {
+    display: block;
+}
+
+.show-answer {
+    border: 0;
+    background: #edf3ff;
+    color: #377dff;
+    padding: 13px;
+    border-radius: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Card controls */
+
+.card-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.card-controls button {
+    flex: 1;
+    padding: 14px;
+    border: 0;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.prev {
+    background: white;
+    color: #5d6980;
+}
+
+.next {
+    background: #377dff;
+    color: white;
+}
+
+/* Stats */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.stat {
+    background: white;
+    padding: 14px 5px;
+    border-radius: 17px;
+    text-align: center;
+}
+
+.stat strong {
+    display: block;
+    font-size: 20px;
+}
+
+.stat small {
+    color: #8a96aa;
+    font-size: 10px;
+}
+
+/* Add card */
+
+.add-card {
+    margin-top: 20px;
+    background: white;
+    border-radius: 22px;
+    padding: 18px;
+}
+
+.add-card input,
+.add-card textarea,
+.add-card select {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 10px;
+    border: 1px solid #dfe5ef;
+    border-radius: 13px;
+    outline: none;
+    font-family: inherit;
+}
+
+.add-card textarea {
+    height: 90px;
+    resize: none;
+}
+
+.add-button {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 14px;
+    background: #377dff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Category */
+
+.categories {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.category {
+    white-space: nowrap;
+    border: 0;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+.category.active {
+    background: #377dff;
+    color: white;
+}
+
+/* Message */
+
+.message {
+    text-align: center;
+    color: #73829b;
+    font-size: 13px;
+    margin-top: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <div class="header-top">
+
+            <div class="logo">
+                📚 StudySnap
+            </div>
+
+            <div
+                class="count"
+                id="count"
+            >
+                0 cards
+            </div>
+
+        </div>
+
+        <h1>Learn faster.</h1>
+
+        <p>
+            Turn your questions into simple flashcards.
+        </p>
+
+    </header>
+
+
+    <main class="content">
+
+        <!-- Search -->
+
+        <div class="search">
+
+            <span>🔍</span>
+
+            <input
+                id="search"
+                type="text"
+                placeholder="Search cards..."
+                oninput="filterCards()"
+            >
+
+        </div>
+
+
+        <!-- Categories -->
+
+        <div class="categories">
+
+            <button
+                class="category active"
+                onclick="setCategory('All', this)"
+            >
+                All
+            </button>
+
+            <button
+                class="category"
+                onclick="setCategory('Science', this)"
+            >
+                🔬 Science
+            </button>
+
+            <button
+                class="category"
+                onclick="setCategory('Math', this)"
+            >
+                🔢 Math
+            </button>
+
+            <button
+                class="category"
+                onclick="setCategory('English', this)"
+            >
+                🔤 English
+            </button>
+
+            <button
+                class="category"
+                onclick="setCategory('General', this)"
+            >
+                💡 General
+            </button>
+
+        </div>
+
+
+        <h2 class="section-title">
+            Flashcard
+        </h2>
+
+
+        <!-- Flashcard -->
+
+        <section class="flashcard">
+
+            <div class="card-label" id="cardLabel">
+                QUESTION
+            </div>
+
+            <div
+                class="question"
+                id="question"
+            >
+                What is the capital of Bangladesh?
+            </div>
+
+            <div
+                class="answer"
+                id="answer"
+            >
+                Dhaka is the capital city of Bangladesh.
+            </div>
+
+            <button
+                class="show-answer"
+                id="answerButton"
+                onclick="toggleAnswer()"
+            >
+                Show Answer
+            </button>
+
+        </section>
+
+
+        <!-- Controls -->
+
+        <div class="card-controls">
+
+            <button
+                class="prev"
+                onclick="previousCard()"
+            >
+                ← Previous
+            </button>
+
+            <button
+                class="next"
+                onclick="nextCard()"
+            >
+                Next →
+            </button>
+
+        </div>
+
+
+        <!-- Stats -->
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <strong id="cardNumber">
+                    1
+                </strong>
+
+                <small>
+                    Current
+                </small>
+
+            </div>
+
+            <div class="stat">
+
+                <strong id="studied">
+                    0
+                </strong>
+
+                <small>
+                    Studied
+                </small>
+
+            </div>
+
+            <div class="stat">
+
+                <strong id="mastered">
+                    0
+                </strong>
+
+                <small>
+                    Mastered
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- Add Card -->
+
+        <section class="add-card">
+
+            <h2 class="section-title">
+                Create New Card
+            </h2>
+
+            <input
+                id="newQuestion"
+                type="text"
+                placeholder="Question"
+            >
+
+            <textarea
+                id="newAnswer"
+                placeholder="Answer"
+            ></textarea>
+
+            <select id="newCategory">
+
+                <option value="General">
+                    💡 General
+                </option>
+
+                <option value="Science">
+                    🔬 Science
+                </option>
+
+                <option value="Math">
+                    🔢 Math
+                </option>
+
+                <option value="English">
+                    🔤 English
+                </option>
+
+            </select>
+
+            <button
+                class="add-button"
+                onclick="addCard()"
+            >
+                + Add Flashcard
+            </button>
+
+        </section>
+
+
+        <div
+            class="message"
+            id="message"
+        >
+            Keep learning one card at a time. 🧠
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/*
+    StudySnap
+    Flashcard learning app
+*/
+
+
+const defaultCards = [
+
+    {
+        question:
+            "What is the capital of Bangladesh?",
+
+        answer:
+            "Dhaka is the capital city of Bangladesh.",
+
+        category:
+            "General"
+    },
+
+    {
+        question:
+            "What is H₂O?",
+
+        answer:
+            "H₂O is the chemical formula for water.",
+
+        category:
+            "Science"
+    },
+
+    {
+        question:
+            "What is 12 × 5?",
+
+        answer:
+            "12 × 5 = 60.",
+
+        category:
+            "Math"
+    },
+
+    {
+        question:
+            "What is the opposite of 'hot'?",
+
+        answer:
+            "The opposite of hot is cold.",
+
+        category:
+            "English"
+    }
+
+];
+
+
+let cards =
+    JSON.parse(
+        localStorage.getItem("studySnapCards")
+    ) || defaultCards;
+
+
+let currentIndex = 0;
+
+let studied =
+    Number(
+        localStorage.getItem("studySnapStudied")
+    ) || 0;
+
+let mastered =
+    Number(
+        localStorage.getItem("studySnapMastered")
+    ) || 0;
+
+let selectedCategory = "All";
+
+let filteredCards = cards;
+
+
+/* Save */
+
+function saveData() {
+
+    localStorage.setItem(
+        "studySnapCards",
+        JSON.stringify(cards)
+    );
+
+    localStorage.setItem(
+        "studySnapStudied",
+        studied
+    );
+
+    localStorage.setItem(
+        "studySnapMastered",
+        mastered
+    );
+
+}
+
+
+/* Display current card */
+
+function renderCard() {
+
+    if (filteredCards.length === 0) {
+
+        document.getElementById("question").innerText =
+            "No cards found.";
+
+        document.getElementById("answer").innerText =
+            "Create a new card below.";
+
+        document.getElementById("answer").classList.add("show");
+
+        return;
+    }
+
+
+    if (currentIndex >= filteredCards.length) {
+
+        currentIndex = 0;
+
+    }
+
+
+    const card =
+        filteredCards[currentIndex];
+
+
+    document.getElementById("question").innerText =
+        card.question;
+
+
+    document.getElementById("answer").innerText =
+        card.answer;
+
+
+    document.getElementById("answer").classList.remove("show");
+
+
+    document.getElementById("answerButton").innerText =
+        "Show Answer";
+
+
+    document.getElementById("cardNumber").innerText =
+        currentIndex + 1;
+
+
+    document.getElementById("count").innerText =
+        cards.length +
+        (cards.length === 1 ? " card" : " cards");
+
+}
+
+
+/* Show answer */
+
+function toggleAnswer() {
+
+    const answer =
+        document.getElementById("answer");
+
+    const button =
+        document.getElementById("answerButton");
+
+
+    if (answer.classList.contains("show")) {
+
+        answer.classList.remove("show");
+
+        button.innerText =
+            "Show Answer";
+
+    } else {
+
+        answer.classList.add("show");
+
+        button.innerText =
+            "Hide Answer";
+
+        studied++;
+
+        document.getElementById("studied").innerText =
+            studied;
+
+        saveData();
+
+    }
+
+}
+
+
+/* Next */
+
+function nextCard() {
+
+    if (filteredCards.length === 0) return;
+
+
+    currentIndex++;
+
+    if (currentIndex >= filteredCards.length) {
+
+        currentIndex = 0;
+
+    }
+
+
+    renderCard();
+
+}
+
+
+/* Previous */
+
+function previousCard() {
+
+    if (filteredCards.length === 0) return;
+
+
+    currentIndex--;
+
+    if (currentIndex < 0) {
+
+        currentIndex =
+            filteredCards.length - 1;
+
+    }
+
+
+    renderCard();
+
+}
+
+
+/* Category */
+
+function setCategory(category, button) {
+
+    selectedCategory = category;
+
+    document
+        .querySelectorAll(".category")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+    filterCards();
+
+}
+
+
+/* Search + category */
+
+function filterCards() {
+
+    const query =
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    filteredCards =
+        cards.filter(card => {
+
+            const matchesCategory =
+                selectedCategory === "All" ||
+                card.category === selectedCategory;
+
+
+            const matchesSearch =
+                card.question
+                    .toLowerCase()
+                    .includes(query)
+
+                ||
+
+                card.answer
+                    .toLowerCase()
+                    .includes(query);
+
+
+            return (
+                matchesCategory &&
+                matchesSearch
+            );
+
+        });
+
+
+    currentIndex = 0;
+
+    renderCard();
+
+}
+
+
+/* Add new card */
+
+function addCard() {
+
+    const question =
+        document
+            .getElementById("newQuestion")
+            .value
+            .trim();
+
+
+    const answer =
+        document
+            .getElementById("newAnswer")
+            .value
+            .trim();
+
+
+    const category =
+        document
+            .getElementById("newCategory")
+            .value;
+
+
+    if (!question || !answer) {
+
+        showMessage(
+            "Please enter both question and answer."
+        );
+
+        return;
+    }
+
+
+    cards.push({
+
+        question:
+            question,
+
+        answer:
+            answer,
+
+        category:
+            category
+
+    });
+
+
+    saveData();
+
+
+    document.getElementById("newQuestion").value =
+        "";
+
+    document.getElementById("newAnswer").value =
+        "";
+
+
+    filterCards();
+
+
+    showMessage(
+        "New flashcard added ✓"
+    );
+
+}
+
+
+/* Message */
+
+function showMessage(text) {
+
+    document.getElementById("message").innerText =
+        text;
+
+}
+
+
+/* Initial */
+
+document.getElementById("studied").innerText =
+    studied;
+
+document.getElementById("mastered").innerText =
+    mastered;
+
+renderCard();
+
+</script>
+
+</body>
+</html>

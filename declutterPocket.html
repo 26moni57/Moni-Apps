@@ -1,0 +1,2219 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f766e">
+<title>DeclutterPocket</title>
+
+<style>
+:root{
+    --bg:#f2fbf9;
+    --card:#ffffff;
+    --text:#173330;
+    --muted:#7b918e;
+    --line:#dcece8;
+    --primary:#0f766e;
+    --primary2:#14b8a6;
+    --soft:#dff7f2;
+    --green:#16a34a;
+    --greenSoft:#eaf8ee;
+    --orange:#ea580c;
+    --orangeSoft:#fff0e7;
+    --red:#dc2626;
+    --blue:#2563eb;
+    --purple:#7c3aed;
+    --shadow:0 12px 32px rgba(20,80,72,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:auto;
+    overflow:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 31px;
+    color:#fff;
+    background:
+        linear-gradient(
+            145deg,
+            #115e59,
+            #0f766e 52%,
+            #2dd4bf
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header:before,
+.header:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.10);
+}
+
+.header:before{
+    width:205px;
+    height:205px;
+    right:-100px;
+    top:-125px;
+}
+
+.header:after{
+    width:155px;
+    height:155px;
+    left:-90px;
+    bottom:-115px;
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.brandIcon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    font-size:22px;
+}
+
+.brandName{
+    font-size:21px;
+    font-weight:850;
+}
+
+.themeBtn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    color:#fff;
+    font-size:17px;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:24px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    margin:8px 0 0;
+    max-width:340px;
+    color:rgba(255,255,255,.84);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    padding:18px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:17px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:21px;
+    box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:15px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progressWrap{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.progressCircle{
+    position:relative;
+    width:78px;
+    height:78px;
+    flex:0 0 78px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:
+        conic-gradient(
+            var(--primary)
+            0deg,
+            var(--primary)
+            var(--progress,0deg),
+            var(--soft)
+            var(--progress,0deg),
+            var(--soft)
+            360deg
+        );
+}
+
+.progressCircle:after{
+    content:"";
+    position:absolute;
+    inset:7px;
+    border-radius:50%;
+    background:var(--card);
+}
+
+.progressNumber{
+    position:relative;
+    z-index:2;
+    font-size:18px;
+    font-weight:900;
+}
+
+.progressText{
+    flex:1;
+}
+
+.progressText strong{
+    display:block;
+    font-size:13px;
+}
+
+.progressText p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.5;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:14px;
+}
+
+.stat{
+    padding:12px 5px;
+    text-align:center;
+    border-radius:15px;
+    background:var(--bg);
+}
+
+.statIcon{
+    font-size:18px;
+}
+
+.stat strong{
+    display:block;
+    margin-top:3px;
+    font-size:18px;
+}
+
+.stat span{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* =========================
+   ADD FORM
+========================= */
+
+.addBtn{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:13px;
+    background:var(--primary);
+    color:#fff;
+    font-size:12px;
+    font-weight:800;
+    box-shadow:0 7px 18px rgba(15,118,110,.18);
+}
+
+.form{
+    display:none;
+}
+
+.form.open{
+    display:block;
+}
+
+.field{
+    margin-top:11px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:5px;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:750;
+}
+
+input,
+select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+input:focus,
+select:focus{
+    border-color:var(--primary2);
+}
+
+.formButtons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:12px;
+}
+
+.primaryBtn,
+.secondaryBtn{
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.primaryBtn{
+    background:var(--primary);
+    color:#fff;
+}
+
+.secondaryBtn{
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search{
+    position:relative;
+    margin-bottom:12px;
+}
+
+.searchIcon{
+    position:absolute;
+    top:10px;
+    left:12px;
+}
+
+.search input{
+    padding-left:36px;
+}
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters{
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    padding-bottom:2px;
+    scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{
+    display:none;
+}
+
+.filter{
+    flex:0 0 auto;
+    padding:8px 10px;
+    border:0;
+    border-radius:9px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:9px;
+    font-weight:750;
+}
+
+.filter.active{
+    background:var(--primary);
+    color:#fff;
+}
+
+/* =========================
+   ITEMS
+========================= */
+
+.itemList{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.item{
+    padding:14px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:var(--card);
+    transition:.18s;
+}
+
+.item.done{
+    border-color:#c9ead4;
+    background:var(--greenSoft);
+}
+
+.itemTop{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+}
+
+.itemCheck{
+    width:30px;
+    height:30px;
+    flex:0 0 30px;
+    display:grid;
+    place-items:center;
+    border:2px solid #cbdcd8;
+    border-radius:10px;
+    background:transparent;
+    color:transparent;
+    font-size:14px;
+    font-weight:900;
+}
+
+.item.done .itemCheck{
+    border-color:var(--green);
+    background:var(--green);
+    color:#fff;
+}
+
+.itemInfo{
+    flex:1;
+    min-width:0;
+}
+
+.itemName{
+    margin:0;
+    font-size:12px;
+    font-weight:850;
+    word-break:break-word;
+}
+
+.item.done .itemName{
+    color:var(--muted);
+    text-decoration:line-through;
+}
+
+.itemMeta{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:6px;
+    margin-top:6px;
+}
+
+.category{
+    padding:4px 7px;
+    border-radius:7px;
+    background:var(--soft);
+    color:var(--primary);
+    font-size:7px;
+    font-weight:850;
+}
+
+.status{
+    color:var(--muted);
+    font-size:8px;
+}
+
+.itemActions{
+    display:flex;
+    gap:5px;
+    margin-top:11px;
+}
+
+.actionBtn{
+    flex:1;
+    padding:8px 6px;
+    border:0;
+    border-radius:9px;
+    background:var(--bg);
+    color:var(--text);
+    font-size:9px;
+    font-weight:750;
+}
+
+.actionBtn.keep{
+    color:var(--green);
+}
+
+.actionBtn.donate{
+    color:var(--purple);
+}
+
+.actionBtn.sell{
+    color:var(--orange);
+}
+
+.actionBtn.trash{
+    color:var(--red);
+}
+
+.actionBtn.delete{
+    color:var(--red);
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    padding:29px 12px;
+    text-align:center;
+}
+
+.emptyIcon{
+    font-size:35px;
+}
+
+.empty h3{
+    margin:8px 0 5px;
+    font-size:14px;
+}
+
+.empty p{
+    margin:0;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.5;
+}
+
+/* =========================
+   TIP
+========================= */
+
+.tip{
+    padding:13px;
+    border-radius:14px;
+    background:var(--soft);
+}
+
+.tip strong{
+    display:block;
+    font-size:11px;
+}
+
+.tip p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.5;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    z-index:100;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#173330;
+    color:#fff;
+    font-size:11px;
+    white-space:nowrap;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark{
+    --bg:#0c1715;
+    --card:#15221f;
+    --text:#effaf7;
+    --muted:#98aaa6;
+    --line:#293b37;
+    --soft:#173a35;
+    --shadow:0 12px 35px rgba(0,0,0,.28);
+}
+
+body.dark .item.done{
+    background:#11251a;
+    border-color:#245135;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media(min-width:700px){
+
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(20,70,65,.12);
+    }
+}
+
+/* =========================
+   SMALL
+========================= */
+
+@media(max-width:350px){
+
+    .content{
+        padding:14px;
+    }
+
+    .header{
+        padding:18px 15px 27px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+
+    .itemActions{
+        flex-wrap:wrap;
+    }
+
+    .actionBtn{
+        min-width:45%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brandIcon">
+                🧹
+            </div>
+
+            <div class="brandName">
+                DeclutterPocket
+            </div>
+
+        </div>
+
+        <button
+            class="themeBtn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+            aria-label="Toggle dark mode"
+        >
+            🌙
+        </button>
+
+    </div>
+
+
+    <div class="hero">
+
+        <h1>
+            Clear space.<br>
+            Clear mind.
+        </h1>
+
+        <p>
+            One small item at a time. Decide what to keep, donate, sell or remove.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- PROGRESS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            🧹 Declutter Progress
+        </h2>
+
+        <span>
+            Today
+        </span>
+
+    </div>
+
+
+    <div class="progressWrap">
+
+        <div
+            class="progressCircle"
+            id="progressCircle"
+        >
+
+            <div
+                class="progressNumber"
+                id="progressNumber"
+            >
+                0%
+            </div>
+
+        </div>
+
+
+        <div class="progressText">
+
+            <strong id="progressTitle">
+                Ready to clear?
+            </strong>
+
+            <p id="progressDescription">
+                Add something you want to organize or remove.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="statIcon">
+                📦
+            </div>
+
+            <strong id="totalCount">
+                0
+            </strong>
+
+            <span>
+                Items
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ✅
+            </div>
+
+            <strong id="doneCount">
+                0
+            </strong>
+
+            <span>
+                Cleared
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                🔥
+            </div>
+
+            <strong id="streakCount">
+                0
+            </strong>
+
+            <span>
+                Streak
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ADD -->
+
+<section class="card">
+
+    <button
+        class="addBtn"
+        id="addButton"
+        onclick="toggleForm()"
+    >
+        ＋ Add Clutter Item
+    </button>
+
+
+    <div
+        class="form"
+        id="form"
+    >
+
+        <div class="field">
+
+            <label>
+                ITEM
+            </label>
+
+            <input
+                id="itemInput"
+                type="text"
+                maxlength="100"
+                placeholder="e.g. Old headphones"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                CATEGORY
+            </label>
+
+            <select id="categoryInput">
+
+                <option value="Room">
+                    🏠 Room
+                </option>
+
+                <option value="Desk">
+                    🖥️ Desk
+                </option>
+
+                <option value="Phone">
+                    📱 Phone
+                </option>
+
+                <option value="Files">
+                    📁 Files
+                </option>
+
+                <option value="Other">
+                    📦 Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="formButtons">
+
+            <button
+                class="secondaryBtn"
+                onclick="closeForm()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="primaryBtn"
+                onclick="addItem()"
+            >
+                🧹 Add Item
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ITEMS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📋 Your Items
+        </h2>
+
+        <span id="itemLabel">
+            0 items
+        </span>
+
+    </div>
+
+
+    <div class="search">
+
+        <span class="searchIcon">
+            🔍
+        </span>
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Search items..."
+            oninput="render()"
+        >
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="setFilter('All',this)"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Room',this)"
+        >
+            🏠 Room
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Desk',this)"
+        >
+            🖥️ Desk
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Phone',this)"
+        >
+            📱 Phone
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Files',this)"
+        >
+            📁 Files
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Other',this)"
+        >
+            📦 Other
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Done',this)"
+        >
+            ✅ Done
+        </button>
+
+    </div>
+
+
+    <div
+        style="height:12px"
+    ></div>
+
+
+    <div
+        class="itemList"
+        id="itemList"
+    ></div>
+
+</section>
+
+
+<!-- TIP -->
+
+<section class="card">
+
+    <div class="tip">
+
+        <strong>
+            💡 Decluttering Tip
+        </strong>
+
+        <p id="tipText">
+            If you haven't used something in a long time and it no longer serves a purpose, consider letting it go.
+        </p>
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================
+   DATA
+========================= */
+
+let items =
+    JSON.parse(
+        localStorage.getItem(
+            "declutterPocketItems"
+        ) || "[]"
+    );
+
+let currentFilter = "All";
+
+let editingId = null;
+
+let toastTimer;
+
+
+/* =========================
+   DATE
+========================= */
+
+function todayKey(){
+
+    const d = new Date();
+
+    return (
+        d.getFullYear() +
+        "-" +
+        String(
+            d.getMonth() + 1
+        ).padStart(2,"0") +
+        "-" +
+        String(
+            d.getDate()
+        ).padStart(2,"0")
+    );
+
+}
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function saveData(){
+
+    localStorage.setItem(
+        "declutterPocketItems",
+        JSON.stringify(items)
+    );
+
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+function toggleForm(){
+
+    const form =
+        document.getElementById("form");
+
+
+    if(form.classList.contains("open")){
+
+        closeForm();
+
+    }else{
+
+        editingId = null;
+
+        form.classList.add("open");
+
+        document.getElementById("addButton")
+            .textContent =
+            "✕ Close Form";
+
+        document.getElementById("itemInput")
+            .focus();
+
+    }
+
+}
+
+
+function closeForm(){
+
+    editingId = null;
+
+    document.getElementById("form")
+        .classList.remove("open");
+
+    document.getElementById("addButton")
+        .textContent =
+        "＋ Add Clutter Item";
+
+    document.getElementById("itemInput")
+        .value = "";
+
+    document.getElementById("categoryInput")
+        .value = "Room";
+
+}
+
+
+/* =========================
+   ADD / EDIT ITEM
+========================= */
+
+function addItem(){
+
+    const input =
+        document.getElementById(
+            "itemInput"
+        );
+
+    const category =
+        document.getElementById(
+            "categoryInput"
+        ).value;
+
+    const name =
+        input.value.trim();
+
+
+    if(!name){
+
+        showToast(
+            "⚠️ Please enter an item."
+        );
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    if(editingId){
+
+        const item =
+            items.find(
+                x =>
+                    x.id === editingId
+            );
+
+
+        if(item){
+
+            item.name = name;
+
+            item.category = category;
+
+            showToast(
+                "✏️ Item updated."
+            );
+
+        }
+
+    }else{
+
+        items.unshift({
+
+            id:
+                Date.now().toString() +
+                Math.random()
+                    .toString(16)
+                    .slice(2),
+
+            name:name,
+
+            category:category,
+
+            status:"Pending",
+
+            completed:false,
+
+            action:null,
+
+            created:Date.now(),
+
+            completedDate:null,
+
+            date:todayKey()
+
+        });
+
+
+        showToast(
+            "🧹 Item added!"
+        );
+
+    }
+
+
+    saveData();
+
+    closeForm();
+
+    render();
+
+}
+
+
+/* =========================
+   COMPLETE
+========================= */
+
+function toggleItem(id){
+
+    const item =
+        items.find(
+            x =>
+                x.id === id
+        );
+
+
+    if(!item){
+        return;
+    }
+
+
+    item.completed =
+        !item.completed;
+
+
+    if(item.completed){
+
+        item.completedDate =
+            todayKey();
+
+        item.status =
+            item.action || "Cleared";
+
+        showToast(
+            "✅ Item cleared!"
+        );
+
+    }else{
+
+        item.completedDate =
+            null;
+
+        item.status =
+            "Pending";
+
+        item.action =
+            null;
+
+        showToast(
+            "↩️ Item moved back."
+        );
+
+    }
+
+
+    saveData();
+
+    render();
+
+}
+
+
+/* =========================
+   ACTION
+========================= */
+
+function chooseAction(
+    id,
+    action
+){
+
+    const item =
+        items.find(
+            x =>
+                x.id === id
+        );
+
+
+    if(!item){
+        return;
+    }
+
+
+    item.action =
+        action;
+
+
+    item.status =
+        action;
+
+
+    item.completed =
+        true;
+
+
+    item.completedDate =
+        todayKey();
+
+
+    saveData();
+
+    render();
+
+
+    const messages = {
+
+        Keep:"💚 Marked as Keep.",
+
+        Donate:"🎁 Marked for Donation.",
+
+        Sell:"💰 Marked for Sale.",
+
+        Trash:"🗑️ Marked for Trash."
+
+    };
+
+
+    showToast(
+        messages[action] ||
+        "✅ Item updated."
+    );
+
+}
+
+
+/* =========================
+   EDIT
+========================= */
+
+function editItem(id){
+
+    const item =
+        items.find(
+            x =>
+                x.id === id
+        );
+
+
+    if(!item){
+        return;
+    }
+
+
+    editingId = id;
+
+
+    document.getElementById(
+        "itemInput"
+    ).value =
+        item.name;
+
+
+    document.getElementById(
+        "categoryInput"
+    ).value =
+        item.category;
+
+
+    document.getElementById(
+        "form"
+    ).classList.add("open");
+
+
+    document.getElementById(
+        "addButton"
+    ).textContent =
+        "✕ Close Form";
+
+
+    document.getElementById(
+        "itemInput"
+    ).focus();
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteItem(id){
+
+    const item =
+        items.find(
+            x =>
+                x.id === id
+        );
+
+
+    if(!item){
+        return;
+    }
+
+
+    if(
+        !confirm(
+            'Delete "' +
+            item.name +
+            '"?'
+        )
+    ){
+
+        return;
+
+    }
+
+
+    items =
+        items.filter(
+            x =>
+                x.id !== id
+        );
+
+
+    saveData();
+
+    render();
+
+    showToast(
+        "🗑️ Item deleted."
+    );
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(
+    filter,
+    button
+){
+
+    currentFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(
+            x =>
+                x.classList.remove(
+                    "active"
+                )
+        );
+
+
+    button.classList.add(
+        "active"
+    );
+
+
+    render();
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+    const list =
+        document.getElementById(
+            "itemList"
+        );
+
+    const search =
+        document.getElementById(
+            "search"
+        ).value
+         .toLowerCase()
+         .trim();
+
+
+    const todayItems =
+        items.filter(
+            item =>
+                item.date === todayKey()
+        );
+
+
+    const completed =
+        todayItems.filter(
+            item =>
+                item.completed
+        ).length;
+
+
+    const total =
+        todayItems.length;
+
+
+    const percent =
+        total
+            ? Math.round(
+                completed /
+                total *
+                100
+            )
+            : 0;
+
+
+    /* Progress */
+
+    document
+        .getElementById(
+            "progressCircle"
+        )
+        .style.setProperty(
+            "--progress",
+            percent * 3.6 + "deg"
+        );
+
+
+    document
+        .getElementById(
+            "progressNumber"
+        )
+        .textContent =
+        percent + "%";
+
+
+    document
+        .getElementById(
+            "totalCount"
+        )
+        .textContent =
+        total;
+
+
+    document
+        .getElementById(
+            "doneCount"
+        )
+        .textContent =
+        completed;
+
+
+    document
+        .getElementById(
+            "itemLabel"
+        )
+        .textContent =
+        total +
+        (
+            total === 1
+                ? " item"
+                : " items"
+        );
+
+
+    updateProgressText(
+        total,
+        completed,
+        percent
+    );
+
+
+    updateStreak();
+
+
+    /* Filter */
+
+    let filtered =
+        items.filter(
+            item =>
+                item.date === todayKey()
+        );
+
+
+    if(search){
+
+        filtered =
+            filtered.filter(
+                item =>
+                    item.name
+                        .toLowerCase()
+                        .includes(search) ||
+
+                    item.category
+                        .toLowerCase()
+                        .includes(search) ||
+
+                    item.status
+                        .toLowerCase()
+                        .includes(search)
+            );
+
+    }
+
+
+    if(currentFilter === "Done"){
+
+        filtered =
+            filtered.filter(
+                item =>
+                    item.completed
+            );
+
+    }else if(
+        currentFilter !== "All"
+    ){
+
+        filtered =
+            filtered.filter(
+                item =>
+                    item.category ===
+                    currentFilter
+            );
+
+    }
+
+
+    if(filtered.length === 0){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="emptyIcon">
+                    ${
+                        currentFilter === "Done"
+                            ? "🌱"
+                            : "🧹"
+                    }
+                </div>
+
+                <h3>
+                    ${
+                        currentFilter === "Done"
+                            ? "Nothing cleared yet"
+                            : "No items found"
+                    }
+                </h3>
+
+                <p>
+                    ${
+                        currentFilter === "Done"
+                            ? "Clear an item and your progress will appear here."
+                            : "Add something small that you want to declutter."
+                    }
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        filtered
+        .map(
+            item => {
+
+                const categoryIcon =
+                    getCategoryIcon(
+                        item.category
+                    );
+
+
+                return `
+
+                    <article
+                        class="item ${
+                            item.completed
+                                ? "done"
+                                : ""
+                        }"
+                    >
+
+                        <div class="itemTop">
+
+                            <button
+                                class="itemCheck"
+                                onclick="toggleItem('${item.id}')"
+                                aria-label="Complete item"
+                            >
+                                ✓
+                            </button>
+
+
+                            <div class="itemInfo">
+
+                                <p class="itemName">
+                                    ${escapeHTML(item.name)}
+                                </p>
+
+
+                                <div class="itemMeta">
+
+                                    <span class="category">
+
+                                        ${categoryIcon}
+                                        ${escapeHTML(item.category)}
+
+                                    </span>
+
+                                    <span class="status">
+                                        ${escapeHTML(item.status)}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="itemActions">
+
+                            <button
+                                class="actionBtn keep"
+                                onclick="chooseAction('${item.id}','Keep')"
+                            >
+                                💚 Keep
+                            </button>
+
+                            <button
+                                class="actionBtn donate"
+                                onclick="chooseAction('${item.id}','Donate')"
+                            >
+                                🎁 Donate
+                            </button>
+
+                            <button
+                                class="actionBtn sell"
+                                onclick="chooseAction('${item.id}','Sell')"
+                            >
+                                💰 Sell
+                            </button>
+
+                            <button
+                                class="actionBtn trash"
+                                onclick="chooseAction('${item.id}','Trash')"
+                            >
+                                🗑 Trash
+                            </button>
+
+                            <button
+                                class="actionBtn"
+                                onclick="editItem('${item.id}')"
+                            >
+                                ✏️
+                            </button>
+
+                            <button
+                                class="actionBtn delete"
+                                onclick="deleteItem('${item.id}')"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                `;
+
+            }
+        )
+        .join("");
+
+}
+
+
+/* =========================
+   PROGRESS TEXT
+========================= */
+
+function updateProgressText(
+    total,
+    completed,
+    percent
+){
+
+    const title =
+        document.getElementById(
+            "progressTitle"
+        );
+
+    const description =
+        document.getElementById(
+            "progressDescription"
+        );
+
+
+    if(total === 0){
+
+        title.textContent =
+            "Ready to clear?";
+
+        description.textContent =
+            "Add your first item and make a little space.";
+
+        return;
+
+    }
+
+
+    if(percent === 100){
+
+        title.textContent =
+            "Space cleared! 🎉";
+
+        description.textContent =
+            "Amazing! You cleared everything for today.";
+
+        return;
+
+    }
+
+
+    if(percent >= 70){
+
+        title.textContent =
+            "Almost finished! 💪";
+
+        description.textContent =
+            completed +
+            " of " +
+            total +
+            " items cleared.";
+
+        return;
+
+    }
+
+
+    if(percent >= 40){
+
+        title.textContent =
+            "Great progress! 🌱";
+
+        description.textContent =
+            completed +
+            " of " +
+            total +
+            " items cleared.";
+
+        return;
+
+    }
+
+
+    title.textContent =
+        "Start small.";
+
+    description.textContent =
+        completed +
+        " of " +
+        total +
+        " items cleared.";
+
+}
+
+
+/* =========================
+   STREAK
+========================= */
+
+function updateStreak(){
+
+    const completedDates =
+        new Set(
+            items
+                .filter(
+                    item =>
+                        item.completed &&
+                        item.completedDate
+                )
+                .map(
+                    item =>
+                        item.completedDate
+                )
+        );
+
+
+    let streak = 0;
+
+    const date =
+        new Date();
+
+
+    while(true){
+
+        const key =
+            date.getFullYear() +
+            "-" +
+            String(
+                date.getMonth()+1
+            ).padStart(2,"0") +
+            "-" +
+            String(
+                date.getDate()
+            ).padStart(2,"0");
+
+
+        if(
+            completedDates.has(key)
+        ){
+
+            streak++;
+
+            date.setDate(
+                date.getDate() - 1
+            );
+
+        }else{
+
+            break;
+
+        }
+
+    }
+
+
+    document
+        .getElementById(
+            "streakCount"
+        )
+        .textContent =
+        streak;
+
+}
+
+
+/* =========================
+   CATEGORY ICON
+========================= */
+
+function getCategoryIcon(
+    category
+){
+
+    const icons = {
+
+        Room:"🏠",
+
+        Desk:"🖥️",
+
+        Phone:"📱",
+
+        Files:"📁",
+
+        Other:"📦"
+
+    };
+
+
+    return icons[category] || "📦";
+
+}
+
+
+/* =========================
+   HTML ESCAPE
+========================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body
+        .classList
+        .toggle("dark");
+
+
+    const dark =
+        document.body
+            .classList
+            .contains("dark");
+
+
+    localStorage.setItem(
+        "declutterPocketDark",
+        dark ? "1" : "0"
+    );
+
+
+    document
+        .getElementById(
+            "themeBtn"
+        )
+        .textContent =
+        dark
+            ? "☀️"
+            : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            "declutterPocketDark"
+        ) === "1";
+
+
+    if(dark){
+
+        document.body
+            .classList
+            .add("dark");
+
+
+        document
+            .getElementById(
+                "themeBtn"
+            )
+            .textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TIPS
+========================= */
+
+const tips = [
+
+    "Start with one drawer or one small surface instead of trying to clean everything at once.",
+
+    "If an item has not been used for a long time, ask whether you would buy it again today.",
+
+    "Create a donation box. When it is full, take it out immediately.",
+
+    "Keep frequently used items easy to reach and move rarely used items elsewhere.",
+
+    "Digital clutter counts too. Delete screenshots, duplicate files and unused apps.",
+
+    "Give every important item a home. It becomes much easier to put things away.",
+
+    "When you finish one small area, stop and enjoy the extra space."
+
+];
+
+
+document
+    .getElementById(
+        "tipText"
+    )
+    .textContent =
+    tips[
+        new Date().getDate()
+        % tips.length
+    ];
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(
+    message
+){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () =>
+                toast.classList.remove(
+                    "show"
+                ),
+            2200
+        );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+render();
+
+</script>
+
+</body>
+</html>

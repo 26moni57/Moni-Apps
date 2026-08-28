@@ -1,0 +1,480 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+<title>NoteCheck Studio</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Warm Editorial Cream & Crimson Ink Look */
+:root{
+--bg:#f4f1ea;
+--card:#fbf9f4;
+--text:#2c2523;
+--muted:#7c6e6a;
+--line:#e8e2d5;
+--primary:#991b1b;
+--primary2:#c2414c;
+--soft:#fef2f2;
+--green:#15803d;
+--green-soft:#f0fdf4;
+--danger:#b91c1c;
+--shadow:0 12px 35px rgba(44,37,35,0.06)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Georgia, serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - SIGNATURE WARM EDITORIAL ACCENT WITH TEXTURED LINES */
+.header{
+position:relative;
+padding:24px 18px 34px;
+color:white;
+background:linear-gradient(145deg,#7f1d1d,#991b1b 60%,#b91c1c);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid #f59e0b
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.05);
+border:1px dashed rgba(255,255,255,0.1)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.12);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:800;
+letter-spacing:-0.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.12);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:28px;
+line-height:1.15;
+font-weight:normal;
+letter-spacing:-0.5px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+font-family:system-ui, -apple-system, sans-serif;
+color:rgba(255,255,255,.75)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:18px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:24px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+font-weight:700;
+text-transform:uppercase;
+color:var(--muted);
+letter-spacing:0.5px
+}
+
+.title span{
+font-size:11px;
+color:var(--muted)
+}
+
+/* REORDERABLE CHECKLIST FEED ITEMS */
+.check-item-row {
+display:flex;
+align-items:center;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid var(--line);
+transition:all 0.2s ease
+}
+.check-item-row:last-child{border-bottom:0}
+
+.check-circle-btn {
+width:26px;
+height:26px;
+border:2px solid var(--line);
+border-radius:50%;
+background:transparent;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+transition:all 0.2s ease;
+padding:0;
+flex-shrink:0
+}
+.check-item-row.done .check-circle-btn {
+background:var(--green);
+border-color:var(--green)
+}
+
+.note-item-details {
+flex:1;
+min-width:0
+}
+
+.note-item-text {
+font-size:15px;
+line-height:1.4;
+color:var(--text);
+word-wrap:break-word
+}
+.check-item-row.done .note-item-text {
+color:var(--muted);
+text-decoration:line-through
+}
+
+.btn-remove-row {
+background:transparent;
+border:0;
+color:var(--muted);
+font-size:14px;
+padding:4px;
+cursor:pointer;
+transition:color 0.2s
+}
+.btn-remove-row:hover {
+color:var(--danger)
+}
+
+/* FLOATING TRIGGER FAB CONFIGURATION */
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:50%;
+background:var(--primary);
+color:white;
+font-size:28px;
+box-shadow:0 12px 28px rgba(153,27,27,.25);
+z-index:10;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+/* MODAL CONTAINER DRAWER OVERLAY */
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(44,37,35,.5);
+backdrop-filter:blur(3px)
+}
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0;
+border-top:1px solid var(--line)
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.modal-head h2{
+margin:0;
+font-size:18px;
+font-weight:700
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:50%;
+background:var(--bg);
+color:var(--text)
+}
+
+.field{margin-bottom:12px; font-family:system-ui, -apple-system, sans-serif}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+font-weight:700;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field input{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-family:Georgia, serif
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:white;
+font-weight:700;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.empty-state {
+text-align:center;
+padding:35px 15px;
+color:var(--muted);
+font-family:system-ui, -apple-system, sans-serif
+}
+.empty-icon { font-size:40px; margin-bottom:6px; }
+
+/* DARK CHARCOAL SKIN INVERSION */
+body.dark-editorial {
+--bg:#1a1615;
+--card:#241f1e;
+--text:#f4f1ea;
+--muted:#a39591;
+--line:#38312f;
+--shadow:0 12px 35px rgba(0,0,0,.3);
+--green-soft:#142d1b
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🖋️</div>
+<div class="brand-name">NoteCheck</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleEditorialTheme()">🌙</button>
+</div>
+
+<div class="hero">
+<h1>Write Thoughts.<br>Check Achievements.</h1>
+<p>Organize loose tasks into clean notebook lines with quick client sandbox loops.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- DYNAMIC TASK SHEET CARD -->
+<section class="card">
+<div class="title">
+<h2>📝 Current Sheet Entries</h2>
+<span id="itemsCounterNode">0 entries</span>
+</div>
+
+<div id="checklistItemsBox">
+<!-- Generated dynamically by JavaScript -->
+</div>
+</section>
+
+</main>
+
+<!-- FLOATING FAB INJECTION ACTION -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- ADD ITEM OVERLAY PANEL DRAWER SHEET -->
+<div class="overlay" id="overlay">
+<div class="modal">
+<div class="modal-head">
+<h2>Append Sheet Entry</h2>
+<button class="close" onclick="closeModal()">✕</button>
+</div>
+
+<div class="field">
+<label>Task Note Description</label>
+<input type="text" id="inputTaskText" placeholder="e.g., Finalize project boilerplate modules">
+</div>
+
+<button class="save" onclick="commitChecklistItem()">Lock Note row</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// Load active list state directly out of browser local storage persistence sandbox
+let taskItemsList = JSON.parse(localStorage.getItem("note_check_sheet_items")) || [
+    { id: 1, text: "Refactor core CSS root design variables", done: true },
+    { id: 2, text: "Assemble audio patch testing scripts", done: false },
+    { id: 3, text: "Compile milestone deployment logs track", done: false }
+];
+
+function toggleEditorialTheme() {
+    document.body.classList.toggle("dark-editorial");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("dark-editorial") ? "☀️" : "🌙";
+}
+
+function openModal() { document.getElementById("overlay").classList.add("show"); }
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+
+function commitChecklistItem() {
+    const textVal = document.getElementById("inputTaskText").value.trim();
+    if (!textVal) return alert("Please type a valid task check description entry.");
+
+    taskItemsList.push({ id: Date.now(), text: textVal, done: false });
+    saveAndRedrawView();
+    closeModal();
+
+    document.getElementById("inputTaskText").value = "";
+}
+
+function toggleTaskCompletion(id) {
+    const target = taskItemsList.find(item => item.id === id);
+    if(target) {
+        target.done = !target.done;
+        saveAndRedrawView();
+    }
+}
+
+function removeTaskRow(id) {
+    taskItemsList = taskItemsList.filter(item => item.id !== id);
+    saveAndRedrawView();
+}
+
+function saveAndRedrawView() {
+    localStorage.setItem("note_check_sheet_items", JSON.stringify(taskItemsList));
+    render();
+}
+
+function render() {
+    const container = document.getElementById("checklistItemsBox");
+    document.getElementById("itemsCounterNode").innerText = `${taskItemsList.length} items`;
+
+    if (taskItemsList.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">🍃</div>
+                <h3>Notebook Sheet Empty</h3>
+                <p>Tap the warm crimson plus switch to line up your task rows.</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = taskItemsList.map(item => `
+        <div class="check-item-row ${item.done ? 'done' : ''}">
+            <button class="check-circle-btn" onclick="toggleTaskCompletion(${item.id})">
+                ${item.done ? '✓' : ''}
+            </button>
+            <div class="note-item-details">
+                <div class="note-item-text">${item.text}</div>
+            </div>
+            <button class="btn-remove-row" onclick="removeTaskRow(${item.id})">✕</button>
+        </div>
+    `).join("");
+}
+
+// Initial structural rendering activation blueprint loop upon device hardware loading
+render();
+</script>
+
+</body>
+</html>

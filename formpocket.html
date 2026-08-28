@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>FormPocket — Offline Form Builder</title>
+<style>
+:root{
+ --bg:#f6f7fb;--card:#fff;--text:#191827;--muted:#77758a;--line:#e6e5ee;
+ --primary:#7c3aed;--primary2:#8b5cf6;--soft:#f1eaff;--green:#16a34a;
+ --red:#dc2626;--shadow:0 12px 35px rgba(55,35,100,.08)
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{width:100%;max-width:620px;min-height:100vh;margin:auto}
+.header{position:relative;overflow:hidden;padding:18px 18px 24px;color:#fff;background:linear-gradient(145deg,#4c1d95,#7c3aed 58%,#a78bfa);border-radius:0 0 30px 30px}
+.header:before,.header:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.09)}
+.header:before{width:280px;height:280px;right:-150px;top:-190px}.header:after{width:190px;height:190px;left:-120px;bottom:-145px}
+.topbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:rgba(255,255,255,.15);font-size:21px}
+.brand b{display:block;font-size:18px}.brand span{display:block;margin-top:2px;color:#ede9fe;font-size:7px}
+.theme{width:40px;height:40px;border:0;border-radius:13px;background:rgba(255,255,255,.15);color:#fff}
+.hero{position:relative;z-index:2;margin-top:19px}.hero-label{color:#ede9fe;font-size:8px}.title{margin-top:3px;font-size:29px;font-weight:900;letter-spacing:-1px}.hero p{margin:5px 0 0;color:#ede9fe;font-size:8px}
+.content{padding:15px}.card{margin-bottom:13px;padding:14px;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:var(--shadow)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{padding:11px 4px;border-radius:14px;background:var(--bg);text-align:center}.stat .ico{font-size:16px}.stat b{display:block;margin-top:3px;font-size:13px}.stat span{display:block;margin-top:3px;color:var(--muted);font-size:6.5px}
+.head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}.head h2{margin:0;font-size:14px}.head span{color:var(--muted);font-size:8px}
+.search{position:relative}.search input{width:100%;height:42px;padding:0 38px;border:1px solid var(--line);border-radius:11px;outline:none;background:var(--bg);color:var(--text);font-size:9px}.search-icon{position:absolute;left:13px;top:12px}.clear{position:absolute;right:4px;top:4px;width:32px;height:32px;border:0;background:transparent;color:var(--muted)}
+.form-list{display:flex;flex-direction:column;gap:8px}.form-item{display:flex;align-items:center;gap:9px;padding:11px;border:1px solid var(--line);border-radius:14px}.form-icon{width:39px;height:39px;display:grid;place-items:center;border-radius:11px;background:var(--soft);font-size:17px}.form-info{min-width:0;flex:1}.form-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:900}.form-meta{margin-top:3px;color:var(--muted);font-size:7px}.actions{display:flex;gap:4px}.small{width:29px;height:29px;border:0;border-radius:8px;background:var(--bg);color:var(--muted)}
+.primary{width:100%;height:40px;margin-top:9px;border:0;border-radius:10px;background:var(--primary);color:#fff;font-size:8px;font-weight:900}.primary:hover{background:#6d28d9}
+.empty{text-align:center;padding:28px 10px}.empty .e{font-size:37px}.empty b{display:block;margin-top:7px;font-size:10px}.empty p{max-width:290px;margin:5px auto;color:var(--muted);font-size:8px;line-height:1.5}
+.modal{position:fixed;inset:0;z-index:50;display:none;align-items:flex-end;justify-content:center;padding:15px;background:rgba(20,10,35,.58);backdrop-filter:blur(5px)}.modal.show{display:flex}.box{width:100%;max-width:570px;max-height:93vh;overflow:auto;padding:18px;border-radius:23px;background:var(--card);box-shadow:0 25px 80px rgba(0,0,0,.25)}
+.modalhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.modalhead h3{margin:0;font-size:15px}.close{width:32px;height:32px;border:0;border-radius:9px;background:var(--bg);color:var(--muted)}
+.field{margin-bottom:11px}.field label{display:block;margin-bottom:5px;font-size:8px;font-weight:900}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;outline:none;background:var(--bg);color:var(--text);font-size:9px}.field textarea{min-height:65px;resize:vertical}
+.builder{display:flex;flex-direction:column;gap:7px}.field-row{padding:10px;border:1px solid var(--line);border-radius:13px;background:var(--bg)}.field-top{display:flex;align-items:center;gap:7px}.drag{color:var(--muted);font-size:13px;cursor:grab}.field-top strong{flex:1;font-size:8px}.field-top select{width:100px;height:29px;padding:0 5px;font-size:7px}.field-controls{display:flex;gap:4px}.field-controls button{width:27px;height:27px;border:0;border-radius:7px;background:var(--card);color:var(--muted);font-size:9px}.required{margin-top:7px;display:flex;align-items:center;gap:5px;color:var(--muted);font-size:7px}
+.add-field{width:100%;height:36px;margin-top:8px;border:1px dashed #cfc4e9;border-radius:10px;background:var(--soft);color:var(--primary);font-size:8px;font-weight:900}
+.modal-actions{display:flex;gap:7px;margin-top:15px}.modal-actions button{flex:1;height:40px;border:0;border-radius:10px;font-size:9px;font-weight:900}.cancel{background:var(--bg);color:var(--text)}.save{background:var(--primary);color:#fff}
+.form-preview label{display:block;margin-bottom:5px;font-size:8px;font-weight:900}.preview-field{margin-bottom:12px}.preview-field input,.preview-field select,.preview-field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font-size:9px;outline:none}.preview-field textarea{min-height:75px}.checkline{display:flex;align-items:center;gap:7px;font-size:8px}.checkline input{width:16px;height:16px}
+.submission{padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--bg);margin-bottom:7px}.subhead{display:flex;justify-content:space-between;align-items:center}.subhead b{font-size:8px}.subhead span{font-size:6.5px;color:var(--muted)}.answers{margin-top:7px;display:grid;gap:4px}.answer{font-size:7px}.answer b{font-weight:900}.danger{color:var(--red)!important}
+.toast{position:fixed;left:50%;bottom:20px;z-index:100;max-width:calc(100% - 30px);padding:11px 15px;border-radius:11px;background:#17121f;color:#fff;font-size:9px;opacity:0;pointer-events:none;transform:translate(-50%,20px);transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+body.dark{--bg:#0f0d16;--card:#191621;--text:#f7f3ff;--muted:#aaa2b9;--line:#302a3d;--soft:#291b43;--shadow:0 15px 40px rgba(0,0,0,.32)}
+@media(min-width:700px){body{padding:20px 0}.app{min-height:calc(100vh - 40px);overflow:hidden;border-radius:30px;box-shadow:0 20px 60px rgba(45,20,75,.14)}.modal{align-items:center}}
+</style>
+</head>
+<body>
+
+<div class="app">
+<header class="header">
+ <div class="topbar">
+  <div class="brand"><div class="logo">📝</div><div><b>FormPocket</b><span>Build and fill forms — completely offline.</span></div></div>
+  <button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+ </div>
+ <div class="hero">
+  <div class="hero-label">YOUR PRIVATE FORM BUILDER</div>
+  <div class="title">FormPocket</div>
+  <p>Create forms, collect responses, and keep everything on this device.</p>
+ </div>
+</header>
+
+<main class="content">
+<section class="card">
+ <div class="stats">
+  <div class="stat"><div class="ico">📋</div><b id="formCount">0</b><span>Forms</span></div>
+  <div class="stat"><div class="ico">🧩</div><b id="fieldCount">0</b><span>Fields</span></div>
+  <div class="stat"><div class="ico">📨</div><b id="submissionCount">0</b><span>Responses</span></div>
+ </div>
+</section>
+
+<section class="card">
+ <div class="head"><h2>📋 My Forms</h2><span id="resultCount">0 forms</span></div>
+ <div class="search"><span class="search-icon">🔍</span><input id="search" placeholder="Search forms..." oninput="renderForms()"><button class="clear" onclick="clearSearch()">×</button></div>
+ <button class="primary" onclick="openBuilder()">+ Create New Form</button>
+</section>
+
+<section class="card">
+ <div class="form-list" id="formList"></div>
+</section>
+</main>
+
+<footer style="padding:5px 15px 25px;text-align:center;color:var(--muted);font-size:7px">🔒 FormPocket stores forms and responses locally in your browser.</footer>
+</div>
+
+<!-- BUILDER -->
+<div class="modal" id="builderModal">
+ <div class="box">
+  <div class="modalhead"><h3 id="builderTitle">📝 Create Form</h3><button class="close" onclick="closeBuilder()">×</button></div>
+  <div class="field"><label>FORM NAME</label><input id="formName" maxlength="100" placeholder="e.g. Customer Feedback"></div>
+  <div class="field"><label>DESCRIPTION</label><textarea id="formDescription" maxlength="300" placeholder="Short description for this form..."></textarea></div>
+  <div class="head"><h2>🧩 Fields</h2><span id="builderFieldCount">0 fields</span></div>
+  <div class="builder" id="builderFields"></div>
+  <button class="add-field" onclick="addBuilderField()">+ Add Field</button>
+  <div class="modal-actions"><button class="cancel" onclick="closeBuilder()">Cancel</button><button class="save" onclick="saveForm()">Save Form</button></div>
+ </div>
+</div>
+
+<!-- FILL -->
+<div class="modal" id="fillModal">
+ <div class="box">
+  <div class="modalhead"><h3 id="fillTitle">📋 Fill Form</h3><button class="close" onclick="closeFill()">×</button></div>
+  <div id="fillDescription" style="margin:-5px 0 14px;color:var(--muted);font-size:8px;line-height:1.5"></div>
+  <div class="form-preview" id="formPreview"></div>
+  <div class="modal-actions"><button class="cancel" onclick="closeFill()">Cancel</button><button class="save" onclick="submitForm()">Submit Response</button></div>
+ </div>
+</div>
+
+<!-- RESPONSES -->
+<div class="modal" id="responsesModal">
+ <div class="box">
+  <div class="modalhead"><h3 id="responsesTitle">📨 Responses</h3><button class="close" onclick="closeResponses()">×</button></div>
+  <div class="modal-actions" style="margin-top:0;margin-bottom:12px"><button class="cancel" onclick="exportCSV()">📤 Export CSV</button><button class="save" onclick="clearResponses()">🗑️ Clear All</button></div>
+  <div id="responsesList"></div>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const DATA_KEY="formPocketData";
+const THEME_KEY="formPocketTheme";
+
+let data=JSON.parse(localStorage.getItem(DATA_KEY)||"null");
+if(!data||typeof data!=="object")data={forms:[],submissions:[]};
+if(!Array.isArray(data.forms))data.forms=[];
+if(!Array.isArray(data.submissions))data.submissions=[];
+
+let editingId=null;
+let builderFields=[];
+let activeFillId=null;
+let activeResponseFormId=null;
+
+const types=[
+ ["text","Aa Text"],
+ ["number","123 Number"],
+ ["email","✉ Email"],
+ ["date","📅 Date"],
+ ["textarea","▤ Long Text"],
+ ["select","▾ Dropdown"],
+ ["checkbox","☑ Checkbox"]
+];
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function save(){localStorage.setItem(DATA_KEY,JSON.stringify(data))}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove("show"),2200)}
+
+function openBuilder(form=null){
+ editingId=form?.id||null;
+ builderFields=form?JSON.parse(JSON.stringify(form.fields||[])):[];
+ document.getElementById("builderTitle").textContent=form?"✏️ Edit Form":"📝 Create Form";
+ document.getElementById("formName").value=form?.name||"";
+ document.getElementById("formDescription").value=form?.description||"";
+ renderBuilder();
+ document.getElementById("builderModal").classList.add("show");
+}
+function closeBuilder(){document.getElementById("builderModal").classList.remove("show");editingId=null;builderFields=[]}
+
+function addBuilderField(){
+ builderFields.push({id:uid(),label:"New Field",type:"text",required:false,options:["Option 1","Option 2"]});
+ renderBuilder();
+ setTimeout(()=>{
+  const rows=document.querySelectorAll(".field-row");
+  rows[rows.length-1]?.scrollIntoView({behavior:"smooth",block:"center"});
+ },50);
+}
+function removeBuilderField(i){
+ builderFields.splice(i,1);renderBuilder();
+}
+function moveField(i,dir){
+ const j=i+dir;
+ if(j<0||j>=builderFields.length)return;
+ [builderFields[i],builderFields[j]]=[builderFields[j],builderFields[i]];
+ renderBuilder();
+}
+function updateField(i,key,value){
+ builderFields[i][key]=value;
+ if(key==="type"&&value==="select"&&!Array.isArray(builderFields[i].options))builderFields[i].options=["Option 1","Option 2"];
+ if(key==="type"&&value!=="select")delete builderFields[i].options;
+ renderBuilder();
+}
+
+function renderBuilder(){
+ const box=document.getElementById("builderFields");
+ document.getElementById("builderFieldCount").textContent=`${builderFields.length} ${builderFields.length===1?"field":"fields"}`;
+ if(!builderFields.length){
+  box.innerHTML='<div class="empty" style="padding:18px"><div class="e">🧩</div><b>No fields yet</b><p>Add a field to start building your form.</p></div>';
+  return;
+ }
+ box.innerHTML=builderFields.map((f,i)=>{
+  const options=(f.options||[]).join("\n");
+  return `
+  <div class="field-row">
+   <div class="field-top">
+    <span class="drag">☷</span>
+    <strong>Field ${i+1}</strong>
+    <select onchange="updateField(${i},'type',this.value)">
+      ${types.map(([v,l])=>`<option value="${v}" ${f.type===v?"selected":""}>${l}</option>`).join("")}
+    </select>
+    <div class="field-controls">
+      <button onclick="moveField(${i},-1)">↑</button>
+      <button onclick="moveField(${i},1)">↓</button>
+      <button onclick="removeBuilderField(${i})">🗑️</button>
+    </div>
+   </div>
+   <div class="field" style="margin-top:8px;margin-bottom:0">
+    <label>LABEL</label>
+    <input value="${esc(f.label)}" maxlength="100" oninput="builderFields[${i}].label=this.value" placeholder="Question or field name">
+   </div>
+   ${f.type==="select"?`
+   <div class="field" style="margin-top:8px;margin-bottom:0">
+    <label>OPTIONS — ONE PER LINE</label>
+    <textarea oninput="builderFields[${i}].options=this.value.split('\\n').map(x=>x.trim()).filter(Boolean)">${esc(options)}</textarea>
+   </div>`:""}
+   <label class="required"><input type="checkbox" ${f.required?"checked":""} onchange="builderFields[${i}].required=this.checked"> Required field</label>
+  </div>`;
+ }).join("");
+}
+
+function saveForm(){
+ const name=document.getElementById("formName").value.trim();
+ const description=document.getElementById("formDescription").value.trim();
+ if(!name){toast("Please enter a form name.");return}
+ if(!builderFields.length){toast("Add at least one field.");return}
+ for(const f of builderFields){
+  if(!f.label.trim()){toast("Every field needs a label.");return}
+  if(f.type==="select"&&!(f.options||[]).length){toast(`Add options for "${f.label}".`);return}
+ }
+ const obj={
+  id:editingId||uid(),
+  name,
+  description,
+  fields:builderFields.map(f=>({...f})),
+  updated:Date.now(),
+  created:editingId?(data.forms.find(x=>x.id===editingId)?.created||Date.now()):Date.now()
+ };
+ if(editingId){
+  const i=data.forms.findIndex(x=>x.id===editingId);
+  if(i>=0)data.forms[i]=obj;
+  toast("✏️ Form updated.");
+ }else{
+  data.forms.unshift(obj);
+  toast("📝 Form created.");
+ }
+ save();closeBuilder();render();
+}
+
+function deleteForm(id){
+ const form=data.forms.find(x=>x.id===id);if(!form)return;
+ if(!confirm(`Delete "${form.name}" and its responses?`))return;
+ data.forms=data.forms.filter(x=>x.id!==id);
+ data.submissions=data.submissions.filter(x=>x.formId!==id);
+ save();render();toast("🗑️ Form deleted.");
+}
+
+function openFill(id){
+ const form=data.forms.find(x=>x.id===id);if(!form)return;
+ activeFillId=id;
+ document.getElementById("fillTitle").textContent="📋 "+form.name;
+ document.getElementById("fillDescription").textContent=form.description||"";
+ document.getElementById("formPreview").innerHTML=form.fields.map((f,i)=>{
+  const req=f.required?"required":"";
+  if(f.type==="checkbox")return `<div class="preview-field"><label class="checkline"><input id="answer_${i}" type="checkbox" ${req}> ${esc(f.label)}${f.required?" *":""}</label></div>`;
+  if(f.type==="textarea")return `<div class="preview-field"><label>${esc(f.label)}${f.required?" *":""}</label><textarea id="answer_${i}" ${req}></textarea></div>`;
+  if(f.type==="select")return `<div class="preview-field"><label>${esc(f.label)}${f.required?" *":""}</label><select id="answer_${i}" ${req}><option value="">Choose...</option>${(f.options||[]).map(o=>`<option>${esc(o)}</option>`).join("")}</select></div>`;
+  return `<div class="preview-field"><label>${esc(f.label)}${f.required?" *":""}</label><input id="answer_${i}" type="${f.type}" ${req}></div>`;
+ }).join("");
+ document.getElementById("fillModal").classList.add("show");
+}
+
+function closeFill(){document.getElementById("fillModal").classList.remove("show");activeFillId=null}
+
+function submitForm(){
+ const form=data.forms.find(x=>x.id===activeFillId);if(!form)return;
+ const answers={};
+ for(let i=0;i<form.fields.length;i++){
+  const f=form.fields[i],el=document.getElementById(`answer_${i}`);
+  let value=f.type==="checkbox"?el.checked:el.value.trim();
+  if(f.required&&((f.type==="checkbox"&&!value)||(f.type!=="checkbox"&&!value))){
+   toast(`Please complete "${f.label}".`);el.focus();return;
+  }
+  answers[f.id]=value;
+ }
+ data.submissions.unshift({id:uid(),formId:form.id,answers,created:Date.now()});
+ save();closeFill();render();toast("✅ Response saved locally.");
+}
+
+function openResponses(id){
+ const form=data.forms.find(x=>x.id===id);if(!form)return;
+ activeResponseFormId=id;
+ document.getElementById("responsesTitle").textContent=`📨 ${form.name} Responses`;
+ renderResponses();
+ document.getElementById("responsesModal").classList.add("show");
+}
+function closeResponses(){document.getElementById("responsesModal").classList.remove("show");activeResponseFormId=null}
+
+function renderResponses(){
+ const form=data.forms.find(x=>x.id===activeResponseFormId);
+ const subs=data.submissions.filter(x=>x.formId===activeResponseFormId);
+ const box=document.getElementById("responsesList");
+ if(!subs.length){
+  box.innerHTML='<div class="empty"><div class="e">📨</div><b>No responses yet</b><p>Fill out this form to create the first response.</p></div>';
+  return;
+ }
+ box.innerHTML=subs.map((s,index)=>`
+  <div class="submission">
+   <div class="subhead"><b>Response ${subs.length-index}</b><span>${new Date(s.created).toLocaleString()}</span></div>
+   <div class="answers">${form.fields.map(f=>`<div class="answer"><b>${esc(f.label)}:</b> ${esc(formatAnswer(s.answers[f.id],f))}</div>`).join("")}</div>
+   <button class="small danger" style="margin-top:7px" onclick="deleteResponse('${s.id}')">🗑️ Delete response</button>
+  </div>
+ `).join("");
+}
+function formatAnswer(v,f){
+ if(f.type==="checkbox")return v?"Yes":"No";
+ return v===undefined||v===""?"—":v;
+}
+function deleteResponse(id){
+ if(!confirm("Delete this response?"))return;
+ data.submissions=data.submissions.filter(x=>x.id!==id);save();renderResponses();render();toast("🗑️ Response deleted.");
+}
+function clearResponses(){
+ const count=data.submissions.filter(x=>x.formId===activeResponseFormId).length;
+ if(!count)return;
+ if(!confirm(`Delete all ${count} responses?`))return;
+ data.submissions=data.submissions.filter(x=>x.formId!==activeResponseFormId);save();renderResponses();render();toast("🗑️ Responses cleared.");
+}
+
+function exportCSV(){
+ const form=data.forms.find(x=>x.id===activeResponseFormId);
+ const subs=data.submissions.filter(x=>x.formId===activeResponseFormId);
+ if(!form||!subs.length){toast("No responses to export.");return}
+ const headers=["Submitted",...form.fields.map(f=>f.label)];
+ const rows=subs.map(s=>[new Date(s.created).toLocaleString(),...form.fields.map(f=>formatAnswer(s.answers[f.id],f))]);
+ const csv=[headers,...rows].map(row=>row.map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\r\n");
+ const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=(form.name.replace(/[^a-z0-9]+/gi,"_").toLowerCase()||"form")+"_responses.csv";a.click();URL.revokeObjectURL(a.href);
+ toast("📤 CSV exported.");
+}
+
+function renderForms(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ const forms=data.forms.filter(f=>!q||f.name.toLowerCase().includes(q)||(f.description||"").toLowerCase().includes(q));
+ document.getElementById("resultCount").textContent=`${forms.length} ${forms.length===1?"form":"forms"}`;
+ document.getElementById("formCount").textContent=data.forms.length;
+ document.getElementById("fieldCount").textContent=data.forms.reduce((n,f)=>n+f.fields.length,0);
+ document.getElementById("submissionCount").textContent=data.submissions.length;
+ const box=document.getElementById("formList");
+ if(!forms.length){
+  box.innerHTML='<div class="empty"><div class="e">📝</div><b>No forms found</b><p>Create your first offline form to get started.</p></div>';
+  return;
+ }
+ box.innerHTML=forms.map(f=>{
+  const responses=data.submissions.filter(s=>s.formId===f.id).length;
+  return `<div class="form-item">
+   <div class="form-icon">📝</div>
+   <div class="form-info">
+    <div class="form-name">${esc(f.name)}</div>
+    <div class="form-meta">${f.fields.length} fields · ${responses} response${responses===1?"":"s"}</div>
+   </div>
+   <div class="actions">
+    <button class="small" title="Fill" onclick="openFill('${f.id}')">▶️</button>
+    <button class="small" title="Responses" onclick="openResponses('${f.id}')">📨</button>
+    <button class="small" title="Edit" onclick="openBuilder(data.forms.find(x=>x.id==='${f.id}'))">✏️</button>
+    <button class="small" title="Delete" onclick="deleteForm('${f.id}')">🗑️</button>
+   </div>
+  </div>`;
+ }).join("");
+}
+function clearSearch(){document.getElementById("search").value="";renderForms()}
+
+function toggleTheme(){
+ document.body.classList.toggle("dark");
+ const dark=document.body.classList.contains("dark");
+ localStorage.setItem(THEME_KEY,dark?"1":"0");
+ document.getElementById("themeBtn").textContent=dark?"☀️":"🌙";
+}
+function loadTheme(){
+ if(localStorage.getItem(THEME_KEY)==="1"){
+  document.body.classList.add("dark");
+  document.getElementById("themeBtn").textContent="☀️";
+ }
+}
+
+["builderModal","fillModal","responsesModal"].forEach(id=>{
+ document.getElementById(id).addEventListener("click",e=>{
+  if(e.target.id===id){
+   if(id==="builderModal")closeBuilder();
+   if(id==="fillModal")closeFill();
+   if(id==="responsesModal")closeResponses();
+  }
+ });
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeBuilder();closeFill();closeResponses()}});
+
+loadTheme();
+renderForms();
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>MoneyPocket — Personal Money Tracker</title>
+<style>
+:root{
+ --bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#7a8498;--line:#e6eaf1;
+ --primary:#2563eb;--primary2:#3b82f6;--green:#16a34a;--greenbg:#eaf8ef;
+ --red:#ef4444;--redbg:#fff0f0;--soft:#edf3ff;--shadow:0 12px 35px rgba(30,55,100,.08)
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{width:100%;max-width:570px;min-height:100vh;margin:auto}
+.header{position:relative;overflow:hidden;padding:18px 18px 25px;color:#fff;background:linear-gradient(145deg,#172554,#2563eb 60%,#60a5fa);border-radius:0 0 30px 30px}
+.header:before,.header:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}
+.header:before{width:280px;height:280px;right:-150px;top:-185px}.header:after{width:190px;height:190px;left:-120px;bottom:-145px}
+.topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:rgba(255,255,255,.15);font-size:21px}
+.brand b{display:block;font-size:18px}.brand span{display:block;margin-top:2px;color:#dbeafe;font-size:7px}
+.theme{width:40px;height:40px;border:0;border-radius:13px;background:rgba(255,255,255,.15);color:#fff}
+.hero{position:relative;z-index:2;margin-top:18px}.hero-label{font-size:8px;color:#dbeafe}.balance{margin-top:4px;font-size:32px;font-weight:900;letter-spacing:-1px}.hero p{margin:5px 0 0;color:#dbeafe;font-size:8px}
+.content{padding:15px}.card{margin-bottom:13px;padding:14px;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:var(--shadow)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{padding:12px 4px;border-radius:14px;background:var(--bg);text-align:center}.stat .ico{font-size:16px}.stat b{display:block;margin-top:3px;font-size:12px}.stat span{display:block;margin-top:3px;color:var(--muted);font-size:6.5px}
+.month-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.month-row h2{margin:0;font-size:14px}.month-row span{font-size:8px;color:var(--muted)}
+.search{position:relative}.search input{width:100%;height:43px;padding:0 38px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);outline:none;font-size:9px}.search input:focus{border-color:var(--primary)}.search-icon{position:absolute;left:13px;top:12px}.clear{position:absolute;right:5px;top:5px;width:32px;height:32px;border:0;background:transparent;color:var(--muted)}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.filters select{height:36px;padding:0 8px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);font-size:8px;outline:none}
+.add{width:100%;height:39px;margin-top:8px;border:0;border-radius:10px;background:var(--primary);color:#fff;font-size:8px;font-weight:900}.add:hover{background:#1d4ed8}
+.tx-list{display:flex;flex-direction:column;gap:8px}.tx{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid var(--line);border-radius:14px}.tx-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 38px;border-radius:11px;background:var(--soft);font-size:16px}.tx-info{min-width:0;flex:1}.tx-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:900}.tx-meta{margin-top:3px;color:var(--muted);font-size:7px}.tx-amount{text-align:right;font-size:9px;font-weight:900}.income{color:var(--green)}.expense{color:var(--red)}.tx-actions{display:flex;gap:3px;margin-left:2px}.small{width:27px;height:27px;border:0;border-radius:8px;background:var(--bg);color:var(--muted)}
+.empty{text-align:center;padding:28px 10px}.empty .e{font-size:36px}.empty b{display:block;margin-top:7px;font-size:10px}.empty p{max-width:270px;margin:5px auto;color:var(--muted);font-size:8px;line-height:1.5}
+.modal{position:fixed;inset:0;z-index:50;display:none;align-items:flex-end;justify-content:center;padding:15px;background:rgba(10,20,40,.58);backdrop-filter:blur(5px)}.modal.show{display:flex}.box{width:100%;max-width:535px;max-height:92vh;overflow:auto;padding:18px;border-radius:23px;background:var(--card);box-shadow:0 25px 80px rgba(0,0,0,.25)}
+.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modalhead h3{margin:0;font-size:15px}.close{width:32px;height:32px;border:0;border-radius:9px;background:var(--bg);color:var(--muted)}
+.field{margin-bottom:11px}.field label{display:block;margin-bottom:5px;font-size:8px;font-weight:900}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;outline:none;background:var(--bg);color:var(--text);font-size:9px}.field textarea{min-height:75px;resize:vertical}
+.type{display:grid;grid-template-columns:1fr 1fr;gap:7px}.type button{height:38px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:8px;font-weight:900;color:var(--muted)}.type button.active.incomeBtn{background:var(--greenbg);color:var(--green);border-color:#b7e6c5}.type button.active.expenseBtn{background:var(--redbg);color:var(--red);border-color:#ffcaca}
+.actions{display:flex;gap:7px;margin-top:15px}.actions button{flex:1;height:40px;border:0;border-radius:10px;font-size:9px;font-weight:900}.cancel{background:var(--bg);color:var(--text)}.save{background:var(--primary);color:#fff}
+.toast{position:fixed;left:50%;bottom:20px;z-index:100;max-width:calc(100% - 30px);padding:11px 15px;border-radius:11px;background:#141923;color:#fff;font-size:9px;opacity:0;pointer-events:none;transform:translate(-50%,20px);transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+body.dark{--bg:#0d111b;--card:#171d2a;--text:#f5f7fb;--muted:#9ba5b8;--line:#293244;--soft:#17284b;--greenbg:#12271a;--redbg:#301719;--shadow:0 15px 40px rgba(0,0,0,.3)}
+@media(min-width:700px){body{padding:20px 0}.app{min-height:calc(100vh - 40px);overflow:hidden;border-radius:30px;box-shadow:0 20px 60px rgba(30,50,90,.14)}.modal{align-items:center}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+ <div class="topbar">
+  <div class="brand"><div class="logo">💰</div><div><b>MoneyPocket</b><span>Your private offline money tracker.</span></div></div>
+  <button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+ </div>
+ <div class="hero">
+  <div class="hero-label">CURRENT BALANCE</div>
+  <div class="balance" id="balance">৳0.00</div>
+  <p id="balanceHint">Track every taka, simply.</p>
+ </div>
+</header>
+
+<main class="content">
+<section class="card">
+ <div class="stats">
+  <div class="stat"><div class="ico">📈</div><b class="income" id="income">৳0</b><span>Income</span></div>
+  <div class="stat"><div class="ico">📉</div><b class="expense" id="expense">৳0</b><span>Expenses</span></div>
+  <div class="stat"><div class="ico">🧾</div><b id="count">0</b><span>Transactions</span></div>
+ </div>
+</section>
+
+<section class="card">
+ <div class="month-row"><h2>🔎 Find Transactions</h2><span id="resultCount">0 items</span></div>
+ <div class="search"><span class="search-icon">🔍</span><input id="search" type="search" placeholder="Search title, category or note..." oninput="render()"><button class="clear" onclick="clearSearch()">×</button></div>
+ <div class="filters">
+  <select id="typeFilter" onchange="render()"><option value="all">💰 All types</option><option value="income">📈 Income</option><option value="expense">📉 Expense</option></select>
+  <select id="categoryFilter" onchange="render()"><option value="all">🏷️ All categories</option></select>
+ </div>
+ <button class="add" onclick="openModal()">+ Add Transaction</button>
+</section>
+
+<section class="card">
+ <div class="month-row"><h2>💳 Recent Activity</h2><span id="period">All time</span></div>
+ <div class="tx-list" id="txList"></div>
+</section>
+</main>
+
+<footer style="padding:5px 15px 25px;text-align:center;color:var(--muted);font-size:7px">🔒 MoneyPocket stores everything locally on this device.</footer>
+</div>
+
+<div class="modal" id="modal">
+ <div class="box">
+  <div class="modalhead"><h3 id="modalTitle">💰 Add Transaction</h3><button class="close" onclick="closeModal()">×</button></div>
+  <div class="field"><label>TYPE</label><div class="type"><button id="incomeBtn" class="incomeBtn active incomeBtn" onclick="setType('income')">📈 Income</button><button id="expenseBtn" class="expenseBtn" onclick="setType('expense')">📉 Expense</button></div></div>
+  <div class="field"><label>AMOUNT</label><input id="amount" type="number" min="0" step="0.01" placeholder="0.00"></div>
+  <div class="field"><label>TITLE</label><input id="title" maxlength="100" placeholder="e.g. Salary, Groceries, Internet bill"></div>
+  <div class="field"><label>CATEGORY</label><select id="category"><option>Food</option><option>Transport</option><option>Shopping</option><option>Bills</option><option>Health</option><option>Entertainment</option><option>Salary</option><option>Freelance</option><option>Gift</option><option>Other</option></select></div>
+  <div class="field"><label>DATE</label><input id="date" type="date"></div>
+  <div class="field"><label>NOTE</label><textarea id="note" maxlength="300" placeholder="Optional note..."></textarea></div>
+  <div class="actions"><button class="cancel" onclick="closeModal()">Cancel</button><button class="save" onclick="saveTx()">Save Transaction</button></div>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const KEY="moneyPocketData", THEME="moneyPocketTheme";
+let txs=JSON.parse(localStorage.getItem(KEY)||"[]"); if(!Array.isArray(txs))txs=[];
+let editingId=null, currentType="income";
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function save(){localStorage.setItem(KEY,JSON.stringify(txs))}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function money(n){return "৳"+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}
+function shortMoney(n){return "৳"+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:0})}
+function toast(m){let t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),2200)}
+
+function setType(type){
+ currentType=type;
+ document.getElementById("incomeBtn").classList.toggle("active",type==="income");
+ document.getElementById("expenseBtn").classList.toggle("active",type==="expense");
+}
+function openModal(item=null){
+ editingId=item?item.id:null;
+ document.getElementById("modalTitle").textContent=item?"✏️ Edit Transaction":"💰 Add Transaction";
+ currentType=item?.type||"income";setType(currentType);
+ document.getElementById("amount").value=item?.amount||"";
+ document.getElementById("title").value=item?.title||"";
+ document.getElementById("category").value=item?.category||"Other";
+ document.getElementById("date").value=item?.date||new Date().toISOString().slice(0,10);
+ document.getElementById("note").value=item?.note||"";
+ document.getElementById("modal").classList.add("show");
+ setTimeout(()=>document.getElementById("amount").focus(),80);
+}
+function closeModal(){document.getElementById("modal").classList.remove("show");editingId=null}
+function saveTx(){
+ const amount=Number(document.getElementById("amount").value);
+ const title=document.getElementById("title").value.trim();
+ const category=document.getElementById("category").value;
+ const date=document.getElementById("date").value||new Date().toISOString().slice(0,10);
+ const note=document.getElementById("note").value.trim();
+ if(!amount||amount<=0)return toast("Please enter a valid amount.");
+ if(!title)return toast("Please enter a title.");
+ if(editingId){
+  const x=txs.find(a=>a.id===editingId);
+  if(x){Object.assign(x,{amount,title,category,date,note,type:currentType,updated:Date.now()})}
+  toast("✏️ Transaction updated.");
+ }else{
+  txs.unshift({id:uid(),amount,title,category,date,note,type:currentType,created:Date.now(),updated:Date.now()});
+  toast("💰 Transaction added.");
+ }
+ save();closeModal();render();
+}
+function deleteTx(id){
+ const x=txs.find(a=>a.id===id);if(!x)return;
+ if(!confirm(`Delete "${x.title}"?`))return;
+ txs=txs.filter(a=>a.id!==id);save();render();toast("🗑️ Transaction deleted.");
+}
+function editTx(id){const x=txs.find(a=>a.id===id);if(x)openModal(x)}
+function toggleTheme(){
+ document.body.classList.toggle("dark");
+ const d=document.body.classList.contains("dark");
+ localStorage.setItem(THEME,d?"1":"0");document.getElementById("themeBtn").textContent=d?"☀️":"🌙";
+}
+function clearSearch(){document.getElementById("search").value="";render()}
+
+function updateCategories(){
+ const sel=document.getElementById("categoryFilter"), old=sel.value;
+ const cats=[...new Set(txs.map(x=>x.category).filter(Boolean))].sort();
+ sel.innerHTML='<option value="all">🏷️ All categories</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+ if(cats.includes(old))sel.value=old;
+}
+function filtered(){
+ const q=document.getElementById("search").value.trim().toLowerCase(), tf=document.getElementById("typeFilter").value, cf=document.getElementById("categoryFilter").value;
+ return [...txs].filter(x=>{
+  const hit=!q||x.title.toLowerCase().includes(q)||x.category.toLowerCase().includes(q)||(x.note||"").toLowerCase().includes(q);
+  return hit&&(tf==="all"||x.type===tf)&&(cf==="all"||x.category===cf);
+ }).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||b.updated-a.updated);
+}
+function render(){
+ updateCategories();
+ let inc=0,exp=0;
+ txs.forEach(x=>x.type==="income"?inc+=Number(x.amount):exp+=Number(x.amount));
+ document.getElementById("balance").textContent=money(inc-exp);
+ document.getElementById("income").textContent=shortMoney(inc);
+ document.getElementById("expense").textContent=shortMoney(exp);
+ document.getElementById("count").textContent=txs.length;
+ const list=filtered();document.getElementById("resultCount").textContent=`${list.length} item${list.length===1?"":"s"}`;
+ const el=document.getElementById("txList");
+ if(!list.length){el.innerHTML='<div class="empty"><div class="e">💸</div><b>No transactions found</b><p>Add your first transaction or change your filters.</p></div>';return}
+ el.innerHTML=list.map(x=>`
+  <div class="tx">
+   <div class="tx-icon">${x.type==="income"?"📈":"📉"}</div>
+   <div class="tx-info">
+    <div class="tx-title">${esc(x.title)}</div>
+    <div class="tx-meta">${esc(x.category)} · ${esc(x.date)}${x.note?" · "+esc(x.note):""}</div>
+   </div>
+   <div class="tx-amount ${x.type}">${x.type==="income"?"+":"−"}${money(x.amount)}</div>
+   <div class="tx-actions">
+    <button class="small" onclick="editTx('${x.id}')" title="Edit">✏️</button>
+    <button class="small" onclick="deleteTx('${x.id}')" title="Delete">🗑️</button>
+   </div>
+  </div>`).join("");
+}
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal.show").forEach(m=>m.classList.remove("show"))});
+if(localStorage.getItem(THEME)==="1"){document.body.classList.add("dark");document.getElementById("themeBtn").textContent="☀️"}
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#06b6d4">
+<title>SudokuPad Logic Studio</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Slate Tech Blueprint & Clear Aqua Cyan Look */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#38bdf8;
+--line:#334155;
+--primary:#06b6d4;
+--primary2:#22d3ee;
+--soft:#0c4a6e;
+--soft-glow:rgba(6,182,212,0.25);
+--danger:#ef4444;
+--danger-soft:#451a1a;
+--shadow:0 12px 35px rgba(6,182,212,0.1)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text);
+user-select:none
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - LOGIC BLUEPRINT TO AQUA CYAN GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#0f172a,#1e293b 60%,#06b6d4);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:2px solid var(--primary2)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(6,182,212,0.08);
+border:1px dashed var(--primary2)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+/* HIGH-END TACTILE SUDOKU GRID BOARD ASSEMBLY */
+.sudoku-matrix-grid-board {
+display:grid;
+grid-template-columns:repeat(9, 1fr);
+gap:1px;
+background:var(--line);
+padding:3px;
+border-radius:16px;
+border:2px solid var(--muted);
+box-shadow:inset 0 4px 12px rgba(0,0,0,0.3)
+}
+
+.matrix-cell-node {
+aspect-ratio:1;
+background:var(--card);
+border:0;
+color:var(--text);
+font-size:16px;
+font-weight:800;
+display:grid;
+place-items:center;
+outline:none;
+transition:all 0.1s ease
+}
+
+/* Demarcate core standard 3x3 sub-grid quadrant borders visual weight thick lines */
+.matrix-cell-node:nth-child(3n) { border-right:2px solid var(--line); }
+.matrix-cell-node:nth-child(9n) { border-right:0; }
+.matrix-cell-node:nth-child(n+19):nth-child(-n+27),
+.matrix-cell-node:nth-child(n+46):nth-child(-n+54) { border-bottom:2px solid var(--line); }
+
+/* Interactive active target mapping state variations */
+.matrix-cell-node.preset-clue {
+background:var(--bg);
+color:var(--muted);
+cursor:default
+}
+
+.matrix-cell-node.selected-focused {
+background:var(--soft);
+box-shadow:inset 0 0 0 2px var(--primary2)
+}
+
+.matrix-cell-node.contradiction-error {
+background:var(--danger-soft);
+color:var(--danger);
+text-shadow:0 0 8px rgba(239,68,104,0.3)
+}
+
+/* DIGIT INJECTION NUMBER SELECTORS TOOLBAR PALETTE */
+.digit-selector-row-grid {
+display:grid;
+grid-template-columns:repeat(5, 1fr);
+gap:8px;
+margin-top:4px
+}
+
+.btn-digit-patch {
+padding:12px 2px;
+border:1px solid var(--line);
+border-radius:12px;
+background:var(--bg);
+color:var(--text);
+font-size:15px;
+font-weight:900;
+text-align:center;
+transition:all 0.1s ease
+}
+.btn-digit-patch:active {
+background:var(--primary);
+color:var(--bg);
+border-color:var(--primary)
+}
+
+.btn-master-trigger {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:var(--bg);
+font-weight:950;
+font-size:15px;
+text-transform:uppercase;
+transition:opacity 0.2s
+}
+.btn-master-trigger:active { opacity:0.9 }
+
+/* LIGHT BRIGHT HIGH CONTRAST BLUEPRINT SKIN LIGHT OVERRIDE */
+body.light-theme {
+--bg:#f0f4f8;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#0284c7;
+--line:#cbd5e1;
+--soft:#e0f2fe;
+--shadow:0 10px 25px rgba(6,182,212,0.04)
+}
+body.light-theme .matrix-cell-node.preset-clue {
+background:#f8fafc
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🧩</div>
+<div class="brand-name">SudokuPad</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Logic Core Matrix.<br>Cellular Deduction.</h1>
+<p>Solve mathematical constraint arrays locally with real-time rule contradiction detectors.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- DUAL BOARD INTERACTIVE WORKSPACE CARD -->
+<section class="card" style="padding:6px;">
+<div id="sudokuBoardContainer" class="sudoku-matrix-grid-board">
+<!-- Injected dynamically via Javascript setup processing engine -->
+</div>
+</section>
+
+<!-- NUMERIC INPUT INJECTION TOOLBAR PALETTE CARD -->
+<section class="card">
+<div class="title">
+<h2>⌨️ Input Digit Injection Deck</h2>
+</div>
+<div class="digit-selector-row-grid">
+<button class="btn-digit-patch" onclick="injectDigitValueToSelectedCell(1)">1</button>
+<button class="btn-digit-patch" onclick="injectDigitValueToSelectedCell(2)">2</button>
+<button class="btn-digit-patch" onclick="injectDigitValueToSelectedCell(3)">3</button>
+<button class="btn-digit-patch" onclick="injectDigitValueToSelectedCell(4)">4</button>
+<button class="btn-digit-patch" onclick="injectDigitValueToSelectedCell(5)">5</button>
+<button class="btn-digit-patch" onclick="injectDigitValueToSelectedCell(6)">6</button>
+<button class="btn-digit-patch" onclick="injectDigitValueToSelectedCell(7)">7</button>
+<button class="btn-digit-patch" onclick="injectDigitValueToSelectedCell(8)">8</button>
+<button class="btn-digit-patch" onclick="injectDigitValueToSelectedCell(9)">9</button>
+<button class="btn-digit-patch" style="color:var(--danger);" onclick="injectDigitValueToSelectedCell(0)">✕</button>
+</div>
+</section>
+
+<button class="btn-master-trigger" onclick="deployNewPuzzleSessionMatrix()">Reset Puzzle Board</button>
+
+</main>
+
+</div>
+
+<script>
+// Simple legal partial clue setup seed blueprint representation array
+const puzzleClueMapTemplate = [
+    5, 3, 0, 0, 7, 0, 0, 0, 0,
+    6, 0, 0, 1, 9, 5, 0, 0, 0,
+    0, 9, 8, 0, 0, 0, 0, 6, 0,
+    8, 0, 0, 0, 6, 0, 0, 0, 3,
+    4, 0, 0, 8, 0, 3, 0, 0, 1,
+    7, 0, 0, 0, 2, 0, 0, 0, 6,
+    0, 6, 0, 0, 0, 0, 2, 8, 0,
+    0, 0, 0, 4, 1, 9, 0, 0, 5,
+    0, 0, 0, 0, 8, 0, 0, 7, 9
+];
+
+let workingGridStateValuesArray = [];
+let focusedCellIndexPointer = null;
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function deployNewPuzzleSessionMatrix() {
+    focusedCellIndexPointer = null;
+    workingGridStateValuesArray = [...puzzleClueMapTemplate];
+
+    const container = document.getElementById("sudokuBoardContainer");
+    container.innerHTML = "";
+
+    for (let i = 0; i < 81; i++) {
+        const cellButton = document.createElement("button");
+        cellButton.className = "matrix-cell-node";
+        cellButton.dataset.index = i;
+        
+        const presetVal = puzzleClueMapTemplate[i];
+        if (presetVal !== 0) {
+            cellButton.innerText = presetVal;
+            cellButton.classList.add("preset-clue");
+        } else {
+            cellButton.innerText = "";
+            cellButton.addEventListener("click", () => handleCellNodeFocusAssignment(cellButton, i));
+        }
+
+        container.appendChild(cellButton);
+    }
+    evaluateBoardContradictionConstraints();
+}
+
+function handleCellNodeFocusAssignment(cellElementTarget, cellIndexInt) {
+    // Drop active classes on prior selected item elements loops
+    document.querySelectorAll(".matrix-cell-node").forEach(cell => cell.classList.remove("selected-focused"));
+    
+    focusedCellIndexPointer = cellIndexInt;
+    cellElementTarget.classList.add("selected-focused");
+}
+
+function injectDigitValueToSelectedCell(digitValueInt) {
+    if (focusedCellIndexPointer === null) return alert("Please select an editable cell box target row first.");
+
+    const cellsList = document.querySelectorAll(".matrix-cell-node");
+    const activeTargetCellElement = cellsList[focusedCellIndexPointer];
+
+    workingGridStateValuesArray[focusedCellIndexPointer] = digitValueInt;
+    activeTargetCellElement.innerText = digitValueInt === 0 ? "" : digitValueInt;
+
+    triggerTactileRadarClick(520, 0.04); // Fast confirmation beep feedback sound
+    evaluateBoardContradictionConstraints();
+    verifyVictoryStateAchievements();
+}
+
+function evaluateBoardContradictionConstraints() {
+    const cellsList = document.querySelectorAll(".matrix-cell-node");
+    
+    // Clear previous contradiction alerts markers styles across grid board fields boundaries
+    cellsList.forEach(cell => cell.classList.remove("contradiction-error"));
+
+    // Check rows, columns, and 3x3 blocks for duplicates
+    for (let i = 0; i < 81; i++) {
+        const val = workingGridStateValuesArray[i];
+        if (val === 0) continue;
+
+        const row = Math.floor(i / 9);
+        const col = i % 9;
+        const boxRow = Math.floor(row / 3) * 3;
+        const boxCol = Math.floor(col / 3) * 3;
+
+        let conflictFound = false;
+
+        for (let j = 0; j < 81; j++) {
+if (i === j || workingGridStateValuesArray[j] !== val) continue;const r = Math.floor(j / 9);const colIdx = j % 9;const bRow = Math.floor(r / 3) * 3;const bCol = Math.floor(colIdx / 3) * 3;// Check Row collision, Column collision, or 3x3 Box Quadrant collision maps parametersif (row === r || col === colIdx || (boxRow === bRow && boxCol === bCol)) {conflictFound = true;cellsList[j].classList.add("contradiction-error");}}if (conflictFound) {cellsList[i].classList.add("contradiction-error");}}}function verifyVictoryStateAchievements() {// Check if the board is completely filled up and has zero active contradiction flags marks stylesconst elementsArray = Array.from(document.querySelectorAll(".matrix-cell-node"));const cellsFilled = workingGridStateValuesArray.every(val => val !== 0);const zeroErrors = elementsArray.every(cell => !cell.classList.contains("contradiction-error"));if (cellsFilled && zeroErrors) {triggerTactileRadarClick(880, 0.25); // Success arpeggio sequence chord frequency ringalert("🎉 CONGRATULATIONS! Logic matrix fully compiled with perfect constraint alignment.");}}function triggerTactileRadarClick(frequencyHzValue, durationSecondsValue) {if (window.AudioContext || window.webkitAudioContext) {try {const ctx = new (window.AudioContext || window.webkitAudioContext)();const osc = ctx.createOscillator();const gain = ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type = "sine";osc.frequency.setValueAtTime(frequencyHzValue, ctx.currentTime);gain.gain.setValueAtTime(0.1, ctx.currentTime);osc.start();osc.stop(ctx.currentTime + durationSecondsValue);} catch (e) {}}}// Initial structural visualization rendering loop setup activation pass on boot initializationdeployNewPuzzleSessionMatrix();</script></body></html>

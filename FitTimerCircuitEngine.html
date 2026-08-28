@@ -1,0 +1,431 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#ea580c">
+<title>FitTimer Circuit Engine</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Carbon Matrix Black & Speedway Orange Sports Look */
+:root{
+--bg:#090d16;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#ea580c;
+--primary2:#f97316;
+--soft:#431407;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 12px 35px rgba(234,88,12,0.15)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text);
+user-select:none
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - SPEEDWAY ACCENT RADIAL RUN GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e293b,#090d16 60%,#ea580c);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(234,88,12,0.06);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+/* CHRONOMETER MONITOR DISPLAY SCREEN */
+.timer-panel {
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:20px 0;
+text-align:center
+}
+
+.interval-badge {
+display:inline-block;
+padding:5px 12px;
+border-radius:20px;
+font-size:10.5px;
+font-weight:800;
+text-transform:uppercase;
+letter-spacing:0.8px;
+background:var(--soft);
+color:var(--primary2)
+}
+.interval-badge.rest-active {
+background:var(--green-soft);
+color:var(--green)
+}
+
+.countdown-digits {
+font-size:62px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+margin:12px 0 2px;
+color:var(--text);
+letter-spacing:1px;
+text-shadow:0 0 10px rgba(234,88,12,0.2)
+}
+
+/* FORM SELECT SETUP PARAMETERS INPUTS */
+.field{
+margin-bottom:12px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field select {
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-weight:700
+}
+.field select:focus{
+border-color:var(--primary)
+}
+
+/* CONTROLLER ACTION BUTTON ROW ROWS */
+.controls-row-stack {
+display:flex;
+gap:8px;
+margin-top:4px
+}
+
+.btn-control-node {
+flex:1;
+padding:14px;
+border:0;
+border-radius:14px;
+font-weight:900;
+font-size:14px;
+color:white;
+transition:opacity 0.15s
+}
+.btn-control-node:active { opacity:0.85 }
+
+.btn-start-run { background:var(--primary); color:var(--bg); font-weight:950; }
+.btn-pause-run { background:var(--danger); }
+.btn-reset-run { background:var(--line); color:var(--text); }
+
+/* LEDGER CIRCUIT HISTORIES TILES FEED */
+.circuit-row-item {
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 0;
+border-bottom:1px solid var(--line);
+font-size:13px
+}
+.circuit-row-item:last-child { border-bottom:0 }
+
+.circuit-label { font-weight:700; color:var(--text); }
+.circuit-val { font-family:"Courier New",Courier,monospace; font-weight:800; color:var(--primary2); }
+
+/* SPEEDWAY LIGHT INVERSION OVERRIDE SKIN STYLE */
+body.light-theme {
+--bg:#f8fafc;
+--card:#ffffff;
+--text:#090d16;
+--muted:#475569;
+--line:#cbd5e1;
+--shadow:0 10px 25px rgba(234,88,12,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">⏱️</div>
+<div class="brand-name">FitTimer</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Interval Engine.<br>HIIT Circuit Pacer.</h1>
+<p>Block workout structures parameters cleanly with low-overhead client clock loops.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- CHRONO DISPLAY MONITOR VIEW SCREEN -->
+<section class="card">
+<div class="timer-panel">
+<span id="lblIntervalStatus" class="interval-badge">🔥 Work Sprint</span>
+<div class="countdown-digits" id="lblChronoDigits">00:30</div>
+</div>
+</section>
+
+<!-- LAUNCH ACTIONS TRIGGER BUTTON ROWS CONTROLLER -->
+<section class="card">
+<div class="controls-row-stack">
+<button id="btnStartPauseNode" class="btn-control-node btn-start-run" onclick="toggleCircuitIntervalTimerState()">Start Circuit</button>
+<button class="btn-control-node btn-reset-run" onclick="resetCircuitIntervalTimerState()">Reset</button>
+</div>
+</section>
+
+<!-- CONFIGURE LAP INTERVAL TARGET CORES TRACKS -->
+<section class="card">
+<div class="title">
+<h2>⚙️ Select Interval Blueprint</h2>
+</div>
+<div class="field">
+<label>WORK / REST DELAY RATIO</label>
+<select id="selectCircuitBlueprint" onchange="synchronizeCircuitBlueprintParameters()">
+<option value="30-10">Tabata (30s Work / 10s Rest)</option>
+<option value="45-15">Standard HIIT (45s Work / 15s Rest)</option>
+<option value="60-30">Endurance Pace (60s Work / 30s Rest)</option>
+</select>
+</div>
+</section>
+
+<!-- RECENT METRICS LOG PROGRESS HISTORIES FEED CARD -->
+<section class="card">
+<div class="title">
+<h2>📜 Completed Circuit Round Log</h2>
+</div>
+<div id="circuitHistoryLogBox">
+<!-- Generated dynamically via Javascript actions loops execution -->
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+let executionIntervalTimerId = null;
+let durationSecondsWorkSetting = 30;
+let durationSecondsRestSetting = 10;
+
+let currentRemainingSecondsCount = 30;
+let isTimerEngineActive = false;
+let isCurrentModeWorkSprint = true;
+let totalCompletedRoundsCount = 0;
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function synchronizeCircuitBlueprintParameters() {
+    if (isTimerEngineActive) toggleCircuitIntervalTimerState(); // Pause active thread configuration ease
+    
+    const choice = document.getElementById("selectCircuitBlueprint").value;
+    const tokens = choice.split("-");
+    
+    durationSecondsWorkSetting = parseInt(tokens[0]);
+    durationSecondsRestSetting = parseInt(tokens[1]);
+    
+    isCurrentModeWorkSprint = true;
+    currentRemainingSecondsCount = durationSecondsWorkSetting;
+    
+    redrawMonitorView();
+}
+
+function redrawChronoDigitsString() {
+    const mins = Math.floor(currentRemainingSecondsCount / 60);
+    const secs = currentRemainingSecondsCount % 60;
+    document.getElementById("lblChronoDigits").innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+function redrawMonitorView() {
+    const statusLabel = document.getElementById("lblIntervalStatus");
+    if (isCurrentModeWorkSprint) {
+        statusLabel.innerText = "🔥 Work Sprint";
+        statusLabel.className = "interval-badge";
+    } else {
+        statusLabel.innerText = "🌴 Recovery Rest";
+        statusLabel.className = "interval-badge rest-active";
+    }
+    redrawChronoDigitsString();
+}
+
+function toggleCircuitIntervalTimerState() {
+    const btn = document.getElementById("btnStartPauseNode");
+    
+    if (isTimerEngineActive) {
+        clearInterval(executionIntervalTimerId);
+        isTimerEngineActive = false;
+        btn.innerText = "Resume Work";
+        btn.className = "btn-control-node btn-start-run";
+    } else {
+        isTimerEngineActive = true;
+        btn.innerText = "Halt Interval";
+        btn.className = "btn-control-node btn-pause-run";
+
+        executionIntervalTimerId = setInterval(() => {
+            currentRemainingSecondsCount--;
+            redrawChronoDigitsString();
+
+            if (currentRemainingSecondsCount <= 0) {
+                clearInterval(executionIntervalTimerId);
+                isTimerEngineActive = false;
+                handleIntervalCycleCompletion();
+            }
+        }, 1000);
+    }
+}
+
+function handleIntervalCycleCompletion() {
+    triggerTactileHardwareChime();
+
+    if (isCurrentModeWorkSprint) {
+        totalCompletedRoundsCount++;
+        
+        // Append milestone straight onto tracking logs ledger lists
+        const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+        const logBox = document.getElementById("circuitHistoryLogBox");
+        
+        const row = document.createElement("div");
+        row.className = "circuit-row-item";
+        row.innerHTML = `<span class="circuit-label">🏃 Circuit Round #${String(totalCompletedRoundsCount).padStart(2, '0')}</span><span class="circuit-val">Logged at ${timeStr}</span>`;
+        
+        if (logBox.firstChild && logBox.firstChild.className === "circuit-row-item") {
+            logBox.insertBefore(row, logBox.firstChild);
+        } else {
+logBox.innerHTML = "";logBox.appendChild(row);}// Swap to rest duration context metrics parametersisCurrentModeWorkSprint = false;currentRemainingSecondsCount = durationSecondsRestSetting;} else {// Swap to work sprint parametersisCurrentModeWorkSprint = true;currentRemainingSecondsCount = durationSecondsWorkSetting;}const btn = document.getElementById("btnStartPauseNode");btn.innerText = isCurrentModeWorkSprint ? "Launch Work Set" : "Launch Break Rest";btn.className = "btn-control-node btn-start-run";redrawMonitorView();}function resetCircuitIntervalTimerState() {if (isTimerEngineActive) {clearInterval(executionIntervalTimerId);isTimerEngineActive = false;}isCurrentModeWorkSprint = true;currentRemainingSecondsCount = durationSecondsWorkSetting;document.getElementById("btnStartPauseNode").innerText = "Start Circuit";document.getElementById("btnStartPauseNode").className = "btn-control-node btn-start-run";redrawMonitorView();}function triggerTactileHardwareChime() {if (window.AudioContext || window.webkitAudioContext) {try {const ctx = new (window.AudioContext || window.webkitAudioContext)();const osc = ctx.createOscillator();const gain = ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type = "sine";osc.frequency.setValueAtTime(650, ctx.currentTime);osc.frequency.setValueAtTime(850, ctx.currentTime + 0.12);gain.gain.setValueAtTime(0.15, ctx.currentTime);osc.start();osc.stop(ctx.currentTime + 0.25);} catch (e) {}}}// Initial structural rendering synchronization allocation pass on launch boot loop trackssynchronizeCircuitBlueprintParameters();</script></body></html>

@@ -1,0 +1,2447 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0f766e">
+<title>SplitPocket — Simple Bill Splitter</title>
+
+<style>
+:root{
+  --bg:#f4f8f7;
+  --card:#fff;
+  --text:#172522;
+  --muted:#788783;
+  --line:#e1eae7;
+  --primary:#0f766e;
+  --primary2:#14b8a6;
+  --soft:#e8f7f4;
+  --green:#16a34a;
+  --greenbg:#eaf8ef;
+  --red:#dc2626;
+  --redbg:#fff0f0;
+  --orange:#d97706;
+  --orangebg:#fff7e6;
+  --shadow:0 12px 35px rgba(18,70,62,.08);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,input,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:100%;
+  max-width:570px;
+  min-height:100vh;
+  margin:auto;
+}
+
+/* HEADER */
+
+.header{
+  position:relative;
+  overflow:hidden;
+  padding:18px 18px 27px;
+  color:#fff;
+  background:
+    linear-gradient(
+      145deg,
+      #064e3b,
+      #0f766e 58%,
+      #2dd4bf
+    );
+  border-radius:0 0 30px 30px;
+}
+
+.header:before,
+.header:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+
+.header:before{
+  width:280px;
+  height:280px;
+  right:-155px;
+  top:-185px;
+}
+
+.header:after{
+  width:200px;
+  height:200px;
+  left:-135px;
+  bottom:-150px;
+}
+
+.topbar{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.15);
+  font-size:21px;
+}
+
+.brand b{
+  display:block;
+  font-size:18px;
+}
+
+.brand span{
+  display:block;
+  margin-top:2px;
+  color:#ccfbf1;
+  font-size:7px;
+}
+
+.theme{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+}
+
+.hero{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero-label{
+  color:#ccfbf1;
+  font-size:8px;
+}
+
+.total{
+  margin-top:3px;
+  font-size:32px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.hero p{
+  margin:5px 0 0;
+  color:#ccfbf1;
+  font-size:8px;
+}
+
+/* CONTENT */
+
+.content{
+  padding:15px;
+}
+
+.card{
+  margin-bottom:13px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+}
+
+.stat{
+  padding:11px 4px;
+  border-radius:14px;
+  background:var(--bg);
+  text-align:center;
+}
+
+.stat-icon{
+  font-size:16px;
+}
+
+.stat b{
+  display:block;
+  margin-top:3px;
+  font-size:13px;
+}
+
+.stat span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:6.5px;
+}
+
+/* SECTION */
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:11px;
+}
+
+.section-head h2{
+  margin:0;
+  font-size:14px;
+}
+
+.section-head span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* PEOPLE */
+
+.people{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.person{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 9px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--bg);
+  font-size:8px;
+}
+
+.avatar{
+  width:23px;
+  height:23px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:var(--soft);
+  color:var(--primary);
+  font-size:9px;
+  font-weight:900;
+}
+
+.person button{
+  width:20px;
+  height:20px;
+  border:0;
+  border-radius:6px;
+  background:transparent;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.add-person{
+  width:100%;
+  height:36px;
+  margin-top:9px;
+  border:1px dashed #b9ccc8;
+  border-radius:10px;
+  background:transparent;
+  color:var(--primary);
+  font-size:8px;
+  font-weight:900;
+}
+
+/* BALANCES */
+
+.balance-list{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.balance-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px;
+  border-radius:12px;
+  background:var(--bg);
+}
+
+.balance-info{
+  min-width:0;
+  flex:1;
+}
+
+.balance-name{
+  font-size:9px;
+  font-weight:900;
+}
+
+.balance-desc{
+  margin-top:2px;
+  color:var(--muted);
+  font-size:6.5px;
+}
+
+.balance-amount{
+  font-size:9px;
+  font-weight:900;
+}
+
+.positive{
+  color:var(--green);
+}
+
+.negative{
+  color:var(--red);
+}
+
+.neutral{
+  color:var(--muted);
+}
+
+/* SETTLEMENT */
+
+.settlement{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:9px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--card);
+}
+
+.settlement + .settlement{
+  margin-top:7px;
+}
+
+.settle-person{
+  flex:1;
+  min-width:0;
+}
+
+.settle-person b{
+  display:block;
+  font-size:8px;
+}
+
+.settle-person span{
+  display:block;
+  margin-top:2px;
+  color:var(--muted);
+  font-size:6px;
+}
+
+.arrow{
+  color:var(--primary);
+  font-size:14px;
+}
+
+.settle-amount{
+  padding:6px 8px;
+  border-radius:8px;
+  background:var(--soft);
+  color:var(--primary);
+  font-size:8px;
+  font-weight:900;
+}
+
+/* EXPENSES */
+
+.expense-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.expense{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.expense-icon{
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:var(--soft);
+  font-size:16px;
+}
+
+.expense-info{
+  min-width:0;
+  flex:1;
+}
+
+.expense-title{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:9px;
+  font-weight:900;
+}
+
+.expense-meta{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:6.5px;
+}
+
+.expense-amount{
+  font-size:9px;
+  font-weight:900;
+}
+
+.expense-actions{
+  display:flex;
+  gap:3px;
+}
+
+.small{
+  width:27px;
+  height:27px;
+  border:0;
+  border-radius:8px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+/* BUTTON */
+
+.primary{
+  width:100%;
+  height:40px;
+  margin-top:9px;
+  border:0;
+  border-radius:10px;
+  background:var(--primary);
+  color:#fff;
+  font-size:8px;
+  font-weight:900;
+}
+
+.primary:hover{
+  background:#0b625b;
+}
+
+/* EMPTY */
+
+.empty{
+  padding:25px 10px;
+  text-align:center;
+}
+
+.empty-icon{
+  font-size:36px;
+}
+
+.empty b{
+  display:block;
+  margin-top:7px;
+  font-size:10px;
+}
+
+.empty p{
+  max-width:280px;
+  margin:5px auto;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.5;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:15px;
+  background:rgba(7,25,22,.58);
+  backdrop-filter:blur(5px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:535px;
+  max-height:92vh;
+  overflow:auto;
+  padding:18px;
+  border-radius:23px;
+  background:var(--card);
+  box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.modal-head h3{
+  margin:0;
+  font-size:15px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:9px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.field{
+  margin-bottom:11px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  font-size:8px;
+  font-weight:900;
+}
+
+.field input,
+.field select{
+  width:100%;
+  height:39px;
+  padding:0 10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:9px;
+}
+
+.field input:focus,
+.field select:focus{
+  border-color:var(--primary);
+}
+
+/* PARTICIPANTS */
+
+.participants{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.participant{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:7px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--bg);
+}
+
+.participant label{
+  flex:1;
+  margin:0;
+  font-size:8px;
+  font-weight:700;
+}
+
+.participant input{
+  width:80px;
+  height:31px;
+  padding:0 7px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--card);
+  color:var(--text);
+  text-align:right;
+  font-size:8px;
+}
+
+.split-mode{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-bottom:9px;
+}
+
+.split-mode button{
+  height:35px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:var(--bg);
+  color:var(--muted);
+  font-size:8px;
+  font-weight:900;
+}
+
+.split-mode button.active{
+  border-color:var(--primary);
+  background:var(--soft);
+  color:var(--primary);
+}
+
+.modal-actions{
+  display:flex;
+  gap:7px;
+  margin-top:15px;
+}
+
+.modal-actions button{
+  flex:1;
+  height:40px;
+  border:0;
+  border-radius:10px;
+  font-size:9px;
+  font-weight:900;
+}
+
+.cancel{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.save{
+  background:var(--primary);
+  color:#fff;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  z-index:100;
+  max-width:calc(100% - 30px);
+  padding:11px 15px;
+  border-radius:11px;
+  background:#101b19;
+  color:#fff;
+  font-size:9px;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+  --bg:#0c1413;
+  --card:#16201e;
+  --text:#f2f8f6;
+  --muted:#99aaa5;
+  --line:#293936;
+  --soft:#123b36;
+  --greenbg:#12291b;
+  --redbg:#301719;
+  --orangebg:#302714;
+  --shadow:0 15px 40px rgba(0,0,0,.32);
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+
+  body{
+    padding:20px 0;
+  }
+
+  .app{
+    min-height:calc(100vh - 40px);
+    overflow:hidden;
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(20,60,55,.14);
+  }
+
+  .modal{
+    align-items:center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+  <div class="topbar">
+
+    <div class="brand">
+
+      <div class="logo">🧾</div>
+
+      <div>
+        <b>SplitPocket</b>
+        <span>Simple bill splitting, completely offline.</span>
+      </div>
+
+    </div>
+
+    <button
+      class="theme"
+      id="themeBtn"
+      onclick="toggleTheme()"
+    >🌙</button>
+
+  </div>
+
+  <div class="hero">
+
+    <div class="hero-label">
+      TOTAL GROUP SPENDING
+    </div>
+
+    <div
+      class="total"
+      id="totalSpent"
+    >
+      ৳0.00
+    </div>
+
+    <p id="summary">
+      Add friends and expenses to get started.
+    </p>
+
+  </div>
+
+</header>
+
+
+<main class="content">
+
+  <!-- STATS -->
+
+  <section class="card">
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-icon">👥</div>
+        <b id="peopleCount">0</b>
+        <span>People</span>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">🧾</div>
+        <b id="expenseCount">0</b>
+        <span>Expenses</span>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">⚖️</div>
+        <b id="shareAmount">৳0</b>
+        <span>Per Person</span>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PEOPLE -->
+
+  <section class="card">
+
+    <div class="section-head">
+
+      <h2>👥 People</h2>
+
+      <span id="peopleLabel">0 people</span>
+
+    </div>
+
+    <div
+      class="people"
+      id="peopleList"
+    ></div>
+
+    <button
+      class="add-person"
+      onclick="addPerson()"
+    >
+      + Add Person
+    </button>
+
+  </section>
+
+
+  <!-- BALANCES -->
+
+  <section class="card">
+
+    <div class="section-head">
+
+      <h2>📊 Balances</h2>
+
+      <span>Who owes what</span>
+
+    </div>
+
+    <div
+      class="balance-list"
+      id="balanceList"
+    ></div>
+
+  </section>
+
+
+  <!-- SETTLEMENTS -->
+
+  <section class="card">
+
+    <div class="section-head">
+
+      <h2>🔄 Suggested Settlements</h2>
+
+      <span>Keep it simple</span>
+
+    </div>
+
+    <div
+      id="settlementList"
+    ></div>
+
+  </section>
+
+
+  <!-- EXPENSES -->
+
+  <section class="card">
+
+    <div class="section-head">
+
+      <h2>🧾 Expenses</h2>
+
+      <span id="expenseLabel">0 expenses</span>
+
+    </div>
+
+    <div
+      class="expense-list"
+      id="expenseList"
+    ></div>
+
+    <button
+      class="primary"
+      onclick="openExpenseModal()"
+    >
+      + Add Expense
+    </button>
+
+  </section>
+
+</main>
+
+
+<footer style="
+  padding:5px 15px 25px;
+  text-align:center;
+  color:var(--muted);
+  font-size:7px;
+">
+  🔒 SplitPocket works offline and stores your data locally.
+</footer>
+
+</div>
+
+
+<!-- EXPENSE MODAL -->
+
+<div
+  class="modal"
+  id="expenseModal"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h3 id="expenseModalTitle">
+        🧾 Add Expense
+      </h3>
+
+      <button
+        class="close"
+        onclick="closeExpenseModal()"
+      >×</button>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>EXPENSE NAME</label>
+
+      <input
+        id="expenseName"
+        maxlength="100"
+        placeholder="e.g. Dinner, Hotel, Taxi"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>AMOUNT</label>
+
+      <input
+        id="expenseAmount"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="0.00"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>PAID BY</label>
+
+      <select id="paidBy"></select>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>SPLIT METHOD</label>
+
+      <div class="split-mode">
+
+        <button
+          id="equalBtn"
+          class="active"
+          onclick="setSplitMode('equal')"
+        >
+          ⚖️ Equal
+        </button>
+
+        <button
+          id="customBtn"
+          onclick="setSplitMode('custom')"
+        >
+          ✏️ Custom
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>PARTICIPANTS</label>
+
+      <div
+        class="participants"
+        id="participants"
+      ></div>
+
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="cancel"
+        onclick="closeExpenseModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="save"
+        onclick="saveExpense()"
+      >
+        Save Expense
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+
+/* ===============================
+   STORAGE
+================================ */
+
+const DATA_KEY = "splitPocketData";
+const THEME_KEY = "splitPocketTheme";
+
+let data =
+  JSON.parse(
+    localStorage.getItem(DATA_KEY) || "null"
+  );
+
+if(
+  !data ||
+  typeof data !== "object"
+){
+
+  data = {
+    people:[],
+    expenses:[]
+  };
+
+}
+
+if(!Array.isArray(data.people))
+  data.people=[];
+
+if(!Array.isArray(data.expenses))
+  data.expenses=[];
+
+
+let editingExpenseId = null;
+let splitMode = "equal";
+
+
+/* ===============================
+   HELPERS
+================================ */
+
+function uid(){
+
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2,8);
+
+}
+
+
+function save(){
+
+  localStorage.setItem(
+    DATA_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function money(value){
+
+  return "৳" +
+    Number(value || 0)
+      .toLocaleString(
+        undefined,
+        {
+          minimumFractionDigits:2,
+          maximumFractionDigits:2
+        }
+      );
+
+}
+
+
+function shortMoney(value){
+
+  return "৳" +
+    Number(value || 0)
+      .toLocaleString(
+        undefined,
+        {
+          maximumFractionDigits:0
+        }
+      );
+
+}
+
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent=message;
+
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(
+      ()=>toast.classList.remove("show"),
+      2200
+    );
+
+}
+
+
+/* ===============================
+   PEOPLE
+================================ */
+
+function addPerson(){
+
+  const name =
+    prompt("Enter person's name:");
+
+  if(!name)
+    return;
+
+  const clean =
+    name.trim();
+
+  if(!clean)
+    return;
+
+  const exists =
+    data.people.some(
+      p=>p.name.toLowerCase()===clean.toLowerCase()
+    );
+
+  if(exists){
+
+    showToast("That person already exists.");
+
+    return;
+
+  }
+
+  data.people.push({
+    id:uid(),
+    name:clean
+  });
+
+  save();
+
+  render();
+
+  showToast("👤 Person added.");
+
+}
+
+
+function removePerson(id){
+
+  const person =
+    data.people.find(
+      p=>p.id===id
+    );
+
+  if(!person)
+    return;
+
+
+  const used =
+    data.expenses.some(
+      e=>
+        e.paidBy===id ||
+        e.participants.some(
+          p=>p.personId===id
+        )
+    );
+
+
+  if(used){
+
+    showToast(
+      "This person is used in an expense."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      `Remove ${person.name}?`
+    )
+  )
+    return;
+
+
+  data.people =
+    data.people.filter(
+      p=>p.id!==id
+    );
+
+  save();
+
+  render();
+
+  showToast("👤 Person removed.");
+
+}
+
+
+/* ===============================
+   EXPENSE MODAL
+================================ */
+
+function openExpenseModal(expense=null){
+
+  if(!data.people.length){
+
+    showToast(
+      "Add at least two people first."
+    );
+
+    return;
+
+  }
+
+  editingExpenseId =
+    expense ? expense.id : null;
+
+  document.getElementById(
+    "expenseModalTitle"
+  ).textContent =
+    expense
+      ? "✏️ Edit Expense"
+      : "🧾 Add Expense";
+
+
+  document.getElementById(
+    "expenseName"
+  ).value =
+    expense?.name || "";
+
+
+  document.getElementById(
+    "expenseAmount"
+  ).value =
+    expense?.amount || "";
+
+
+  const paidBy =
+    document.getElementById("paidBy");
+
+  paidBy.innerHTML =
+    data.people
+      .map(
+        p=>`
+          <option value="${p.id}">
+            ${escapeHTML(p.name)}
+          </option>
+        `
+      )
+      .join("");
+
+
+  if(expense)
+    paidBy.value=expense.paidBy;
+
+
+  splitMode =
+    expense?.splitMode || "equal";
+
+  setSplitMode(splitMode);
+
+
+  renderParticipants(
+    expense?.participants || null
+  );
+
+
+  document.getElementById(
+    "expenseModal"
+  ).classList.add("show");
+
+}
+
+
+function closeExpenseModal(){
+
+  document.getElementById(
+    "expenseModal"
+  ).classList.remove("show");
+
+  editingExpenseId=null;
+
+}
+
+
+/* ===============================
+   SPLIT MODE
+================================ */
+
+function setSplitMode(mode){
+
+  splitMode=mode;
+
+  document
+    .getElementById("equalBtn")
+    .classList.toggle(
+      "active",
+      mode==="equal"
+    );
+
+  document
+    .getElementById("customBtn")
+    .classList.toggle(
+      "active",
+      mode==="custom"
+    );
+
+
+  renderParticipants();
+
+}
+
+
+function renderParticipants(saved=null){
+
+  const container =
+    document.getElementById(
+      "participants"
+    );
+
+
+  container.innerHTML =
+    data.people.map(
+      person=>{
+
+        const existing =
+          saved?.find(
+            p=>p.personId===person.id
+          );
+
+
+        const checked =
+          saved
+            ? !!existing
+            : true;
+
+
+        const amount =
+          existing?.amount || "";
+
+
+        return `
+
+          <div class="participant">
+
+            <input
+              type="checkbox"
+              data-person="${person.id}"
+              ${checked ? "checked" : ""}
+              onchange="updateParticipantUI()"
+              style="
+                width:15px;
+                height:15px;
+              "
+            >
+
+            <label>
+              ${escapeHTML(person.name)}
+            </label>
+
+            ${
+              splitMode==="custom"
+              ?
+              `
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  data-amount="${person.id}"
+                  value="${amount}"
+                  placeholder="0"
+                >
+              `
+              :
+              `
+                <span
+                  style="
+                    color:var(--muted);
+                    font-size:7px
+                  "
+                >
+                  Equal share
+                </span>
+              `
+            }
+
+          </div>
+
+        `;
+
+      }
+    )
+    .join("");
+
+}
+
+
+function updateParticipantUI(){
+
+  /* Intentionally simple:
+     checkbox state is read on save. */
+
+}
+
+
+/* ===============================
+   SAVE EXPENSE
+================================ */
+
+function saveExpense(){
+
+  const name =
+    document.getElementById(
+      "expenseName"
+    ).value.trim();
+
+
+  const amount =
+    Number(
+      document.getElementById(
+        "expenseAmount"
+      ).value
+    );
+
+
+  const paidBy =
+    document.getElementById(
+      "paidBy"
+    ).value;
+
+
+  if(!name){
+
+    showToast(
+      "Enter an expense name."
+    );
+
+    return;
+
+  }
+
+
+  if(!amount || amount<=0){
+
+    showToast(
+      "Enter a valid amount."
+    );
+
+    return;
+
+  }
+
+
+  const checked =
+    [...document.querySelectorAll(
+      "#participants input[type=checkbox]"
+    )]
+    .filter(
+      input=>input.checked
+    )
+    .map(
+      input=>input.dataset.person
+    );
+
+
+  if(!checked.length){
+
+    showToast(
+      "Select at least one participant."
+    );
+
+    return;
+
+  }
+
+
+  let participants=[];
+
+
+  if(splitMode==="equal"){
+
+    const share =
+      amount / checked.length;
+
+
+    participants =
+      checked.map(
+        id=>({
+          personId:id,
+          amount:share
+        })
+      );
+
+  }
+  else{
+
+    participants =
+      checked.map(
+        id=>{
+
+          const input =
+            document.querySelector(
+              `[data-amount="${id}"]`
+            );
+
+          return {
+            personId:id,
+            amount:Number(
+              input?.value || 0
+            )
+          };
+
+        }
+      );
+
+
+    const totalCustom =
+      participants.reduce(
+        (sum,p)=>sum+p.amount,
+        0
+      );
+
+
+    if(
+      Math.abs(
+        totalCustom-amount
+      ) > 0.01
+    ){
+
+      showToast(
+        `Custom shares must equal ${money(amount)}.`
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  const expenseData={
+
+    id:
+      editingExpenseId || uid(),
+
+    name,
+
+    amount,
+
+    paidBy,
+
+    splitMode,
+
+    participants,
+
+    created:
+      Date.now()
+
+  };
+
+
+  if(editingExpenseId){
+
+    const index =
+      data.expenses.findIndex(
+        e=>e.id===editingExpenseId
+      );
+
+    if(index>=0)
+      data.expenses[index]=
+        expenseData;
+
+    showToast(
+      "✏️ Expense updated."
+    );
+
+  }
+  else{
+
+    data.expenses.unshift(
+      expenseData
+    );
+
+    showToast(
+      "🧾 Expense added."
+    );
+
+  }
+
+
+  save();
+
+  closeExpenseModal();
+
+  render();
+
+}
+
+
+/* ===============================
+   DELETE / EDIT
+================================ */
+
+function editExpense(id){
+
+  const expense =
+    data.expenses.find(
+      e=>e.id===id
+    );
+
+  if(expense)
+    openExpenseModal(expense);
+
+}
+
+
+function deleteExpense(id){
+
+  const expense =
+    data.expenses.find(
+      e=>e.id===id
+    );
+
+  if(!expense)
+    return;
+
+
+  if(
+    !confirm(
+      `Delete "${expense.name}"?`
+    )
+  )
+    return;
+
+
+  data.expenses =
+    data.expenses.filter(
+      e=>e.id!==id
+    );
+
+  save();
+
+  render();
+
+  showToast(
+    "🗑️ Expense deleted."
+  );
+
+}
+
+
+/* ===============================
+   CALCULATE BALANCES
+================================ */
+
+/*
+ Positive = person should receive money.
+ Negative = person owes money.
+*/
+
+function calculateBalances(){
+
+  const balances={};
+
+  data.people.forEach(
+    p=>balances[p.id]=0
+  );
+
+
+  data.expenses.forEach(
+    expense=>{
+
+      if(
+        balances[expense.paidBy]===undefined
+      )
+        balances[expense.paidBy]=0;
+
+
+      balances[expense.paidBy] +=
+        Number(expense.amount);
+
+
+      expense.participants.forEach(
+        participant=>{
+
+          if(
+            balances[participant.personId]===undefined
+          )
+            balances[participant.personId]=0;
+
+
+          balances[participant.personId] -=
+            Number(participant.amount);
+
+        }
+      );
+
+    }
+  );
+
+
+  return balances;
+
+}
+
+
+/* ===============================
+   SETTLEMENTS
+================================ */
+
+function calculateSettlements(){
+
+  const balances =
+    calculateBalances();
+
+
+  const creditors=[];
+  const debtors=[];
+
+
+  Object.entries(
+    balances
+  ).forEach(
+    ([personId,balance])=>{
+
+      if(balance>0.01){
+
+        creditors.push({
+          personId,
+          amount:balance
+        });
+
+      }
+
+      else if(balance<-0.01){
+
+        debtors.push({
+          personId,
+          amount:-balance
+        });
+
+      }
+
+    }
+  );
+
+
+  const settlements=[];
+
+
+  let i=0;
+  let j=0;
+
+
+  while(
+    i<debtors.length &&
+    j<creditors.length
+  ){
+
+    const debtor =
+      debtors[i];
+
+    const creditor =
+      creditors[j];
+
+
+    const amount =
+      Math.min(
+        debtor.amount,
+        creditor.amount
+      );
+
+
+    settlements.push({
+
+      from:debtor.personId,
+
+      to:creditor.personId,
+
+      amount
+
+    });
+
+
+    debtor.amount -= amount;
+
+    creditor.amount -= amount;
+
+
+    if(debtor.amount<=0.01)
+      i++;
+
+
+    if(creditor.amount<=0.01)
+      j++;
+
+  }
+
+
+  return settlements;
+
+}
+
+
+/* ===============================
+   RENDER
+================================ */
+
+function render(){
+
+  renderPeople();
+
+  renderStats();
+
+  renderBalances();
+
+  renderSettlements();
+
+  renderExpenses();
+
+}
+
+
+function renderPeople(){
+
+  const list =
+    document.getElementById(
+      "peopleList"
+    );
+
+
+  document.getElementById(
+    "peopleCount"
+  ).textContent =
+    data.people.length;
+
+
+  document.getElementById(
+    "peopleLabel"
+  ).textContent =
+    `${data.people.length} ${
+      data.people.length===1
+        ? "person"
+        : "people"
+    }`;
+
+
+  if(!data.people.length){
+
+    list.innerHTML=`
+
+      <div
+        style="
+          width:100%;
+          padding:12px;
+          border-radius:11px;
+          background:var(--bg);
+          color:var(--muted);
+          text-align:center;
+          font-size:8px;
+        "
+      >
+        No people added yet.
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    data.people
+      .map(
+        person=>`
+
+          <div class="person">
+
+            <div class="avatar">
+              ${escapeHTML(
+                person.name.charAt(0).toUpperCase()
+              )}
+            </div>
+
+            <span>
+              ${escapeHTML(person.name)}
+            </span>
+
+            <button
+              onclick="removePerson('${person.id}')"
+              title="Remove"
+            >
+              ×
+            </button>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+function renderStats(){
+
+  const total =
+    data.expenses.reduce(
+      (sum,e)=>
+        sum+Number(e.amount),
+      0
+    );
+
+
+  const people =
+    data.people.length;
+
+
+  document.getElementById(
+    "totalSpent"
+  ).textContent =
+    money(total);
+
+
+  document.getElementById(
+    "expenseCount"
+  ).textContent =
+    data.expenses.length;
+
+
+  document.getElementById(
+    "shareAmount"
+  ).textContent =
+    people
+      ? shortMoney(total/people)
+      : "৳0";
+
+
+  document.getElementById(
+    "summary"
+  ).textContent =
+    people
+      ? `${people} people · ${data.expenses.length} expenses`
+      : "Add friends and expenses to get started.";
+
+}
+
+
+function getPerson(id){
+
+  return data.people.find(
+    p=>p.id===id
+  );
+
+}
+
+
+function renderBalances(){
+
+  const list =
+    document.getElementById(
+      "balanceList"
+    );
+
+
+  if(!data.people.length){
+
+    list.innerHTML=`
+
+      <div class="empty">
+
+        <div class="empty-icon">⚖️</div>
+
+        <b>No balances yet</b>
+
+        <p>
+          Add people and expenses to calculate
+          who owes what.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const balances =
+    calculateBalances();
+
+
+  list.innerHTML =
+    data.people
+      .map(
+        person=>{
+
+          const amount =
+            balances[person.id] || 0;
+
+
+          let cls="neutral";
+
+          let desc="All settled up";
+
+          let display="৳0.00";
+
+
+          if(amount>0.01){
+
+            cls="positive";
+
+            desc="Should receive";
+
+            display="+"+money(amount);
+
+          }
+          else if(amount<-0.01){
+
+            cls="negative";
+
+            desc="Needs to pay";
+
+            display="−"+money(
+              Math.abs(amount)
+            );
+
+          }
+
+
+          return `
+
+            <div class="balance-row">
+
+              <div class="avatar">
+                ${escapeHTML(
+                  person.name.charAt(0).toUpperCase()
+                )}
+              </div>
+
+              <div class="balance-info">
+
+                <div class="balance-name">
+                  ${escapeHTML(person.name)}
+                </div>
+
+                <div class="balance-desc">
+                  ${desc}
+                </div>
+
+              </div>
+
+              <div class="balance-amount ${cls}">
+                ${display}
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+function renderSettlements(){
+
+  const list =
+    document.getElementById(
+      "settlementList"
+    );
+
+
+  const settlements =
+    calculateSettlements();
+
+
+  if(!settlements.length){
+
+    list.innerHTML=`
+
+      <div
+        style="
+          padding:12px;
+          border-radius:11px;
+          background:var(--greenbg);
+          color:var(--green);
+          text-align:center;
+          font-size:8px;
+          font-weight:800;
+        "
+      >
+        🎉 Everyone is settled up!
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    settlements
+      .map(
+        s=>{
+
+          const from =
+            getPerson(s.from);
+
+          const to =
+            getPerson(s.to);
+
+
+          return `
+
+            <div class="settlement">
+
+              <div class="settle-person">
+
+                <b>
+                  ${escapeHTML(
+                    from?.name || "Unknown"
+                  )}
+                </b>
+
+                <span>
+                  needs to pay
+                </span>
+
+              </div>
+
+              <div class="arrow">
+                →
+              </div>
+
+              <div class="settle-person">
+
+                <b>
+                  ${escapeHTML(
+                    to?.name || "Unknown"
+                  )}
+                </b>
+
+                <span>
+                  should receive
+                </span>
+
+              </div>
+
+              <div class="settle-amount">
+                ${money(s.amount)}
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+function renderExpenses(){
+
+  const list =
+    document.getElementById(
+      "expenseList"
+    );
+
+
+  document.getElementById(
+    "expenseLabel"
+  ).textContent =
+    `${data.expenses.length} ${
+      data.expenses.length===1
+        ? "expense"
+        : "expenses"
+    }`;
+
+
+  if(!data.expenses.length){
+
+    list.innerHTML=`
+
+      <div class="empty">
+
+        <div class="empty-icon">🧾</div>
+
+        <b>No expenses yet</b>
+
+        <p>
+          Add a bill and choose who participated.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    data.expenses
+      .map(
+        expense=>{
+
+          const payer =
+            getPerson(
+              expense.paidBy
+            );
+
+
+          return `
+
+            <div class="expense">
+
+              <div class="expense-icon">
+                🧾
+              </div>
+
+              <div class="expense-info">
+
+                <div class="expense-title">
+                  ${escapeHTML(
+                    expense.name
+                  )}
+                </div>
+
+                <div class="expense-meta">
+
+                  Paid by
+                  ${escapeHTML(
+                    payer?.name || "Unknown"
+                  )}
+                  ·
+                  ${expense.participants.length}
+                  people
+
+                </div>
+
+              </div>
+
+              <div class="expense-amount">
+                ${money(expense.amount)}
+              </div>
+
+              <div class="expense-actions">
+
+                <button
+                  class="small"
+                  onclick="editExpense('${expense.id}')"
+                >
+                  ✏️
+                </button>
+
+                <button
+                  class="small"
+                  onclick="deleteExpense('${expense.id}')"
+                >
+                  🗑️
+                </button>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* ===============================
+   THEME
+================================ */
+
+function toggleTheme(){
+
+  document.body.classList.toggle(
+    "dark"
+  );
+
+
+  const dark =
+    document.body.classList.contains(
+      "dark"
+    );
+
+
+  localStorage.setItem(
+    THEME_KEY,
+    dark ? "1" : "0"
+  );
+
+
+  document.getElementById(
+    "themeBtn"
+  ).textContent =
+    dark ? "☀️" : "🌙";
+
+}
+
+
+function loadTheme(){
+
+  if(
+    localStorage.getItem(
+      THEME_KEY
+    )==="1"
+  ){
+
+    document.body.classList.add(
+      "dark"
+    );
+
+    document.getElementById(
+      "themeBtn"
+    ).textContent="☀️";
+
+  }
+
+}
+
+
+/* ===============================
+   MODAL EVENTS
+================================ */
+
+document
+  .getElementById("expenseModal")
+  .addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target===
+        document.getElementById(
+          "expenseModal"
+        )
+      ){
+
+        closeExpenseModal();
+
+      }
+
+    }
+  );
+
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(event.key==="Escape"){
+
+      closeExpenseModal();
+
+    }
+
+  }
+);
+
+
+/* ===============================
+   INIT
+================================ */
+
+loadTheme();
+
+render();
+
+</script>
+
+</body>
+</html>

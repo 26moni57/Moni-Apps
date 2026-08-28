@@ -1,0 +1,1090 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoodPixel</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f2ff;
+    color: #252239;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 40px;
+}
+
+/* Header */
+
+.header {
+    padding: 28px 20px 25px;
+    color: white;
+    background: linear-gradient(135deg, #7b61ff, #a989ff);
+    border-radius: 0 0 30px 30px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.pixel {
+    font-size: 12px;
+    background: rgba(255,255,255,.2);
+    padding: 7px 11px;
+    border-radius: 20px;
+}
+
+.header h1 {
+    margin: 28px 0 5px;
+    font-size: 29px;
+}
+
+.header p {
+    margin: 0;
+    opacity: .85;
+}
+
+/* Content */
+
+.content {
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    margin: 8px 0 13px;
+}
+
+/* Mood picker */
+
+.mood-card {
+    background: white;
+    padding: 20px;
+    border-radius: 24px;
+    box-shadow: 0 7px 25px rgba(70,50,130,.08);
+}
+
+.mood-question {
+    text-align: center;
+    color: #707080;
+    font-size: 14px;
+    margin-bottom: 17px;
+}
+
+.moods {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.mood {
+    flex: 1;
+    border: 2px solid transparent;
+    background: #f7f6fb;
+    border-radius: 17px;
+    padding: 11px 3px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.mood span {
+    display: block;
+    font-size: 27px;
+}
+
+.mood small {
+    display: block;
+    margin-top: 6px;
+    color: #777;
+    font-size: 9px;
+}
+
+.mood.selected {
+    border-color: #7b61ff;
+    background: #f0ecff;
+    transform: translateY(-3px);
+}
+
+/* Note */
+
+.note {
+    margin-top: 13px;
+}
+
+.note textarea {
+    width: 100%;
+    min-height: 95px;
+    resize: none;
+    border: 1px solid #e2deef;
+    border-radius: 16px;
+    padding: 14px;
+    font-family: inherit;
+    outline: none;
+}
+
+.save-button {
+    width: 100%;
+    border: 0;
+    margin-top: 10px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #7b61ff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Weekly */
+
+.week-card {
+    background: white;
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: 0 6px 20px rgba(70,50,130,.06);
+}
+
+.week-days {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    gap: 5px;
+}
+
+.day {
+    text-align: center;
+}
+
+.day-name {
+    font-size: 9px;
+    color: #999;
+    margin-bottom: 7px;
+}
+
+.day-mood {
+    width: 35px;
+    height: 35px;
+    margin: auto;
+    border-radius: 12px;
+    background: #f4f2f9;
+    display: grid;
+    place-items: center;
+    font-size: 19px;
+}
+
+/* Stats */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 9px;
+    margin-top: 12px;
+}
+
+.stat {
+    background: white;
+    padding: 15px 5px;
+    border-radius: 17px;
+    text-align: center;
+}
+
+.stat strong {
+    display: block;
+    font-size: 20px;
+}
+
+.stat small {
+    color: #8d8998;
+    font-size: 10px;
+}
+
+/* Search */
+
+.search {
+    position: relative;
+    margin-top: 20px;
+}
+
+.search input {
+    width: 100%;
+    padding: 15px 16px 15px 43px;
+    border: 0;
+    border-radius: 16px;
+    outline: none;
+    box-shadow: 0 5px 16px rgba(70,50,130,.06);
+}
+
+.search span {
+    position: absolute;
+    left: 15px;
+    top: 14px;
+}
+
+/* History */
+
+.history-item {
+    background: white;
+    padding: 16px;
+    border-radius: 18px;
+    margin-top: 10px;
+}
+
+.history-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.history-mood {
+    font-size: 30px;
+}
+
+.history-info {
+    flex: 1;
+}
+
+.history-info strong {
+    display: block;
+}
+
+.history-info small {
+    color: #999;
+    font-size: 10px;
+}
+
+.history-note {
+    margin-top: 10px;
+    background: #f8f6fc;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 13px;
+    color: #676376;
+    line-height: 1.5;
+}
+
+.delete {
+    border: 0;
+    background: transparent;
+    color: #b0aab9;
+    cursor: pointer;
+}
+
+/* Empty */
+
+.empty {
+    text-align: center;
+    color: #8e899b;
+    padding: 40px 15px;
+}
+
+.empty-icon {
+    font-size: 45px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <div class="header-top">
+
+            <div class="logo">
+                😊 MoodPixel
+            </div>
+
+            <div
+                class="pixel"
+                id="entryCount"
+            >
+                0 entries
+            </div>
+
+        </div>
+
+        <h1>How are you?</h1>
+
+        <p>
+            A tiny check-in for your day.
+        </p>
+
+    </header>
+
+
+    <main class="content">
+
+        <!-- Today's Mood -->
+
+        <h2 class="section-title">
+            Today's mood
+        </h2>
+
+        <section class="mood-card">
+
+            <div class="mood-question">
+                Pick the emoji that feels right.
+            </div>
+
+            <div class="moods">
+
+                <button
+                    class="mood"
+                    data-mood="great"
+                    onclick="selectMood('great', this)"
+                >
+                    <span>😁</span>
+                    <small>Great</small>
+                </button>
+
+                <button
+                    class="mood"
+                    data-mood="good"
+                    onclick="selectMood('good', this)"
+                >
+                    <span>🙂</span>
+                    <small>Good</small>
+                </button>
+
+                <button
+                    class="mood"
+                    data-mood="okay"
+                    onclick="selectMood('okay', this)"
+                >
+                    <span>😐</span>
+                    <small>Okay</small>
+                </button>
+
+                <button
+                    class="mood"
+                    data-mood="sad"
+                    onclick="selectMood('sad', this)"
+                >
+                    <span>😔</span>
+                    <small>Low</small>
+                </button>
+
+                <button
+                    class="mood"
+                    data-mood="bad"
+                    onclick="selectMood('bad', this)"
+                >
+                    <span>😣</span>
+                    <small>Bad</small>
+                </button>
+
+            </div>
+
+            <div class="note">
+
+                <textarea
+                    id="note"
+                    placeholder="Write a little about your day..."
+                ></textarea>
+
+                <button
+                    class="save-button"
+                    onclick="saveToday()"
+                >
+                    Save Today's Mood
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Week -->
+
+        <h2 class="section-title">
+            Your week
+        </h2>
+
+        <section class="week-card">
+
+            <div
+                class="week-days"
+                id="weekDays"
+            ></div>
+
+        </section>
+
+
+        <!-- Stats -->
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <strong id="totalEntries">
+                    0
+                </strong>
+
+                <small>
+                    Check-ins
+                </small>
+
+            </div>
+
+            <div class="stat">
+
+                <strong id="bestMood">
+                    —
+                </strong>
+
+                <small>
+                    Most common
+                </small>
+
+            </div>
+
+            <div class="stat">
+
+                <strong id="weekCount">
+                    0
+                </strong>
+
+                <small>
+                    This week
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- Search -->
+
+        <div class="search">
+
+            <span>🔍</span>
+
+            <input
+                id="search"
+                type="text"
+                placeholder="Search your journal..."
+                oninput="renderHistory()"
+            >
+
+        </div>
+
+
+        <!-- History -->
+
+        <h2 class="section-title">
+            Mood history
+        </h2>
+
+        <section id="history"></section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/*
+    MoodPixel
+    Simple mood journal
+*/
+
+
+const moods = {
+
+    great: {
+        emoji: "😁",
+        name: "Great"
+    },
+
+    good: {
+        emoji: "🙂",
+        name: "Good"
+    },
+
+    okay: {
+        emoji: "😐",
+        name: "Okay"
+    },
+
+    sad: {
+        emoji: "😔",
+        name: "Low"
+    },
+
+    bad: {
+        emoji: "😣",
+        name: "Bad"
+    }
+
+};
+
+
+let entries =
+    JSON.parse(
+        localStorage.getItem("moodPixelEntries")
+    ) || [];
+
+
+let selectedMood = null;
+
+
+/* Date */
+
+function getDateKey(date = new Date()) {
+
+    return date
+        .toISOString()
+        .split("T")[0];
+
+}
+
+
+/* Select mood */
+
+function selectMood(mood, button) {
+
+    selectedMood = mood;
+
+    document
+        .querySelectorAll(".mood")
+        .forEach(item =>
+            item.classList.remove("selected")
+        );
+
+    button.classList.add("selected");
+
+}
+
+
+/* Save */
+
+function saveToday() {
+
+    if (!selectedMood) {
+
+        alert(
+            "Please choose your mood first."
+        );
+
+        return;
+
+    }
+
+
+    const note =
+        document
+            .getElementById("note")
+            .value
+            .trim();
+
+
+    const today =
+        getDateKey();
+
+
+    const existing =
+        entries.find(
+            entry => entry.date === today
+        );
+
+
+    if (existing) {
+
+        existing.mood =
+            selectedMood;
+
+        existing.note =
+            note;
+
+    } else {
+
+        entries.unshift({
+
+            id: Date.now(),
+
+            date: today,
+
+            mood: selectedMood,
+
+            note: note
+
+        });
+
+    }
+
+
+    localStorage.setItem(
+        "moodPixelEntries",
+        JSON.stringify(entries)
+    );
+
+
+    document.getElementById("note").value =
+        "";
+
+
+    renderAll();
+
+
+    alert(
+        "Today's mood saved 💜"
+    );
+
+}
+
+
+/* Get entry */
+
+function getEntry(date) {
+
+    return entries.find(
+        entry => entry.date === date
+    );
+
+}
+
+
+/* Week */
+
+function renderWeek() {
+
+    const container =
+        document.getElementById("weekDays");
+
+
+    const today =
+        new Date();
+
+
+    const dayOfWeek =
+        today.getDay();
+
+
+    const mondayOffset =
+        dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+
+
+    const monday =
+        new Date(today);
+
+
+    monday.setDate(
+        today.getDate() + mondayOffset
+    );
+
+
+    let html = "";
+
+
+    for (let i = 0; i < 7; i++) {
+
+        const date =
+            new Date(monday);
+
+
+        date.setDate(
+            monday.getDate() + i
+        );
+
+
+        const key =
+            getDateKey(date);
+
+
+        const entry =
+            getEntry(key);
+
+
+        const emoji =
+            entry
+                ? moods[entry.mood].emoji
+                : "·";
+
+
+        html += `
+
+            <div class="day">
+
+                <div class="day-name">
+                    ${date.toLocaleDateString(
+                        undefined,
+                        { weekday: "short" }
+                    )}
+                </div>
+
+                <div class="day-mood">
+                    ${emoji}
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+/* History */
+
+function renderHistory() {
+
+    const container =
+        document.getElementById("history");
+
+
+    const search =
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        entries.filter(entry => {
+
+            return (
+                moods[entry.mood]
+                    .name
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                (entry.note || "")
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                entry.date
+                    .includes(search)
+            );
+
+        });
+
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🌱
+                </div>
+
+                <h3>
+                    No mood entries yet
+                </h3>
+
+                <p>
+                    Start by checking in today.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        filtered.map(entry => `
+
+            <article class="history-item">
+
+                <div class="history-top">
+
+                    <div class="history-mood">
+                        ${moods[entry.mood].emoji}
+                    </div>
+
+                    <div class="history-info">
+
+                        <strong>
+                            ${moods[entry.mood].name}
+                        </strong>
+
+                        <small>
+                            ${formatDate(entry.date)}
+                        </small>
+
+                    </div>
+
+                    <button
+                        class="delete"
+                        onclick="deleteEntry(${entry.id})"
+                    >
+                        🗑️
+                    </button>
+
+                </div>
+
+
+                ${
+                    entry.note
+                    ?
+                    `<div class="history-note">
+                        ${escapeHTML(entry.note)}
+                    </div>`
+                    :
+                    ""
+                }
+
+            </article>
+
+        `).join("");
+
+}
+
+
+/* Stats */
+
+function renderStats() {
+
+    document.getElementById("totalEntries").innerText =
+        entries.length;
+
+
+    const counts = {
+
+        great: 0,
+        good: 0,
+        okay: 0,
+        sad: 0,
+        bad: 0
+
+    };
+
+
+    entries.forEach(entry => {
+
+        counts[entry.mood]++;
+
+    });
+
+
+    let common = "—";
+
+    let highest = 0;
+
+
+    Object.keys(counts).forEach(key => {
+
+        if (counts[key] > highest) {
+
+            highest =
+                counts[key];
+
+            common =
+                moods[key].emoji;
+
+        }
+
+    });
+
+
+    document.getElementById("bestMood").innerText =
+        common;
+
+
+    const now =
+        new Date();
+
+
+    const sevenDaysAgo =
+        new Date();
+
+
+    sevenDaysAgo.setDate(
+        now.getDate() - 6
+    );
+
+
+    const weekEntries =
+        entries.filter(entry => {
+
+            const date =
+                new Date(entry.date);
+
+            return date >= sevenDaysAgo;
+
+        });
+
+
+    document.getElementById("weekCount").innerText =
+        weekEntries.length;
+
+
+    document.getElementById("entryCount").innerText =
+        entries.length +
+        (entries.length === 1
+            ? " entry"
+            : " entries");
+
+}
+
+
+/* Delete */
+
+function deleteEntry(id) {
+
+    if (
+        !confirm(
+            "Delete this mood entry?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    entries =
+        entries.filter(
+            entry => entry.id !== id
+        );
+
+
+    localStorage.setItem(
+        "moodPixelEntries",
+        JSON.stringify(entries)
+    );
+
+
+    renderAll();
+
+}
+
+
+/* Format */
+
+function formatDate(date) {
+
+    const today =
+        getDateKey();
+
+
+    if (date === today) {
+
+        return "Today";
+
+    }
+
+
+    return new Date(date)
+        .toLocaleDateString(
+            undefined,
+            {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
+
+}
+
+
+/* Escape */
+
+function escapeHTML(text) {
+
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* Render everything */
+
+function renderAll() {
+
+    renderWeek();
+
+    renderHistory();
+
+    renderStats();
+
+}
+
+
+/* Load today's entry */
+
+function loadToday() {
+
+    const today =
+        getEntry(getDateKey());
+
+
+    if (!today) return;
+
+
+    selectedMood =
+        today.mood;
+
+
+    document
+        .querySelectorAll(".mood")
+        .forEach(button => {
+
+            if (
+                button.dataset.mood ===
+                today.mood
+            ) {
+
+                button.classList.add(
+                    "selected"
+                );
+
+            }
+
+        });
+
+
+    document.getElementById("note").value =
+        today.note || "";
+
+}
+
+
+/* Start */
+
+renderAll();
+
+loadToday();
+
+</script>
+
+</body>
+</html>

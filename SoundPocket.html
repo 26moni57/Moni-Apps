@@ -1,0 +1,1442 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#5b21b6">
+<title>SoundPocket</title>
+
+<style>
+:root{
+    --bg:#f6f4fb;
+    --card:#fff;
+    --text:#211b2d;
+    --muted:#8b8499;
+    --line:#e8e3ef;
+    --primary:#6d28d9;
+    --primary2:#8b5cf6;
+    --soft:#eee7ff;
+    --green:#16a34a;
+    --shadow:0 12px 32px rgba(58,40,85,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:auto;
+    overflow:hidden;
+}
+
+/* HEADER */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 30px;
+    color:white;
+    background:
+        linear-gradient(
+            145deg,
+            #4c1d95,
+            #6d28d9 55%,
+            #8b5cf6
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header:before,
+.header:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.09);
+}
+
+.header:before{
+    width:190px;
+    height:190px;
+    right:-90px;
+    top:-110px;
+}
+
+.header:after{
+    width:140px;
+    height:140px;
+    left:-80px;
+    bottom:-100px;
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.brandIcon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    font-size:22px;
+}
+
+.brandName{
+    font-size:21px;
+    font-weight:850;
+}
+
+.themeBtn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    color:#fff;
+    font-size:17px;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:25px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    margin:8px 0 0;
+    max-width:335px;
+    color:rgba(255,255,255,.83);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+    padding:18px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:17px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:21px;
+    box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:15px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* PLAYER */
+
+.player{
+    text-align:center;
+}
+
+.soundOrb{
+    width:150px;
+    height:150px;
+    margin:8px auto 17px;
+    display:grid;
+    place-items:center;
+    position:relative;
+    border-radius:50%;
+    background:
+        radial-gradient(
+            circle,
+            #c4b5fd 0 24%,
+            #8b5cf6 25% 47%,
+            #6d28d9 48% 68%,
+            #eee7ff 69% 100%
+        );
+    box-shadow:
+        0 15px 35px rgba(109,40,217,.2);
+}
+
+.soundOrb.playing{
+    animation:pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.045);
+    }
+}
+
+.orbIcon{
+    width:76px;
+    height:76px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:rgba(255,255,255,.9);
+    font-size:33px;
+    box-shadow:0 8px 20px rgba(70,40,100,.15);
+}
+
+.player h2{
+    margin:0;
+    font-size:19px;
+}
+
+.playerDesc{
+    margin:5px auto 16px;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.wave{
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    margin-bottom:15px;
+}
+
+.wave i{
+    width:4px;
+    height:12px;
+    border-radius:10px;
+    background:var(--primary2);
+}
+
+.wave.playing i{
+    animation:wave .7s infinite alternate ease-in-out;
+}
+
+.wave i:nth-child(2){animation-delay:.1s}
+.wave i:nth-child(3){animation-delay:.2s}
+.wave i:nth-child(4){animation-delay:.3s}
+.wave i:nth-child(5){animation-delay:.4s}
+.wave i:nth-child(6){animation-delay:.5s}
+.wave i:nth-child(7){animation-delay:.3s}
+.wave i:nth-child(8){animation-delay:.2s}
+
+@keyframes wave{
+    to{
+        height:32px;
+    }
+}
+
+.playerControls{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+}
+
+.controlBtn{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.playBtn{
+    width:58px;
+    height:58px;
+    border-radius:19px;
+    background:var(--primary);
+    color:white;
+    font-size:21px;
+    box-shadow:0 8px 20px rgba(109,40,217,.22);
+}
+
+/* VOLUME */
+
+.volumeRow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.volumeRow span{
+    font-size:16px;
+}
+
+.volumeRow input{
+    flex:1;
+    accent-color:var(--primary);
+}
+
+.volumeValue{
+    width:32px;
+    color:var(--muted);
+    font-size:10px;
+    text-align:right;
+}
+
+/* SOUNDS */
+
+.soundGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+}
+
+.sound{
+    position:relative;
+    min-height:92px;
+    padding:13px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:var(--card);
+    text-align:left;
+    color:var(--text);
+    transition:.18s;
+}
+
+.sound.active{
+    border-color:var(--primary2);
+    background:var(--soft);
+    transform:translateY(-1px);
+}
+
+.soundIcon{
+    font-size:24px;
+}
+
+.soundName{
+    margin-top:8px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.soundSub{
+    margin-top:3px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.favorite{
+    position:absolute;
+    top:9px;
+    right:9px;
+    width:25px;
+    height:25px;
+    border:0;
+    border-radius:8px;
+    background:rgba(255,255,255,.7);
+    font-size:12px;
+}
+
+/* TIMER */
+
+.timerOptions{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:7px;
+}
+
+.timerOption{
+    padding:11px 5px;
+    border:0;
+    border-radius:11px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:10px;
+    font-weight:750;
+}
+
+.timerOption.active{
+    background:var(--primary);
+    color:#fff;
+}
+
+.timerStatus{
+    margin-top:12px;
+    text-align:center;
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* SEARCH */
+
+.search{
+    position:relative;
+    margin-bottom:12px;
+}
+
+.search span{
+    position:absolute;
+    left:12px;
+    top:10px;
+}
+
+.search input{
+    width:100%;
+    padding:11px 12px 11px 36px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* EMPTY */
+
+.empty{
+    padding:22px;
+    text-align:center;
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    z-index:50;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#211b2d;
+    color:#fff;
+    font-size:11px;
+    white-space:nowrap;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+    --bg:#11101a;
+    --card:#1b1926;
+    --text:#f4f1f8;
+    --muted:#9992a6;
+    --line:#2b2737;
+    --soft:#29203f;
+    --shadow:0 12px 35px rgba(0,0,0,.25);
+}
+
+body.dark .favorite{
+    background:rgba(30,27,40,.8);
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(45,30,65,.12);
+    }
+}
+
+/* SMALL */
+
+@media(max-width:350px){
+    .content{
+        padding:14px;
+    }
+
+    .header{
+        padding:18px 15px 27px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brandIcon">🎵</div>
+
+            <div class="brandName">
+                SoundPocket
+            </div>
+
+        </div>
+
+        <button
+            class="themeBtn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+    <div class="hero">
+
+        <h1>
+            Find your quiet.<br>
+            Stay in the moment.
+        </h1>
+
+        <p>
+            Simple ambient sounds for focus, relaxation and sleep.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- PLAYER -->
+
+<section class="card player">
+
+    <div class="sectionTitle">
+
+        <h2>🎧 Now Playing</h2>
+
+        <span id="playingStatus">
+            Paused
+        </span>
+
+    </div>
+
+
+    <div
+        class="soundOrb"
+        id="soundOrb"
+    >
+
+        <div
+            class="orbIcon"
+            id="orbIcon"
+        >
+            🌧️
+        </div>
+
+    </div>
+
+
+    <h2 id="currentName">
+        Soft Rain
+    </h2>
+
+    <div
+        class="playerDesc"
+        id="currentDesc"
+    >
+        Gentle rain for a calm atmosphere
+    </div>
+
+
+    <div
+        class="wave"
+        id="wave"
+    >
+        <i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i>
+    </div>
+
+
+    <div class="playerControls">
+
+        <button
+            class="controlBtn"
+            onclick="previousSound()"
+        >
+            ⏮
+        </button>
+
+        <button
+            class="playBtn"
+            id="playBtn"
+            onclick="togglePlay()"
+        >
+            ▶
+        </button>
+
+        <button
+            class="controlBtn"
+            onclick="nextSound()"
+        >
+            ⏭
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- VOLUME -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>🔊 Volume</h2>
+
+        <span id="volumeValue">
+            60%
+        </span>
+
+    </div>
+
+    <div class="volumeRow">
+
+        <span>🔈</span>
+
+        <input
+            id="volume"
+            type="range"
+            min="0"
+            max="100"
+            value="60"
+            oninput="changeVolume()"
+        >
+
+        <span>🔊</span>
+
+    </div>
+
+</section>
+
+
+<!-- SOUNDS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>🌿 Ambient Sounds</h2>
+
+        <span id="soundCount">
+            6 sounds
+        </span>
+
+    </div>
+
+
+    <div class="search">
+
+        <span>🔍</span>
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Find a sound..."
+            oninput="renderSounds()"
+        >
+
+    </div>
+
+
+    <div
+        class="soundGrid"
+        id="soundGrid"
+    ></div>
+
+</section>
+
+
+<!-- TIMER -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>⏱️ Sleep Timer</h2>
+
+        <span id="timerLabel">
+            Off
+        </span>
+
+    </div>
+
+
+    <div class="timerOptions">
+
+        <button
+            class="timerOption active"
+            onclick="setTimer(0,this)"
+        >
+            Off
+        </button>
+
+        <button
+            class="timerOption"
+            onclick="setTimer(15,this)"
+        >
+            15 min
+        </button>
+
+        <button
+            class="timerOption"
+            onclick="setTimer(30,this)"
+        >
+            30 min
+        </button>
+
+        <button
+            class="timerOption"
+            onclick="setTimer(60,this)"
+        >
+            60 min
+        </button>
+
+    </div>
+
+
+    <div
+        class="timerStatus"
+        id="timerStatus"
+    >
+        Sound will continue playing.
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================
+   SOUNDS
+========================= */
+
+const sounds = [
+
+    {
+        id:"rain",
+        name:"Soft Rain",
+        icon:"🌧️",
+        desc:"Gentle rain for a calm atmosphere"
+    },
+
+    {
+        id:"forest",
+        name:"Forest",
+        icon:"🌲",
+        desc:"Peaceful forest ambience"
+    },
+
+    {
+        id:"ocean",
+        name:"Ocean Waves",
+        icon:"🌊",
+        desc:"Slow waves by the sea"
+    },
+
+    {
+        id:"fire",
+        name:"Campfire",
+        icon:"🔥",
+        desc:"Warm crackling fire"
+    },
+
+    {
+        id:"cafe",
+        name:"Coffee Shop",
+        icon:"☕",
+        desc:"Soft café background noise"
+    },
+
+    {
+        id:"wind",
+        name:"Night Wind",
+        icon:"🌙",
+        desc:"Gentle nighttime breeze"
+    },
+
+    {
+        id:"birds",
+        name:"Morning Birds",
+        icon:"🐦",
+        desc:"Fresh birdsong ambience"
+    },
+
+    {
+        id:"thunder",
+        name:"Distant Storm",
+        icon:"⛈️",
+        desc:"Quiet distant thunder"
+    }
+
+];
+
+
+let currentIndex = 0;
+let isPlaying = false;
+let favorites =
+    JSON.parse(
+        localStorage.getItem("soundPocketFavorites") || "[]"
+    );
+
+let timerMinutes = 0;
+let timerSeconds = 0;
+let timerInterval = null;
+let toastTimer;
+
+
+/* =========================
+   RENDER SOUNDS
+========================= */
+
+function renderSounds(){
+
+    const grid =
+        document.getElementById("soundGrid");
+
+    const query =
+        document.getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        sounds.filter(sound =>
+            sound.name
+                .toLowerCase()
+                .includes(query)
+        );
+
+
+    document.getElementById("soundCount")
+        .textContent =
+        filtered.length +
+        (
+            filtered.length === 1
+                ? " sound"
+                : " sounds"
+        );
+
+
+    if(filtered.length === 0){
+
+        grid.innerHTML = `
+
+            <div
+                class="empty"
+                style="grid-column:1/-1"
+            >
+                🔎 No sounds found.
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    grid.innerHTML =
+        filtered.map(sound => {
+
+            const originalIndex =
+                sounds.findIndex(
+                    item =>
+                        item.id === sound.id
+                );
+
+
+            const active =
+                originalIndex === currentIndex;
+
+
+            const favorite =
+                favorites.includes(sound.id);
+
+
+            return `
+
+                <button
+                    class="sound ${
+                        active ? "active" : ""
+                    }"
+                    onclick="selectSound(${originalIndex})"
+                >
+
+                    <div class="soundIcon">
+                        ${sound.icon}
+                    </div>
+
+                    <div class="soundName">
+                        ${escapeHTML(sound.name)}
+                    </div>
+
+                    <div class="soundSub">
+                        ${escapeHTML(sound.desc)}
+                    </div>
+
+
+                    <span
+                        class="favorite"
+                        onclick="toggleFavorite(event,'${sound.id}')"
+                    >
+                        ${favorite ? "❤️" : "♡"}
+                    </span>
+
+                </button>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================
+   SELECT
+========================= */
+
+function selectSound(index){
+
+    currentIndex = index;
+
+    updatePlayer();
+
+    renderSounds();
+
+    if(isPlaying){
+        showToast(
+            sounds[index].icon +
+            " " +
+            sounds[index].name
+        );
+    }
+
+}
+
+
+function updatePlayer(){
+
+    const sound =
+        sounds[currentIndex];
+
+
+    document.getElementById("currentName")
+        .textContent =
+        sound.name;
+
+
+    document.getElementById("currentDesc")
+        .textContent =
+        sound.desc;
+
+
+    document.getElementById("orbIcon")
+        .textContent =
+        sound.icon;
+
+}
+
+
+/* =========================
+   PLAY
+========================= */
+
+function togglePlay(){
+
+    isPlaying =
+        !isPlaying;
+
+
+    updatePlayState();
+
+
+    if(isPlaying){
+
+        showToast(
+            "▶ Playing " +
+            sounds[currentIndex].name
+        );
+
+    }else{
+
+        showToast(
+            "⏸ Sound paused"
+        );
+
+    }
+
+}
+
+
+function updatePlayState(){
+
+    const play =
+        document.getElementById("playBtn");
+
+    const orb =
+        document.getElementById("soundOrb");
+
+    const wave =
+        document.getElementById("wave");
+
+    const status =
+        document.getElementById("playingStatus");
+
+
+    if(isPlaying){
+
+        play.textContent = "⏸";
+
+        orb.classList.add("playing");
+
+        wave.classList.add("playing");
+
+        status.textContent = "Playing";
+
+    }else{
+
+        play.textContent = "▶";
+
+        orb.classList.remove("playing");
+
+        wave.classList.remove("playing");
+
+        status.textContent = "Paused";
+
+    }
+
+}
+
+
+/* =========================
+   NEXT / PREVIOUS
+========================= */
+
+function nextSound(){
+
+    currentIndex =
+        (currentIndex + 1)
+        % sounds.length;
+
+    updatePlayer();
+
+    renderSounds();
+
+    if(isPlaying){
+        showToast(
+            "🎵 " +
+            sounds[currentIndex].name
+        );
+    }
+
+}
+
+
+function previousSound(){
+
+    currentIndex =
+        (
+            currentIndex - 1 + sounds.length
+        )
+        % sounds.length;
+
+    updatePlayer();
+
+    renderSounds();
+
+}
+
+
+/* =========================
+   FAVORITES
+========================= */
+
+function toggleFavorite(event,id){
+
+    event.stopPropagation();
+
+
+    if(favorites.includes(id)){
+
+        favorites =
+            favorites.filter(
+                item => item !== id
+            );
+
+        showToast(
+            "Removed from favorites."
+        );
+
+    }else{
+
+        favorites.push(id);
+
+        showToast(
+            "❤️ Added to favorites."
+        );
+
+    }
+
+
+    localStorage.setItem(
+        "soundPocketFavorites",
+        JSON.stringify(favorites)
+    );
+
+
+    renderSounds();
+
+}
+
+
+/* =========================
+   VOLUME
+========================= */
+
+function changeVolume(){
+
+    const volume =
+        document.getElementById("volume")
+            .value;
+
+
+    document.getElementById("volumeValue")
+        .textContent =
+        volume + "%";
+
+
+    localStorage.setItem(
+        "soundPocketVolume",
+        volume
+    );
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function setTimer(minutes,button){
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    timerMinutes = minutes;
+
+    timerSeconds =
+        minutes * 60;
+
+
+    document
+        .querySelectorAll(".timerOption")
+        .forEach(
+            item =>
+                item.classList.remove("active")
+        );
+
+
+    button.classList.add("active");
+
+
+    const label =
+        document.getElementById("timerLabel");
+
+    const status =
+        document.getElementById("timerStatus");
+
+
+    if(minutes === 0){
+
+        label.textContent = "Off";
+
+        status.textContent =
+            "Sound will continue playing.";
+
+        return;
+
+    }
+
+
+    label.textContent =
+        minutes + " min";
+
+
+    updateTimerText();
+
+
+    timerInterval =
+        setInterval(
+            () => {
+
+                timerSeconds--;
+
+                updateTimerText();
+
+
+                if(timerSeconds <= 0){
+
+                    clearInterval(timerInterval);
+
+                    timerInterval = null;
+
+                    isPlaying = false;
+
+                    updatePlayState();
+
+                    label.textContent = "Finished";
+
+                    status.textContent =
+                        "Sleep timer finished.";
+
+                    showToast(
+                        "🌙 Sleep timer finished."
+                    );
+
+                }
+
+            },
+            1000
+        );
+
+
+    showToast(
+        "⏱️ Timer set for " +
+        minutes +
+        " minutes."
+    );
+
+}
+
+
+function updateTimerText(){
+
+    const minutes =
+        Math.floor(
+            timerSeconds / 60
+        );
+
+    const seconds =
+        timerSeconds % 60;
+
+
+    document.getElementById("timerStatus")
+        .textContent =
+        "Stops in " +
+        String(minutes).padStart(2,"0") +
+        ":" +
+        String(seconds).padStart(2,"0");
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+
+    const dark =
+        document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "soundPocketDark",
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById("themeBtn")
+        .textContent =
+        dark ? "☀️" : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            "soundPocketDark"
+        ) === "1";
+
+
+    if(dark){
+
+        document.body.classList.add("dark");
+
+        document.getElementById("themeBtn")
+            .textContent = "☀️";
+
+    }
+
+
+    const savedVolume =
+        localStorage.getItem(
+            "soundPocketVolume"
+        );
+
+
+    if(savedVolume !== null){
+
+        document.getElementById("volume")
+            .value =
+            savedVolume;
+
+        document.getElementById("volumeValue")
+            .textContent =
+            savedVolume + "%";
+
+    }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () =>
+                toast.classList.remove("show"),
+            2200
+        );
+
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+updatePlayer();
+
+renderSounds();
+
+updatePlayState();
+
+</script>
+
+</body>
+</html>

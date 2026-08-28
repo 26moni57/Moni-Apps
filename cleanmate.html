@@ -1,0 +1,1990 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#06b6d4">
+<title>CleanMate</title>
+
+<style>
+:root{
+    --bg:#f4f8fa;
+    --card:#ffffff;
+    --text:#17232b;
+    --muted:#7b8991;
+    --line:#e3eaee;
+    --primary:#06b6d4;
+    --primary-dark:#0891b2;
+    --soft:#e5f9fc;
+    --green:#16a34a;
+    --green-soft:#eaf8ef;
+    --danger:#dc2626;
+    --danger-soft:#fff0f0;
+    --shadow:0 10px 30px rgba(25,55,70,.07);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:0 auto;
+    overflow:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    position:relative;
+    padding:21px 18px 31px;
+    color:white;
+    background:
+        linear-gradient(
+            145deg,
+            #0891b2,
+            #06b6d4 55%,
+            #22d3ee
+        );
+    border-radius:0 0 31px 31px;
+    overflow:hidden;
+}
+
+.header::before{
+    content:"";
+    position:absolute;
+    width:190px;
+    height:190px;
+    right:-90px;
+    top:-105px;
+    border-radius:50%;
+    background:rgba(255,255,255,.11);
+}
+
+.header::after{
+    content:"";
+    position:absolute;
+    width:130px;
+    height:130px;
+    left:-65px;
+    bottom:-85px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.brand-icon{
+    width:41px;
+    height:41px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:13px;
+
+    background:rgba(255,255,255,.17);
+
+    font-size:22px;
+}
+
+.brand-name{
+    font-size:21px;
+    font-weight:850;
+}
+
+.theme-btn{
+    width:40px;
+    height:40px;
+
+    border:0;
+    border-radius:13px;
+
+    background:rgba(255,255,255,.17);
+
+    color:white;
+
+    font-size:17px;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+
+    margin-top:25px;
+}
+
+.hero h1{
+    margin:0;
+
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    max-width:320px;
+
+    margin:8px 0 0;
+
+    color:rgba(255,255,255,.84);
+
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    padding:18px;
+}
+
+.card{
+    margin-bottom:14px;
+
+    padding:17px;
+
+    background:var(--card);
+
+    border:1px solid var(--line);
+    border-radius:21px;
+
+    box-shadow:var(--shadow);
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:14px;
+}
+
+.section-title h2{
+    margin:0;
+
+    font-size:15px;
+}
+
+.section-title span{
+    color:var(--muted);
+
+    font-size:10px;
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-box{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.progress-circle{
+    width:66px;
+    height:66px;
+
+    flex-shrink:0;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+
+    background:
+        conic-gradient(
+            var(--primary) var(--progress,0%),
+            #e8eef1 0
+        );
+
+    position:relative;
+}
+
+.progress-circle::after{
+    content:"";
+
+    position:absolute;
+    width:49px;
+    height:49px;
+
+    border-radius:50%;
+
+    background:var(--card);
+}
+
+.progress-circle strong{
+    position:relative;
+    z-index:2;
+
+    font-size:13px;
+}
+
+.progress-info{
+    flex:1;
+}
+
+.progress-info h3{
+    margin:0;
+
+    font-size:15px;
+}
+
+.progress-info p{
+    margin:5px 0 0;
+
+    color:var(--muted);
+
+    font-size:10px;
+    line-height:1.5;
+}
+
+.progress-line{
+    width:100%;
+    height:8px;
+
+    margin-top:15px;
+
+    overflow:hidden;
+
+    border-radius:20px;
+
+    background:#e7eef1;
+}
+
+.progress-fill{
+    width:0;
+    height:100%;
+
+    border-radius:inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary-dark),
+            var(--primary)
+        );
+
+    transition:width .3s ease;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:8px;
+
+    margin-top:14px;
+}
+
+.stat{
+    padding:11px 6px;
+
+    text-align:center;
+
+    border-radius:14px;
+
+    background:var(--bg);
+}
+
+.stat strong{
+    display:block;
+
+    font-size:18px;
+}
+
+.stat span{
+    display:block;
+
+    margin-top:3px;
+
+    color:var(--muted);
+
+    font-size:9px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search{
+    position:relative;
+}
+
+.search-icon{
+    position:absolute;
+
+    left:13px;
+    top:11px;
+
+    font-size:14px;
+}
+
+.search input{
+    width:100%;
+
+    padding:12px 12px 12px 37px;
+
+    border:1px solid var(--line);
+    border-radius:13px;
+
+    outline:none;
+
+    background:var(--bg);
+    color:var(--text);
+}
+
+.search input:focus{
+    border-color:var(--primary);
+}
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters{
+    display:flex;
+
+    gap:7px;
+
+    overflow-x:auto;
+
+    padding:13px 0 3px;
+
+    scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{
+    display:none;
+}
+
+.filter{
+    flex-shrink:0;
+
+    padding:9px 12px;
+
+    border:0;
+    border-radius:11px;
+
+    background:var(--bg);
+
+    color:var(--muted);
+
+    font-size:10px;
+    font-weight:750;
+}
+
+.filter.active{
+    background:var(--primary);
+
+    color:white;
+}
+
+/* =========================
+   CLEANING ITEM
+========================= */
+
+.task{
+    display:flex;
+    align-items:center;
+
+    gap:11px;
+
+    padding:13px 0;
+
+    border-bottom:1px solid var(--line);
+}
+
+.task:last-child{
+    border-bottom:0;
+}
+
+.task-check{
+    width:25px;
+    height:25px;
+
+    flex-shrink:0;
+
+    display:grid;
+    place-items:center;
+
+    border:2px solid #ccd6db;
+    border-radius:8px;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:13px;
+
+    transition:.2s;
+}
+
+.task.done .task-check{
+    border-color:var(--primary);
+
+    background:var(--primary);
+}
+
+.task-icon{
+    width:39px;
+    height:39px;
+
+    flex-shrink:0;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:12px;
+
+    background:var(--soft);
+
+    font-size:18px;
+}
+
+.task-info{
+    flex:1;
+    min-width:0;
+}
+
+.task-name{
+    font-size:13px;
+    font-weight:800;
+}
+
+.task.done .task-name{
+    color:var(--muted);
+
+    text-decoration:line-through;
+}
+
+.task-meta{
+    margin-top:4px;
+
+    color:var(--muted);
+
+    font-size:9px;
+}
+
+.task-delete{
+    width:32px;
+    height:32px;
+
+    border:0;
+    border-radius:9px;
+
+    background:var(--bg);
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    padding:31px 8px 18px;
+
+    text-align:center;
+
+    color:var(--muted);
+}
+
+.empty-icon{
+    font-size:42px;
+}
+
+.empty h3{
+    margin:8px 0 5px;
+
+    color:var(--text);
+
+    font-size:14px;
+}
+
+.empty p{
+    margin:0;
+
+    font-size:11px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.add-btn{
+    width:100%;
+
+    margin-top:12px;
+
+    padding:14px;
+
+    border:0;
+    border-radius:14px;
+
+    background:var(--primary);
+
+    color:white;
+
+    font-weight:800;
+}
+
+.reset-btn{
+    width:100%;
+
+    padding:13px;
+
+    border:0;
+    border-radius:13px;
+
+    background:var(--danger-soft);
+
+    color:var(--danger);
+
+    font-size:11px;
+    font-weight:750;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.overlay{
+    position:fixed;
+
+    inset:0;
+
+    z-index:20;
+
+    display:none;
+
+    align-items:flex-end;
+    justify-content:center;
+
+    background:rgba(0,0,0,.48);
+}
+
+.overlay.show{
+    display:flex;
+}
+
+.modal{
+    width:min(430px,100%);
+
+    max-height:92vh;
+
+    overflow:auto;
+
+    padding:23px 18px 30px;
+
+    background:var(--card);
+
+    border-radius:28px 28px 0 0;
+}
+
+.modal-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:17px;
+}
+
+.modal-head h2{
+    margin:0;
+
+    font-size:19px;
+}
+
+.close-btn{
+    width:35px;
+    height:35px;
+
+    border:0;
+    border-radius:10px;
+
+    background:var(--bg);
+
+    color:var(--text);
+}
+
+.field{
+    margin-bottom:12px;
+}
+
+.field label{
+    display:block;
+
+    margin-bottom:6px;
+
+    font-size:11px;
+    font-weight:750;
+}
+
+.field input,
+.field select{
+    width:100%;
+
+    padding:13px;
+
+    border:1px solid var(--line);
+    border-radius:12px;
+
+    outline:none;
+
+    background:var(--bg);
+    color:var(--text);
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:var(--primary);
+}
+
+.save-btn{
+    width:100%;
+
+    padding:14px;
+
+    border:0;
+    border-radius:13px;
+
+    background:var(--primary);
+
+    color:white;
+
+    font-weight:800;
+}
+
+/* =========================
+   FAB
+========================= */
+
+.fab{
+    position:fixed;
+
+    right:
+        max(
+            22px,
+            calc((100vw - 430px)/2 + 22px)
+        );
+
+    bottom:23px;
+
+    width:59px;
+    height:59px;
+
+    border:0;
+    border-radius:20px;
+
+    background:var(--primary);
+
+    color:white;
+
+    font-size:28px;
+
+    box-shadow:
+        0 12px 28px rgba(6,182,212,.28);
+
+    z-index:10;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+
+    left:50%;
+    bottom:92px;
+
+    z-index:50;
+
+    transform:translate(-50%,20px);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    padding:11px 15px;
+
+    border-radius:12px;
+
+    background:#17232b;
+
+    color:white;
+
+    font-size:11px;
+
+    white-space:nowrap;
+
+    transition:.25s ease;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:translate(-50%,0);
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark{
+    --bg:#0e171a;
+    --card:#162124;
+    --text:#edf6f7;
+    --muted:#92a3a7;
+    --line:#29383c;
+    --soft:#123039;
+    --shadow:0 12px 35px rgba(0,0,0,.22);
+}
+
+body.dark .reset-btn{
+    background:#321f22;
+}
+
+body.dark .progress-line{
+    background:#29363a;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media(min-width:700px){
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+
+        border-radius:30px;
+
+        box-shadow:
+            0 20px 60px rgba(20,40,50,.12);
+    }
+}
+
+/* =========================
+   SMALL PHONE
+========================= */
+
+@media(max-width:350px){
+    .header{
+        padding:18px 15px 27px;
+    }
+
+    .content{
+        padding:14px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+
+    .task-icon{
+        width:35px;
+        height:35px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🧼
+            </div>
+
+            <div class="brand-name">
+                CleanMate
+            </div>
+
+        </div>
+
+        <button
+            class="theme-btn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+    <div class="hero">
+
+        <h1>
+            Fresh home.<br>
+            Clear mind.
+        </h1>
+
+        <p>
+            Keep your daily cleaning routine simple and organized.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- PROGRESS CARD -->
+
+<section class="card">
+
+    <div class="section-title">
+
+        <h2>
+            ✨ Today's Cleaning
+        </h2>
+
+        <span id="dateText">
+            Today
+        </span>
+
+    </div>
+
+
+    <div class="progress-box">
+
+        <div
+            class="progress-circle"
+            id="progressCircle"
+        >
+            <strong id="progressPercent">
+                0%
+            </strong>
+        </div>
+
+
+        <div class="progress-info">
+
+            <h3 id="progressTitle">
+                Let's get started
+            </h3>
+
+            <p id="progressMessage">
+                Complete your cleaning tasks to make your home shine.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="progress-line">
+
+        <div
+            class="progress-fill"
+            id="progressFill"
+        ></div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <strong id="totalCount">
+                0
+            </strong>
+
+            <span>
+                Tasks
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <strong id="doneCount">
+                0
+            </strong>
+
+            <span>
+                Done
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <strong id="leftCount">
+                0
+            </strong>
+
+            <span>
+                Remaining
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TASK LIST -->
+
+<section class="card">
+
+    <div class="section-title">
+
+        <h2>
+            🧹 Cleaning Tasks
+        </h2>
+
+        <span id="visibleCount">
+            0 tasks
+        </span>
+
+    </div>
+
+
+    <div class="search">
+
+        <span class="search-icon">
+            🔍
+        </span>
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Search cleaning task..."
+            oninput="renderTasks()"
+        >
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="setFilter('all',this)"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('kitchen',this)"
+        >
+            🍳 Kitchen
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('bedroom',this)"
+        >
+            🛏️ Bedroom
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('bathroom',this)"
+        >
+            🛁 Bathroom
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('living',this)"
+        >
+            🛋️ Living
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('other',this)"
+        >
+            📦 Other
+        </button>
+
+    </div>
+
+
+    <div id="taskList"></div>
+
+
+    <button
+        class="add-btn"
+        onclick="openModal()"
+    >
+        ＋ Add Cleaning Task
+    </button>
+
+</section>
+
+
+<!-- RESET -->
+
+<section class="card">
+
+    <button
+        class="reset-btn"
+        onclick="resetTasks()"
+    >
+        🔄 Reset Completed Tasks
+    </button>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- FAB -->
+
+<button
+    class="fab"
+    onclick="openModal()"
+>
+    +
+</button>
+
+
+<!-- ADD MODAL -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+    <div class="modal">
+
+        <div class="modal-head">
+
+            <h2>
+                Add Cleaning Task
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Task name
+            </label>
+
+            <input
+                id="taskName"
+                type="text"
+                placeholder="e.g. Mop the floor"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Room
+            </label>
+
+            <select id="taskRoom">
+
+                <option value="kitchen">
+                    🍳 Kitchen
+                </option>
+
+                <option value="bedroom">
+                    🛏️ Bedroom
+                </option>
+
+                <option value="bathroom">
+                    🛁 Bathroom
+                </option>
+
+                <option value="living">
+                    🛋️ Living Room
+                </option>
+
+                <option value="other">
+                    📦 Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <button
+            class="save-btn"
+            onclick="saveTask()"
+        >
+            🧼 Add Task
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+
+/* =========================
+   DATA
+========================= */
+
+let tasks =
+    JSON.parse(
+        localStorage.getItem("cleanMateTasks") || "[]"
+    );
+
+let activeFilter = "all";
+
+let toastTimer;
+
+
+/* =========================
+   DEFAULT TASKS
+========================= */
+
+if(tasks.length === 0){
+
+    tasks = [
+
+        {
+            id:Date.now()+1,
+            name:"Wash the dishes",
+            room:"kitchen",
+            done:false
+        },
+
+        {
+            id:Date.now()+2,
+            name:"Wipe kitchen counters",
+            room:"kitchen",
+            done:false
+        },
+
+        {
+            id:Date.now()+3,
+            name:"Make the bed",
+            room:"bedroom",
+            done:false
+        },
+
+        {
+            id:Date.now()+4,
+            name:"Clean the bathroom sink",
+            room:"bathroom",
+            done:false
+        },
+
+        {
+            id:Date.now()+5,
+            name:"Vacuum living room",
+            room:"living",
+            done:false
+        }
+
+    ];
+
+    saveTasks();
+
+}
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function saveTasks(){
+
+    localStorage.setItem(
+        "cleanMateTasks",
+        JSON.stringify(tasks)
+    );
+
+}
+
+
+/* =========================
+   ROOM ICON
+========================= */
+
+function roomIcon(room){
+
+    const icons = {
+
+        kitchen:"🍳",
+
+        bedroom:"🛏️",
+
+        bathroom:"🛁",
+
+        living:"🛋️",
+
+        other:"📦"
+
+    };
+
+    return icons[room] || "📦";
+
+}
+
+
+/* =========================
+   ROOM NAME
+========================= */
+
+function roomName(room){
+
+    const names = {
+
+        kitchen:"Kitchen",
+
+        bedroom:"Bedroom",
+
+        bathroom:"Bathroom",
+
+        living:"Living Room",
+
+        other:"Other"
+
+    };
+
+    return names[room] || "Other";
+
+}
+
+
+/* =========================
+   RENDER TASKS
+========================= */
+
+function renderTasks(){
+
+    const container =
+        document.getElementById("taskList");
+
+    const query =
+        document.getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        tasks.filter(task => {
+
+            const matchesSearch =
+                task.name
+                    .toLowerCase()
+                    .includes(query);
+
+            const matchesFilter =
+                activeFilter === "all" ||
+                task.room === activeFilter;
+
+            return (
+                matchesSearch &&
+                matchesFilter
+            );
+
+        });
+
+
+    document.getElementById("visibleCount")
+        .textContent =
+        filtered.length +
+        (
+            filtered.length === 1
+                ? " task"
+                : " tasks"
+        );
+
+
+    if(filtered.length === 0){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🧹
+                </div>
+
+                <h3>
+                    No cleaning tasks
+                </h3>
+
+                <p>
+                    Add a task to start cleaning.
+                </p>
+
+            </div>
+
+        `;
+
+    }else{
+
+        container.innerHTML =
+            filtered
+                .map(task => `
+
+                    <div
+                        class="task ${
+                            task.done
+                                ? "done"
+                                : ""
+                        }"
+                    >
+
+                        <button
+                            class="task-check"
+                            onclick="toggleTask(${task.id})"
+                        >
+                            ${
+                                task.done
+                                    ? "✓"
+                                    : ""
+                            }
+                        </button>
+
+
+                        <div class="task-icon">
+                            ${roomIcon(task.room)}
+                        </div>
+
+
+                        <div class="task-info">
+
+                            <div class="task-name">
+                                ${escapeHTML(task.name)}
+                            </div>
+
+                            <div class="task-meta">
+                                ${roomName(task.room)}
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="task-delete"
+                            onclick="deleteTask(${task.id})"
+                            title="Delete"
+                        >
+                            🗑️
+                        </button>
+
+                    </div>
+
+                `)
+                .join("");
+
+    }
+
+
+    updateProgress();
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function updateProgress(){
+
+    const total =
+        tasks.length;
+
+    const done =
+        tasks.filter(
+            task => task.done
+        ).length;
+
+    const remaining =
+        total - done;
+
+
+    const percent =
+        total === 0
+            ? 0
+            : Math.round(
+                done / total * 100
+            );
+
+
+    document.getElementById("totalCount")
+        .textContent =
+        total;
+
+    document.getElementById("doneCount")
+        .textContent =
+        done;
+
+    document.getElementById("leftCount")
+        .textContent =
+        remaining;
+
+    document.getElementById("progressPercent")
+        .textContent =
+        percent + "%";
+
+
+    document.getElementById("progressFill")
+        .style.width =
+        percent + "%";
+
+
+    document.getElementById("progressCircle")
+        .style.setProperty(
+            "--progress",
+            percent + "%"
+        );
+
+
+    const title =
+        document.getElementById("progressTitle");
+
+    const message =
+        document.getElementById("progressMessage");
+
+
+    if(total === 0){
+
+        title.textContent =
+            "Ready to clean";
+
+        message.textContent =
+            "Add your first cleaning task.";
+
+    }else if(percent === 100){
+
+        title.textContent =
+            "✨ Everything is clean!";
+
+        message.textContent =
+            "Great job! Your cleaning list is complete.";
+
+    }else if(percent >= 70){
+
+        title.textContent =
+            "Almost there!";
+
+        message.textContent =
+            "Just a few more tasks to finish.";
+
+    }else if(percent > 0){
+
+        title.textContent =
+            "Nice progress!";
+
+        message.textContent =
+            "Keep going and make your home shine.";
+
+    }else{
+
+        title.textContent =
+            "Let's get started";
+
+        message.textContent =
+            "Complete your cleaning tasks to make your home shine.";
+
+    }
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(filter,button){
+
+    activeFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(
+            element =>
+                element.classList.remove("active")
+        );
+
+
+    button.classList.add("active");
+
+    renderTasks();
+
+}
+
+
+/* =========================
+   TOGGLE
+========================= */
+
+function toggleTask(id){
+
+    const task =
+        tasks.find(
+            item => item.id === id
+        );
+
+    if(!task) return;
+
+
+    task.done =
+        !task.done;
+
+
+    saveTasks();
+
+    renderTasks();
+
+
+    showToast(
+        task.done
+            ? "✓ Task completed!"
+            : "Task marked as incomplete."
+    );
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteTask(id){
+
+    const task =
+        tasks.find(
+            item => item.id === id
+        );
+
+    if(!task) return;
+
+
+    if(
+        !confirm(
+            `Delete "${task.name}"?`
+        )
+    ){
+        return;
+    }
+
+
+    tasks =
+        tasks.filter(
+            item => item.id !== id
+        );
+
+
+    saveTasks();
+
+    renderTasks();
+
+    showToast(
+        "Task deleted."
+    );
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetTasks(){
+
+    const completed =
+        tasks.filter(
+            task => task.done
+        ).length;
+
+
+    if(completed === 0){
+
+        showToast(
+            "No completed tasks."
+        );
+
+        return;
+    }
+
+
+    if(
+        !confirm(
+            `Reset ${completed} completed task(s)?`
+        )
+    ){
+        return;
+    }
+
+
+    tasks.forEach(
+        task => task.done = false
+    );
+
+
+    saveTasks();
+
+    renderTasks();
+
+    showToast(
+        "Tasks reset."
+    );
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(){
+
+    document.getElementById("taskName")
+        .value = "";
+
+    document.getElementById("taskRoom")
+        .value = "kitchen";
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+
+    setTimeout(
+        () =>
+            document
+                .getElementById("taskName")
+                .focus(),
+        50
+    );
+
+}
+
+
+function closeModal(){
+
+    document.getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   SAVE TASK
+========================= */
+
+function saveTask(){
+
+    const name =
+        document.getElementById("taskName")
+            .value
+            .trim();
+
+    const room =
+        document.getElementById("taskRoom")
+            .value;
+
+
+    if(!name){
+
+        showToast(
+            "Please enter a task name."
+        );
+
+        return;
+    }
+
+
+    tasks.unshift({
+
+        id:Date.now(),
+
+        name:name,
+
+        room:room,
+
+        done:false
+
+    });
+
+
+    saveTasks();
+
+    closeModal();
+
+    renderTasks();
+
+    showToast(
+        "🧼 Cleaning task added!"
+    );
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+
+    const dark =
+        document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "cleanMateDark",
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById("themeBtn")
+        .textContent =
+        dark ? "☀️" : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            "cleanMateDark"
+        ) === "1";
+
+
+    if(dark){
+
+        document.body.classList.add("dark");
+
+        document.getElementById("themeBtn")
+            .textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function setDate(){
+
+    const date =
+        new Date();
+
+
+    const text =
+        date.toLocaleDateString(
+            undefined,
+            {
+                weekday:"short",
+                month:"short",
+                day:"numeric"
+            }
+        );
+
+
+    document.getElementById("dateText")
+        .textContent =
+        text;
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+                toast.classList.remove("show");
+            },
+            2200
+        );
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   OUTSIDE CLICK
+========================= */
+
+document
+    .getElementById("overlay")
+    .addEventListener(
+        "click",
+        event => {
+
+            if(
+                event.target.id === "overlay"
+            ){
+                closeModal();
+            }
+
+        }
+    );
+
+
+/* =========================
+   ESC KEY
+========================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Escape"){
+            closeModal();
+        }
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+setDate();
+
+renderTasks();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,434 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#a3e635">
+<title>BMIAnalytics Dashboard</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Volt Lime & Asphalt Carbon Active Look */
+:root{
+--bg:#090d16;
+--card:#111827;
+--text:#f9fafb;
+--muted:#9ca3af;
+--line:#1f2937;
+--primary:#a3e635;
+--primary2:#bef264;
+--soft:#1c2d0c;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(163,230,53,.12)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - ATHLETIC SPEEDWAY GLOW GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#4d7c0f,#0f172a 65%,#111827);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(163,230,53,.06);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+/* INPUT ENTRY FIELD INTERFACE */
+.field{
+margin-bottom:12px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field input{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-weight:700
+}
+.field input:focus{
+border-color:var(--primary)
+}
+
+/* EVALUATION DASHBOARD BANNER */
+.score-box-panel {
+text-align:center;
+padding:15px 0 5px
+}
+
+.score-digits {
+font-size:52px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--primary);
+margin-bottom:4px;
+text-shadow:0 0 15px rgba(163,230,53,0.25)
+}
+
+.status-badge {
+display:inline-block;
+padding:5px 12px;
+border-radius:8px;
+font-size:10px;
+font-weight:800;
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+.status-badge.normal { background:var(--green-soft); color:var(--green); }
+.status-badge.warn { background:#f59e0b33; color:#f59e0b; }
+.status-badge.alert { background:#ef444433; color:var(--danger); }
+
+/* HISTORICAL METRICS LEDGER ROW TILES */
+.history-row-item {
+display:flex;
+align-items:center;
+gap:12px;
+padding:11px 0;
+border-bottom:1px solid var(--line)
+}
+.history-row-item:last-child { border-bottom:0 }
+
+.item-icon-node {
+width:36px;
+height:36px;
+border-radius:10px;
+background:var(--bg);
+display:grid;
+place-items:center;
+font-size:16px;
+flex-shrink:0
+}
+
+.item-details-node {
+flex:1;
+min-width:0
+}
+
+.item-title-text {
+font-size:14px;
+font-weight:750;
+color:var(--text)
+}
+
+.item-meta-text {
+font-size:9.5px;
+color:var(--muted);
+margin-top:3px
+}
+
+.btn-delete-row {
+background:transparent;
+border:0;
+color:var(--danger);
+font-size:11px;
+font-weight:700;
+padding:4px;
+cursor:pointer
+}
+
+.btn-action-master {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:var(--bg);
+font-weight:900;
+font-size:15px;
+transition:opacity 0.2s
+}
+.btn-action-master:active { opacity:0.9 }
+
+/* BRIGHT ACTIVE LIGHT OVERRIDE SKIN */
+body.light-theme {
+--bg:#f8fafc;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#4b5563;
+--line:#e2e8f0;
+--soft:#ecfccb;
+--shadow:0 10px 25px rgba(163,230,53,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">📈</div>
+<div class="brand-name">BMIAnalytics</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Body Analysis.<br>Metric Tracking Desk.</h1>
+<p>Evaluate body mass calculations and archive systemic wellness records locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- METRICS PARAMETERS DATA CONTEXT FIELDS -->
+<section class="card">
+<div class="field">
+<label>Current Weight Quantity (kg)</label>
+<input type="number" id="inputWeightKg" placeholder="e.g., 72.5" step="0.1" min="1" oninput="executeBodyMassAnalysis()">
+</div>
+
+<div class="field">
+<label>Current Height Dimensions (cm)</label>
+<input type="number" id="inputHeightCm" placeholder="e.g., 178" step="0.1" min="1" oninput="executeBodyMassAnalysis()">
+</div>
+</section>
+
+<!-- MAIN SCORE MONITOR ANALYSIS REPORT -->
+<section class="card">
+<div class="title">
+<h2>📊 Active Mass Index Summary</h2>
+</div>
+<div class="score-box-panel">
+<div id="lblCalculatedBmiScore" class="score-digits">0.0</div>
+<span id="lblCalculatedBmiStatus" class="status-badge normal">Status: Ready</span>
+</div>
+</section>
+
+<!-- COMMIT RECORD ACTION KEY CONTAINER -->
+<section class="card" style="padding:10px;">
+<button class="btn-action-master" onclick="commitAnalysisNodeToHistoryLog()">Archive Entry to Analytics Log</button>
+</section>
+
+<!-- ARCHIVED HISTORY REGISTRY TRACKER FEED -->
+<section class="card">
+<div class="title">
+<h2>📜 Logged Analytics Streams</h2>
+</div>
+<div id="analyticsHistoryLogContainer">
+<!-- Dynamic layout nodes populated by JavaScript loops -->
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+// Fetch workspace memory persistence lists out of sandbox browser storage variables
+let trackingHistoryLogsArray = JSON.parse(localStorage.getItem("bmi_analytics_logs")) || [
+    { id: 1, score: 23.4, weight: 74.0, category: "Normal", time: "Aug 26" },
+    { id: 2, score: 25.2, weight: 79.5, category: "Overweight", time: "Aug 25" }
+];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function executeBodyMassAnalysis() {
+    const weight = parseFloat(document.getElementById("inputWeightKg").value);
+    const height = document.getElementById("inputHeightCm").value;
+    
+    const displayScore = document.getElementById("lblCalculatedBmiScore");
+    const displayStatus = document.getElementById("lblCalculatedBmiStatus");
+
+    if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+        displayScore.innerText = "0.0";
+        displayStatus.innerText = "Awaiting Input Lines";
+        displayStatus.className = "status-badge warn";
+        return 0;
+    }
+
+    // formula calculation: weight(kg) / height(m)^2
+    const heightMeters = height / 100;
+    const computedBmiIndexValue = weight / (heightMeters * heightMeters);
+    const finalizedScoreFloat = parseFloat(computedBmiIndexValue.toFixed(1));
+
+    displayScore.innerText = finalizedScoreFloat.toFixed(1);
+
+    // Enforce matching categorical status boundaries metrics layout definitions
+    if (finalizedScoreFloat < 18.5) {
+        displayStatus.innerText = "📉 Underweight Profile";
+        displayStatus.className = "status-badge warn";
+    } else if (finalizedScoreFloat >= 18.5 && finalizedScoreFloat <= 24.9) {
+        displayStatus.innerText = "🛡️ Optimal / Healthy Range";
+        displayStatus.className = "status-badge normal";
+    } else if (finalizedScoreFloat >= 25 && finalizedScoreFloat <= 29.9) {
+        displayStatus.innerText = "⚡ Overweight Threshold";
+        displayStatus.className = "status-badge warn";
+    } else {
+        displayStatus.innerText = "🚨 High Obesity Risk";
+        displayStatus.className = "status-badge alert";
+    }
+
+    return finalizedScoreFloat;
+}
+
+function commitAnalysisNodeToHistoryLog() {
+    const activeScore = executeBodyMassAnalysis();
+    const weightVal = parseFloat(document.getElementById("inputWeightKg").value);
+    
+    if (activeScore === 0 || isNaN(weightVal)) return alert("Please establish correct, complete biometric dimension values first.");
+
+    const statusTextClean = document.getElementById("lblCalculatedBmiStatus").innerText.split(' ').slice(1).join(' ');
+    const optionsDateShort = { month: 'short', day: 'numeric' };
+    const dateFormattedString = new Date().toLocaleDateString('en-US', optionsDateShort);
+
+    trackingHistoryLogsArray.unshift({
+        id: Date.now(),
+        score: activeScore,
+        weight: weightVal,
+        category: statusTextClean,
+        time: dateFormattedString
+    });
+
+    saveAndRedrawAnalyticsLedgerView();
+    
+    // Clear inputs back to normal standard operational defaults
+    document.getElementById("inputWeightKg").value = "";
+    document.getElementById("inputHeightCm").value = "";
+    document.getElementById("lblCalculatedBmiScore").innerText = "0.0";
+    document.getElementById("lblCalculatedBmiStatus").innerText = "Status: Ready";
+    document.getElementById("lblCalculatedBmiStatus").className = "status-badge normal";
+}
+
+function wipeAnalyticsLogEntry(id) {
+trackingHistoryLogsArray = trackingHistoryLogsArray.filter(l => l.id !== id);saveAndRedrawAnalyticsLedgerView();}function saveAndRedrawAnalyticsLedgerView() {localStorage.setItem("bmi_analytics_logs", JSON.stringify(trackingHistoryLogsArray));render();}function render() {const container = document.getElementById("analyticsHistoryLogContainer");if (trackingHistoryLogsArray.length === 0) {container.innerHTML = <div style="text-align:center; padding:15px; color:var(--muted); font-size:12px;">No archived evaluations. Log metrics entries above!</div>;return;}// Clamp slices indices parameters boundary allocations safely to retain look heights layout heightsconst topSlices = trackingHistoryLogsArray.slice(0, 3);container.innerHTML = topSlices.map(log => <div class="history-row-item"> <div class="item-icon-node">⚖️</div> <div class="item-details-node"> <div class="item-title-text">BMI Score Index: ${log.score.toFixed(1)}</div> <div class="item-meta-text">${log.time} • Weight: ${log.weight} kg • ${log.category}</div> </div> <button class="btn-delete-row" onclick="wipeAnalyticsLogEntry(${log.id})">Wipe</button> </div>).join("");}// Initial structural rendering loop initialization pass configurationsrender();</script></body></html>

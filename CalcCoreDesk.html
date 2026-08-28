@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#f97316">
+<title>CalcCore Desk</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Slate Chrome & Safety Orange Industrial Look */
+:root{
+--bg:#1e293b;
+--card:#334155;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#475569;
+--primary:#f97316;
+--primary2:#fb923c;
+--soft:#431407;
+--green:#10b981;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(30,41,59,.5)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - INDUSTRIAL CONTRAST GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#334155,#1e293b 65%,#f97316);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:2px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(249,115,22,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.12);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.06);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+/* SCREEN PANEL */
+.screen-panel {
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+justify-content:center;
+padding:16px 14px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:16px;
+margin-bottom:14px;
+min-height:90px
+}
+
+.screen-history {
+font-size:13px;
+color:var(--muted);
+font-family:"Courier New",Courier,monospace;
+letter-spacing:0.5px;
+min-height:18px;
+word-break:break-all
+}
+
+.screen-digits {
+font-size:34px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--text);
+margin-top:4px;
+word-break:break-all
+}
+
+/* MATH KEYPAD TACTILE GRID */
+.keypad-grid {
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px
+}
+
+.btn-math-key {
+height:56px;
+border:0;
+border-radius:14px;
+background:var(--bg);
+color:var(--text);
+font-size:18px;
+font-weight:750;
+display:grid;
+place-items:center;
+transition:background 0.15s, border-color 0.15s
+}
+.btn-math-key:active {
+background:var(--line)
+}
+
+.btn-math-key.op-key {
+color:var(--primary2)
+}
+
+.btn-math-key.clear-key {
+color:var(--danger)
+}
+
+.btn-math-key.equal-key {
+background:var(--primary);
+color:var(--bg);
+font-weight:900;
+font-size:22px
+}
+.btn-math-key.equal-key:active {
+background:var(--primary2)
+}
+
+/* INDUSTRIAL LIGHT CERAMIC OVERRIDE */
+body.light-theme {
+--bg:#f8fafc;
+--card:#ffffff;
+--text:#1e293b;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#ffedd5;
+--shadow:0 10px 30px rgba(249,115,22,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🧮</div>
+<div class="brand-name">CalcCore</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Desk Compute.<br> tactile Engine.</h1>
+<p>Execute arithmetic statements locally using standard mathematical operator priorities.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- CALCULATOR TERMINAL MONITOR SCREEN -->
+<section class="card">
+<div class="screen-panel">
+<div id="screenHistoryNode" class="screen-history"></div>
+<div id="screenDigitsNode" class="screen-digits">0</div>
+</div>
+
+<!-- KEYBOARD MATRIX INTERFACE -->
+<div class="keypad-grid">
+<button class="btn-math-key clear-key" onclick="handleClearKeyAction()">C</button>
+<button class="btn-math-key op-key" onclick="appendTokenToStatement('/')">÷</button>
+<button class="btn-math-key op-key" onclick="appendTokenToStatement('*')">×</button>
+<button class="btn-math-key op-key" onclick="appendTokenToStatement('-')">−</button>
+
+<button class="btn-math-key" onclick="appendTokenToStatement('7')">7</button>
+<button class="btn-math-key" onclick="appendTokenToStatement('8')">8</button>
+<button class="btn-math-key" onclick="appendTokenToStatement('9')">9</button>
+<button class="btn-math-key op-key" onclick="appendTokenToStatement('+')">+</button>
+
+<button class="btn-math-key" onclick="appendTokenToStatement('4')">4</button>
+<button class="btn-math-key" onclick="appendTokenToStatement('5')">5</button>
+<button class="btn-math-key" onclick="appendTokenToStatement('6')">6</button>
+<button class="btn-math-key equal-key" style="grid-row: span 2; height: 122px;" onclick="executeStatementEvaluation()">=</button>
+
+<button class="btn-math-key" onclick="appendTokenToStatement('1')">1</button>
+<button class="btn-math-key" onclick="appendTokenToStatement('2')">2</button>
+<button class="btn-math-key" onclick="appendTokenToStatement('3')">3</button>
+
+<button class="btn-math-key" style="grid-column: span 2;" onclick="appendTokenToStatement('0')">0</button>
+<button class="btn-math-key" onclick="appendTokenToStatement('.')">.</button>
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+let activeStatementString = "";
+let clearScreenOnNextInputState = false;
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function handleClearKeyAction() {
+    activeStatementString = "";
+    document.getElementById("screenHistoryNode").innerText = "";
+    document.getElementById("screenDigitsNode").innerText = "0";
+    clearScreenOnNextInputState = false;
+}
+
+function appendTokenToStatement(tokenValue) {
+    const digitsDisplay = document.getElementById("screenDigitsNode");
+    
+    if (clearScreenOnNextInputState) {
+        if (!isNaN(tokenValue) || tokenValue === '.') {
+            activeStatementString = "";
+        }
+        clearScreenOnNextInputState = false;
+    }
+
+    // Intercept repetitive operators collisions
+    const lastChar = activeStatementString.slice(-1);
+    const operators = ['+', '-', '*', '/'];
+    if (operators.includes(lastChar) && operators.includes(tokenValue)) {
+        activeStatementString = activeStatementString.slice(0, -1);
+    }
+
+    activeStatementString += tokenValue;
+    
+    // Map human-readable display adjustments securely
+    let presentationStr = activeStatementString.replace(/\*/g, '×').replace(/\//g, '÷');
+    digitsDisplay.innerText = presentationStr;
+}
+
+function executeStatementEvaluation() {
+    if (!activeStatementString) return;
+    
+    const historyDisplay = document.getElementById("screenHistoryNode");
+    const digitsDisplay = document.getElementById("screenDigitsNode");
+
+    try {
+        // Enforce parsing arithmetic evaluation tokens maps using standard runtime compilation safely
+        const evaluationOutcomeResult = Function(`"use strict"; return (${activeStatementString})`)();
+        
+        let displayHistoryText = activeStatementString.replace(/\*/g, '×').replace(/\//g, '÷');
+        historyDisplay.innerText = displayHistoryText + " =";
+        
+        if (evaluationOutcomeResult === undefined || isNaN(evaluationOutcomeResult)) {
+            digitsDisplay.innerText = "Error";
+            activeStatementString = "";
+        } else {
+            // Check for massive decimal loops float boundaries leaks
+            let formattedResult = Number.isInteger(evaluationOutcomeResult) ? 
+                evaluationOutcomeResult.toString() : 
+                parseFloat(evaluationOutcomeResult.toFixed(4)).toString();
+                
+            digitsDisplay.innerText = formattedResult;
+            activeStatementString = formattedResult;
+        }
+    } catch (evalError) {
+        digitsDisplay.innerText = "Error";
+        activeStatementString = "";
+    }
+    
+    clearScreenOnNextInputState = true;
+}
+</script>
+
+</body>
+</html>

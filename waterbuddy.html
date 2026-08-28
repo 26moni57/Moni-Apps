@@ -1,0 +1,946 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WaterBuddy</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef8fc;
+    color: #17303b;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 50px;
+}
+
+/* HEADER */
+
+.header {
+    padding: 28px 20px 32px;
+    color: white;
+    background: linear-gradient(
+        135deg,
+        #159bd1,
+        #51c9ef
+    );
+    border-radius: 0 0 32px 32px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.date {
+    padding: 8px 11px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.18);
+    font-size: 10px;
+}
+
+.header h1 {
+    margin: 28px 0 5px;
+    font-size: 30px;
+}
+
+.header p {
+    margin: 0;
+    opacity: .85;
+}
+
+/* MAIN */
+
+.content {
+    padding: 20px;
+}
+
+/* WATER CARD */
+
+.water-card {
+    background: white;
+    border-radius: 27px;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow:
+        0 8px 25px rgba(40,130,165,.10);
+}
+
+.glass {
+    width: 220px;
+    height: 220px;
+    margin: auto;
+    border-radius: 50%;
+    position: relative;
+
+    background:
+        conic-gradient(
+            #22aee2 var(--progress),
+            #e5f4fa var(--progress)
+        );
+
+    display: grid;
+    place-items: center;
+}
+
+.glass::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    background: white;
+    border-radius: 50%;
+}
+
+.water-center {
+    position: relative;
+    z-index: 2;
+}
+
+.water-icon {
+    font-size: 34px;
+}
+
+.amount {
+    font-size: 35px;
+    font-weight: 800;
+    margin-top: 5px;
+}
+
+.goal-text {
+    color: #82929a;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.percent {
+    color: #159bd1;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* BUTTONS */
+
+.quick-title {
+    font-size: 17px;
+    margin: 24px 0 12px;
+}
+
+.quick-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+}
+
+.quick {
+    border: 0;
+    background: white;
+    border-radius: 17px;
+    padding: 14px 5px;
+    color: #2586a6;
+    cursor: pointer;
+    box-shadow:
+        0 4px 14px rgba(40,130,165,.05);
+}
+
+.quick strong {
+    display: block;
+    font-size: 15px;
+}
+
+.quick small {
+    display: block;
+    margin-top: 4px;
+    color: #8b9ba3;
+    font-size: 9px;
+}
+
+/* CUSTOM */
+
+.custom {
+    background: white;
+    padding: 16px;
+    border-radius: 19px;
+    box-shadow:
+        0 4px 14px rgba(40,130,165,.05);
+}
+
+.custom-row {
+    display: flex;
+    gap: 8px;
+}
+
+.custom input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid #d9e8ee;
+    border-radius: 12px;
+    outline: none;
+}
+
+.custom button {
+    width: 90px;
+    border: 0;
+    border-radius: 12px;
+    background: #159bd1;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* GOAL */
+
+.goal-card {
+    margin-top: 18px;
+    background: white;
+    padding: 17px;
+    border-radius: 19px;
+    box-shadow:
+        0 4px 14px rgba(40,130,165,.05);
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.goal-header strong {
+    font-size: 14px;
+}
+
+.goal-header span {
+    color: #159bd1;
+    font-size: 12px;
+}
+
+.goal-input {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.goal-input input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #d9e8ee;
+    border-radius: 12px;
+    outline: none;
+}
+
+.goal-input button {
+    border: 0;
+    padding: 12px 15px;
+    border-radius: 12px;
+    background: #e6f6fb;
+    color: #1686b3;
+    cursor: pointer;
+}
+
+/* HISTORY */
+
+.history-title {
+    font-size: 17px;
+    margin: 24px 0 12px;
+}
+
+.history {
+    background: white;
+    border-radius: 19px;
+    overflow: hidden;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border-bottom: 1px solid #edf3f5;
+}
+
+.history-item:last-child {
+    border-bottom: 0;
+}
+
+.history-icon {
+    width: 39px;
+    height: 39px;
+    border-radius: 13px;
+    background: #e8f8fd;
+    display: grid;
+    place-items: center;
+}
+
+.history-info {
+    flex: 1;
+}
+
+.history-time {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.history-label {
+    color: #8a989e;
+    font-size: 10px;
+    margin-top: 4px;
+}
+
+.history-amount {
+    color: #159bd1;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* EMPTY */
+
+.empty {
+    padding: 28px;
+    text-align: center;
+    color: #8b989e;
+}
+
+.empty-icon {
+    font-size: 38px;
+}
+
+/* RESET */
+
+.reset {
+    width: 100%;
+    margin-top: 15px;
+    padding: 13px;
+    border: 0;
+    border-radius: 13px;
+    background: #fff0f0;
+    color: #d45e5e;
+    cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="top">
+
+            <div class="logo">
+                💧 WaterBuddy
+            </div>
+
+            <div
+                class="date"
+                id="date"
+            >
+                Today
+            </div>
+
+        </div>
+
+        <h1>
+            Stay hydrated.
+        </h1>
+
+        <p>
+            Small sips. Better days.
+        </p>
+
+    </header>
+
+
+    <main class="content">
+
+        <!-- WATER PROGRESS -->
+
+        <section class="water-card">
+
+            <div
+                class="glass"
+                id="glass"
+                style="--progress: 0deg"
+            >
+
+                <div class="water-center">
+
+                    <div class="water-icon">
+                        💧
+                    </div>
+
+                    <div
+                        class="amount"
+                        id="amount"
+                    >
+                        0 ml
+                    </div>
+
+                    <div
+                        class="goal-text"
+                        id="goalText"
+                    >
+                        Goal: 2000 ml
+                    </div>
+
+                    <div
+                        class="percent"
+                        id="percent"
+                    >
+                        0%
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ADD -->
+
+        <h2 class="quick-title">
+            Quick add
+        </h2>
+
+        <div class="quick-buttons">
+
+            <button
+                class="quick"
+                onclick="addWater(150)"
+            >
+                <strong>+150</strong>
+                <small>Small glass</small>
+            </button>
+
+            <button
+                class="quick"
+                onclick="addWater(250)"
+            >
+                <strong>+250</strong>
+                <small>Glass</small>
+            </button>
+
+            <button
+                class="quick"
+                onclick="addWater(350)"
+            >
+                <strong>+350</strong>
+                <small>Large glass</small>
+            </button>
+
+            <button
+                class="quick"
+                onclick="addWater(500)"
+            >
+                <strong>+500</strong>
+                <small>Bottle</small>
+            </button>
+
+            <button
+                class="quick"
+                onclick="addWater(750)"
+            >
+                <strong>+750</strong>
+                <small>Big bottle</small>
+            </button>
+
+            <button
+                class="quick"
+                onclick="addWater(1000)"
+            >
+                <strong>+1000</strong>
+                <small>1 litre</small>
+            </button>
+
+        </div>
+
+
+        <!-- CUSTOM -->
+
+        <h2 class="quick-title">
+            Custom amount
+        </h2>
+
+        <section class="custom">
+
+            <div class="custom-row">
+
+                <input
+                    id="customAmount"
+                    type="number"
+                    min="1"
+                    placeholder="Amount in ml"
+                >
+
+                <button
+                    onclick="addCustom()"
+                >
+                    Add
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- GOAL -->
+
+        <section class="goal-card">
+
+            <div class="goal-header">
+
+                <strong>
+                    🎯 Daily goal
+                </strong>
+
+                <span id="goalDisplay">
+                    2000 ml
+                </span>
+
+            </div>
+
+            <div class="goal-input">
+
+                <input
+                    id="goalInput"
+                    type="number"
+                    min="100"
+                    placeholder="New goal in ml"
+                >
+
+                <button
+                    onclick="changeGoal()"
+                >
+                    Set Goal
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- HISTORY -->
+
+        <h2 class="history-title">
+            Today's drinks
+        </h2>
+
+        <section
+            class="history"
+            id="history"
+        ></section>
+
+
+        <button
+            class="reset"
+            onclick="resetDay()"
+        >
+            ↻ Reset today's water
+        </button>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/*
+    WaterBuddy
+    Simple hydration tracker
+*/
+
+
+const today =
+    new Date()
+        .toISOString()
+        .split("T")[0];
+
+
+/* DATA */
+
+let data =
+    JSON.parse(
+        localStorage.getItem(
+            "waterBuddyData"
+        )
+    ) || {
+
+        date: today,
+
+        goal: 2000,
+
+        amount: 0,
+
+        history: []
+
+    };
+
+
+/*
+    New day automatically
+*/
+
+if (data.date !== today) {
+
+    data = {
+
+        date: today,
+
+        goal: data.goal || 2000,
+
+        amount: 0,
+
+        history: []
+
+    };
+
+    saveData();
+
+}
+
+
+/* SAVE */
+
+function saveData() {
+
+    localStorage.setItem(
+        "waterBuddyData",
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* ADD WATER */
+
+function addWater(amount) {
+
+    amount =
+        Number(amount);
+
+
+    if (
+        !amount ||
+        amount <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    data.amount += amount;
+
+
+    data.history.unshift({
+
+        amount: amount,
+
+        time:
+            new Date()
+                .toLocaleTimeString(
+                    [],
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                )
+
+    });
+
+
+    saveData();
+
+    render();
+
+}
+
+
+/* CUSTOM */
+
+function addCustom() {
+
+    const input =
+        document.getElementById(
+            "customAmount"
+        );
+
+
+    const amount =
+        Number(input.value);
+
+
+    if (
+        !amount ||
+        amount <= 0
+    ) {
+
+        alert(
+            "Enter a valid amount."
+        );
+
+        return;
+
+    }
+
+
+    addWater(amount);
+
+    input.value = "";
+
+}
+
+
+/* CHANGE GOAL */
+
+function changeGoal() {
+
+    const input =
+        document.getElementById(
+            "goalInput"
+        );
+
+
+    const goal =
+        Number(input.value);
+
+
+    if (
+        !goal ||
+        goal < 100
+    ) {
+
+        alert(
+            "Goal must be at least 100 ml."
+        );
+
+        return;
+
+    }
+
+
+    data.goal =
+        goal;
+
+
+    saveData();
+
+    input.value = "";
+
+    render();
+
+}
+
+
+/* RENDER */
+
+function render() {
+
+    const goal =
+        data.goal || 2000;
+
+
+    const amount =
+        data.amount || 0;
+
+
+    const percentage =
+        Math.min(
+            100,
+            Math.round(
+                amount /
+                goal *
+                100
+            )
+        );
+
+
+    const progress =
+        percentage * 3.6;
+
+
+    document
+        .getElementById("amount")
+        .innerText =
+        amount.toLocaleString() +
+        " ml";
+
+
+    document
+        .getElementById("goalText")
+        .innerText =
+        "Goal: " +
+        goal.toLocaleString() +
+        " ml";
+
+
+    document
+        .getElementById("goalDisplay")
+        .innerText =
+        goal.toLocaleString() +
+        " ml";
+
+
+    document
+        .getElementById("percent")
+        .innerText =
+        percentage +
+        "%";
+
+
+    document
+        .getElementById("glass")
+        .style
+        .setProperty(
+            "--progress",
+            progress + "deg"
+        );
+
+
+    renderHistory();
+
+}
+
+
+/* HISTORY */
+
+function renderHistory() {
+
+    const container =
+        document.getElementById(
+            "history"
+        );
+
+
+    if (
+        !data.history ||
+        data.history.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🥤
+                </div>
+
+                No drinks logged yet.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        data.history
+            .slice(0, 12)
+            .map(item => `
+
+                <div class="history-item">
+
+                    <div class="history-icon">
+                        💧
+                    </div>
+
+                    <div class="history-info">
+
+                        <div class="history-time">
+                            ${item.time}
+                        </div>
+
+                        <div class="history-label">
+                            Water added
+                        </div>
+
+                    </div>
+
+                    <div class="history-amount">
+                        +${item.amount} ml
+                    </div>
+
+                </div>
+
+            `)
+            .join("");
+
+}
+
+
+/* RESET */
+
+function resetDay() {
+
+    if (
+        !confirm(
+            "Reset all water logged today?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    data.amount = 0;
+
+    data.history = [];
+
+
+    saveData();
+
+    render();
+
+}
+
+
+/* DATE */
+
+document
+    .getElementById("date")
+    .innerText =
+    new Date()
+        .toLocaleDateString(
+            undefined,
+            {
+                month: "short",
+                day: "numeric"
+            }
+        );
+
+
+/* START */
+
+render();
+
+</script>
+
+</body>
+</html>

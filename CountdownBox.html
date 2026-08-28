@@ -1,0 +1,375 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>CountdownBox Premium</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Cyberpunk Neon Violet Look */
+:root{
+--bg:#0b061a;
+--card:#160d33;
+--text:#f3e8ff;
+--muted:#a78bfa;
+--line:#2e1f5e;
+--primary:#7c3aed;
+--primary2:#a78bfa;
+--soft:#2e1572;
+--green:#06b6d4;
+--green-soft:#083344;
+--danger:#f43f5e;
+--shadow:0 10px 30px rgba(11,6,26,.6)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - SIGNATURE RADACTIVE VIOLET GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#4c1d95,#7c3aed 55%,#db2777);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.09)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.16);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.16);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* HIGH COMPACT CLOCK BOX */
+.clock-grid-display {
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin:10px 0 5px;
+text-align:center
+}
+
+.clock-node {
+padding:12px 4px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:14px
+}
+
+.clock-digits {
+font-size:26px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--text);
+letter-spacing:0.5px
+}
+
+.clock-label {
+display:block;
+margin-top:4px;
+font-size:8.5px;
+color:var(--muted);
+text-transform:uppercase;
+font-weight:750
+}
+
+/* FIELDS CONFIGURATION INPUT PANELS */
+.field{
+margin-bottom:12px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.3px
+}
+
+.field input{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-weight:700
+}
+.field input:focus {
+border-color:var(--primary2)
+}
+
+.btn-trigger-action {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:white;
+font-weight:800;
+transition:opacity 0.2s
+}
+.btn-trigger-action:active { opacity:0.9 }
+
+/* AMBIENT LIGHT OVERRIDE SKIN INVERSION */
+body.light-theme {
+--bg:#faf5ff;
+--card:#ffffff;
+--text:#2e1f5e;
+--muted:#7c3aed;
+--line:#e9d5ff;
+--soft:#f3e8ff;
+--shadow:0 10px 30px rgba(124,58,237,0.05)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">⏳</div>
+<div class="brand-name">CountdownBox</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Track Deadlines.<br>Count Every Second.</h1>
+<p>Pin custom milestone event dates and view precise real-time ticker calculations.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- PRECISION TICKER CHRONO DISPLAY CARD -->
+<section class="card">
+<div class="title">
+<h2 id="lblTargetTitle">🎯 Target Milestone: Year End</h2>
+</div>
+<div class="clock-grid-display">
+<div class="clock-node">
+<div id="tickerDays" class="clock-digits">00</div>
+<span class="clock-label">Days</span>
+</div>
+<div class="clock-node">
+<div id="tickerHours" class="clock-digits">00</div>
+<span class="clock-label">Hours</span>
+</div>
+<div class="clock-node">
+<div id="tickerMins" class="clock-digits">00</div>
+<span class="clock-label">Mins</span>
+</div>
+<div class="clock-node">
+<div id="tickerSecs" class="clock-digits">00</div>
+<span class="clock-label">Secs</span>
+</div>
+</div>
+</section>
+
+<!-- CONFIGURE CHRONO PARAMETERS CARD -->
+<section class="card">
+<div class="title">
+<h2>⚙️ Adjust Target Deadline</h2>
+</div>
+<div class="field">
+<label>MILESTONE EVENT LABEL</label>
+<input type="text" id="targetTitleInput" placeholder="e.g., App Deployment Launch">
+</div>
+<div class="field">
+<label>TARGET CALENDAR DEADLINE DATE</label>
+<input type="date" id="targetDateInput">
+</div>
+<button class="btn-trigger-action" onclick="commitNewDeadlineTarget()">Lock New Deadline</button>
+</section>
+
+</main>
+
+</div>
+
+<script>
+let executionIntervalId = null;
+
+// Initialize automatic system default year-end fallback deadline context target configuration values
+let targetTimestampMemory = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59).getTime();
+let targetTitleMemory = "Year End Celebration";
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function commitNewDeadlineTarget() {
+    const titleVal = document.getElementById("targetTitleInput").value.trim();
+    const dateVal = document.getElementById("targetDateInput").value;
+
+    if (!dateVal) return alert("Please clarify a target calendar date boundary.");
+
+    // Parse target date and clamp execution loop bounds securely
+    const parsedTarget = new Date(dateVal + "T00:00:00").getTime();
+    if (parsedTarget <= Date.now()) return alert("Deadline milestone must extend into the future.");
+
+    targetTimestampMemory = parsedTarget;
+    targetTitleMemory = titleVal || "Custom Milestone Task";
+    
+    document.getElementById("targetTitleInput").value = "";
+    runCountdownEngineLoop();
+}
+
+function runCountdownEngineLoop() {
+    if (executionIntervalId) clearInterval(executionIntervalId);
+    
+    document.getElementById("lblTargetTitle").innerText = `🎯 Target Milestone: ${targetTitleMemory}`;
+
+    function computeChronoDeltaSlice() {
+        const currentMoment = Date.now();
+        const differenceDelta = targetTimestampMemory - currentMoment;
+
+        if (differenceDelta <= 0) {
+            clearInterval(executionIntervalId);
+            document.getElementById("tickerDays").innerText = "00";
+            document.getElementById("tickerHours").innerText = "00";
+            document.getElementById("tickerMins").innerText = "00";
+            document.getElementById("tickerSecs").innerText = "00";
+            return;
+        }
+
+        // Apply raw mathematical remainder division conversions metrics structures safely
+        const days = Math.floor(differenceDelta / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((differenceDelta % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((differenceDelta % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((differenceDelta % (1000 * 60)) / 1000);
+
+        // Map computed fields directly to template layout elements components
+        document.getElementById("tickerDays").innerText = String(days).padStart(2, '0');
+        document.getElementById("tickerHours").innerText = String(hours).padStart(2, '0');
+        document.getElementById("tickerMins").innerText = String(minutes).padStart(2, '0');
+        document.getElementById("tickerSecs").innerText = String(seconds).padStart(2, '0');
+    }
+
+    // Fire initial rendering execution pass immediately before interval latch triggers
+    computeChronoDeltaSlice();
+    executionIntervalId = setInterval(computeChronoDeltaSlice, 1000);
+}
+
+// Bootstrap rendering runtime on application launch
+runCountdownEngineLoop();
+</script>
+
+</body>
+</html>

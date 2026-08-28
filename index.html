@@ -1,0 +1,481 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Moni - Your smart digital tools hub." />
+  <title>Moni — Smart Digital Tools</title>
+
+  <style>
+    :root {
+      --bg: #f4f7f1;
+      --card: #ffffff;
+      --dark: #17220d;
+      --muted: #6c7867;
+      --green: #79a92d;
+      --lime: #b8f34a;
+      --border: #e1e8dc;
+      --shadow: 0 14px 35px rgba(35, 55, 24, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      color: var(--dark);
+      background: var(--bg);
+    }
+
+    header {
+      color: white;
+      padding: 24px 6% 100px;
+      background:
+        linear-gradient(135deg, rgba(23, 34, 13, 0.96), rgba(76, 111, 33, 0.9)),
+        url("https://scontent.fdac22-2.fna.fbcdn.net/v/t39.30808-6/778565329_122177041034627403_6801500238595957558_n.jpg?stp=dst-jpg_tt6&cstp=mx1119x735&ctp=s1119x735&_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=NATIT98xdZEQ7kNvwEPz5ou&_nc_oc=Adr8u7Cpe9549zOIiuVKhplw2LWxxbBKjBc4GbWHfhaZPzdFfZbpcc67yYa0osc1rhM&_nc_zt=23&_nc_ht=scontent.fdac22-2.fna&_nc_gid=50Nx5d6r7tHPoliL4DoI_g&_nc_ss=7b2a8&oh=00_AQFu6WQBY9sOSHoyJQbcM4VfcxSjGeXG1RcEMK-vYsbMDg&oe=6A964F23")
+        center/cover;
+    }
+
+    nav {
+      max-width: 1250px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .logo-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--lime);
+      color: var(--dark);
+      font-size: 1.25rem;
+      font-weight: 900;
+      box-shadow: 0 7px 20px rgba(184, 243, 74, 0.3);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 25px;
+      opacity: 0.85;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      opacity: 1;
+      color: var(--lime);
+    }
+
+    .hero {
+      max-width: 850px;
+      margin: 85px auto 0;
+      text-align: center;
+    }
+
+    .hero-label {
+      display: inline-block;
+      color: var(--lime);
+      font-weight: 800;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.78rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.7rem, 7vw, 5.5rem);
+      line-height: 1.02;
+      letter-spacing: -3px;
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: auto;
+      color: #e5ecd9;
+      font-size: 1.12rem;
+      line-height: 1.7;
+    }
+
+    .search-area {
+      max-width: 650px;
+      margin: 35px auto 0;
+    }
+
+    .search-box {
+      display: flex;
+      padding: 6px;
+      background: white;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .search-box input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      padding: 15px;
+      border-radius: 10px;
+      color: var(--dark);
+      font-size: 1rem;
+    }
+
+    .search-box button {
+      border: 0;
+      padding: 0 25px;
+      border-radius: 10px;
+      background: var(--lime);
+      color: var(--dark);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .search-box button:hover {
+      background: #a5e531;
+    }
+
+    main {
+      max-width: 1250px;
+      margin: -50px auto 0;
+      padding: 0 24px 70px;
+      position: relative;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 21px 24px;
+      margin-bottom: 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      box-shadow: var(--shadow);
+    }
+
+    .toolbar h2 {
+      font-size: 1.25rem;
+    }
+
+    .filter {
+      padding: 11px 15px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: white;
+      color: var(--dark);
+      cursor: pointer;
+    }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+      gap: 20px;
+    }
+
+    .app-card {
+      padding: 23px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      transition: 0.25s ease;
+    }
+
+    .app-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+      border-color: #c5d9af;
+    }
+
+    .app-icon {
+      width: 55px;
+      height: 55px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      border-radius: 16px;
+      background: #eef7dd;
+      font-size: 1.65rem;
+    }
+
+    .app-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.08rem;
+    }
+
+    .app-card p {
+      min-height: 48px;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .app-card a {
+      color: var(--green);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .app-card a:hover {
+      text-decoration: underline;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 55px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 30px 20px;
+      background: white;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding-bottom: 90px;
+      }
+
+      nav a {
+        display: none;
+      }
+
+      .hero {
+        margin-top: 65px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+
+      .toolbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .filter {
+        width: 100%;
+      }
+
+      .search-box button {
+        padding: 0 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">
+        <span class="logo-mark">M</span>
+        Moni
+      </div>
+
+      <div>
+        <a href="#apps">Apps</a>
+        <a href="#about">About</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <span class="hero-label">One simple hub</span>
+
+      <h1>Everything you need<br />to manage your moni.</h1>
+
+      <p>
+        Discover beautiful, useful, and powerful tools for productivity,
+        creativity, business, entertainment, and everyday life.
+      </p>
+
+      <div class="search-area">
+        <form class="search-box" id="searchForm">
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search an app..."
+            aria-label="Search apps"
+          />
+          <button type="submit">Search</button>
+        </form>
+      </div>
+    </section>
+  </header>
+
+  <main id="apps">
+    <div class="toolbar">
+      <h2><span id="appCount">100</span> Moni Apps</h2>
+
+      <select class="filter" id="categoryFilter">
+        <option value="all">All categories</option>
+        <option value="productivity">Productivity</option>
+        <option value="creative">Creative</option>
+        <option value="business">Business</option>
+        <option value="utility">Utility</option>
+        <option value="entertainment">Entertainment</option>
+      </select>
+    </div>
+
+    <section class="apps-grid" id="appsGrid"></section>
+
+    <div class="empty-state" id="emptyState">
+      No apps found. Try another search.
+    </div>
+  </main>
+
+  <footer id="about">
+    <p>© 2026 Moni — Make every decision count.</p>
+  </footer>
+
+  <script>
+    const appNames = [
+      "Acoustic Metronome Pocket","billsplit","Bistro ReceiptPocket","BizzCard Identity Desk",
+      "BMIAnalytics Dashboard","BMICalc Pocket","BookmarkPocket","bookpocket",
+      "brainbox","BreathePocket Pacer","CalcCore Desk","CardPocket Vault",
+      "cardpocket","cleanmate","ClickSpeed Arcade","CoinToss Probability Pad",
+      "ColourPad Studio","CountdownBox","DailyDose","DailyQuote Board",
+      "DayPlan Planner","dayplan","declutterPocket","DicePocket Roller",
+      "FilePocket","FitCounter Rep Tracker","FitTimer Circuit Engine","FocusBox",
+      "focuspocket","FormPocket Log","formpocket","GoalPocket",
+      "gymcompanion","HabitPocket Tracker","habitpocket","ideavault",
+      "journalpocket","laundryflow","ListPocket","MathBlitz Arcade",
+      "medicinepocket","MemeGen Studio","MetroPocket Stopwatch","mindpocket",
+      "MinesPocket Safe Matrix","moneypocket","moodpixel","NoteCheck Studio",
+      "notepocket","packagetrack","packeasy","pantrykeeper",
+      "PantryPal","PassGen Premium","PassGen Stealth Vault","PassVault Secure",
+      "photopocket","pinpocket","PixelArt Studio","planpocket",
+      "PocketFlow","pockettrack","QuickList Artisan Taskpad","quicklist",
+      "QuickNote","quicktimer","ReceiptPocket Tracker","receiptpocket",
+      "RecipePocket Ledger","RemindMe Premium","remindme","RollerCode Crypto Desk",
+      "SafePass","ScoreCounter Tally","SecretNote Vault","secretnote",
+      "SleepPocket Tracker","sleeppocket","snaplist","Soundboard Synthwave Pad",
+      "SoundGen Audio Lab","SoundPocket Studio","SoundPocket","splitpocket",
+      "studysnap","SudokuPad Logic Studio","taskpocket","tinytasks",
+      "TipCalc Pocket","Tomato Pomodoro Core","toolpocket","trippocket",
+      "TypingRun Speed Trainer","UnitFlip Studio","vaultpocket","waterbuddy",
+      "WaterPocket","wheredidiputit","WordCounter Pocket","WordSramble Arcade"
+    ];
+
+    const icons = ["⏱️","🧾","🍽️","🆔","📊","🧮","🔖","📁","🧠","🫁","🧮","🔐","📁","🧹","🕹️","🎲",
+      "🎨","⏱️","📅","💬","📅","📅","🧹","🎲","📁","🏋️","⏱️","🎯","🎯","📝","📝","🎯",
+      "🏋️","🎯","🎯","💡","📝","🧺","📋","🧮","💊","🤡","🗺️","🧠","🕹️","💰","🎭","📝",
+      "📝","📦","📦","🍳","🍳","🔐","🔐","🔐","📷","📌","🎨","📅","📈","📈","📋","📋",
+      "📝","⏱️","🧾","🧾","🧾","🔔","🔔","🕹️","🔐","🔢","🔐","🔐","🛌","🛌","📷","🎹",
+      "🎵","🎵","🎵","💳","📷","🔢","📋","📋","🧮","⏱️","🧰","🧳","🏃","🔄","🔐","🚰",
+      "🚰","🔍","🔢","🕹️"];
+
+    const categories = [
+      "productivity","productivity","productivity","productivity","productivity",
+      "productivity","utility","utility","business","business",
+      "business","business","business","productivity","productivity",
+      "utility","utility","utility","utility","utility",
+      "utility","utility","utility","creative","utility",
+      "creative","utility","utility","creative","utility",
+      "creative","utility","creative","creative","creative",
+      "creative","creative","creative","creative","creative",
+      "creative","creative","creative","creative","creative",
+      "creative","creative","creative","creative","productivity",
+      "productivity","productivity","utility","utility",
+      "utility","utility","utility","entertainment","entertainment",
+      "entertainment","entertainment","entertainment","entertainment","entertainment",
+      "productivity","utility","utility","productivity","productivity",
+      "business","business","business","business","productivity",
+      "productivity","productivity","productivity","utility","business",
+      "business","utility","business","business",
+      "business","business","business","business","business",
+      "business","business","business","business","business",
+      "productivity","entertainment","entertainment","utility","productivity"
+    ];
+
+    const descriptions = [
+      "Moni—compact & colorful",
+
+    ];
+
+    const apps = appNames.map((name, index) => ({
+      name,
+      icon: icons[index],
+      category: categories[index],
+      description: descriptions[index % descriptions.length]
+    }));
+
+    const appsGrid = document.getElementById("appsGrid");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const appCount = document.getElementById("appCount");
+    const emptyState = document.getElementById("emptyState");
+
+    function renderApps() {
+      const search = searchInput.value.toLowerCase().trim();
+      const category = categoryFilter.value;
+
+      const filteredApps = apps.filter(app => {
+        const matchesSearch =
+          app.name.toLowerCase().includes(search) ||
+          app.description.toLowerCase().includes(search);
+
+        const matchesCategory =
+          category === "all" || app.category === category;
+
+        return matchesSearch && matchesCategory;
+      });
+
+      appsGrid.innerHTML = filteredApps.map(app => `
+        <article class="app-card">
+          <div class="app-icon">${app.icon}</div>
+          <h3>${app.name}</h3>
+          <p>${app.description}</p>
+          <a href="#" onclick="openApp(event, '${app.name}')">
+            Open app →
+          </a>
+        </article>
+      `).join("");
+
+      appCount.textContent = filteredApps.length;
+      emptyState.style.display = filteredApps.length ? "none" : "block";
+    }
+
+    function openApp(event, appName) {
+      event.preventDefault();
+      // Build file path from folder "name1234"
+      const fileName = appName.replace(/\s+/g, "").toLowerCase() + ".html";
+      const appUrl = fileName;
+      window.location.href = appUrl;
+    }
+
+    searchInput.addEventListener("input", renderApps);
+    categoryFilter.addEventListener("change", renderApps);
+
+    document.getElementById("searchForm").addEventListener("submit", event => {
+      event.preventDefault();
+      renderApps();
+    });
+
+    renderApps();
+  </script>
+
+</body>
+</html>

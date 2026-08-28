@@ -1,0 +1,389 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#a3e635">
+<title>FitCounter Rep Tracker</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Volt Neon Green & Track Asphalt Carbon Style Look */
+:root{
+--bg:#090d16;
+--card:#111827;
+--text:#f9fafb;
+--muted:#9ca3af;
+--line:#1f2937;
+--primary:#a3e635;
+--primary2:#bef264;
+--soft:#1c2d0c;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(163,230,53,.15)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - ACTIVE VOLT TO SPEEDWAY DRAB GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#4d7c0f,#0f172a 65%,#111827);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(163,230,53,.06);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+/* LARGE DISPLAY SCORE BOARD CONTAINER */
+.rep-display-panel {
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:15px 0 5px;
+text-align:center
+}
+
+.rep-digits {
+font-size:62px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--primary);
+margin-bottom:4px;
+text-shadow:0 0 15px rgba(163,230,53,0.3)
+}
+
+/* ACTIONS BUTTON MATRIX GRID */
+.tally-actions-grid {
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-bottom:6px
+}
+
+.btn-tally-step {
+padding:14px 4px;
+border:0;
+border-radius:14px;
+font-weight:900;
+font-size:14px;
+transition:opacity 0.15s
+}
+.btn-tally-step:active { opacity:0.85 }
+
+.btn-tally-plus { background:var(--primary); color:var(--bg); }
+.btn-tally-macro { background:var(--soft); color:var(--primary2); }
+.btn-tally-minus { background:var(--line); color:var(--muted); }
+
+/* HISTORICAL LIST ROWS STACK FEED */
+.history-row {
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:11px 0;
+border-bottom:1px solid var(--line);
+font-size:13px
+}
+.history-row:last-child { border-bottom:0 }
+
+.history-label { font-weight:700; color:var(--text); }
+.history-val { font-family:"Courier New",Courier,monospace; font-weight:800; color:var(--primary); }
+
+.btn-action-master {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--line);
+color:var(--text);
+font-weight:800;
+transition:opacity 0.2s
+}
+.btn-action-master:active { opacity:0.9 }
+
+/* LIGHT BRIGHT HIGH CONTRAST VOLT OVERRIDE SKIN */
+body.light-theme {
+--bg:#f8fafc;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#4b5563;
+--line:#e2e8f0;
+--soft:#ecfccb;
+--shadow:0 10px 25px rgba(163,230,53,0.05)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🏋️‍♂️</div>
+<div class="brand-name">FitCounter</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Log Performance.<br>Track Repetition Sets.</h1>
+<p>Log active workout volumes, count repetition sets, and maintain local histories seamlessly.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- DYNAMIC MONITORS BLOCK DISPLAY -->
+<section class="card">
+<div class="rep-display-panel">
+<div id="digitsDisplayNode" class="rep-digits">0</div>
+<span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--muted); letter-spacing:0.5px;">Current Set Reps</span>
+</div>
+</section>
+
+<!-- CONTROLLER TRIGGERS MATRIX KEYS CONTAINER -->
+<section class="card">
+<div class="title">
+<h2>⚡ Rep Logger Tally Controls</h2>
+</div>
+<div class="tally-actions-grid">
+<button class="btn-tally-step btn-tally-plus" onclick="adjustRepetitionScoreCount(1)">+1 Rep</button>
+<button class="btn-tally-step btn-tally-macro" onclick="adjustRepetitionScoreCount(5)">+5 Set</button>
+<button class="btn-tally-step btn-tally-minus" onclick="adjustRepetitionScoreCount(-1)">-1 Rep</button>
+</div>
+</section>
+
+<!-- CONFIGURE SET COMMIT COMMAND KEY -->
+<section class="card">
+<button class="btn-action-master" style="background:var(--soft); color:var(--primary2); border:1px solid var(--primary);" onclick="commitSetToHistoryLogs()">Save Set to History Ledger</button>
+</section>
+
+<!-- RECENT HISTORY STACK FEED LOGGER BOX -->
+<section class="card">
+<div class="title">
+<h2>📜 Completed Workout History</h2>
+</div>
+<div id="workoutHistoryLogBox">
+<!-- Generated dynamically via Javascript actions loops -->
+</div>
+</section>
+
+<button class="btn-action-master" onclick="wipeEntireWorkoutSessionLogs()">Reset Workout Session</button>
+
+</main>
+
+</div>
+
+<script>
+let currentRepetitionTallyScore = 0;
+let archivedWorkoutSetsArray = JSON.parse(localStorage.getItem("fit_counter_sets_vault")) || [];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function adjustRepetitionScoreCount(deltaStepValue) {
+    currentRepetitionTallyScore = Math.max(0, currentRepetitionTallyScore + deltaStepValue);
+    document.getElementById("digitsDisplayNode").innerText = currentRepetitionTallyScore;
+    
+    // Synthesize quick tactile click feedback frequencies safely
+    triggerAthleticBleepTone(600, 0.05);
+}
+
+function commitSetToHistoryLogs() {
+    if (currentRepetitionTallyScore === 0) return alert("Please increment rep tallies above zero before logging a complete set.");
+    
+    const timestampStr = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    
+    archivedWorkoutSetsArray.unshift({
+        id: Date.now(),
+        setNumber: archivedWorkoutSetsArray.length + 1,
+        count: currentRepetitionTallyScore,
+        time: timestampStr
+    });
+    
+    // Reset counter tracking space immediately back to clean operational limits
+    currentRepetitionTallyScore = 0;
+    document.getElementById("digitsDisplayNode").innerText = "0";
+
+    triggerAthleticBleepTone(880, 0.15); // Landing arpeggio tone indicator
+    saveAndRedrawWorkoutLedgerView();
+}
+
+function wipeEntireWorkoutSessionLogs() {
+    if (confirm("Permanently wipe clean down your compiled workout session sets and metrics logs?")) {
+        currentRepetitionTallyScore = 0;
+        archivedWorkoutSetsArray = [];
+        document.getElementById("digitsDisplayNode").innerText = "0";
+        saveAndRedrawWorkoutLedgerView();
+    }
+}
+
+function saveAndRedrawWorkoutLedgerView() {
+    localStorage.setItem("fit_counter_sets_vault", JSON.stringify(archivedWorkoutSetsArray));
+    render();
+}
+
+function triggerAthleticBleepTone(frequencyHzValue, durationSecondsValue) {
+    if (window.AudioContext || window.webkitAudioContext) {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(frequencyHzValue, ctx.currentTime);
+            gain.gain.setValueAtTime(0.12, ctx.currentTime);
+            osc.start();
+            osc.stop(ctx.currentTime + durationSecondsValue);
+        } catch (e) {}
+    }
+}
+
+function render() {
+    const container = document.getElementById("workoutHistoryLogBox");
+    
+    if (archivedWorkoutSetsArray.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--muted); font-size:12px;">No logged sets yet. Tick reps and commit your set above!</div>`;
+        return;
+    }
+    
+    // Clamp slices indices parameters boundary allocations safely to retain look heights layout heights
+    const topSets = archivedWorkoutSetsArray.slice(0, 4);
+    container.innerHTML = topSets.map(set => `
+        <div class="history-row">
+            <span class="history-label">💪 Completed Workout Set #${String(set.setNumber).padStart(2, '0')}</span>
+            <span class="history-val">${set.count} Reps <span style="font-size:10px; color:var(--muted); font-weight:400; font-family:system-ui; margin-left:4px;">at ${set.time}</span></span>
+        </div>
+    `).join("");
+}
+
+// Initial structural rendering loop initialization pass configurations
+render();
+</script>
+
+</body>
+</html>

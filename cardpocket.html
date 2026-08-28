@@ -1,0 +1,1656 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>CardPocket — Offline Card Wallet</title>
+
+<style>
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#151827;
+  --muted:#777d91;
+  --line:#e5e8f0;
+  --primary:#2563eb;
+  --primary2:#4f46e5;
+  --soft:#eaf1ff;
+  --danger:#dc2626;
+  --shadow:0 14px 40px rgba(30,50,100,.08);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input,select{font:inherit}
+
+button{cursor:pointer}
+
+.app{
+  width:100%;
+  max-width:620px;
+  min-height:100vh;
+  margin:auto;
+  background:var(--bg);
+}
+
+/* HEADER */
+.header{
+  position:relative;
+  overflow:hidden;
+  padding:18px 18px 27px;
+  color:white;
+  border-radius:0 0 30px 30px;
+  background:linear-gradient(145deg,#172554,#2563eb 58%,#6366f1);
+}
+
+.header:before,
+.header:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+
+.header:before{
+  width:300px;
+  height:300px;
+  right:-160px;
+  top:-210px;
+}
+
+.header:after{
+  width:190px;
+  height:190px;
+  left:-120px;
+  bottom:-145px;
+}
+
+.topbar{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.15);
+  font-size:21px;
+}
+
+.brand b{
+  display:block;
+  font-size:18px;
+}
+
+.brand span{
+  display:block;
+  margin-top:2px;
+  color:#dbeafe;
+  font-size:7px;
+}
+
+.theme{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  color:#fff;
+  background:rgba(255,255,255,.15);
+}
+
+.hero{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero-label{
+  color:#dbeafe;
+  font-size:8px;
+  font-weight:700;
+}
+
+.title{
+  margin-top:3px;
+  font-size:30px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.hero p{
+  margin:7px 0 0;
+  color:#dbeafe;
+  font-size:8px;
+}
+
+/* CONTENT */
+.content{
+  padding:15px;
+}
+
+.card{
+  margin-bottom:13px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+}
+
+.stat{
+  padding:11px 4px;
+  border-radius:14px;
+  text-align:center;
+  background:var(--bg);
+}
+
+.stat .ico{
+  font-size:16px;
+}
+
+.stat b{
+  display:block;
+  margin-top:3px;
+  font-size:14px;
+}
+
+.stat span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:6.5px;
+}
+
+.head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:11px;
+}
+
+.head h2{
+  margin:0;
+  font-size:14px;
+}
+
+.head span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+.search{
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  height:42px;
+  padding:0 38px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  outline:none;
+  color:var(--text);
+  background:var(--bg);
+  font-size:9px;
+}
+
+.search-icon{
+  position:absolute;
+  left:13px;
+  top:12px;
+}
+
+.clear{
+  position:absolute;
+  right:4px;
+  top:4px;
+  width:32px;
+  height:32px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+}
+
+.filters{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  padding:9px 0 2px;
+}
+
+.filters::-webkit-scrollbar{
+  display:none;
+}
+
+.filter{
+  flex:0 0 auto;
+  padding:7px 11px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  color:var(--muted);
+  font-size:7px;
+  font-weight:800;
+}
+
+.filter.active{
+  border-color:var(--primary);
+  background:var(--primary);
+  color:#fff;
+}
+
+.primary{
+  width:100%;
+  height:40px;
+  margin-top:9px;
+  border:0;
+  border-radius:11px;
+  background:var(--primary);
+  color:#fff;
+  font-size:8px;
+  font-weight:900;
+}
+
+.primary:hover{
+  background:#1d4ed8;
+}
+
+/* CARD ITEMS */
+.card-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.wallet-card{
+  position:relative;
+  overflow:hidden;
+  padding:15px;
+  min-height:142px;
+  border-radius:19px;
+  color:#fff;
+  background:linear-gradient(135deg,#111827,#2563eb);
+  box-shadow:0 12px 25px rgba(37,99,235,.18);
+}
+
+.wallet-card:nth-child(3n+2){
+  background:linear-gradient(135deg,#312e81,#7c3aed);
+}
+
+.wallet-card:nth-child(3n+3){
+  background:linear-gradient(135deg,#064e3b,#059669);
+}
+
+.wallet-card:after{
+  content:"";
+  position:absolute;
+  width:150px;
+  height:150px;
+  right:-70px;
+  bottom:-100px;
+  border-radius:50%;
+  background:rgba(255,255,255,.1);
+}
+
+.wallet-top{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.company{
+  font-size:8px;
+  opacity:.78;
+}
+
+.wallet-name{
+  margin-top:3px;
+  font-size:15px;
+  font-weight:900;
+}
+
+.favorite{
+  width:30px;
+  height:30px;
+  border:0;
+  border-radius:9px;
+  color:white;
+  background:rgba(255,255,255,.14);
+}
+
+.favorite.active{
+  color:#fde047;
+}
+
+.card-number{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:2px;
+  word-break:break-all;
+}
+
+.wallet-bottom{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-top:12px;
+}
+
+.category{
+  padding:5px 8px;
+  border-radius:8px;
+  background:rgba(255,255,255,.14);
+  font-size:6px;
+  font-weight:800;
+}
+
+.card-actions{
+  display:flex;
+  gap:5px;
+}
+
+.card-action{
+  width:29px;
+  height:29px;
+  border:0;
+  border-radius:8px;
+  color:white;
+  background:rgba(255,255,255,.14);
+  font-size:10px;
+}
+
+.empty{
+  padding:32px 10px;
+  text-align:center;
+}
+
+.empty .emoji{
+  font-size:40px;
+}
+
+.empty b{
+  display:block;
+  margin-top:7px;
+  font-size:10px;
+}
+
+.empty p{
+  max-width:280px;
+  margin:5px auto;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.5;
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:15px;
+  background:rgba(10,15,30,.6);
+  backdrop-filter:blur(5px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.box{
+  width:100%;
+  max-width:570px;
+  max-height:92vh;
+  overflow:auto;
+  padding:18px;
+  border-radius:24px;
+  background:var(--card);
+  box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.modal-head h3{
+  margin:0;
+  font-size:15px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:9px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.field{
+  margin-bottom:11px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  font-size:8px;
+  font-weight:900;
+}
+
+.field input,
+.field select{
+  width:100%;
+  height:40px;
+  padding:0 10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:9px;
+}
+
+.colors{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.color{
+  width:32px;
+  height:32px;
+  border:3px solid transparent;
+  border-radius:50%;
+}
+
+.color.selected{
+  border-color:var(--text);
+}
+
+.modal-actions{
+  display:flex;
+  gap:7px;
+  margin-top:15px;
+}
+
+.modal-actions button{
+  flex:1;
+  height:40px;
+  border:0;
+  border-radius:10px;
+  font-size:9px;
+  font-weight:900;
+}
+
+.cancel{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.save{
+  background:var(--primary);
+  color:#fff;
+}
+
+/* VIEWER */
+.viewer-card{
+  border-radius:22px;
+  padding:20px;
+  color:#fff;
+  background:linear-gradient(135deg,#111827,#2563eb);
+  text-align:center;
+}
+
+.viewer-icon{
+  font-size:42px;
+}
+
+.viewer-company{
+  margin-top:8px;
+  opacity:.75;
+  font-size:8px;
+}
+
+.viewer-name{
+  margin-top:4px;
+  font-size:20px;
+  font-weight:900;
+}
+
+.viewer-number{
+  margin-top:25px;
+  padding:15px 8px;
+  border-radius:12px;
+  background:rgba(255,255,255,.12);
+  font-size:17px;
+  font-weight:900;
+  letter-spacing:3px;
+  word-break:break-all;
+}
+
+.barcode{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:2px;
+  height:55px;
+  margin-top:17px;
+  padding:8px;
+  border-radius:9px;
+  background:#fff;
+}
+
+.barcode i{
+  display:block;
+  width:2px;
+  height:100%;
+  background:#111;
+}
+
+.barcode i:nth-child(3n){
+  width:4px;
+}
+
+.barcode i:nth-child(5n){
+  width:1px;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  z-index:100;
+  max-width:calc(100% - 30px);
+  padding:11px 15px;
+  border-radius:11px;
+  background:#171923;
+  color:white;
+  font-size:9px;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* DARK */
+body.dark{
+  --bg:#0e1017;
+  --card:#181b24;
+  --text:#f7f8fc;
+  --muted:#9ca3b4;
+  --line:#2b303d;
+  --soft:#182744;
+  --shadow:0 15px 40px rgba(0,0,0,.32);
+}
+
+@media(min-width:700px){
+  body{
+    padding:20px 0;
+  }
+
+  .app{
+    min-height:calc(100vh - 40px);
+    overflow:hidden;
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(20,30,70,.14);
+  }
+
+  .modal{
+    align-items:center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">💳</div>
+      <div>
+        <b>CardPocket</b>
+        <span>YOUR OFFLINE CARD WALLET</span>
+      </div>
+    </div>
+
+    <button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+  </div>
+
+  <div class="hero">
+    <div class="hero-label">ALL YOUR CARDS, ONE POCKET</div>
+    <div class="title">CardPocket</div>
+    <p>Keep membership and loyalty cards organized on your device.</p>
+  </div>
+
+</header>
+
+<main class="content">
+
+<section class="card">
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="ico">💳</div>
+      <b id="cardCount">0</b>
+      <span>Total Cards</span>
+    </div>
+
+    <div class="stat">
+      <div class="ico">⭐</div>
+      <b id="favoriteCount">0</b>
+      <span>Favorites</span>
+    </div>
+
+    <div class="stat">
+      <div class="ico">🏷️</div>
+      <b id="categoryCount">0</b>
+      <span>Categories</span>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="card">
+
+  <div class="head">
+    <h2>💳 My Cards</h2>
+    <span id="resultCount">0 cards</span>
+  </div>
+
+  <div class="search">
+    <span class="search-icon">🔍</span>
+    <input
+      id="search"
+      placeholder="Search cards or companies..."
+      oninput="renderCards()"
+    >
+    <button class="clear" onclick="clearSearch()">×</button>
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <button class="primary" onclick="openEditor()">+ Add New Card</button>
+
+</section>
+
+<section class="card">
+
+  <div class="card-list" id="cardList"></div>
+
+</section>
+
+</main>
+
+<footer style="
+padding:5px 15px 25px;
+text-align:center;
+color:var(--muted);
+font-size:7px
+">
+🔒 CardPocket stores your cards only in this browser.
+</footer>
+
+</div>
+
+
+<!-- EDIT MODAL -->
+
+<div class="modal" id="editorModal">
+
+<div class="box">
+
+  <div class="modal-head">
+    <h3 id="editorTitle">💳 Add Card</h3>
+    <button class="close" onclick="closeEditor()">×</button>
+  </div>
+
+  <div class="field">
+    <label>CARD / MEMBERSHIP NAME</label>
+    <input
+      id="cardName"
+      maxlength="80"
+      placeholder="e.g. Supermarket Rewards"
+    >
+  </div>
+
+  <div class="field">
+    <label>COMPANY / BRAND</label>
+    <input
+      id="company"
+      maxlength="80"
+      placeholder="e.g. Fresh Market"
+    >
+  </div>
+
+  <div class="field">
+    <label>CARD NUMBER</label>
+    <input
+      id="cardNumber"
+      maxlength="60"
+      placeholder="e.g. 1234 5678 9012"
+    >
+  </div>
+
+  <div class="field">
+    <label>CATEGORY</label>
+
+    <select id="category">
+      <option value="Loyalty">⭐ Loyalty</option>
+      <option value="Membership">🎫 Membership</option>
+      <option value="Shopping">🛍️ Shopping</option>
+      <option value="Fitness">💪 Fitness</option>
+      <option value="Travel">✈️ Travel</option>
+      <option value="Library">📚 Library</option>
+      <option value="Other">📌 Other</option>
+    </select>
+
+  </div>
+
+  <div class="field">
+
+    <label>CARD COLOR</label>
+
+    <div class="colors" id="colors">
+
+      <button class="color" data-color="#2563eb"
+        style="background:#2563eb"
+        onclick="chooseColor(this)"></button>
+
+      <button class="color" data-color="#7c3aed"
+        style="background:#7c3aed"
+        onclick="chooseColor(this)"></button>
+
+      <button class="color" data-color="#059669"
+        style="background:#059669"
+        onclick="chooseColor(this)"></button>
+
+      <button class="color" data-color="#db2777"
+        style="background:#db2777"
+        onclick="chooseColor(this)"></button>
+
+      <button class="color" data-color="#ea580c"
+        style="background:#ea580c"
+        onclick="chooseColor(this)"></button>
+
+      <button class="color" data-color="#111827"
+        style="background:#111827"
+        onclick="chooseColor(this)"></button>
+
+    </div>
+
+  </div>
+
+  <div class="modal-actions">
+
+    <button class="cancel" onclick="closeEditor()">
+      Cancel
+    </button>
+
+    <button class="save" onclick="saveCard()">
+      Save Card
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- VIEW MODAL -->
+
+<div class="modal" id="viewModal">
+
+<div class="box">
+
+  <div class="modal-head">
+    <h3>💳 Card Details</h3>
+    <button class="close" onclick="closeViewer()">×</button>
+  </div>
+
+  <div id="viewer"></div>
+
+  <div class="modal-actions">
+
+    <button class="cancel" onclick="copyActiveNumber()">
+      📋 Copy Number
+    </button>
+
+    <button class="save" onclick="closeViewer()">
+      Done
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+"use strict";
+
+const STORAGE_KEY = "cardPocketData";
+const THEME_KEY = "cardPocketTheme";
+
+let data = JSON.parse(
+  localStorage.getItem(STORAGE_KEY) || "null"
+);
+
+if(!data || typeof data !== "object"){
+  data = {cards:[]};
+}
+
+if(!Array.isArray(data.cards)){
+  data.cards = [];
+}
+
+let editingId = null;
+let selectedColor = "#2563eb";
+let activeCategory = "All";
+let activeViewerId = null;
+
+
+/* HELPERS */
+
+function uid(){
+
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2,8);
+
+}
+
+function save(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+function esc(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+function toast(message){
+
+  const t = document.getElementById("toast");
+
+  t.textContent = message;
+
+  t.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(()=>{
+    t.classList.remove("show");
+  },2200);
+
+}
+
+
+/* EDITOR */
+
+function openEditor(card=null){
+
+  editingId = card?.id || null;
+
+  document.getElementById("editorTitle").textContent =
+    card ? "✏️ Edit Card" : "💳 Add Card";
+
+  document.getElementById("cardName").value =
+    card?.name || "";
+
+  document.getElementById("company").value =
+    card?.company || "";
+
+  document.getElementById("cardNumber").value =
+    card?.number || "";
+
+  document.getElementById("category").value =
+    card?.category || "Loyalty";
+
+  selectedColor =
+    card?.color || "#2563eb";
+
+  document.querySelectorAll(".color").forEach(btn=>{
+    btn.classList.toggle(
+      "selected",
+      btn.dataset.color === selectedColor
+    );
+  });
+
+  document
+    .getElementById("editorModal")
+    .classList.add("show");
+
+}
+
+
+function closeEditor(){
+
+  document
+    .getElementById("editorModal")
+    .classList.remove("show");
+
+  editingId = null;
+
+}
+
+
+function chooseColor(button){
+
+  selectedColor = button.dataset.color;
+
+  document.querySelectorAll(".color").forEach(btn=>{
+    btn.classList.toggle(
+      "selected",
+      btn === button
+    );
+  });
+
+}
+
+
+function saveCard(){
+
+  const name =
+    document.getElementById("cardName")
+      .value.trim();
+
+  const company =
+    document.getElementById("company")
+      .value.trim();
+
+  const number =
+    document.getElementById("cardNumber")
+      .value.trim();
+
+  const category =
+    document.getElementById("category").value;
+
+  if(!name){
+
+    toast("Please enter a card name.");
+
+    return;
+
+  }
+
+  if(!number){
+
+    toast("Please enter the card number.");
+
+    return;
+
+  }
+
+  const card = {
+
+    id: editingId || uid(),
+
+    name,
+
+    company,
+
+    number,
+
+    category,
+
+    color:selectedColor,
+
+    favorite:
+      editingId
+      ? (
+        data.cards.find(x=>x.id===editingId)
+          ?.favorite || false
+      )
+      : false,
+
+    created:
+      editingId
+      ? (
+        data.cards.find(x=>x.id===editingId)
+          ?.created || Date.now()
+      )
+      : Date.now()
+
+  };
+
+
+  if(editingId){
+
+    const index =
+      data.cards.findIndex(
+        x=>x.id===editingId
+      );
+
+    if(index >= 0){
+      data.cards[index] = card;
+    }
+
+    toast("✏️ Card updated.");
+
+  }else{
+
+    data.cards.unshift(card);
+
+    toast("💳 Card added.");
+
+  }
+
+  save();
+
+  closeEditor();
+
+  render();
+
+}
+
+
+/* DELETE */
+
+function deleteCard(id){
+
+  const card =
+    data.cards.find(x=>x.id===id);
+
+  if(!card)return;
+
+  if(!confirm(
+    `Delete "${card.name}"?`
+  ))return;
+
+  data.cards =
+    data.cards.filter(
+      x=>x.id!==id
+    );
+
+  save();
+
+  render();
+
+  toast("🗑️ Card deleted.");
+
+}
+
+
+/* FAVORITE */
+
+function toggleFavorite(id){
+
+  const card =
+    data.cards.find(x=>x.id===id);
+
+  if(!card)return;
+
+  card.favorite = !card.favorite;
+
+  save();
+
+  renderCards();
+
+  toast(
+    card.favorite
+      ? "⭐ Added to favorites."
+      : "☆ Removed from favorites."
+  );
+
+}
+
+
+/* COPY */
+
+function copyNumber(number){
+
+  if(
+    navigator.clipboard &&
+    window.isSecureContext
+  ){
+
+    navigator.clipboard
+      .writeText(number)
+      .then(()=>{
+        toast("📋 Card number copied.");
+      });
+
+  }else{
+
+    const input =
+      document.createElement("textarea");
+
+    input.value = number;
+
+    document.body.appendChild(input);
+
+    input.select();
+
+    document.execCommand("copy");
+
+    input.remove();
+
+    toast("📋 Card number copied.");
+
+  }
+
+}
+
+
+/* VIEWER */
+
+function openViewer(id){
+
+  const card =
+    data.cards.find(x=>x.id===id);
+
+  if(!card)return;
+
+  activeViewerId = id;
+
+  document.getElementById("viewer").innerHTML = `
+
+    <div
+      class="viewer-card"
+      style="background:
+      linear-gradient(135deg,
+      ${esc(card.color)},
+      #111827)"
+    >
+
+      <div class="viewer-icon">
+        💳
+      </div>
+
+      <div class="viewer-company">
+        ${esc(card.company || "Membership Card")}
+      </div>
+
+      <div class="viewer-name">
+        ${esc(card.name)}
+      </div>
+
+      <div class="viewer-number">
+        ${esc(card.number)}
+      </div>
+
+      <div class="barcode">
+        ${Array.from({length:48},(_,i)=>
+          `<i style="height:${35+(i%4)*5}px"></i>`
+        ).join("")}
+      </div>
+
+      <div style="
+        margin-top:9px;
+        font-size:7px;
+        opacity:.7
+      ">
+        ${esc(card.category)}
+      </div>
+
+    </div>
+
+  `;
+
+  document
+    .getElementById("viewModal")
+    .classList.add("show");
+
+}
+
+
+function closeViewer(){
+
+  document
+    .getElementById("viewModal")
+    .classList.remove("show");
+
+  activeViewerId = null;
+
+}
+
+
+function copyActiveNumber(){
+
+  const card =
+    data.cards.find(
+      x=>x.id===activeViewerId
+    );
+
+  if(card){
+    copyNumber(card.number);
+  }
+
+}
+
+
+/* FILTERS */
+
+function getCategories(){
+
+  return [
+    "All",
+    ...new Set(
+      data.cards
+        .map(x=>x.category)
+        .filter(Boolean)
+    )
+  ];
+
+}
+
+
+function renderFilters(){
+
+  const box =
+    document.getElementById("filters");
+
+  box.innerHTML =
+    getCategories()
+      .map(category=>`
+
+        <button
+          class="filter
+          ${activeCategory===category
+            ?"active":""
+          }"
+          onclick="setCategory('${esc(category)}')"
+        >
+          ${esc(category)}
+        </button>
+
+      `)
+      .join("");
+
+}
+
+
+function setCategory(category){
+
+  activeCategory = category;
+
+  renderFilters();
+
+  renderCards();
+
+}
+
+
+/* RENDER */
+
+function renderCards(){
+
+  const query =
+    document.getElementById("search")
+      .value.trim()
+      .toLowerCase();
+
+  let cards =
+    data.cards.filter(card=>{
+
+      const matchesSearch =
+        !query ||
+        card.name.toLowerCase().includes(query) ||
+        (card.company||"")
+          .toLowerCase()
+          .includes(query) ||
+        card.number
+          .toLowerCase()
+          .includes(query);
+
+      const matchesCategory =
+        activeCategory === "All" ||
+        card.category === activeCategory;
+
+      return matchesSearch &&
+             matchesCategory;
+
+    });
+
+
+  /* favorites first */
+
+  cards.sort((a,b)=>
+    Number(b.favorite)-Number(a.favorite)
+  );
+
+
+  document.getElementById("resultCount")
+    .textContent =
+      `${cards.length} ${
+        cards.length===1
+          ?"card"
+          :"cards"
+      }`;
+
+
+  const list =
+    document.getElementById("cardList");
+
+
+  if(!cards.length){
+
+    list.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emoji">
+          💳
+        </div>
+
+        <b>
+          No cards found
+        </b>
+
+        <p>
+          Add your first membership or
+          loyalty card to keep it handy.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    cards.map(card=>`
+
+      <div
+        class="wallet-card"
+        style="
+          background:
+          linear-gradient(
+            135deg,
+            ${esc(card.color)},
+            #111827
+          )
+        "
+      >
+
+        <div class="wallet-top">
+
+          <div>
+
+            <div class="company">
+              ${esc(
+                card.company ||
+                "Membership Card"
+              )}
+            </div>
+
+            <div class="wallet-name">
+              ${esc(card.name)}
+            </div>
+
+          </div>
+
+          <button
+            class="
+              favorite
+              ${card.favorite?"active":""}
+            "
+            onclick="toggleFavorite('${card.id}')"
+          >
+            ${card.favorite?"★":"☆"}
+          </button>
+
+        </div>
+
+
+        <div class="card-number">
+          ${esc(card.number)}
+        </div>
+
+
+        <div class="wallet-bottom">
+
+          <div class="category">
+            ${esc(card.category)}
+          </div>
+
+          <div class="card-actions">
+
+            <button
+              class="card-action"
+              title="View"
+              onclick="openViewer('${card.id}')"
+            >
+              👁️
+            </button>
+
+            <button
+              class="card-action"
+              title="Copy"
+              onclick="copyNumber(${JSON.stringify(card.number)})"
+            >
+              📋
+            </button>
+
+            <button
+              class="card-action"
+              title="Edit"
+              onclick="openEditor(data.cards.find(x=>x.id==='${card.id}'))"
+            >
+              ✏️
+            </button>
+
+            <button
+              class="card-action"
+              title="Delete"
+              onclick="deleteCard('${card.id}')"
+            >
+              🗑️
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `)
+    .join("");
+
+}
+
+
+function renderStats(){
+
+  document.getElementById("cardCount")
+    .textContent =
+      data.cards.length;
+
+  document.getElementById("favoriteCount")
+    .textContent =
+      data.cards.filter(
+        x=>x.favorite
+      ).length;
+
+  document.getElementById("categoryCount")
+    .textContent =
+      new Set(
+        data.cards.map(
+          x=>x.category
+        )
+      ).size;
+
+}
+
+
+function render(){
+
+  renderStats();
+
+  renderFilters();
+
+  renderCards();
+
+}
+
+
+/* SEARCH */
+
+function clearSearch(){
+
+  document.getElementById("search")
+    .value="";
+
+  renderCards();
+
+}
+
+
+/* THEME */
+
+function toggleTheme(){
+
+  document.body.classList.toggle("dark");
+
+  const dark =
+    document.body.classList.contains("dark");
+
+  localStorage.setItem(
+    THEME_KEY,
+    dark ? "1" : "0"
+  );
+
+  document.getElementById("themeBtn")
+    .textContent =
+      dark ? "☀️" : "🌙";
+
+}
+
+
+function loadTheme(){
+
+  if(
+    localStorage.getItem(THEME_KEY)
+    === "1"
+  ){
+
+    document.body.classList.add("dark");
+
+    document.getElementById("themeBtn")
+      .textContent="☀️";
+
+  }
+
+}
+
+
+/* MODAL CLICK OUTSIDE */
+
+document
+  .getElementById("editorModal")
+  .addEventListener("click",e=>{
+
+    if(e.target.id==="editorModal"){
+      closeEditor();
+    }
+
+  });
+
+
+document
+  .getElementById("viewModal")
+  .addEventListener("click",e=>{
+
+    if(e.target.id==="viewModal"){
+      closeViewer();
+    }
+
+  });
+
+
+/* ESC */
+
+document.addEventListener("keydown",e=>{
+
+  if(e.key==="Escape"){
+
+    closeEditor();
+
+    closeViewer();
+
+  }
+
+});
+
+
+/* START */
+
+loadTheme();
+
+render();
+
+</script>
+
+</body>
+</html>

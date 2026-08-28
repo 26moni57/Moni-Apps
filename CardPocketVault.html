@@ -1,0 +1,516 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>CardPocket Vault</title>
+
+<style>
+/* CSS PALETTE: Midnight Ocean Blue Style Uniform Look */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#2563eb;
+--primary2:#3b82f6;
+--soft:#1e3a8a;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(15,23,42,.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#2563eb 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* DIGITAL WALLET CARD COMPONENT */
+.wallet-card {
+position:relative;
+width:100%;
+height:200px;
+border-radius:16px;
+padding:20px;
+color:white;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+margin-bottom:14px;
+overflow:hidden
+}
+
+.wallet-card::before {
+content:"";
+position:absolute;
+width:150px;
+height:150px;
+background:rgba(255,255,255,0.06);
+border-radius:50%;
+right:-40px;
+bottom:-40px
+}
+
+.card-top {
+display:flex;
+justify-content:space-between;
+align-items:center;
+z-index:2
+}
+
+.card-title {
+font-size:16px;
+font-weight:800;
+letter-spacing:-0.3px
+}
+
+.card-chip {
+width:35px;
+height:26px;
+background:linear-gradient(135deg, #e2e8f0, #cbd5e1);
+border-radius:6px;
+opacity:0.85
+}
+
+.card-mid {
+z-index:2;
+margin:20px 0 10px
+}
+
+.card-number {
+font-family:"Courier New", Courier, monospace;
+font-size:19px;
+font-weight:700;
+letter-spacing:2px;
+text-shadow:1px 1px 2px rgba(0,0,0,0.5)
+}
+
+.card-bottom {
+display:flex;
+justify-content:space-between;
+align-items:flex-end;
+z-index:2
+}
+
+.card-holder {
+display:flex;
+flex-direction:column
+}
+
+.holder-label {
+font-size:8px;
+color:rgba(255,255,255,0.7);
+text-transform:uppercase;
+font-weight:700;
+letter-spacing:0.5px
+}
+
+.holder-name {
+font-size:12px;
+font-weight:700;
+margin-top:2px;
+text-transform:uppercase
+}
+
+.delete-card-btn {
+background:rgba(255,255,255,0.2);
+border:0;
+color:white;
+border-radius:8px;
+padding:6px 10px;
+font-size:11px;
+font-weight:700
+}
+
+/* FAB BUTTON */
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:20px;
+background:var(--primary);
+color:white;
+font-size:28px;
+box-shadow:0 12px 28px rgba(37,99,235,.28);
+z-index:10;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+/* MODAL / OVERLAY SETUP */
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(0,0,0,.6)
+}
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0;
+border-top:1px solid var(--line)
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px
+}
+
+.modal-head h2{
+margin:0;
+font-size:19px
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:10px;
+background:var(--bg);
+color:var(--text)
+}
+
+.field{margin-bottom:12px}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+font-weight:750;
+color:var(--muted)
+}
+
+.field input,
+.field select{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text)
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:white;
+font-weight:800
+}
+
+.empty-state {
+text-align:center;
+padding:40px 20px;
+color:var(--muted)
+}
+.empty-icon { font-size:42px; margin-bottom:8px; }
+
+/* LIGHT THEME INVERSION OVERRIDE */
+body.light-theme {
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#dbeafe;
+--shadow:0 10px 30px rgba(51,65,85,0.06)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">💳</div>
+<div class="brand-name">CardPocket</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Secure Wallet.<br>Always With You.</h1>
+<p>Store membership tokens, identity passes, and loyalty numbers locally in your browser sandbox.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- CARD STACK SECTION -->
+<section id="cardStack">
+<!-- Rendered dynamically by Javascript layout loop -->
+</section>
+
+</main>
+
+<!-- FLOATING ACTION KEY TRIGGER -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- ADD NEW SECURITY PASSPORT OVERLAY MODAL -->
+<div class="overlay" id="overlay">
+<div class="modal">
+<div class="modal-head">
+<h2>Add Document / Pass</h2>
+<button class="close" onclick="closeModal()">✕</button>
+</div>
+
+<div class="field">
+<label>CARD OR PASS TITLE</label>
+<input type="text" id="cardName" placeholder="e.g., Target Loyalty Card">
+</div>
+
+<div class="field">
+<label>CARD NUMBER / MEMBERSHIP ID</label>
+<input type="text" id="cardNumber" placeholder="e.g., 4000 1234 5678 9010">
+</div>
+
+<div class="field">
+<label>CARDHOLDER NAME</label>
+<input type="text" id="cardHolder" placeholder="e.g., ALEX JOHNSON">
+</div>
+
+<div class="field">
+<label>SKIN DESIGN VISUAL SHADE</label>
+<select id="cardColor">
+<option value="linear-gradient(135deg, #1e3a8a, #3b82f6)">🔵 Midnight Sapphire</option>
+<option value="linear-gradient(135deg, #064e3b, #10b981)">🟢 Emerald Mint</option>
+<option value="linear-gradient(135deg, #701a75, #d946ef)">🟣 Purple Amethyst</option>
+<option value="linear-gradient(135deg, #7c2d12, #ea580c)">🟠 Sunset Crimson</option>
+<option value="linear-gradient(135deg, #111827, #374151)">⚫ Cyber Onyx</option>
+</select>
+</div>
+
+<button class="save" onclick="addCard()">Secure Card to Vault</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// Load pre-existing state tracking items cleanly out of local storage runtime space
+let savedCards = JSON.parse(localStorage.getItem("pocket_vault_cards")) || [
+    { id: 1, name: "Metro Transit Pass", number: "9832 1045 4421", holder: "Alex Johnson", color: "linear-gradient(135deg, #1e3a8a, #3b82f6)" },
+    { id: 2, name: "Gym Membership", number: "FIT-99201-X", holder: "Alex Johnson", color: "linear-gradient(135deg, #064e3b, #10b981)" }
+];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function openModal() { document.getElementById("overlay").classList.add("show"); }
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+
+function addCard() {
+    const name = document.getElementById("cardName").value.trim();
+    const number = document.getElementById("cardNumber").value.trim();
+    const holder = document.getElementById("cardHolder").value.trim() || "CARD MEMBER";
+    const color = document.getElementById("cardColor").value;
+
+    if (!name || !number) return alert("Please supply a valid title and key identifier number.");
+
+    savedCards.push({ id: Date.now(), name, number, holder, color });
+    saveAndRender();
+    closeModal();
+
+    // Clear operational default entry parameters inputs fields
+    document.getElementById("cardName").value = "";
+    document.getElementById("cardNumber").value = "";
+    document.getElementById("cardHolder").value = "";
+}
+
+function deleteCard(id) {
+    if(confirm("Permanently strip this identity credential out of your vault space?")) {
+        savedCards = savedCards.filter(c => c.id !== id);
+        saveAndRender();
+    }
+}
+
+function saveAndRender() {
+    localStorage.setItem("pocket_vault_cards", JSON.stringify(savedCards));
+    render();
+}
+
+function render() {
+    const container = document.getElementById("cardStack");
+    
+    if(savedCards.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📁</div>
+                <h3>Pocket Vault Empty</h3>
+                <p>Tap the floating button below to slot your digital identity cards here.</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = savedCards.map(c => `
+        <div class="wallet-card" style="background: ${c.color}">
+            <div class="card-top">
+                <div class="card-title">${c.name}</div>
+                <div class="card-chip"></div>
+            </div>
+            <div class="card-mid">
+                <div class="card-number">${c.number}</div>
+            </div>
+ <div class="card-bottom">
+                <div class="card-holder">
+                    <span class="holder-label">Card Holder</span>
+                    <span class="holder-name">${c.holder}</span>
+                </div>
+                <button class="delete-card-btn" onclick="deleteCard(${c.id})">Remove</button>
+            </div>
+        </div>
+    `).join("");
+}
+
+// Fire rendering framework processing directly on load runtime loops initial configuration updates
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2424 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>JournalPocket</title>
+
+<style>
+:root{
+  --bg:#f6f5fb;
+  --card:#ffffff;
+  --text:#1d1b2b;
+  --muted:#817e91;
+  --line:#e8e5ef;
+  --primary:#7c3aed;
+  --primary2:#6d28d9;
+  --soft:#f0eaff;
+  --yellow:#f59e0b;
+  --yellowSoft:#fff6dd;
+  --red:#ef4444;
+  --redSoft:#fff0f0;
+  --green:#16a34a;
+  --greenSoft:#eaf9ef;
+  --shadow:0 12px 35px rgba(43,32,80,.08);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:100%;
+  max-width:500px;
+  min-height:100vh;
+  margin:auto;
+  background:var(--bg);
+}
+
+/* ================= HEADER ================= */
+
+.header{
+  position:relative;
+  overflow:hidden;
+  padding:18px 18px 25px;
+  color:#fff;
+  background:
+    linear-gradient(
+      145deg,
+      #3b0764,
+      #6d28d9 55%,
+      #8b5cf6
+    );
+  border-radius:0 0 30px 30px;
+}
+
+.header::before{
+  content:"";
+  position:absolute;
+  width:240px;
+  height:240px;
+  right:-110px;
+  top:-145px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+
+.header::after{
+  content:"";
+  position:absolute;
+  width:170px;
+  height:170px;
+  left:-105px;
+  bottom:-120px;
+  border-radius:50%;
+  background:rgba(255,255,255,.07);
+}
+
+.topbar{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.16);
+  font-size:21px;
+}
+
+.brandText b{
+  display:block;
+  font-size:19px;
+}
+
+.brandText span{
+  display:block;
+  margin-top:2px;
+  color:#ddd6fe;
+  font-size:7px;
+}
+
+.themeBtn{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+}
+
+.hero{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:29px;
+  line-height:1.08;
+  letter-spacing:-.8px;
+}
+
+.hero p{
+  max-width:315px;
+  margin:9px 0 0;
+  color:#ede9fe;
+  font-size:9px;
+  line-height:1.5;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+  padding:15px;
+}
+
+.card{
+  margin-bottom:13px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+
+/* ================= STATS ================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.stat{
+  padding:12px 5px;
+  border-radius:14px;
+  text-align:center;
+  background:var(--bg);
+}
+
+.statIcon{
+  font-size:16px;
+}
+
+.stat b{
+  display:block;
+  margin-top:3px;
+  font-size:17px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* ================= SEARCH ================= */
+
+.search{
+  position:relative;
+}
+
+.searchIcon{
+  position:absolute;
+  left:13px;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+.search input{
+  width:100%;
+  padding:12px 40px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:10px;
+}
+
+.search input:focus{
+  border-color:var(--primary);
+}
+
+.clearSearch{
+  position:absolute;
+  right:5px;
+  top:50%;
+  width:30px;
+  height:30px;
+  border:0;
+  transform:translateY(-50%);
+  background:transparent;
+  color:var(--muted);
+}
+
+/* ================= FILTERS ================= */
+
+.filterRow{
+  display:flex;
+  gap:6px;
+  overflow:auto;
+}
+
+.filterRow::-webkit-scrollbar{
+  display:none;
+}
+
+.filter{
+  flex:0 0 auto;
+  padding:8px 11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--card);
+  color:var(--muted);
+  font-size:8px;
+  font-weight:800;
+}
+
+.filter.active{
+  border-color:var(--primary);
+  background:var(--soft);
+  color:var(--primary);
+}
+
+/* ================= SECTION ================= */
+
+.sectionHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:11px;
+}
+
+.sectionHead h2{
+  margin:0;
+  font-size:14px;
+}
+
+.sectionHead span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* ================= JOURNAL LIST ================= */
+
+.entries{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.entry{
+  position:relative;
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:var(--card);
+  transition:.2s;
+}
+
+.entry:hover{
+  transform:translateY(-1px);
+}
+
+.entry.pinned{
+  border-color:#c4b5fd;
+}
+
+.entryTop{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.mood{
+  width:39px;
+  height:39px;
+  flex:0 0 39px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:var(--soft);
+  font-size:21px;
+}
+
+.entryBody{
+  min-width:0;
+  flex:1;
+}
+
+.entryTitle{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:11px;
+  font-weight:900;
+}
+
+.entryDate{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:7px;
+}
+
+.entryActions{
+  display:flex;
+  gap:3px;
+}
+
+.iconBtn{
+  width:29px;
+  height:29px;
+  border:0;
+  border-radius:9px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.iconBtn:hover{
+  color:var(--primary);
+}
+
+.entryText{
+  display:-webkit-box;
+  overflow:hidden;
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.55;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+}
+
+.entryMeta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:10px;
+}
+
+.badge{
+  padding:5px 7px;
+  border-radius:7px;
+  background:var(--soft);
+  color:var(--primary);
+  font-size:7px;
+  font-weight:800;
+}
+
+.badge.favorite{
+  background:var(--yellowSoft);
+  color:#b45309;
+}
+
+.badge.pin{
+  background:var(--greenSoft);
+  color:var(--green);
+}
+
+/* ================= EMPTY ================= */
+
+.empty{
+  padding:35px 12px;
+  text-align:center;
+}
+
+.emptyIcon{
+  font-size:42px;
+}
+
+.empty b{
+  display:block;
+  margin-top:8px;
+  font-size:11px;
+}
+
+.empty p{
+  max-width:280px;
+  margin:6px auto 0;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.5;
+}
+
+/* ================= FAB ================= */
+
+.fab{
+  position:fixed;
+  right:max(calc((100vw - 500px)/2 + 17px),17px);
+  bottom:19px;
+  z-index:30;
+  width:57px;
+  height:57px;
+  border:0;
+  border-radius:19px;
+  background:var(--primary);
+  color:#fff;
+  font-size:27px;
+  box-shadow:0 13px 30px rgba(124,58,237,.35);
+}
+
+.fab:active{
+  transform:scale(.95);
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(13,10,25,.68);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalBox{
+  width:100%;
+  max-width:500px;
+  max-height:94vh;
+  overflow:auto;
+  padding:20px;
+  border-radius:26px 26px 0 0;
+  background:var(--card);
+}
+
+.modalHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+
+.modalHead h2{
+  margin:0;
+  font-size:17px;
+}
+
+.close{
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.field{
+  margin-bottom:12px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  color:var(--muted);
+  font-size:8px;
+  font-weight:900;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:10px;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:var(--primary);
+}
+
+.field textarea{
+  min-height:150px;
+  resize:vertical;
+  line-height:1.55;
+}
+
+.moodGrid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:6px;
+}
+
+.moodOption input{
+  display:none;
+}
+
+.moodOption label{
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:42px;
+  margin:0;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--bg);
+  font-size:19px;
+  cursor:pointer;
+}
+
+.moodOption input:checked + label{
+  border-color:var(--primary);
+  background:var(--soft);
+  transform:translateY(-1px);
+}
+
+.dateRow{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.primaryBtn{
+  width:100%;
+  padding:12px;
+  border:0;
+  border-radius:12px;
+  background:var(--primary);
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+}
+
+.primaryBtn:hover{
+  background:var(--primary2);
+}
+
+.deleteBtn{
+  width:100%;
+  margin-top:8px;
+  padding:11px;
+  border:0;
+  border-radius:11px;
+  background:var(--redSoft);
+  color:var(--red);
+  font-size:9px;
+  font-weight:900;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* ================= VIEWER ================= */
+
+.viewer{
+  position:fixed;
+  inset:0;
+  z-index:150;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(8,7,15,.88);
+}
+
+.viewer.show{
+  display:flex;
+}
+
+.viewerBox{
+  width:100%;
+  max-width:500px;
+  max-height:90vh;
+  overflow:auto;
+  padding:20px;
+  border-radius:23px;
+  background:var(--card);
+}
+
+.viewerMood{
+  font-size:42px;
+}
+
+.viewerTitle{
+  margin:10px 0 3px;
+  font-size:19px;
+}
+
+.viewerDate{
+  color:var(--muted);
+  font-size:8px;
+}
+
+.viewerText{
+  margin-top:17px;
+  color:var(--text);
+  font-size:10px;
+  line-height:1.8;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.viewerTags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:15px;
+}
+
+.viewerClose{
+  width:100%;
+  margin-top:18px;
+  padding:11px;
+  border:0;
+  border-radius:11px;
+  background:var(--bg);
+  color:var(--text);
+  font-size:9px;
+  font-weight:800;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  z-index:300;
+  padding:11px 15px;
+  border-radius:12px;
+  background:#191526;
+  color:#fff;
+  font-size:9px;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* ================= DARK ================= */
+
+body.dark{
+  --bg:#0d0b15;
+  --card:#181522;
+  --text:#f6f3ff;
+  --muted:#a19caf;
+  --line:#2c2738;
+  --soft:#271b42;
+  --yellowSoft:#302713;
+  --redSoft:#35191d;
+  --greenSoft:#12291b;
+  --shadow:0 15px 40px rgba(0,0,0,.3);
+}
+
+/* ================= DESKTOP ================= */
+
+@media(min-width:700px){
+
+  body{
+    padding:20px 0;
+  }
+
+  .app{
+    min-height:calc(100vh - 40px);
+    overflow:hidden;
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(40,25,70,.14);
+  }
+
+  .modal{
+    align-items:center;
+    padding:20px;
+  }
+
+  .modalBox{
+    border-radius:25px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <div class="topbar">
+
+      <div class="brand">
+
+        <div class="logo">📖</div>
+
+        <div class="brandText">
+          <b>JournalPocket</b>
+          <span>Your private little space</span>
+        </div>
+
+      </div>
+
+      <button
+        class="themeBtn"
+        id="themeBtn"
+        onclick="toggleTheme()"
+      >🌙</button>
+
+    </div>
+
+    <div class="hero">
+
+      <h1>
+        Write it down.<br>
+        Let it out.
+      </h1>
+
+      <p>
+        Capture your thoughts, memories and
+        little moments — completely offline.
+      </p>
+
+    </div>
+
+  </header>
+
+
+  <main class="content">
+
+    <!-- STATS -->
+
+    <section class="card">
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="statIcon">📖</div>
+          <b id="totalCount">0</b>
+          <span>Entries</span>
+        </div>
+
+        <div class="stat">
+          <div class="statIcon">❤️</div>
+          <b id="favoriteCount">0</b>
+          <span>Favorites</span>
+        </div>
+
+        <div class="stat">
+          <div class="statIcon">📌</div>
+          <b id="pinnedCount">0</b>
+          <span>Pinned</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SEARCH -->
+
+    <section class="card">
+
+      <div class="search">
+
+        <span class="searchIcon">🔎</span>
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search your journal..."
+          oninput="renderEntries()"
+        >
+
+        <button
+          class="clearSearch"
+          onclick="clearSearch()"
+        >×</button>
+
+      </div>
+
+    </section>
+
+
+    <!-- FILTERS -->
+
+    <section class="card">
+
+      <div class="filterRow">
+
+        <button
+          class="filter active"
+          data-filter="all"
+          onclick="setFilter('all')"
+        >
+          📖 All
+        </button>
+
+        <button
+          class="filter"
+          data-filter="today"
+          onclick="setFilter('today')"
+        >
+          📅 Today
+        </button>
+
+        <button
+          class="filter"
+          data-filter="favorite"
+          onclick="setFilter('favorite')"
+        >
+          ❤️ Favorites
+        </button>
+
+        <button
+          class="filter"
+          data-filter="pinned"
+          onclick="setFilter('pinned')"
+        >
+          📌 Pinned
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ENTRIES -->
+
+    <section class="card">
+
+      <div class="sectionHead">
+
+        <h2>📚 My Journal</h2>
+
+        <span id="entrySummary">
+          0 entries
+        </span>
+
+      </div>
+
+      <div
+        class="entries"
+        id="entries"
+      ></div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- FAB -->
+
+<button
+  class="fab"
+  onclick="openEntryModal()"
+  aria-label="New journal entry"
+>
+  +
+</button>
+
+
+<!-- ENTRY MODAL -->
+
+<div
+  class="modal"
+  id="entryModal"
+  onclick="outsideClose(event)"
+>
+
+  <div
+    class="modalBox"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modalHead">
+
+      <h2 id="modalTitle">
+        ✍️ New Entry
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeEntryModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>TITLE</label>
+
+      <input
+        id="entryTitle"
+        maxlength="100"
+        placeholder="Give this moment a title..."
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>HOW ARE YOU FEELING?</label>
+
+      <div class="moodGrid">
+
+        <div class="moodOption">
+          <input
+            type="radio"
+            name="mood"
+            id="m1"
+            value="😊"
+            checked
+          >
+          <label for="m1">😊</label>
+        </div>
+
+        <div class="moodOption">
+          <input
+            type="radio"
+            name="mood"
+            id="m2"
+            value="😍"
+          >
+          <label for="m2">😍</label>
+        </div>
+
+        <div class="moodOption">
+          <input
+            type="radio"
+            name="mood"
+            id="m3"
+            value="😌"
+          >
+          <label for="m3">😌</label>
+        </div>
+
+        <div class="moodOption">
+          <input
+            type="radio"
+            name="mood"
+            id="m4"
+            value="😔"
+          >
+          <label for="m4">😔</label>
+        </div>
+
+        <div class="moodOption">
+          <input
+            type="radio"
+            name="mood"
+            id="m5"
+            value="😤"
+          >
+          <label for="m5">😤</label>
+        </div>
+
+        <div class="moodOption">
+          <input
+            type="radio"
+            name="mood"
+            id="m6"
+            value="🤔"
+          >
+          <label for="m6">🤔</label>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>YOUR THOUGHTS</label>
+
+      <textarea
+        id="entryText"
+        maxlength="5000"
+        placeholder="Start writing..."
+      ></textarea>
+
+    </div>
+
+
+    <div class="dateRow">
+
+      <div class="field">
+
+        <label>DATE</label>
+
+        <input
+          id="entryDate"
+          type="date"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>TAGS</label>
+
+        <input
+          id="entryTags"
+          maxlength="120"
+          placeholder="life, work, ideas"
+        >
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="primaryBtn"
+      onclick="saveEntry()"
+    >
+      💾 Save Entry
+    </button>
+
+
+    <button
+      class="deleteBtn hidden"
+      id="deleteEntryBtn"
+      onclick="deleteEditingEntry()"
+    >
+      🗑️ Delete Entry
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- VIEWER -->
+
+<div
+  class="viewer"
+  id="viewer"
+  onclick="closeViewer(event)"
+>
+
+  <div
+    class="viewerBox"
+    onclick="event.stopPropagation()"
+  >
+
+    <div
+      class="viewerMood"
+      id="viewerMood"
+    ></div>
+
+    <h2
+      class="viewerTitle"
+      id="viewerTitle"
+    ></h2>
+
+    <div
+      class="viewerDate"
+      id="viewerDate"
+    ></div>
+
+    <div
+      class="viewerText"
+      id="viewerText"
+    ></div>
+
+    <div
+      class="viewerTags"
+      id="viewerTags"
+    ></div>
+
+    <button
+      class="viewerClose"
+      onclick="closeViewer()"
+    >
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* ==============================
+   DATA
+================================ */
+
+const STORAGE_KEY =
+  "journalPocketEntries";
+
+const THEME_KEY =
+  "journalPocketTheme";
+
+let entries =
+  JSON.parse(
+    localStorage.getItem(
+      STORAGE_KEY
+    ) || "[]"
+  );
+
+let currentFilter =
+  "all";
+
+let editingId =
+  null;
+
+let toastTimer;
+
+
+/* ==============================
+   HELPERS
+================================ */
+
+function makeId(){
+
+  return (
+    Date.now().toString(36) +
+    Math.random()
+      .toString(36)
+      .slice(2)
+  );
+
+}
+
+
+function saveData(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(entries)
+  );
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function localDate(){
+
+  const d =
+    new Date();
+
+  const y =
+    d.getFullYear();
+
+  const m =
+    String(
+      d.getMonth()+1
+    ).padStart(2,"0");
+
+  const day =
+    String(
+      d.getDate()
+    ).padStart(2,"0");
+
+  return `${y}-${m}-${day}`;
+
+}
+
+
+function formatDate(date){
+
+  if(!date){
+    return "";
+  }
+
+  return new Date(
+    date + "T00:00:00"
+  ).toLocaleDateString(
+    undefined,
+    {
+      weekday:"short",
+      month:"short",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
+
+}
+
+
+function formatTime(timestamp){
+
+  if(!timestamp){
+    return "";
+  }
+
+  return new Date(
+    timestamp
+  ).toLocaleTimeString(
+    undefined,
+    {
+      hour:"numeric",
+      minute:"2-digit"
+    }
+  );
+
+}
+
+
+function isToday(date){
+
+  return date ===
+    localDate();
+
+}
+
+
+/* ==============================
+   FILTERS
+================================ */
+
+function setFilter(filter){
+
+  currentFilter =
+    filter;
+
+  document
+    .querySelectorAll(".filter")
+    .forEach(btn => {
+
+      btn.classList.toggle(
+        "active",
+        btn.dataset.filter ===
+        filter
+      );
+
+    });
+
+  renderEntries();
+
+}
+
+
+function clearSearch(){
+
+  document.getElementById(
+    "searchInput"
+  ).value = "";
+
+  renderEntries();
+
+}
+
+
+/* ==============================
+   STATS
+================================ */
+
+function updateStats(){
+
+  const total =
+    entries.length;
+
+  const favorites =
+    entries.filter(
+      entry =>
+        entry.favorite
+    ).length;
+
+  const pinned =
+    entries.filter(
+      entry =>
+        entry.pinned
+    ).length;
+
+
+  document.getElementById(
+    "totalCount"
+  ).textContent =
+    total;
+
+  document.getElementById(
+    "favoriteCount"
+  ).textContent =
+    favorites;
+
+  document.getElementById(
+    "pinnedCount"
+  ).textContent =
+    pinned;
+
+}
+
+
+/* ==============================
+   GET VISIBLE
+================================ */
+
+function getVisibleEntries(){
+
+  let result =
+    [...entries];
+
+
+  switch(currentFilter){
+
+    case "today":
+
+      result =
+        result.filter(
+          entry =>
+            isToday(entry.date)
+        );
+
+      break;
+
+
+    case "favorite":
+
+      result =
+        result.filter(
+          entry =>
+            entry.favorite
+        );
+
+      break;
+
+
+    case "pinned":
+
+      result =
+        result.filter(
+          entry =>
+            entry.pinned
+        );
+
+      break;
+
+  }
+
+
+  const query =
+    document.getElementById(
+      "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+  if(query){
+
+    result =
+      result.filter(
+        entry => {
+
+          const searchable =
+            [
+              entry.title,
+              entry.text,
+              entry.tags,
+              entry.mood
+            ]
+            .join(" ")
+            .toLowerCase();
+
+          return searchable.includes(
+            query
+          );
+
+        }
+      );
+
+  }
+
+
+  result.sort(
+    (a,b) => {
+
+      if(
+        a.pinned !==
+        b.pinned
+      ){
+
+        return a.pinned
+          ? -1
+          : 1;
+
+      }
+
+
+      return (
+        b.updated -
+        a.updated
+      );
+
+    }
+  );
+
+
+  return result;
+
+}
+
+
+/* ==============================
+   RENDER
+================================ */
+
+function renderEntries(){
+
+  updateStats();
+
+
+  const visible =
+    getVisibleEntries();
+
+
+  const container =
+    document.getElementById(
+      "entries"
+    );
+
+
+  document.getElementById(
+    "entrySummary"
+  ).textContent =
+    `${visible.length} ${
+      visible.length === 1
+        ? "entry"
+        : "entries"
+    }`;
+
+
+  if(!visible.length){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emptyIcon">
+          ${
+            document.getElementById(
+              "searchInput"
+            ).value
+              ? "🔎"
+              : "📖"
+          }
+        </div>
+
+        <b>
+          ${
+            document.getElementById(
+              "searchInput"
+            ).value
+              ? "No matching entries"
+              : "Your journal is waiting"
+          }
+        </b>
+
+        <p>
+          ${
+            document.getElementById(
+              "searchInput"
+            ).value
+              ? "Try another search."
+              : "Write down a thought, memory or moment by tapping the + button."
+          }
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    visible
+      .map(
+        entry =>
+          entryHTML(entry)
+      )
+      .join("");
+
+}
+
+
+function entryHTML(entry){
+
+  const tags =
+    entry.tags
+      ? entry.tags
+          .split(",")
+          .map(
+            tag =>
+              tag.trim()
+          )
+          .filter(Boolean)
+      : [];
+
+
+  return `
+
+    <article
+      class="entry ${
+        entry.pinned
+          ? "pinned"
+          : ""
+      }"
+    >
+
+      <div class="entryTop">
+
+        <div class="mood">
+          ${escapeHTML(
+            entry.mood
+          )}
+        </div>
+
+
+        <div class="entryBody">
+
+          <div class="entryTitle">
+            ${escapeHTML(
+              entry.title
+            )}
+          </div>
+
+          <div class="entryDate">
+            ${formatDate(
+              entry.date
+            )}
+            ·
+            ${formatTime(
+              entry.updated
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="entryActions">
+
+          <button
+            class="iconBtn"
+            onclick="toggleFavorite('${entry.id}')"
+            title="Favorite"
+          >
+            ${
+              entry.favorite
+                ? "❤️"
+                : "♡"
+            }
+          </button>
+
+          <button
+            class="iconBtn"
+            onclick="togglePin('${entry.id}')"
+            title="Pin"
+          >
+            ${
+              entry.pinned
+                ? "📌"
+                : "📍"
+            }
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="entryText">
+        ${escapeHTML(
+          entry.text
+        )}
+      </div>
+
+
+      <div class="entryMeta">
+
+        ${
+          entry.favorite
+            ? `
+              <span class="badge favorite">
+                ❤️ Favorite
+              </span>
+            `
+            : ""
+        }
+
+        ${
+          entry.pinned
+            ? `
+              <span class="badge pin">
+                📌 Pinned
+              </span>
+            `
+            : ""
+        }
+
+        ${tags
+          .map(
+            tag => `
+              <span class="badge">
+                #${escapeHTML(
+                  tag
+                )}
+              </span>
+            `
+          )
+          .join("")
+        }
+
+        <button
+          class="badge"
+          style="
+            border:0;
+            cursor:pointer;
+          "
+          onclick="viewEntry('${entry.id}')"
+        >
+          👁 Read
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* ==============================
+   MODAL
+================================ */
+
+function openEntryModal(){
+
+  editingId =
+    null;
+
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    "✍️ New Entry";
+
+
+  document.getElementById(
+    "entryTitle"
+  ).value = "";
+
+
+  document.getElementById(
+    "entryText"
+  ).value = "";
+
+
+  document.getElementById(
+    "entryDate"
+  ).value =
+    localDate();
+
+
+  document.getElementById(
+    "entryTags"
+  ).value = "";
+
+
+  document.getElementById(
+    "m1"
+  ).checked =
+    true;
+
+
+  document.getElementById(
+    "deleteEntryBtn"
+  ).classList.add(
+    "hidden"
+  );
+
+
+  document.getElementById(
+    "entryModal"
+  ).classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    () => {
+
+      document.getElementById(
+        "entryTitle"
+      ).focus();
+
+    },
+    100
+  );
+
+}
+
+
+function editEntry(id){
+
+  const entry =
+    entries.find(
+      item =>
+        item.id === id
+    );
+
+
+  if(!entry){
+    return;
+  }
+
+
+  editingId =
+    id;
+
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    "✏️ Edit Entry";
+
+
+  document.getElementById(
+    "entryTitle"
+  ).value =
+    entry.title;
+
+
+  document.getElementById(
+    "entryText"
+  ).value =
+    entry.text;
+
+
+  document.getElementById(
+    "entryDate"
+  ).value =
+    entry.date;
+
+
+  document.getElementById(
+    "entryTags"
+  ).value =
+    entry.tags || "";
+
+
+  const mood =
+    document.querySelector(
+      `input[name="mood"][value="${entry.mood}"]`
+    );
+
+
+  if(mood){
+    mood.checked = true;
+  }
+
+
+  document.getElementById(
+    "deleteEntryBtn"
+  ).classList.remove(
+    "hidden"
+  );
+
+
+  document.getElementById(
+    "entryModal"
+  ).classList.add(
+    "show"
+  );
+
+}
+
+
+function closeEntryModal(){
+
+  document.getElementById(
+    "entryModal"
+  ).classList.remove(
+    "show"
+  );
+
+  editingId =
+    null;
+
+}
+
+
+function outsideClose(event){
+
+  if(
+    event.target.id ===
+    "entryModal"
+  ){
+
+    closeEntryModal();
+
+  }
+
+}
+
+
+/* ==============================
+   SAVE ENTRY
+================================ */
+
+function saveEntry(){
+
+  const title =
+    document.getElementById(
+      "entryTitle"
+    )
+    .value
+    .trim();
+
+
+  const text =
+    document.getElementById(
+      "entryText"
+    )
+    .value
+    .trim();
+
+
+  const date =
+    document.getElementById(
+      "entryDate"
+    ).value ||
+    localDate();
+
+
+  const tags =
+    document.getElementById(
+      "entryTags"
+    )
+    .value
+    .trim();
+
+
+  const mood =
+    document.querySelector(
+      'input[name="mood"]:checked'
+    )?.value ||
+    "😊";
+
+
+  if(!title){
+
+    showToast(
+      "⚠️ Please enter a title."
+    );
+
+    return;
+
+  }
+
+
+  if(!text){
+
+    showToast(
+      "✍️ Write something first."
+    );
+
+    return;
+
+  }
+
+
+  if(editingId){
+
+    const entry =
+      entries.find(
+        item =>
+          item.id ===
+          editingId
+      );
+
+
+    if(!entry){
+      return;
+    }
+
+
+    entry.title =
+      title;
+
+    entry.text =
+      text;
+
+    entry.date =
+      date;
+
+    entry.tags =
+      tags;
+
+    entry.mood =
+      mood;
+
+    entry.updated =
+      Date.now();
+
+
+    showToast(
+      "✏️ Entry updated."
+    );
+
+  }
+  else{
+
+    entries.unshift({
+
+      id:makeId(),
+
+      title,
+
+      text,
+
+      date,
+
+      tags,
+
+      mood,
+
+      favorite:false,
+
+      pinned:false,
+
+      created:Date.now(),
+
+      updated:Date.now()
+
+    });
+
+
+    showToast(
+      "📖 Journal entry saved."
+    );
+
+  }
+
+
+  saveData();
+
+  closeEntryModal();
+
+  renderEntries();
+
+}
+
+
+/* ==============================
+   FAVORITE
+================================ */
+
+function toggleFavorite(id){
+
+  const entry =
+    entries.find(
+      item =>
+        item.id === id
+    );
+
+
+  if(!entry){
+    return;
+  }
+
+
+  entry.favorite =
+    !entry.favorite;
+
+  entry.updated =
+    Date.now();
+
+
+  saveData();
+
+  renderEntries();
+
+
+  showToast(
+    entry.favorite
+      ? "❤️ Added to favorites."
+      : "♡ Removed from favorites."
+  );
+
+}
+
+
+/* ==============================
+   PIN
+================================ */
+
+function togglePin(id){
+
+  const entry =
+    entries.find(
+      item =>
+        item.id === id
+    );
+
+
+  if(!entry){
+    return;
+  }
+
+
+  entry.pinned =
+    !entry.pinned;
+
+  entry.updated =
+    Date.now();
+
+
+  saveData();
+
+  renderEntries();
+
+
+  showToast(
+    entry.pinned
+      ? "📌 Entry pinned."
+      : "📍 Entry unpinned."
+  );
+
+}
+
+
+/* ==============================
+   DELETE
+================================ */
+
+function deleteEditingEntry(){
+
+  if(!editingId){
+    return;
+  }
+
+
+  const entry =
+    entries.find(
+      item =>
+        item.id ===
+        editingId
+    );
+
+
+  if(!entry){
+    return;
+  }
+
+
+  if(
+    !confirm(
+      `Delete "${entry.title}"?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  entries =
+    entries.filter(
+      item =>
+        item.id !==
+        editingId
+    );
+
+
+  saveData();
+
+  closeEntryModal();
+
+  renderEntries();
+
+
+  showToast(
+    "🗑️ Entry deleted."
+  );
+
+}
+
+
+/* ==============================
+   VIEW ENTRY
+================================ */
+
+function viewEntry(id){
+
+  const entry =
+    entries.find(
+      item =>
+        item.id === id
+    );
+
+
+  if(!entry){
+    return;
+  }
+
+
+  document.getElementById(
+    "viewerMood"
+  ).textContent =
+    entry.mood;
+
+
+  document.getElementById(
+    "viewerTitle"
+  ).textContent =
+    entry.title;
+
+
+  document.getElementById(
+    "viewerDate"
+  ).textContent =
+    `${formatDate(entry.date)} · ${formatTime(entry.updated)}`;
+
+
+  document.getElementById(
+    "viewerText"
+  ).textContent =
+    entry.text;
+
+
+  const tags =
+    entry.tags
+      ? entry.tags
+          .split(",")
+          .map(
+            tag =>
+              tag.trim()
+          )
+          .filter(Boolean)
+      : [];
+
+
+  document.getElementById(
+    "viewerTags"
+  ).innerHTML =
+    tags
+      .map(
+        tag =>
+          `<span class="badge">#${escapeHTML(tag)}</span>`
+      )
+      .join("");
+
+
+  document.getElementById(
+    "viewer"
+  ).classList.add(
+    "show"
+  );
+
+}
+
+
+function closeViewer(event){
+
+  if(
+    !event ||
+    event.target.id ===
+    "viewer"
+  ){
+
+    document.getElementById(
+      "viewer"
+    ).classList.remove(
+      "show"
+    );
+
+  }
+
+}
+
+
+/* ==============================
+   THEME
+================================ */
+
+function toggleTheme(){
+
+  document.body
+    .classList
+    .toggle("dark");
+
+
+  const dark =
+    document.body
+      .classList
+      .contains("dark");
+
+
+  localStorage.setItem(
+    THEME_KEY,
+    dark ? "1" : "0"
+  );
+
+
+  document.getElementById(
+    "themeBtn"
+  ).textContent =
+    dark
+      ? "☀️"
+      : "🌙";
+
+}
+
+
+function loadTheme(){
+
+  const dark =
+    localStorage.getItem(
+      THEME_KEY
+    ) === "1";
+
+
+  if(dark){
+
+    document.body
+      .classList
+      .add("dark");
+
+
+    document.getElementById(
+      "themeBtn"
+    ).textContent =
+      "☀️";
+
+  }
+
+}
+
+
+/* ==============================
+   TOAST
+================================ */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+
+  toast.textContent =
+    message;
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      () => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      2200
+    );
+
+}
+
+
+/* ==============================
+   KEYBOARD
+================================ */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Escape"
+    ){
+
+      closeEntryModal();
+
+      closeViewer();
+
+    }
+
+
+    if(
+      event.ctrlKey &&
+      event.key.toLowerCase() ===
+      "n"
+    ){
+
+      event.preventDefault();
+
+      openEntryModal();
+
+    }
+
+  }
+);
+
+
+/* ==============================
+   INIT
+================================ */
+
+loadTheme();
+
+renderEntries();
+
+</script>
+
+</body>
+</html>

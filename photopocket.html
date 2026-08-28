@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>PhotoPocket v2</title>
+<style>
+:root{--bg:#f6f5fb;--card:#fff;--text:#191724;--muted:#817d91;--line:#e9e6f0;--primary:#7c3aed;--soft:#f0eaff;--danger:#dc2626;--shadow:0 12px 32px rgba(42,28,75,.09)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:480px;min-height:100vh;margin:auto}
+.header{position:relative;overflow:hidden;padding:20px 18px 24px;color:#fff;background:linear-gradient(145deg,#4c1d95,#7c3aed 58%,#c084fc);border-radius:0 0 30px 30px}.header:before,.header:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}.header:before{width:260px;height:260px;right:-130px;top:-170px}.header:after{width:130px;height:130px;left:-75px;bottom:-90px}.topbar,.hero{position:relative;z-index:2}.topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}.logo{width:43px;height:43px;display:grid;place-items:center;border-radius:14px;background:rgba(255,255,255,.16);font-size:21px}.brand b{font-size:21px}.theme{width:40px;height:40px;border:0;border-radius:13px;background:rgba(255,255,255,.16);color:#fff}.hero{margin-top:20px}.hero h1{margin:0;font-size:29px;line-height:1.08;letter-spacing:-.8px}.hero p{margin:8px 0 0;color:#eee8ff;font-size:11px;line-height:1.5}.content{padding:16px}.card{margin-bottom:14px;padding:15px;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.search{position:relative}.search input{width:100%;padding:12px 40px;border:1px solid var(--line);border-radius:13px;outline:none;background:var(--bg);color:var(--text);font-size:10px}.search span{position:absolute;left:13px;top:50%;transform:translateY(-50%)}.search button{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:29px;height:29px;border:0;background:transparent;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{text-align:center;padding:10px 3px;background:var(--bg);border-radius:14px}.stat b{display:block;margin-top:3px;font-size:17px}.stat span{font-size:8px;color:var(--muted)}
+.drop{padding:18px;border:1.5px dashed #c7b8ee;border-radius:17px;background:var(--soft);text-align:center;transition:.2s}.drop.drag{border-color:var(--primary);transform:scale(1.01)}.drop .dropIcon{font-size:28px}.drop b{display:block;margin-top:6px;font-size:11px}.drop p{margin:4px 0 10px;color:var(--muted);font-size:8px}.uploadBtn{padding:9px 13px;border:0;border-radius:10px;background:var(--primary);color:#fff;font-size:9px;font-weight:800}
+.section{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}.section h2{margin:0;font-size:14px}.section small{color:var(--muted);font-size:8px}.filters{display:flex;gap:6px;overflow:auto}.filters::-webkit-scrollbar{display:none}.filter{flex:0 0 auto;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--muted);font-size:8px}.filter.active{border-color:var(--primary);background:var(--soft);color:var(--primary);font-weight:800}
+.albums{display:flex;gap:8px;overflow:auto}.albums::-webkit-scrollbar{display:none}.album{flex:0 0 92px;padding:7px;border:1px solid var(--line);border-radius:14px;background:var(--card);text-align:left}.albumCover{height:62px;display:grid;place-items:center;border-radius:10px;background:var(--soft);font-size:24px;overflow:hidden}.albumCover img{width:100%;height:100%;object-fit:cover}.album b{display:block;margin-top:6px;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.album span{font-size:7px;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.photo{position:relative;aspect-ratio:1;border-radius:11px;overflow:hidden;background:var(--soft);cursor:pointer}.photo img{width:100%;height:100%;display:block;object-fit:cover;transition:.25s}.photo:hover img{transform:scale(1.04)}.photoFav{position:absolute;right:5px;top:5px;width:24px;height:24px;border:0;border-radius:8px;background:rgba(0,0,0,.4);color:#fff;font-size:13px}.photoFav.active{color:#ffd34d}.photoName{position:absolute;left:5px;right:5px;bottom:5px;padding:4px 5px;border-radius:6px;background:rgba(0,0,0,.45);color:#fff;font-size:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.empty{text-align:center;padding:30px 10px}.empty .e{font-size:38px}.empty b{display:block;margin-top:7px;font-size:11px}.empty p{margin:5px auto 0;color:var(--muted);font-size:8px;line-height:1.5}
+.fab{position:fixed;right:max(calc((100vw - 480px)/2 + 17px),17px);bottom:20px;width:56px;height:56px;border:0;border-radius:18px;background:var(--primary);color:#fff;font-size:26px;box-shadow:0 12px 28px rgba(124,58,237,.35);z-index:20}
+.modal{position:fixed;inset:0;display:none;z-index:50;align-items:flex-end;justify-content:center;background:rgba(12,8,22,.65)}.modal.show{display:flex}.box{width:100%;max-width:480px;max-height:92vh;overflow:auto;padding:19px;border-radius:24px 24px 0 0;background:var(--card)}.modalHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.modalHead h2{margin:0;font-size:16px}.close{width:31px;height:31px;border:0;border-radius:9px;background:var(--bg);color:var(--muted)}.field{margin-bottom:11px}.field label{display:block;margin-bottom:5px;color:var(--muted);font-size:8px;font-weight:800}.field input,.field textarea,.field select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;outline:none;background:var(--bg);color:var(--text);font-size:9px}.field textarea{min-height:80px;resize:vertical}.primary{width:100%;padding:11px;border:0;border-radius:11px;background:var(--primary);color:#fff;font-size:10px;font-weight:800}.danger{background:#fee2e2;color:var(--danger);border:0;border-radius:9px;padding:8px 10px;font-size:8px;font-weight:800}
+.viewer{position:fixed;inset:0;z-index:80;display:none;background:#09070d;color:#fff}.viewer.show{display:block}.viewerImg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.viewerTop{position:absolute;z-index:2;left:0;right:0;top:0;padding:15px;display:flex;justify-content:space-between;background:linear-gradient(#0009,transparent)}.viewerBottom{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:20px 15px;background:linear-gradient(transparent,#000b)}.viewerBottom b{font-size:13px}.viewerBottom p{margin:5px 0 0;color:#ddd;font-size:9px}.viewerBtn{width:38px;height:38px;border:0;border-radius:12px;background:#ffffff22;color:#fff;font-size:17px}.viewerActions{display:flex;gap:7px;margin-top:10px}
+body.dark{--bg:#0e0c14;--card:#191621;--text:#f5f1ff;--muted:#a49cb2;--line:#2c2636;--soft:#2a2040;--shadow:0 14px 35px #0005}
+@media(min-width:700px){body{padding:20px 0}.app{min-height:calc(100vh - 40px);border-radius:30px;box-shadow:0 20px 60px #33224a22}.modal{align-items:center;padding:20px}.box{border-radius:24px}.viewerBottom{padding:28px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+ <div class="topbar">
+  <div class="brand"><div class="logo">📸</div><b>PhotoPocket</b></div>
+  <button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+ </div>
+ <div class="hero"><h1>Your memories,<br>in your pocket.</h1><p>A private offline photo organizer for your favorite moments.</p></div>
+</header>
+
+<main class="content">
+ <section class="card">
+  <div class="search"><span>🔎</span><input id="search" placeholder="Search photos..." oninput="render()"><button onclick="document.getElementById('search').value='';render()">×</button></div>
+ </section>
+
+ <section class="card">
+  <div class="stats">
+   <div class="stat">📸<b id="total">0</b><span>Photos</span></div>
+   <div class="stat">⭐<b id="favorites">0</b><span>Favorites</span></div>
+   <div class="stat">🗂️<b id="albumsCount">0</b><span>Albums</span></div>
+  </div>
+ </section>
+
+ <section class="card">
+  <div id="drop" class="drop">
+   <div class="dropIcon">☁️</div>
+   <b>Drop photos here</b>
+   <p>or choose images from your device</p>
+   <button class="uploadBtn" onclick="document.getElementById('fileInput').click()">📷 Choose Photos</button>
+   <input id="fileInput" type="file" accept="image/*" multiple hidden onchange="handleFiles(this.files)">
+  </div>
+ </section>
+
+ <section class="card">
+  <div class="section"><h2>🗂️ Albums</h2><button class="uploadBtn" onclick="openAlbumModal()">＋ Album</button></div>
+  <div class="albums" id="albums"></div>
+ </section>
+
+ <section class="card">
+  <div class="section"><h2>🖼️ Gallery</h2><small id="countLabel">All photos</small></div>
+  <div class="filters">
+   <button class="filter active" data-filter="All" onclick="setFilter('All')">All</button>
+   <button class="filter" data-filter="Favorites" onclick="setFilter('Favorites')">⭐ Favorites</button>
+   <button class="filter" data-filter="Tagged" onclick="setFilter('Tagged')">🏷️ Tagged</button>
+  </div>
+  <div class="gallery" id="gallery" style="margin-top:11px"></div>
+ </section>
+</main>
+</div>
+
+<button class="fab" onclick="document.getElementById('fileInput').click()">＋</button>
+
+<!-- PHOTO DETAILS -->
+<div class="modal" id="photoModal" onclick="outsideClose(event,'photoModal')">
+ <div class="box" onclick="event.stopPropagation()">
+  <div class="modalHead"><h2>📸 Photo Details</h2><button class="close" onclick="closeModal('photoModal')">×</button></div>
+  <div class="field"><label>NAME</label><input id="photoName" maxlength="80"></div>
+  <div class="field"><label>ALBUM</label><select id="photoAlbum"></select></div>
+  <div class="field"><label>TAGS</label><input id="photoTags" placeholder="travel, family, summer"></div>
+  <div class="field"><label>DESCRIPTION</label><textarea id="photoDesc" maxlength="300" placeholder="Add a short memory..."></textarea></div>
+  <button class="primary" onclick="savePhotoDetails()">💾 Save Details</button>
+  <button class="danger" style="width:100%;margin-top:8px" onclick="deleteCurrentPhoto()">🗑️ Delete Photo</button>
+ </div>
+</div>
+
+<!-- ALBUM -->
+<div class="modal" id="albumModal" onclick="outsideClose(event,'albumModal')">
+ <div class="box" onclick="event.stopPropagation()">
+  <div class="modalHead"><h2>🗂️ New Album</h2><button class="close" onclick="closeModal('albumModal')">×</button></div>
+  <div class="field"><label>ALBUM NAME</label><input id="albumName" maxlength="40" placeholder="e.g. Vacation"></div>
+  <button class="primary" onclick="createAlbum()">Create Album</button>
+ </div>
+</div>
+
+<!-- FULLSCREEN VIEWER -->
+<div class="viewer" id="viewer">
+ <img id="viewerImg" class="viewerImg" alt="">
+ <div class="viewerTop">
+  <button class="viewerBtn" onclick="closeViewer()">×</button>
+  <div style="display:flex;gap:7px"><button class="viewerBtn" onclick="toggleCurrentFavorite()">⭐</button><button class="viewerBtn" onclick="openCurrentDetails()">⋯</button></div>
+ </div>
+ <div class="viewerBottom">
+  <b id="viewerTitle"></b>
+  <p id="viewerMeta"></p>
+ </div>
+</div>
+
+<script>
+const DB_NAME="PhotoPocketV2DB",DB_VERSION=1,STORE="photos";
+let db=null,photos=[],albums=JSON.parse(localStorage.getItem("ppv2_albums")||"[]");
+let filter="All",currentId=null,viewerId=null;
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function saveAlbums(){localStorage.setItem("ppv2_albums",JSON.stringify(albums))}
+function openDB(){
+ return new Promise((resolve,reject)=>{
+  const req=indexedDB.open(DB_NAME,DB_VERSION);
+  req.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE,{keyPath:"id"})};
+  req.onsuccess=e=>{db=e.target.result;resolve(db)}
+  req.onerror=()=>reject(req.error)
+ })
+}
+function dbPut(photo){return new Promise((res,rej)=>{const r=db.transaction(STORE,"readwrite").objectStore(STORE).put(photo);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
+function dbDelete(id){return new Promise((res,rej)=>{const r=db.transaction(STORE,"readwrite").objectStore(STORE).delete(id);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
+function dbAll(){return new Promise((res,rej)=>{const r=db.transaction(STORE).objectStore(STORE).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+
+async function init(){
+ await openDB();
+ photos=await dbAll();
+ loadTheme();
+ render();
+}
+
+async function handleFiles(files){
+ const list=[...files].filter(f=>f.type.startsWith("image/"));
+ for(const file of list){
+  const photo={id:uid(),name:file.name.replace(/\.[^.]+$/,""),blob:file,album:"",tags:[],description:"",favorite:false,created:Date.now()};
+  await dbPut(photo);
+ }
+ photos=await dbAll();
+ render();
+ showToast(list.length+" photo"+(list.length===1?"":"s")+" added.");
+}
+
+function setFilter(f){
+ filter=f;
+ document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===f));
+ render();
+}
+
+function imageURL(blob){return URL.createObjectURL(blob)}
+
+function render(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ let arr=[...photos];
+ if(filter==="Favorites")arr=arr.filter(p=>p.favorite);
+ if(filter==="Tagged")arr=arr.filter(p=>p.tags?.length);
+ if(q)arr=arr.filter(p=>(p.name+" "+(p.tags||[]).join(" ")+" "+p.description).toLowerCase().includes(q));
+ arr.sort((a,b)=>b.created-a.created);
+
+ document.getElementById("total").textContent=photos.length;
+ document.getElementById("favorites").textContent=photos.filter(p=>p.favorite).length;
+ document.getElementById("albumsCount").textContent=albums.length;
+ document.getElementById("countLabel").textContent=filter==="All"?"All photos":filter;
+
+ renderAlbums();
+
+ const gallery=document.getElementById("gallery");
+ if(!arr.length){
+  gallery.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="e">📷</div><b>${q?"No photos found":"Your gallery is empty"}</b><p>${q?"Try another search.":"Add photos above to start building your pocket gallery."}</p></div>`;
+  return;
+ }
+ gallery.innerHTML=arr.map(p=>`
+  <div class="photo" onclick="openViewer('${p.id}')">
+   <img src="${imageURL(p.blob)}" alt="${esc(p.name)}">
+   <button class="photoFav ${p.favorite?"active":""}" onclick="event.stopPropagation();toggleFavorite('${p.id}')">${p.favorite?"★":"☆"}</button>
+   <div class="photoName">${esc(p.name)}</div>
+  </div>`).join("");
+}
+
+function renderAlbums(){
+ const box=document.getElementById("albums");
+ if(!albums.length){
+  box.innerHTML=`<div style="color:var(--muted);font-size:8px;padding:10px 2px">No albums yet — create one above.</div>`;
+  return;
+ }
+ box.innerHTML=albums.map(a=>{
+  const p=photos.find(x=>x.album===a.id);
+  return `<button class="album" onclick="selectAlbum('${a.id}')"><div class="albumCover">${p?`<img src="${imageURL(p.blob)}">`:"🗂️"}</div><b>${esc(a.name)}</b><span>${photos.filter(x=>x.album===a.id).length} photos</span></button>`;
+ }).join("");
+}
+
+function selectAlbum(id){
+ const a=albums.find(x=>x.id===id);
+ if(!a)return;
+ document.getElementById("search").value="";
+ filter="Album:"+id;
+ document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
+ document.getElementById("countLabel").textContent=a.name;
+ const arr=photos.filter(p=>p.album===id);
+ const gallery=document.getElementById("gallery");
+ gallery.innerHTML=arr.length?arr.map(p=>`<div class="photo" onclick="openViewer('${p.id}')"><img src="${imageURL(p.blob)}"><button class="photoFav ${p.favorite?"active":""}" onclick="event.stopPropagation();toggleFavorite('${p.id}')">${p.favorite?"★":"☆"}</button><div class="photoName">${esc(p.name)}</div></div>`).join(""):`<div class="empty" style="grid-column:1/-1"><div class="e">🗂️</div><b>Album is empty</b></div>`;
+}
+
+function openAlbumModal(){document.getElementById("albumName").value="";document.getElementById("albumModal").classList.add("show");setTimeout(()=>document.getElementById("albumName").focus(),80)}
+function createAlbum(){
+ const name=document.getElementById("albumName").value.trim();
+ if(!name){showToast("Enter an album name.");return}
+ if(albums.some(a=>a.name.toLowerCase()===name.toLowerCase())){showToast("Album already exists.");return}
+ albums.push({id:uid(),name});saveAlbums();closeModal("albumModal");render();showToast("🗂️ Album created.");
+}
+
+async function toggleFavorite(id){
+ const p=photos.find(x=>x.id===id);if(!p)return;
+ p.favorite=!p.favorite;await dbPut(p);photos=await dbAll();render();showToast(p.favorite?"⭐ Added to favorites":"☆ Removed from favorites");
+}
+
+function openViewer(id){
+ const p=photos.find(x=>x.id===id);if(!p)return;
+ viewerId=id;
+ document.getElementById("viewerImg").src=imageURL(p.blob);
+ document.getElementById("viewerTitle").textContent=p.name;
+ document.getElementById("viewerMeta").textContent=[p.tags?.length?p.tags.join(" • "):"",p.description||""].filter(Boolean).join(" — ")||"PhotoPocket";
+ document.getElementById("viewer").classList.add("show");
+}
+function closeViewer(){document.getElementById("viewer").classList.remove("show");document.getElementById("viewerImg").src=""}
+function toggleCurrentFavorite(){if(viewerId)toggleFavorite(viewerId)}
+function openCurrentDetails(){closeViewer();openDetails(viewerId)}
+
+function openDetails(id){
+ const p=photos.find(x=>x.id===id);if(!p)return;
+ currentId=id;
+ document.getElementById("photoName").value=p.name;
+ document.getElementById("photoTags").value=(p.tags||[]).join(", ");
+ document.getElementById("photoDesc").value=p.description||"";
+ const select=document.getElementById("photoAlbum");
+ select.innerHTML='<option value="">No album</option>'+albums.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join("");
+ select.value=p.album||"";
+ document.getElementById("photoModal").classList.add("show");
+}
+
+async function savePhotoDetails(){
+ const p=photos.find(x=>x.id===currentId);if(!p)return;
+ p.name=document.getElementById("photoName").value.trim()||"Untitled photo";
+ p.album=document.getElementById("photoAlbum").value;
+ p.tags=document.getElementById("photoTags").value.split(",").map(x=>x.trim()).filter(Boolean).slice(0,12);
+ p.description=document.getElementById("photoDesc").value.trim();
+ await dbPut(p);photos=await dbAll();closeModal("photoModal");render();showToast("💾 Photo details saved.");
+}
+
+async function deleteCurrentPhoto(){
+ const p=photos.find(x=>x.id===currentId);if(!p)return;
+ if(!confirm(`Delete "${p.name}"?`))return;
+ await dbDelete(p.id);photos=await dbAll();closeModal("photoModal");render();showToast("🗑️ Photo deleted.");
+}
+
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+function outsideClose(e,id){if(e.target.id===id)closeModal(id)}
+
+function toggleTheme(){
+ document.body.classList.toggle("dark");
+ const dark=document.body.classList.contains("dark");
+ localStorage.setItem("ppv2_theme",dark?"1":"0");
+ document.getElementById("themeBtn").textContent=dark?"☀️":"🌙";
+}
+function loadTheme(){
+ if(localStorage.getItem("ppv2_theme")==="1"){document.body.classList.add("dark");document.getElementById("themeBtn").textContent="☀️"}
+}
+
+let toastTimer;
+function showToast(msg){
+ const t=document.getElementById("toast")||makeToast();
+ t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);
+}
+function makeToast(){
+ const t=document.createElement("div");t.id="toast";t.className="toast";document.body.appendChild(t);return t;
+}
+
+const drop=document.getElementById("drop");
+["dragenter","dragover"].forEach(e=>drop.addEventListener(e,x=>{x.preventDefault();drop.classList.add("drag")}));
+["dragleave","drop"].forEach(e=>drop.addEventListener(e,x=>{x.preventDefault();drop.classList.remove("drag")}));
+drop.addEventListener("drop",e=>handleFiles(e.dataTransfer.files));
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"){closeViewer();closeModal("photoModal");closeModal("albumModal")}
+ if(e.ctrlKey&&e.key.toLowerCase()==="o"){e.preventDefault();document.getElementById("fileInput").click()}
+});
+
+init().catch(err=>{
+ console.error(err);
+ document.getElementById("gallery").innerHTML='<div class="empty" style="grid-column:1/-1"><div class="e">⚠️</div><b>Storage unavailable</b><p>Your browser may not support IndexedDB.</p></div>';
+});
+</script>
+</body>
+</html>

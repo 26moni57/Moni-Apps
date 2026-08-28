@@ -1,0 +1,2506 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>ListPocket</title>
+
+<style>
+:root{
+    --bg:#f6f5fb;
+    --card:#ffffff;
+    --text:#201c35;
+    --muted:#89859c;
+    --line:#e8e5f0;
+    --primary:#7c3aed;
+    --primary2:#6d28d9;
+    --soft:#f0eaff;
+    --green:#16a34a;
+    --greenSoft:#eaf8ef;
+    --red:#dc2626;
+    --yellow:#f59e0b;
+    --shadow:0 12px 32px rgba(50,35,90,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:440px;
+    min-height:100vh;
+    margin:auto;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 28px;
+    color:#fff;
+    background:
+        linear-gradient(
+            145deg,
+            #2e1065,
+            #6d28d9 55%,
+            #a78bfa
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header:before,
+.header:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+}
+
+.header:before{
+    width:220px;
+    height:220px;
+    right:-110px;
+    top:-135px;
+}
+
+.header:after{
+    width:130px;
+    height:130px;
+    left:-75px;
+    bottom:-95px;
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.brandIcon{
+    width:43px;
+    height:43px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    background:rgba(255,255,255,.15);
+    font-size:21px;
+}
+
+.brandName{
+    font-size:21px;
+    font-weight:850;
+}
+
+.themeBtn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.15);
+    color:#fff;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:22px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    margin:8px 0 0;
+    max-width:355px;
+    color:rgba(255,255,255,.82);
+    font-size:12px;
+    line-height:1.5;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    padding:17px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:16px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:13px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:15px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.searchBox{
+    position:relative;
+}
+
+.searchBox input{
+    width:100%;
+    padding:12px 40px 12px 39px;
+    border:1px solid var(--line);
+    border-radius:13px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+    font-size:11px;
+}
+
+.searchBox input:focus{
+    border-color:var(--primary);
+}
+
+.searchIcon{
+    position:absolute;
+    left:13px;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+.clearSearch{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+    width:28px;
+    height:28px;
+    border:0;
+    background:transparent;
+    color:var(--muted);
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.stat{
+    padding:12px 4px;
+    border-radius:14px;
+    background:var(--bg);
+    text-align:center;
+}
+
+.statIcon{
+    font-size:17px;
+}
+
+.stat strong{
+    display:block;
+    margin-top:3px;
+    font-size:17px;
+}
+
+.stat span{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+/* =========================
+   LIST CARDS
+========================= */
+
+.lists{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.listCard{
+    padding:13px;
+    border:1px solid var(--line);
+    border-radius:15px;
+    background:var(--card);
+}
+
+.listTop{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.listEmoji{
+    width:40px;
+    height:40px;
+    flex:0 0 40px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:var(--soft);
+    font-size:19px;
+}
+
+.listInfo{
+    min-width:0;
+    flex:1;
+}
+
+.listName{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:12px;
+    font-weight:800;
+}
+
+.listMeta{
+    margin-top:4px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.starBtn{
+    width:29px;
+    height:29px;
+    border:0;
+    border-radius:9px;
+    background:var(--bg);
+    color:#bbb6c9;
+}
+
+.starBtn.active{
+    color:var(--yellow);
+    background:#fff7df;
+}
+
+.progress{
+    height:6px;
+    margin-top:12px;
+    overflow:hidden;
+    border-radius:10px;
+    background:var(--soft);
+}
+
+.progress div{
+    width:0;
+    height:100%;
+    border-radius:10px;
+    background:var(--primary);
+    transition:.3s;
+}
+
+.listBottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:9px;
+}
+
+.progressText{
+    color:var(--muted);
+    font-size:8px;
+}
+
+.openList{
+    padding:7px 10px;
+    border:0;
+    border-radius:9px;
+    background:var(--soft);
+    color:var(--primary);
+    font-size:9px;
+    font-weight:800;
+}
+
+/* =========================
+   FILTER
+========================= */
+
+.filters{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+}
+
+.filters::-webkit-scrollbar{
+    display:none;
+}
+
+.filter{
+    flex:0 0 auto;
+    padding:8px 11px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--card);
+    color:var(--muted);
+    font-size:9px;
+}
+
+.filter.active{
+    border-color:var(--primary);
+    background:var(--soft);
+    color:var(--primary);
+    font-weight:800;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    padding:28px 10px;
+    text-align:center;
+}
+
+.emptyIcon{
+    font-size:36px;
+}
+
+.empty strong{
+    display:block;
+    margin-top:8px;
+    font-size:12px;
+}
+
+.empty p{
+    margin:5px auto 0;
+    max-width:250px;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.5;
+}
+
+/* =========================
+   FAB
+========================= */
+
+.fab{
+    position:fixed;
+    right:max(
+        calc((100vw - 440px) / 2 + 18px),
+        18px
+    );
+    bottom:22px;
+    z-index:30;
+    width:55px;
+    height:55px;
+    border:0;
+    border-radius:18px;
+    background:var(--primary);
+    color:#fff;
+    font-size:25px;
+    box-shadow:0 10px 25px rgba(124,58,237,.35);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:60;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(10,8,25,.55);
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modalBox{
+    width:100%;
+    max-width:440px;
+    max-height:90vh;
+    overflow:auto;
+    padding:20px;
+    border-radius:25px 25px 0 0;
+    background:var(--card);
+}
+
+.modalHead{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+}
+
+.modalHead h2{
+    margin:0;
+    font-size:17px;
+}
+
+.closeBtn{
+    width:32px;
+    height:32px;
+    border:0;
+    border-radius:10px;
+    background:var(--bg);
+    color:var(--muted);
+}
+
+.field{
+    margin-bottom:12px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:5px;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:750;
+}
+
+.field input,
+.field select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.saveBtn{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    background:var(--primary);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+}
+
+/* =========================
+   LIST DETAIL
+========================= */
+
+.detailHeader{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.backBtn{
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:10px;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.detailTitle{
+    flex:1;
+    min-width:0;
+}
+
+.detailTitle strong{
+    display:block;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:14px;
+}
+
+.detailTitle span{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.addItem{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:7px;
+    margin-bottom:12px;
+}
+
+.addItem input{
+    width:100%;
+    padding:11px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+    font-size:10px;
+}
+
+.addItem button{
+    padding:0 13px;
+    border:0;
+    border-radius:11px;
+    background:var(--primary);
+    color:#fff;
+    font-size:10px;
+    font-weight:800;
+}
+
+.items{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:10px;
+    border:1px solid var(--line);
+    border-radius:12px;
+}
+
+.check{
+    width:27px;
+    height:27px;
+    flex:0 0 27px;
+    display:grid;
+    place-items:center;
+    border:2px solid #d7d3df;
+    border-radius:8px;
+    background:transparent;
+    color:transparent;
+    font-size:12px;
+    font-weight:900;
+}
+
+.item.done{
+    background:var(--greenSoft);
+    border-color:#cce8d4;
+}
+
+.item.done .check{
+    border-color:var(--green);
+    background:var(--green);
+    color:#fff;
+}
+
+.itemName{
+    flex:1;
+    min-width:0;
+    font-size:10px;
+    font-weight:650;
+}
+
+.item.done .itemName{
+    color:var(--muted);
+    text-decoration:line-through;
+}
+
+.deleteItem{
+    width:27px;
+    height:27px;
+    border:0;
+    border-radius:8px;
+    background:var(--bg);
+    color:var(--red);
+    font-size:10px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    z-index:100;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#201c35;
+    color:#fff;
+    font-size:10px;
+    white-space:nowrap;
+    opacity:0;
+    transform:translate(-50%,20px);
+    pointer-events:none;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark{
+    --bg:#0f0d1a;
+    --card:#191625;
+    --text:#f4f1ff;
+    --muted:#a29db4;
+    --line:#2c283d;
+    --soft:#28203f;
+    --shadow:0 14px 35px rgba(0,0,0,.28);
+}
+
+body.dark .item.done{
+    background:#112519;
+    border-color:#285137;
+}
+
+body.dark .starBtn.active{
+    background:#382f14;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media(min-width:700px){
+
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(40,25,80,.13);
+    }
+
+    .modal{
+        align-items:center;
+        padding:20px;
+    }
+
+    .modalBox{
+        border-radius:24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brandIcon">
+                📋
+            </div>
+
+            <div class="brandName">
+                ListPocket
+            </div>
+
+        </div>
+
+        <button
+            class="themeBtn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+
+    <div class="hero">
+
+        <h1>
+            Everything<br>
+            in one list.
+        </h1>
+
+        <p>
+            Keep shopping, packing, ideas and everyday checklists neatly organized.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- SEARCH -->
+
+<section class="card">
+
+    <div class="searchBox">
+
+        <span class="searchIcon">
+            🔎
+        </span>
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Search your lists..."
+            oninput="renderLists()"
+        >
+
+        <button
+            class="clearSearch"
+            onclick="clearSearch()"
+        >
+            ×
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- STATS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📊 Pocket Stats
+        </h2>
+
+        <span>
+            All lists
+        </span>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="statIcon">
+                📋
+            </div>
+
+            <strong id="totalLists">
+                0
+            </strong>
+
+            <span>
+                Lists
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ✅
+            </div>
+
+            <strong id="completedItems">
+                0
+            </strong>
+
+            <span>
+                Done
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ⭐
+            </div>
+
+            <strong id="favoriteLists">
+                0
+            </strong>
+
+            <span>
+                Favorites
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FILTER -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            🗂️ My Lists
+        </h2>
+
+        <span id="filterLabel">
+            All lists
+        </span>
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            data-filter="All"
+            onclick="setFilter('All')"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Favorites"
+            onclick="setFilter('Favorites')"
+        >
+            ⭐ Favorites
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Shopping"
+            onclick="setFilter('Shopping')"
+        >
+            🛒 Shopping
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Tasks"
+            onclick="setFilter('Tasks')"
+        >
+            ✅ Tasks
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Ideas"
+            onclick="setFilter('Ideas')"
+        >
+            💡 Ideas
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Other"
+            onclick="setFilter('Other')"
+        >
+            📌 Other
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- LISTS -->
+
+<section class="card">
+
+    <div
+        class="lists"
+        id="lists"
+    ></div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- FAB -->
+
+<button
+    class="fab"
+    onclick="openListModal()"
+    aria-label="Create list"
+>
+    +
+</button>
+
+
+<!-- CREATE LIST MODAL -->
+
+<div
+    class="modal"
+    id="listModal"
+    onclick="closeModalOutside(event)"
+>
+
+    <div
+        class="modalBox"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="modalHead">
+
+            <h2>
+                ➕ Create List
+            </h2>
+
+            <button
+                class="closeBtn"
+                onclick="closeListModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                LIST NAME
+            </label>
+
+            <input
+                id="listName"
+                type="text"
+                maxlength="80"
+                placeholder="e.g. Weekend Shopping"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                CATEGORY
+            </label>
+
+            <select id="listCategory">
+
+                <option value="Shopping">
+                    🛒 Shopping
+                </option>
+
+                <option value="Tasks">
+                    ✅ Tasks
+                </option>
+
+                <option value="Ideas">
+                    💡 Ideas
+                </option>
+
+                <option value="Other">
+                    📌 Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                ICON
+            </label>
+
+            <select id="listIcon">
+
+                <option>🛒</option>
+                <option>✅</option>
+                <option>💡</option>
+                <option>📚</option>
+                <option>🎒</option>
+                <option>🏠</option>
+                <option>🍳</option>
+                <option>🎬</option>
+                <option>📌</option>
+
+            </select>
+
+        </div>
+
+
+        <button
+            class="saveBtn"
+            onclick="createList()"
+        >
+            📋 Create List
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- DETAIL MODAL -->
+
+<div
+    class="modal"
+    id="detailModal"
+>
+
+    <div class="modalBox">
+
+        <div class="detailHeader">
+
+            <button
+                class="backBtn"
+                onclick="closeDetail()"
+            >
+                ←
+            </button>
+
+            <div class="detailTitle">
+
+                <strong id="detailName">
+                    List
+                </strong>
+
+                <span id="detailProgress">
+                    0 items
+                </span>
+
+            </div>
+
+            <button
+                class="starBtn"
+                id="detailStar"
+                onclick="toggleCurrentFavorite()"
+            >
+                ☆
+            </button>
+
+        </div>
+
+
+        <div class="addItem">
+
+            <input
+                id="itemInput"
+                type="text"
+                maxlength="100"
+                placeholder="Add an item..."
+            >
+
+            <button
+                onclick="addItem()"
+            >
+                Add
+            </button>
+
+        </div>
+
+
+        <div
+            class="items"
+            id="items"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+
+/* =========================
+   STORAGE
+========================= */
+
+const LIST_KEY =
+    "listPocketLists";
+
+const THEME_KEY =
+    "listPocketTheme";
+
+
+let lists =
+    JSON.parse(
+        localStorage.getItem(
+            LIST_KEY
+        ) || "[]"
+    );
+
+
+let currentFilter =
+    "All";
+
+
+let currentListId =
+    null;
+
+
+let toastTimer;
+
+
+/* =========================
+   DEFAULT DATA
+========================= */
+
+if(!lists.length){
+
+    lists = [
+
+        {
+            id:makeId(),
+
+            name:"Grocery List",
+
+            category:"Shopping",
+
+            icon:"🛒",
+
+            favorite:true,
+
+            items:[
+
+                {
+                    id:makeId(),
+                    name:"Milk",
+                    done:false
+                },
+
+                {
+                    id:makeId(),
+                    name:"Eggs",
+                    done:true
+                },
+
+                {
+                    id:makeId(),
+                    name:"Bread",
+                    done:false
+                },
+
+                {
+                    id:makeId(),
+                    name:"Fruit",
+                    done:false
+                }
+
+            ]
+
+        },
+
+
+        {
+            id:makeId(),
+
+            name:"Today's Tasks",
+
+            category:"Tasks",
+
+            icon:"✅",
+
+            favorite:false,
+
+            items:[
+
+                {
+                    id:makeId(),
+                    name:"Reply to emails",
+                    done:true
+                },
+
+                {
+                    id:makeId(),
+                    name:"Finish project",
+                    done:false
+                },
+
+                {
+                    id:makeId(),
+                    name:"Plan tomorrow",
+                    done:false
+                }
+
+            ]
+
+        },
+
+
+        {
+            id:makeId(),
+
+            name:"App Ideas",
+
+            category:"Ideas",
+
+            icon:"💡",
+
+            favorite:false,
+
+            items:[
+
+                {
+                    id:makeId(),
+                    name:"Simple habit tracker",
+                    done:false
+                },
+
+                {
+                    id:makeId(),
+                    name:"Pocket notes app",
+                    done:false
+                }
+
+            ]
+
+        }
+
+    ];
+
+    saveLists();
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function makeId(){
+
+    return (
+        Date.now().toString(36) +
+        Math.random()
+        .toString(36)
+        .slice(2)
+    );
+
+}
+
+
+function saveLists(){
+
+    localStorage.setItem(
+        LIST_KEY,
+        JSON.stringify(lists)
+    );
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+function getList(id){
+
+    return lists.find(
+        list =>
+            list.id === id
+    );
+
+}
+
+
+function getProgress(list){
+
+    const total =
+        list.items.length;
+
+
+    const done =
+        list.items.filter(
+            item =>
+                item.done
+        ).length;
+
+
+    const percent =
+        total
+            ? Math.round(
+                done / total * 100
+            )
+            : 0;
+
+
+    return {
+        total,
+        done,
+        percent
+    };
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(
+    filter
+){
+
+    currentFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(
+            ".filter"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.filter ===
+                    filter
+                );
+
+            }
+        );
+
+
+    document.getElementById(
+        "filterLabel"
+    ).textContent =
+        filter === "All"
+            ? "All lists"
+            : filter;
+
+
+    renderLists();
+
+}
+
+
+function clearSearch(){
+
+    document.getElementById(
+        "search"
+    ).value = "";
+
+    renderLists();
+
+}
+
+
+/* =========================
+   RENDER LISTS
+========================= */
+
+function renderLists(){
+
+    const container =
+        document.getElementById(
+            "lists"
+        );
+
+
+    const search =
+        document.getElementById(
+            "search"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    let result =
+        [...lists];
+
+
+    if(
+        currentFilter ===
+        "Favorites"
+    ){
+
+        result =
+            result.filter(
+                list =>
+                    list.favorite
+            );
+
+    }
+    else if(
+        currentFilter !==
+        "All"
+    ){
+
+        result =
+            result.filter(
+                list =>
+                    list.category ===
+                    currentFilter
+            );
+
+    }
+
+
+    if(search){
+
+        result =
+            result.filter(
+                list => {
+
+                    const itemText =
+                        list.items
+                        .map(
+                            item =>
+                                item.name
+                        )
+                        .join(" ");
+
+
+                    return (
+
+                        list.name
+                        .toLowerCase()
+                        .includes(search)
+
+                        ||
+
+                        list.category
+                        .toLowerCase()
+                        .includes(search)
+
+                        ||
+
+                        itemText
+                        .toLowerCase()
+                        .includes(search)
+
+                    );
+
+                }
+            );
+
+    }
+
+
+    if(!result.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="emptyIcon">
+                    ${
+                        search
+                            ? "🔎"
+                            : "📋"
+                    }
+                </div>
+
+                <strong>
+                    ${
+                        search
+                            ? "No lists found"
+                            : "No lists yet"
+                    }
+                </strong>
+
+                <p>
+                    ${
+                        search
+                            ? "Try a different search."
+                            : "Tap + to create your first list."
+                    }
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        result
+        .map(
+            list => {
+
+                const progress =
+                    getProgress(
+                        list
+                    );
+
+
+                return `
+
+                    <div class="listCard">
+
+                        <div class="listTop">
+
+                            <div class="listEmoji">
+                                ${escapeHTML(
+                                    list.icon
+                                )}
+                            </div>
+
+
+                            <div class="listInfo">
+
+                                <div class="listName">
+                                    ${escapeHTML(
+                                        list.name
+                                    )}
+                                </div>
+
+                                <div class="listMeta">
+                                    ${
+                                        progress.done
+                                    } of ${
+                                        progress.total
+                                    } completed · ${
+                                        escapeHTML(
+                                            list.category
+                                        )
+                                    }
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="starBtn ${
+                                    list.favorite
+                                        ? "active"
+                                        : ""
+                                }"
+                                onclick="toggleFavorite('${list.id}')"
+                            >
+                                ${
+                                    list.favorite
+                                        ? "★"
+                                        : "☆"
+                                }
+                            </button>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                style="width:${progress.percent}%"
+                            ></div>
+
+                        </div>
+
+
+                        <div class="listBottom">
+
+                            <span class="progressText">
+                                ${
+                                    progress.percent
+                                }% complete
+                            </span>
+
+
+                            <button
+                                class="openList"
+                                onclick="openDetail('${list.id}')"
+                            >
+                                Open →
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        )
+        .join("");
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function renderStats(){
+
+    let completed = 0;
+
+
+    lists.forEach(
+        list => {
+
+            completed +=
+                list.items.filter(
+                    item =>
+                        item.done
+                ).length;
+
+        }
+    );
+
+
+    document.getElementById(
+        "totalLists"
+    ).textContent =
+        lists.length;
+
+
+    document.getElementById(
+        "completedItems"
+    ).textContent =
+        completed;
+
+
+    document.getElementById(
+        "favoriteLists"
+    ).textContent =
+        lists.filter(
+            list =>
+                list.favorite
+        ).length;
+
+}
+
+
+/* =========================
+   CREATE LIST
+========================= */
+
+function openListModal(){
+
+    document.getElementById(
+        "listModal"
+    )
+    .classList
+    .add("show");
+
+
+    setTimeout(
+        () =>
+            document
+            .getElementById(
+                "listName"
+            )
+            .focus(),
+        100
+    );
+
+}
+
+
+function closeListModal(){
+
+    document.getElementById(
+        "listModal"
+    )
+    .classList
+    .remove("show");
+
+}
+
+
+function createList(){
+
+    const name =
+        document.getElementById(
+            "listName"
+        )
+        .value
+        .trim();
+
+
+    const category =
+        document.getElementById(
+            "listCategory"
+        )
+        .value;
+
+
+    const icon =
+        document.getElementById(
+            "listIcon"
+        )
+        .value;
+
+
+    if(!name){
+
+        showToast(
+            "⚠️ Enter a list name."
+        );
+
+        return;
+
+    }
+
+
+    lists.unshift({
+
+        id:makeId(),
+
+        name:name,
+
+        category:category,
+
+        icon:icon,
+
+        favorite:false,
+
+        items:[]
+
+    });
+
+
+    saveLists();
+
+    closeListModal();
+
+    document.getElementById(
+        "listName"
+    ).value = "";
+
+    render();
+
+    showToast(
+        "📋 List created!"
+    );
+
+}
+
+
+/* =========================
+   DELETE LIST
+========================= */
+
+function deleteList(id){
+
+    const list =
+        getList(id);
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+    if(
+        !confirm(
+            `Delete "${list.name}"?`
+        )
+    ){
+
+        return;
+
+    }
+
+
+    lists =
+        lists.filter(
+            item =>
+                item.id !== id
+        );
+
+
+    saveLists();
+
+    render();
+
+    showToast(
+        "🗑️ List deleted."
+    );
+
+}
+
+
+/* =========================
+   FAVORITE LIST
+========================= */
+
+function toggleFavorite(id){
+
+    const list =
+        getList(id);
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+    list.favorite =
+        !list.favorite;
+
+
+    saveLists();
+
+    render();
+
+    if(
+        currentListId === id
+    ){
+
+        updateDetailHeader();
+
+    }
+
+
+    showToast(
+        list.favorite
+            ? "⭐ Added to favorites."
+            : "☆ Removed from favorites."
+    );
+
+}
+
+
+/* =========================
+   DETAIL
+========================= */
+
+function openDetail(id){
+
+    const list =
+        getList(id);
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+    currentListId =
+        id;
+
+
+    document.getElementById(
+        "detailModal"
+    )
+    .classList
+    .add("show");
+
+
+    renderDetail();
+
+
+    setTimeout(
+        () =>
+            document
+            .getElementById(
+                "itemInput"
+            )
+            .focus(),
+        100
+    );
+
+}
+
+
+function closeDetail(){
+
+    document.getElementById(
+        "detailModal"
+    )
+    .classList
+    .remove("show");
+
+
+    currentListId =
+        null;
+
+
+    render();
+
+}
+
+
+function updateDetailHeader(){
+
+    const list =
+        getList(
+            currentListId
+        );
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+    const progress =
+        getProgress(
+            list
+        );
+
+
+    document.getElementById(
+        "detailName"
+    ).textContent =
+        list.name;
+
+
+    document.getElementById(
+        "detailProgress"
+    ).textContent =
+        progress.done +
+        " of " +
+        progress.total +
+        " completed";
+
+
+    const star =
+        document.getElementById(
+            "detailStar"
+        );
+
+
+    star.textContent =
+        list.favorite
+            ? "★"
+            : "☆";
+
+
+    star.classList.toggle(
+        "active",
+        list.favorite
+    );
+
+}
+
+
+/* =========================
+   DETAIL ITEMS
+========================= */
+
+function renderDetail(){
+
+    const list =
+        getList(
+            currentListId
+        );
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+    updateDetailHeader();
+
+
+    const container =
+        document.getElementById(
+            "items"
+        );
+
+
+    if(!list.items.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="emptyIcon">
+                    ✨
+                </div>
+
+                <strong>
+                    No items yet
+                </strong>
+
+                <p>
+                    Add something to this list above.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        list.items
+        .map(
+            item => `
+
+                <div class="item ${
+                    item.done
+                        ? "done"
+                        : ""
+                }">
+
+                    <button
+                        class="check"
+                        onclick="toggleItem('${item.id}')"
+                    >
+                        ✓
+                    </button>
+
+
+                    <div class="itemName">
+                        ${escapeHTML(
+                            item.name
+                        )}
+                    </div>
+
+
+                    <button
+                        class="deleteItem"
+                        onclick="deleteItem('${item.id}')"
+                    >
+                        🗑
+                    </button>
+
+                </div>
+
+            `
+        )
+        .join("");
+
+}
+
+
+function addItem(){
+
+    const list =
+        getList(
+            currentListId
+        );
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+    const input =
+        document.getElementById(
+            "itemInput"
+        );
+
+
+    const name =
+        input.value.trim();
+
+
+    if(!name){
+
+        showToast(
+            "⚠️ Enter an item."
+        );
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    list.items.push({
+
+        id:makeId(),
+
+        name:name,
+
+        done:false
+
+    });
+
+
+    input.value = "";
+
+    saveLists();
+
+    renderDetail();
+
+    renderStats();
+
+    showToast(
+        "✅ Item added."
+    );
+
+
+    input.focus();
+
+}
+
+
+function toggleItem(id){
+
+    const list =
+        getList(
+            currentListId
+        );
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+    const item =
+        list.items.find(
+            x =>
+                x.id === id
+        );
+
+
+    if(!item){
+
+        return;
+
+    }
+
+
+    item.done =
+        !item.done;
+
+
+    saveLists();
+
+    renderDetail();
+
+    renderStats();
+
+    renderLists();
+
+}
+
+
+function deleteItem(id){
+
+    const list =
+        getList(
+            currentListId
+        );
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+    list.items =
+        list.items.filter(
+            item =>
+                item.id !== id
+        );
+
+
+    saveLists();
+
+    renderDetail();
+
+    renderStats();
+
+    renderLists();
+
+    showToast(
+        "🗑️ Item removed."
+    );
+
+}
+
+
+/* =========================
+   CURRENT FAVORITE
+========================= */
+
+function toggleCurrentFavorite(){
+
+    if(currentListId){
+
+        toggleFavorite(
+            currentListId
+        );
+
+    }
+
+}
+
+
+/* =========================
+   MODAL OUTSIDE
+========================= */
+
+function closeModalOutside(
+    event
+){
+
+    if(
+        event.target.id ===
+        "listModal"
+    ){
+
+        closeListModal();
+
+    }
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body
+        .classList
+        .toggle("dark");
+
+
+    const dark =
+        document.body
+        .classList
+        .contains("dark");
+
+
+    localStorage.setItem(
+        THEME_KEY,
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById(
+        "themeBtn"
+    ).textContent =
+        dark
+            ? "☀️"
+            : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            THEME_KEY
+        ) === "1";
+
+
+    if(dark){
+
+        document.body
+            .classList
+            .add("dark");
+
+
+        document.getElementById(
+            "themeBtn"
+        ).textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(
+    message
+){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () =>
+                toast.classList.remove(
+                    "show"
+                ),
+            2200
+        );
+
+}
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.getElementById(
+    "itemInput"
+).addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter"
+        ){
+
+            addItem();
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Escape"
+        ){
+
+            closeListModal();
+
+            closeDetail();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+    renderLists();
+
+    renderStats();
+
+}
+
+
+loadTheme();
+
+render();
+
+</script>
+
+</body>
+</html>

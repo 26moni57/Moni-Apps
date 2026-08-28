@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#ea580c">
+<title>MemeGen Studio</title>
+
+<style>
+:root{
+--bg:#f8f7f4;
+--card:#fff;
+--text:#24221f;
+--muted:#89847d;
+--line:#e9e5de;
+--primary:#ea580c;
+--primary-soft:#fff1e7;
+--shadow:0 10px 30px rgba(55,45,30,.07)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#c2410c,#ea580c 55%,#f97316);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.11)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.17);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.17);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.84)
+}
+
+/* CONTENT */
+
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* INPUT FIELDS */
+
+.field{
+margin-bottom:12px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted)
+}
+
+.field input[type="text"],
+.field select{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text)
+}
+
+.field input[type="text"]:focus{
+border-color:var(--primary)
+}
+
+/* FILE UPLOAD */
+
+.upload-zone{
+position:relative;
+border:2px dashed var(--line);
+border-radius:14px;
+padding:24px;
+text-align:center;
+background:var(--bg);
+cursor:pointer;
+margin-bottom:12px
+}
+
+.upload-zone input[type="file"]{
+position:absolute;
+inset:0;
+opacity:0;
+cursor:pointer
+}
+
+.upload-icon{font-size:28px;margin-bottom:4px}
+.upload-text{font-size:12px;font-weight:700}
+.upload-sub{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* STUDIO PREVIEW SCREEN */
+
+.preview-container{
+display:flex;
+justify-content:center;
+align-items:center;
+background:var(--bg);
+border-radius:16px;
+padding:10px;
+margin-bottom:14px;
+overflow:hidden
+}
+
+canvas{
+max-width:100%;
+height:auto;
+background:#eee;
+border-radius:8px;
+box-shadow:0 4px 12px rgba(0,0,0,.05);
+display:block
+}
+
+.btn-action{
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:white;
+font-weight:800
+}
+
+/* DARK MODE */
+
+body.dark{
+--bg:#121214;
+--card:#1a1a1e;
+--text:#f3f3f5;
+--muted:#a1a1a5;
+--line:#2d2d34;
+--shadow:0 12px 35px rgba(0,0,0,.3)
+}
+
+@media(min-width:700px){
+body{padding:20px 0}
+.app{
+min-height:calc(100vh - 40px);
+border-radius:30px;
+box-shadow:0 20px 60px rgba(30,25,15,.12)
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🖼️</div>
+<div class="brand-name">MemeGen</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+</div>
+
+<div class="hero">
+<h1>Make Memes.<br>Instantly.</h1>
+<p>Upload a background image, inject custom text captions, and share.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- FILE PICKER CARD -->
+<section class="card">
+<div class="upload-zone">
+<div class="upload-icon">📸</div>
+<div class="upload-text">Choose image or photo</div>
+<div class="upload-sub">Supports PNG, JPG or WEBP formats</div>
+<input type="file" id="imageLoader" accept="image/*" onchange="handleImage(this)">
+</div>
+</section>
+
+<!-- LIVE WORKSPACE CANVAS -->
+<section class="card">
+<div class="title">
+<h2>🖼️ Real-time Preview</h2>
+</div>
+<div class="preview-container">
+<canvas id="memeCanvas"></canvas>
+</div>
+</section>
+
+<!-- CONFIG CAPTION CONTROLS -->
+<section class="card">
+<div class="title">
+<h2>✍️ Text Customization</h2>
+</div>
+
+<div class="field">
+<label>TOP TEXT CAPTION</label>
+<input type="text" id="topText" placeholder="ENTER TOP CAPTION" oninput="drawMeme()">
+</div>
+
+<div class="field">
+<label>BOTTOM TEXT CAPTION</label>
+<input type="text" id="bottomText" placeholder="ENTER BOTTOM CAPTION" oninput="drawMeme()">
+</div>
+
+<div class="field">
+<label>FONT STYLE STYLE</label>
+<select id="fontStyle" onchange="drawMeme()">
+<option value="Impact">Classic Meme (Impact)</option>
+<option value="Arial">Clean Modern (Arial)</option>
+<option value="Comic Sans MS">Playful (Comic Sans)</option>
+</select>
+</div>
+</section>
+
+<button class="btn-action" onclick="downloadMeme()">Export & Download Meme</button>
+
+</main>
+
+</div>
+
+<script>
+let canvas = document.getElementById("memeCanvas");
+let ctx = canvas.getContext("2d");
+let currentImage = null;
+
+// Set operational default rendering dimension canvas geometry blueprint limits
+canvas.width = 500;
+canvas.height = 500;
+
+// Draw a placeholder fallback context configuration setup initially on boot
+function initCanvasPlaceholder() {
+    ctx.fillStyle = "#e9e5de";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#89847d";
+    ctx.font = "bold 20px Inter, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Upload an image to start framing", canvas.width / 2, canvas.height / 2);
+}
+
+// Dark/Light layout mode switching engine
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("dark") ? "☀️" : "🌙";
+}
+
+// Read raw graphic file upload transformations securely via file object API
+function handleImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        currentImage = new Image();
+        currentImage.onload = function() {
+            // Force clean baseline target geometry calculations
+            const aspect = currentImage.width / currentImage.height;
+            canvas.width = 600;
+            canvas.height = 600 / aspect;
+            drawMeme();
+        };
+        currentImage.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+// Complete real-time canvas refresh painting calculation cycle
+function drawMeme() {
+    if (!currentImage) {
+        initCanvasPlaceholder();
+        return;
+    }
+
+    // Step 1: Draw background uploaded image file matrix layer bounds
+    ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+
+    // Step 2: Grab layout controls configuration properties metrics
+    const topText = document.getElementById("topText").value.trim().toUpperCase();
+    const bottomText = document.getElementById("bottomText").value.trim().toUpperCase();
+    const selectedFont = document.getElementById("fontStyle").value;
+
+    // Dynamically scale letter footprint geometry based on structural canvas space width bounds
+    const fontSize = Math.floor(canvas.width * 0.085);
+    ctx.font = `bold ${fontSize}px ${selectedFont}`;
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = Math.floor(fontSize * 0.18);
+    ctx.textAlign = "center";
+
+    // Step 3: Overlay rendering Top Text caption
+    if (topText) {
+        ctx.textBaseline = "top";
+        ctx.strokeText(topText, canvas.width / 2, 20);
+        ctx.fillText(topText, canvas.width / 2, 20);
+    }
+
+    // Step 4: Overlay rendering Bottom Text caption
+    if (bottomText) {
+        ctx.textBaseline = "bottom";
+        ctx.strokeText(bottomText, canvas.width / 2, canvas.height - 20);
+        ctx.fillText(bottomText, canvas.width / 2, canvas.height - 20);
+    }
+}
+
+// Local browser hardware download generation action pipeline
+function downloadMeme() {
+    if (!currentImage) return alert("Please select an image file asset element background context first.");
+    
+    const link = document.createElement("a");
+    link.download = "meme-" + Date.now() + ".png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+}
+
+// Standard application lifecycle runtime bootstrap trigger setup
+initCanvasPlaceholder();
+</script>
+
+</body>
+</html>

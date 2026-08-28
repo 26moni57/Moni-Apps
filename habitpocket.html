@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0f766e">
+<title>HabitPocket — Offline Habit Tracker</title>
+<style>
+:root{
+ --bg:#f3f8f7;--card:#fff;--text:#142523;--muted:#72817f;--line:#dfe9e7;
+ --primary:#0f766e;--primary2:#115e59;--soft:#e5f5f2;--green:#16a34a;
+ --amber:#d97706;--red:#dc2626;--shadow:0 14px 38px rgba(15,70,65,.08)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{max-width:650px;margin:auto;min-height:100vh}
+.header{position:relative;overflow:hidden;padding:18px 18px 28px;color:#fff;border-radius:0 0 31px 31px;background:linear-gradient(145deg,#134e4a,#0f766e 58%,#14b8a6)}
+.header:after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;right:-145px;top:-190px;background:rgba(255,255,255,.1)}
+.top{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:rgba(255,255,255,.15);font-size:21px}
+.brand b{display:block;font-size:18px}.brand span{display:block;font-size:7px;color:#ccfbf1;letter-spacing:.5px}
+.theme{width:40px;height:40px;border:0;border-radius:12px;background:rgba(255,255,255,.15);color:#fff}
+.hero{position:relative;z-index:2;margin-top:20px}.eyebrow{font-size:8px;font-weight:900;color:#ccfbf1}.title{font-size:30px;line-height:1;font-weight:900;letter-spacing:-1px;margin-top:4px}.hero p{font-size:8px;color:#ccfbf1;margin:7px 0 0}
+.content{padding:15px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:13px;box-shadow:var(--shadow)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{text-align:center;background:var(--bg);border-radius:14px;padding:11px 4px}.stat i{font-style:normal;font-size:16px}.stat b{display:block;font-size:13px;margin-top:3px}.stat span{display:block;color:var(--muted);font-size:6.5px;margin-top:3px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px}.day{text-align:center}.day span{display:block;color:var(--muted);font-size:6px}.dot{width:23px;height:23px;margin:4px auto 0;border-radius:50%;display:grid;place-items:center;background:var(--line);font-size:7px;font-weight:900}.dot.done{background:var(--primary);color:#fff}.dot.today{outline:2px solid var(--primary);outline-offset:2px}
+.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.head h2{font-size:14px;margin:0}.head span{font-size:8px;color:var(--muted)}
+.search{position:relative}.search input{width:100%;height:42px;border:1px solid var(--line);border-radius:11px;background:var(--bg);padding:0 38px;outline:0;color:var(--text);font-size:9px}.search i{position:absolute;left:13px;top:12px;font-style:normal}.search button{position:absolute;right:4px;top:4px;width:32px;height:32px;border:0;background:transparent;color:var(--muted)}
+.filters{display:flex;gap:6px;overflow:auto;padding:9px 0 2px}.filters::-webkit-scrollbar{display:none}.filter{white-space:nowrap;padding:7px 11px;border:1px solid var(--line);border-radius:20px;background:var(--card);color:var(--muted);font-size:7px;font-weight:800}.filter.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.primary{width:100%;height:40px;margin-top:9px;border:0;border-radius:10px;background:var(--primary);color:#fff;font-size:8px;font-weight:900}.primary:hover{background:var(--primary2)}
+.habits{display:flex;flex-direction:column;gap:9px}.habit{border:1px solid var(--line);border-radius:17px;background:var(--card);padding:12px}.habit-top{display:flex;align-items:center;gap:10px}.habit-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:var(--soft);font-size:20px}.habit-main{flex:1;min-width:0}.habit-name{font-size:12px;font-weight:900}.habit-meta{margin-top:3px;color:var(--muted);font-size:7px}.fav{border:0;background:transparent;color:#c7c1cc;font-size:19px}.fav.on{color:#f59e0b}
+.habit-row{display:flex;align-items:center;gap:8px;margin-top:11px}.check{width:38px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:14px}.check.done{background:var(--primary);border-color:var(--primary);color:#fff}.streak{flex:1;font-size:7px;color:var(--muted)}.streak b{color:var(--text);font-size:8px}.actions{display:flex;gap:4px}.small{width:30px;height:30px;border:0;border-radius:8px;background:var(--bg);color:var(--muted)}
+.empty{text-align:center;padding:32px 10px}.empty .emoji{font-size:42px}.empty b{display:block;font-size:10px;margin-top:7px}.empty p{max-width:280px;margin:5px auto;color:var(--muted);font-size:8px;line-height:1.5}
+.progress{height:7px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:9px}.progress span{display:block;height:100%;width:0;background:var(--primary);border-radius:99px}
+.modal{position:fixed;inset:0;z-index:20;display:none;align-items:flex-end;justify-content:center;padding:15px;background:rgba(8,35,32,.62);backdrop-filter:blur(5px)}.modal.show{display:flex}.box{width:100%;max-width:590px;max-height:93vh;overflow:auto;padding:18px;border-radius:24px;background:var(--card)}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modal-head h3{margin:0;font-size:15px}.close{width:32px;height:32px;border:0;border-radius:9px;background:var(--bg);color:var(--muted)}
+.field{margin-bottom:11px}.field label{display:block;margin-bottom:5px;font-size:8px;font-weight:900}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);outline:0;padding:10px;font-size:9px}.field input,.field select{height:40px}.field textarea{min-height:65px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.modal-actions{display:flex;gap:7px;margin-top:15px}.modal-actions button{flex:1;height:40px;border:0;border-radius:10px;font-size:9px;font-weight:900}.cancel{background:var(--bg);color:var(--text)}.save{background:var(--primary);color:#fff}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detail{padding:10px;border-radius:11px;background:var(--bg)}.detail span{display:block;color:var(--muted);font-size:6px}.detail b{display:block;margin-top:4px;font-size:8px}.section{margin-top:13px}.section h4{margin:0 0 7px;font-size:9px}.note{padding:11px;border-radius:11px;background:var(--bg);font-size:8px;line-height:1.5}
+.toast{position:fixed;left:50%;bottom:20px;z-index:50;max-width:calc(100% - 30px);padding:11px 15px;border-radius:11px;background:#102a28;color:#fff;font-size:9px;opacity:0;pointer-events:none;transform:translate(-50%,20px);transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+body.dark{--bg:#0f1716;--card:#19221f;--text:#f3faf8;--muted:#9aa9a5;--line:#2b3935;--soft:#12342f;--shadow:0 15px 40px rgba(0,0,0,.34)}
+@media(min-width:700px){body{padding:20px 0}.app{min-height:calc(100vh - 40px);overflow:hidden;border-radius:30px;box-shadow:0 20px 60px rgba(15,70,65,.14)}.modal{align-items:center}}
+@media(max-width:420px){.two{grid-template-columns:1fr;gap:0}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+<div class="top"><div class="brand"><div class="logo">🧠</div><div><b>HabitPocket</b><span>YOUR OFFLINE HABIT TRACKER</span></div></div><button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button></div>
+<div class="hero"><div class="eyebrow">BUILD • TRACK • CONSIST</div><div class="title">HabitPocket</div><p>Small daily actions, organized into a simple routine.</p></div>
+</header>
+
+<main class="content">
+<section class="card">
+<div class="stats">
+<div class="stat"><i>🔥</i><b id="streak">0</b><span>Best Streak</span></div>
+<div class="stat"><i>✅</i><b id="today">0/0</b><span>Today</span></div>
+<div class="stat"><i>📊</i><b id="rate">0%</b><span>Completion</span></div>
+</div>
+<div class="progress"><span id="bar"></span></div>
+<div class="week" id="week"></div>
+</section>
+
+<section class="card">
+<div class="head"><h2>🎯 My Habits</h2><span id="count">0 habits</span></div>
+<div class="search"><i>🔍</i><input id="search" placeholder="Search habits..." oninput="render()"><button onclick="clearSearch()">×</button></div>
+<div class="filters" id="filters"></div>
+<button class="primary" onclick="openEditor()">+ Add Habit</button>
+</section>
+
+<section class="card"><div class="habits" id="habits"></div></section>
+</main>
+<footer style="padding:5px 15px 25px;text-align:center;color:var(--muted);font-size:7px">🔒 Habit data is stored locally on this device.</footer>
+</div>
+
+<div class="modal" id="editor"><div class="box">
+<div class="modal-head"><h3 id="editorTitle">🧠 Add Habit</h3><button class="close" onclick="closeEditor()">×</button></div>
+<div class="field"><label>HABIT NAME</label><input id="name" maxlength="80" placeholder="e.g. Read for 20 minutes"></div>
+<div class="two">
+<div class="field"><label>CATEGORY</label><select id="category"><option>Health</option><option>Fitness</option><option>Learning</option><option>Mindfulness</option><option>Work</option><option>Personal</option><option>Other</option></select></div>
+<div class="field"><label>ICON</label><select id="icon"><option>🧠</option><option>💪</option><option>📚</option><option>💧</option><option>🏃</option><option>🧘</option><option>✍️</option><option>🎯</option><option>🌱</option><option>💤</option></select></div>
+</div>
+<div class="two">
+<div class="field"><label>GOAL</label><input id="goal" type="number" min="1" max="7" value="7"></div>
+<div class="field"><label>REMINDER TIME</label><input id="reminder" type="time"></div>
+</div>
+<div class="field"><label>NOTES</label><textarea id="notes" maxlength="700" placeholder="Why this habit matters or a small reminder..."></textarea></div>
+<div class="modal-actions"><button class="cancel" onclick="closeEditor()">Cancel</button><button class="save" onclick="saveHabit()">Save Habit</button></div>
+</div></div>
+
+<div class="modal" id="detail"><div class="box">
+<div class="modal-head"><h3>📈 Habit Details</h3><button class="close" onclick="closeDetail()">×</button></div>
+<div id="detailContent"></div>
+<div class="modal-actions"><button class="cancel" onclick="closeDetail()">Close</button><button class="save" id="editBtn">✏️ Edit</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY="habitPocketData",THEME="habitPocketTheme";
+let data=JSON.parse(localStorage.getItem(KEY)||"null")||{habits:[],checks:{}};
+if(!Array.isArray(data.habits))data.habits=[];
+if(!data.checks||typeof data.checks!=="object")data.checks={};
+let editingId=null,filter="All";
+
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const todayKey=()=>new Date().toISOString().slice(0,10);
+const save=()=>localStorage.setItem(KEY,JSON.stringify(data));
+const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+function dateObj(key){return new Date(key+"T00:00:00")}
+function keyFor(id,date){return id+"|"+date}
+function done(id,date=todayKey()){return !!data.checks[keyFor(id,date)]}
+function fmtDay(d){return d.toLocaleDateString(undefined,{weekday:"short"}).slice(0,3)}
+function dateKey(d){return d.toISOString().slice(0,10)}
+function toast(m){let t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),2200)}
+
+function startOfWeek(){
+ let d=dateObj(todayKey()),day=d.getDay(),diff=(day+6)%7;
+ d.setDate(d.getDate()-diff);return d;
+}
+function weekRender(){
+ let w=startOfWeek(),el=document.getElementById("week"),total=data.habits.length;
+ let html="";
+ for(let i=0;i<7;i++){
+  let d=new Date(w);d.setDate(w.getDate()+i);let k=dateKey(d);
+  let n=data.habits.filter(h=>done(h.id,k)).length;
+  html+=`<div class="day"><span>${fmtDay(d)}</span><div class="dot ${n?"done":""} ${k===todayKey()?"today":""}">${n||""}</div></div>`;
+ }
+ el.innerHTML=html;
+}
+
+function stats(){
+ let hs=data.habits,t=0,td=0,all=0;
+ hs.forEach(h=>{
+  if(done(h.id))td++;
+  for(let i=0;i<30;i++){let d=new Date();d.setDate(d.getDate()-i);if(done(h.id,dateKey(d)))all++}
+  t+=30;
+ });
+ let best=0;
+ hs.forEach(h=>best=Math.max(best,bestStreak(h)));
+ document.getElementById("streak").textContent=best;
+ document.getElementById("today").textContent=td+"/"+hs.length;
+ let pct=t?Math.round(all/t*100):0;
+ document.getElementById("rate").textContent=pct+"%";
+ document.getElementById("bar").style.width=pct+"%";
+ weekRender();
+}
+function bestStreak(h){
+ let best=0,cur=0;
+ for(let i=0;i<366;i++){
+  let d=new Date();d.setDate(d.getDate()-i);
+  if(done(h.id,dateKey(d))){cur++;best=Math.max(best,cur)}else if(i>0)cur=0;
+ }
+ return best;
+}
+function currentStreak(h){
+ let cur=0;
+ for(let i=0;i<366;i++){let d=new Date();d.setDate(d.getDate()-i);if(done(h.id,dateKey(d)))cur++;else break}
+ return cur;
+}
+
+function renderFilters(){
+ document.getElementById("filters").innerHTML=["All","Favorites","Health","Fitness","Learning","Mindfulness","Work","Personal","Other"].map(x=>`<button class="filter ${filter===x?"active":""}" onclick="setFilter('${x}')">${x}</button>`).join("");
+}
+function setFilter(x){filter=x;renderFilters();render()}
+function render(){
+ stats();
+ let q=document.getElementById("search").value.trim().toLowerCase();
+ let arr=data.habits.filter(h=>{
+  let txt=[h.name,h.category,h.notes].join(" ").toLowerCase();
+  return (!q||txt.includes(q))&&(filter==="All"||filter==="Favorites"&&h.favorite||h.category===filter);
+ });
+ arr.sort((a,b)=>Number(b.favorite)-Number(a.favorite));
+ document.getElementById("count").textContent=arr.length+" "+(arr.length===1?"habit":"habits");
+ let box=document.getElementById("habits");
+ if(!arr.length){box.innerHTML=`<div class="empty"><div class="emoji">🌱</div><b>No habits found</b><p>Create a habit and start building your consistency streak.</p></div>`;return}
+ box.innerHTML=arr.map(h=>{
+  let d=done(h.id),cs=currentStreak(h);
+  return `<article class="habit">
+   <div class="habit-top"><div class="habit-icon">${esc(h.icon||"🧠")}</div><div class="habit-main"><div class="habit-name">${esc(h.name)}</div><div class="habit-meta">${esc(h.category)}${h.reminder?" · ⏰ "+esc(h.reminder):""} · Goal ${esc(h.goal||7)}/week</div></div>
+   <button class="fav ${h.favorite?"on":""}" onclick="fav('${h.id}')">${h.favorite?"★":"☆"}</button></div>
+   <div class="habit-row"><button class="check ${d?"done":""}" onclick="toggle('${h.id}')">${d?"✓":"○"}</button><div class="streak">Current streak <b>🔥 ${cs} day${cs===1?"":"s"}</b></div><div class="actions"><button class="small" onclick="details('${h.id}')">👁️</button><button class="small" onclick="openEditor(data.habits.find(x=>x.id==='${h.id}'))">✏️</button><button class="small" onclick="removeHabit('${h.id}')">🗑️</button></div></div>
+  </article>`;
+ }).join("");
+}
+function toggle(id){let k=keyFor(id,todayKey());if(data.checks[k]){delete data.checks[k];toast("↩ Habit unchecked")}else{data.checks[k]=Date.now();toast("✅ Habit completed!")}save();render()}
+function fav(id){let h=data.habits.find(x=>x.id===id);if(!h)return;h.favorite=!h.favorite;save();render();toast(h.favorite?"⭐ Added to favorites":"☆ Removed from favorites")}
+function openEditor(h=null){
+ editingId=h?.id||null;
+ document.getElementById("editorTitle").textContent=h?"✏️ Edit Habit":"🧠 Add Habit";
+ document.getElementById("name").value=h?.name||"";
+ document.getElementById("category").value=h?.category||"Health";
+ document.getElementById("icon").value=h?.icon||"🧠";
+ document.getElementById("goal").value=h?.goal||7;
+ document.getElementById("reminder").value=h?.reminder||"";
+ document.getElementById("notes").value=h?.notes||"";
+ document.getElementById("editor").classList.add("show");
+}
+function closeEditor(){document.getElementById("editor").classList.remove("show");editingId=null}
+function saveHabit(){
+ let h={id:editingId||uid(),name:document.getElementById("name").value.trim(),category:document.getElementById("category").value,icon:document.getElementById("icon").value,goal:Number(document.getElementById("goal").value)||7,reminder:document.getElementById("reminder").value,notes:document.getElementById("notes").value.trim(),favorite:false};
+ if(!h.name){toast("Please enter a habit name.");return}
+ let old=editingId&&data.habits.find(x=>x.id===editingId);if(old)h.favorite=old.favorite;
+ if(editingId){let i=data.habits.findIndex(x=>x.id===editingId);if(i>=0)data.habits[i]=h;toast("✏️ Habit updated.")}else{data.habits.unshift(h);toast("🌱 Habit created.")}
+ save();closeEditor();render();
+}
+function removeHabit(id){let h=data.habits.find(x=>x.id===id);if(!h||!confirm(`Delete "${h.name}"?`))return;data.habits=data.habits.filter(x=>x.id!==id);Object.keys(data.checks).filter(k=>k.startsWith(id+"|")).forEach(k=>delete data.checks[k]);save();render();toast("🗑️ Habit deleted.")}
+function clearSearch(){document.getElementById("search").value="";render()}
+
+function details(id){
+ let h=data.habits.find(x=>x.id===id);if(!h)return;
+ let last7=0;for(let i=0;i<7;i++){let d=new Date();d.setDate(d.getDate()-i);if(done(id,dateKey(d)))last7++}
+ document.getElementById("detailContent").innerHTML=`
+ <div class="detail-grid">
+ <div class="detail"><span>Habit</span><b>${esc(h.name)}</b></div><div class="detail"><span>Category</span><b>${esc(h.category)}</b></div>
+ <div class="detail"><span>Current streak</span><b>🔥 ${currentStreak(h)} days</b></div><div class="detail"><span>Best streak</span><b>🏆 ${bestStreak(h)} days</b></div>
+ <div class="detail"><span>7-day progress</span><b>${last7}/7 days</b></div><div class="detail"><span>Weekly goal</span><b>${esc(h.goal||7)} days</b></div>
+ </div>
+ <div class="section"><h4>📅 This Week</h4><div class="week">${(()=>{let w=startOfWeek(),s="";for(let i=0;i<7;i++){let d=new Date(w);d.setDate(w.getDate()+i),k=dateKey(d);s+=`<div class="day"><span>${fmtDay(d)}</span><div class="dot ${done(id,k)?"done":""} ${k===todayKey()?"today":""}">${done(id,k)?"✓":""}</div></div>`}return s})()}</div></div>
+ ${h.reminder?`<div class="section"><h4>⏰ Reminder</h4><div class="note">${esc(h.reminder)}</div></div>`:""}
+ <div class="section"><h4>📝 Notes</h4><div class="note">${h.notes?esc(h.notes):"No notes added."}</div></div>`;
+ document.getElementById("editBtn").onclick=()=>{closeDetail();openEditor(h)};
+ document.getElementById("detail").classList.add("show");
+}
+function closeDetail(){document.getElementById("detail").classList.remove("show")}
+function toggleTheme(){document.body.classList.toggle("dark");let d=document.body.classList.contains("dark");localStorage.setItem(THEME,d?"1":"0");document.getElementById("themeBtn").textContent=d?"☀️":"🌙"}
+function loadTheme(){if(localStorage.getItem(THEME)==="1"){document.body.classList.add("dark");document.getElementById("themeBtn").textContent="☀️"}}
+document.getElementById("editor").onclick=e=>{if(e.target.id==="editor")closeEditor()};
+document.getElementById("detail").onclick=e=>{if(e.target.id==="detail")closeDetail()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeEditor();closeDetail()}});
+loadTheme();renderFilters();render();
+</script>
+</body>
+</html>

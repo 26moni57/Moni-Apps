@@ -1,0 +1,1895 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>GoalPocket</title>
+
+<style>
+:root{
+    --bg:#f6f4ff;
+    --card:#fff;
+    --text:#211b35;
+    --muted:#8b849d;
+    --line:#e9e4f5;
+    --primary:#7c3aed;
+    --primary2:#8b5cf6;
+    --soft:#eee9ff;
+    --green:#16a34a;
+    --greenSoft:#eaf8ef;
+    --red:#dc2626;
+    --yellow:#f59e0b;
+    --shadow:0 12px 32px rgba(67,42,120,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:auto;
+    overflow:hidden;
+}
+
+/* HEADER */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 30px;
+    color:#fff;
+    background:
+        linear-gradient(
+            145deg,
+            #5b21b6,
+            #7c3aed 55%,
+            #a78bfa
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header:before,
+.header:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.1);
+}
+
+.header:before{
+    width:190px;
+    height:190px;
+    right:-90px;
+    top:-110px;
+}
+
+.header:after{
+    width:150px;
+    height:150px;
+    left:-90px;
+    bottom:-110px;
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.brandIcon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    font-size:22px;
+}
+
+.brandName{
+    font-size:21px;
+    font-weight:850;
+}
+
+.themeBtn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.16);
+    color:#fff;
+    font-size:17px;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:23px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    margin:8px 0 0;
+    max-width:335px;
+    color:rgba(255,255,255,.84);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+    padding:18px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:17px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:21px;
+    box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:15px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* PROGRESS */
+
+.progressWrap{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.progressCircle{
+    position:relative;
+    width:76px;
+    height:76px;
+    flex:0 0 76px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:
+        conic-gradient(
+            var(--primary) 0deg,
+            var(--primary) var(--progress,0deg),
+            var(--soft) var(--progress,0deg),
+            var(--soft) 360deg
+        );
+}
+
+.progressCircle:after{
+    content:"";
+    position:absolute;
+    inset:7px;
+    border-radius:50%;
+    background:var(--card);
+}
+
+.progressNumber{
+    position:relative;
+    z-index:2;
+    font-size:18px;
+    font-weight:900;
+}
+
+.progressText{
+    flex:1;
+}
+
+.progressText strong{
+    display:block;
+    font-size:13px;
+}
+
+.progressText p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.5;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:13px;
+}
+
+.stat{
+    padding:12px 5px;
+    border-radius:15px;
+    background:var(--bg);
+    text-align:center;
+}
+
+.statIcon{
+    font-size:18px;
+}
+
+.stat strong{
+    display:block;
+    margin-top:3px;
+    font-size:18px;
+}
+
+.stat span{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* ADD */
+
+.addBtn{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:13px;
+    background:var(--primary);
+    color:#fff;
+    font-size:12px;
+    font-weight:800;
+    box-shadow:0 7px 18px rgba(124,58,237,.18);
+}
+
+.form{
+    display:none;
+}
+
+.form.open{
+    display:block;
+}
+
+.field{
+    margin-top:11px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:5px;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:750;
+}
+
+input,
+select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+input:focus,
+select:focus{
+    border-color:var(--primary2);
+}
+
+.formButtons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:12px;
+}
+
+.primaryBtn,
+.secondaryBtn{
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.primaryBtn{
+    background:var(--primary);
+    color:#fff;
+}
+
+.secondaryBtn{
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* GOALS */
+
+.goalList{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.goal{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:13px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:var(--card);
+    transition:.18s;
+}
+
+.goal.completed{
+    background:var(--greenSoft);
+    border-color:#ccebd5;
+}
+
+.check{
+    width:30px;
+    height:30px;
+    flex:0 0 30px;
+    display:grid;
+    place-items:center;
+    border:2px solid #cfc8df;
+    border-radius:10px;
+    background:transparent;
+    color:transparent;
+    font-size:15px;
+    font-weight:900;
+}
+
+.goal.completed .check{
+    border-color:var(--green);
+    background:var(--green);
+    color:#fff;
+}
+
+.goalInfo{
+    min-width:0;
+    flex:1;
+}
+
+.goalName{
+    margin:0;
+    font-size:12px;
+    font-weight:800;
+    word-break:break-word;
+}
+
+.goal.completed .goalName{
+    color:var(--muted);
+    text-decoration:line-through;
+}
+
+.goalMeta{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:5px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.priority{
+    padding:3px 6px;
+    border-radius:6px;
+    font-size:7px;
+    font-weight:800;
+}
+
+.priority.high{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.priority.medium{
+    background:#fef3c7;
+    color:#b45309;
+}
+
+.priority.low{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.goalActions{
+    display:flex;
+    gap:4px;
+}
+
+.iconBtn{
+    width:28px;
+    height:28px;
+    display:grid;
+    place-items:center;
+    border:0;
+    border-radius:8px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:11px;
+}
+
+.iconBtn.delete{
+    color:var(--red);
+}
+
+/* EMPTY */
+
+.empty{
+    padding:28px 12px;
+    text-align:center;
+}
+
+.emptyIcon{
+    font-size:34px;
+}
+
+.empty h3{
+    margin:8px 0 4px;
+    font-size:14px;
+}
+
+.empty p{
+    margin:0;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.5;
+}
+
+/* FILTER */
+
+.filters{
+    display:flex;
+    gap:7px;
+    margin-bottom:12px;
+}
+
+.filter{
+    flex:1;
+    padding:8px 5px;
+    border:0;
+    border-radius:9px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:9px;
+    font-weight:750;
+}
+
+.filter.active{
+    background:var(--primary);
+    color:#fff;
+}
+
+/* TIP */
+
+.tip{
+    padding:13px;
+    border-radius:14px;
+    background:var(--soft);
+}
+
+.tip strong{
+    display:block;
+    font-size:11px;
+}
+
+.tip p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.5;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    z-index:100;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#211b35;
+    color:#fff;
+    font-size:11px;
+    white-space:nowrap;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+    --bg:#100d18;
+    --card:#1a1625;
+    --text:#f5f1ff;
+    --muted:#a39bb4;
+    --line:#302a40;
+    --soft:#2a2145;
+    --shadow:0 12px 35px rgba(0,0,0,.28);
+}
+
+body.dark .goal.completed{
+    background:#122119;
+    border-color:#234b31;
+}
+
+body.dark .priority.high{
+    background:#3b2024;
+}
+
+body.dark .priority.medium{
+    background:#3b3118;
+}
+
+body.dark .priority.low{
+    background:#173021;
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(50,30,90,.12);
+    }
+}
+
+/* SMALL */
+
+@media(max-width:350px){
+
+    .content{
+        padding:14px;
+    }
+
+    .header{
+        padding:18px 15px 27px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+
+    .goalActions{
+        flex-direction:column;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brandIcon">
+                🎯
+            </div>
+
+            <div class="brandName">
+                GoalPocket
+            </div>
+
+        </div>
+
+        <button
+            class="themeBtn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+
+    <div class="hero">
+
+        <h1>
+            Small goals.<br>
+            Big progress.
+        </h1>
+
+        <p>
+            Keep today's goals simple, focused and achievable.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- PROGRESS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📈 Today's Progress
+        </h2>
+
+        <span id="todayLabel">
+            Today
+        </span>
+
+    </div>
+
+
+    <div class="progressWrap">
+
+        <div
+            class="progressCircle"
+            id="progressCircle"
+        >
+
+            <div
+                class="progressNumber"
+                id="progressNumber"
+            >
+                0%
+            </div>
+
+        </div>
+
+
+        <div class="progressText">
+
+            <strong id="progressTitle">
+                Ready to start?
+            </strong>
+
+            <p id="progressDescription">
+                Complete your first goal and build momentum.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="statIcon">
+                🎯
+            </div>
+
+            <strong id="totalCount">
+                0
+            </strong>
+
+            <span>
+                Goals
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ✅
+            </div>
+
+            <strong id="doneCount">
+                0
+            </strong>
+
+            <span>
+                Done
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="statIcon">
+                🔥
+            </div>
+
+            <strong id="streakCount">
+                0
+            </strong>
+
+            <span>
+                Streak
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ADD GOAL -->
+
+<section class="card">
+
+    <button
+        class="addBtn"
+        id="addButton"
+        onclick="toggleForm()"
+    >
+        ＋ Add Daily Goal
+    </button>
+
+
+    <div
+        class="form"
+        id="form"
+    >
+
+        <div class="field">
+
+            <label>
+                GOAL
+            </label>
+
+            <input
+                id="goalInput"
+                type="text"
+                maxlength="100"
+                placeholder="e.g. Read for 20 minutes"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                PRIORITY
+            </label>
+
+            <select id="priorityInput">
+
+                <option value="medium">
+                    🟡 Medium
+                </option>
+
+                <option value="high">
+                    🔴 High
+                </option>
+
+                <option value="low">
+                    🟢 Low
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="formButtons">
+
+            <button
+                class="secondaryBtn"
+                onclick="closeForm()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="primaryBtn"
+                onclick="addGoal()"
+            >
+                🎯 Add Goal
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- GOALS -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📝 Today's Goals
+        </h2>
+
+        <span id="goalLabel">
+            0 goals
+        </span>
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="setFilter('all',this)"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('active',this)"
+        >
+            Active
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('done',this)"
+        >
+            Done
+        </button>
+
+    </div>
+
+
+    <div
+        class="goalList"
+        id="goalList"
+    ></div>
+
+</section>
+
+
+<!-- TIP -->
+
+<section class="card">
+
+    <div class="tip">
+
+        <strong>
+            💡 Goal Tip
+        </strong>
+
+        <p id="tip">
+            Make your goal specific enough that you know exactly when it is finished.
+        </p>
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+
+/* =========================
+   DATA
+========================= */
+
+let goals =
+    JSON.parse(
+        localStorage.getItem(
+            "goalPocketGoals"
+        ) || "[]"
+    );
+
+let currentFilter = "all";
+
+let editingId = null;
+
+let toastTimer;
+
+
+/* =========================
+   DATE
+========================= */
+
+function todayKey(){
+
+    const d = new Date();
+
+    return (
+        d.getFullYear() +
+        "-" +
+        String(
+            d.getMonth()+1
+        ).padStart(2,"0") +
+        "-" +
+        String(
+            d.getDate()
+        ).padStart(2,"0")
+    );
+
+}
+
+
+function formatDate(date){
+
+    return new Date(date)
+        .toLocaleDateString(
+            undefined,
+            {
+                month:"short",
+                day:"numeric"
+            }
+        );
+
+}
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function saveData(){
+
+    localStorage.setItem(
+        "goalPocketGoals",
+        JSON.stringify(goals)
+    );
+
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+function toggleForm(){
+
+    const form =
+        document.getElementById("form");
+
+
+    if(form.classList.contains("open")){
+
+        closeForm();
+
+    }else{
+
+        editingId = null;
+
+        form.classList.add("open");
+
+        document.getElementById("addButton")
+            .textContent =
+            "✕ Close Form";
+
+        document.getElementById("goalInput")
+            .focus();
+
+    }
+
+}
+
+
+function closeForm(){
+
+    editingId = null;
+
+    document.getElementById("form")
+        .classList.remove("open");
+
+    document.getElementById("addButton")
+        .textContent =
+        "＋ Add Daily Goal";
+
+    document.getElementById("goalInput")
+        .value = "";
+
+    document.getElementById("priorityInput")
+        .value = "medium";
+
+}
+
+
+/* =========================
+   ADD / EDIT
+========================= */
+
+function addGoal(){
+
+    const input =
+        document.getElementById(
+            "goalInput"
+        );
+
+    const priority =
+        document.getElementById(
+            "priorityInput"
+        ).value;
+
+    const name =
+        input.value.trim();
+
+
+    if(!name){
+
+        showToast(
+            "⚠️ Please enter a goal."
+        );
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    if(editingId){
+
+        const goal =
+            goals.find(
+                item =>
+                    item.id === editingId
+            );
+
+
+        if(goal){
+
+            goal.name = name;
+
+            goal.priority = priority;
+
+            showToast(
+                "✏️ Goal updated."
+            );
+
+        }
+
+    }else{
+
+        goals.unshift({
+
+            id:
+                Date.now().toString() +
+                Math.random()
+                    .toString(16)
+                    .slice(2),
+
+            name:name,
+
+            priority:priority,
+
+            completed:false,
+
+            created:Date.now(),
+
+            completedDate:null,
+
+            date:todayKey()
+
+        });
+
+
+        showToast(
+            "🎯 Goal added!"
+        );
+
+    }
+
+
+    saveData();
+
+    closeForm();
+
+    render();
+
+}
+
+
+/* =========================
+   TOGGLE
+========================= */
+
+function toggleGoal(id){
+
+    const goal =
+        goals.find(
+            item => item.id === id
+        );
+
+
+    if(!goal){
+        return;
+    }
+
+
+    goal.completed =
+        !goal.completed;
+
+
+    goal.completedDate =
+        goal.completed
+            ? todayKey()
+            : null;
+
+
+    saveData();
+
+    render();
+
+
+    showToast(
+        goal.completed
+            ? "✅ Goal completed!"
+            : "↩️ Goal marked active."
+    );
+
+}
+
+
+/* =========================
+   EDIT
+========================= */
+
+function editGoal(id){
+
+    const goal =
+        goals.find(
+            item => item.id === id
+        );
+
+
+    if(!goal){
+        return;
+    }
+
+
+    editingId = id;
+
+
+    document.getElementById("goalInput")
+        .value =
+        goal.name;
+
+
+    document.getElementById("priorityInput")
+        .value =
+        goal.priority;
+
+
+    document.getElementById("form")
+        .classList.add("open");
+
+    document.getElementById("addButton")
+        .textContent =
+        "✕ Close Form";
+
+
+    document.getElementById("goalInput")
+        .focus();
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteGoal(id){
+
+    const goal =
+        goals.find(
+            item => item.id === id
+        );
+
+
+    if(!goal){
+        return;
+    }
+
+
+    if(
+        !confirm(
+            'Delete "' +
+            goal.name +
+            '"?'
+        )
+    ){
+        return;
+    }
+
+
+    goals =
+        goals.filter(
+            item => item.id !== id
+        );
+
+
+    saveData();
+
+    render();
+
+    showToast(
+        "🗑️ Goal deleted."
+    );
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(filter,button){
+
+    currentFilter = filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(
+            item =>
+                item.classList.remove("active")
+        );
+
+
+    button.classList.add("active");
+
+    render();
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+    const list =
+        document.getElementById(
+            "goalList"
+        );
+
+
+    let filtered =
+        goals.filter(
+            goal =>
+                goal.date === todayKey()
+        );
+
+
+    if(currentFilter === "active"){
+
+        filtered =
+            filtered.filter(
+                goal =>
+                    !goal.completed
+            );
+
+    }
+
+
+    if(currentFilter === "done"){
+
+        filtered =
+            filtered.filter(
+                goal =>
+                    goal.completed
+            );
+
+    }
+
+
+    const todayGoals =
+        goals.filter(
+            goal =>
+                goal.date === todayKey()
+        );
+
+
+    const completed =
+        todayGoals.filter(
+            goal =>
+                goal.completed
+        ).length;
+
+
+    const total =
+        todayGoals.length;
+
+
+    const percent =
+        total
+            ? Math.round(
+                completed /
+                total *
+                100
+            )
+            : 0;
+
+
+    /* PROGRESS */
+
+    document.getElementById(
+        "progressCircle"
+    ).style.setProperty(
+        "--progress",
+        (percent * 3.6) + "deg"
+    );
+
+
+    document.getElementById(
+        "progressNumber"
+    ).textContent =
+        percent + "%";
+
+
+    document.getElementById(
+        "totalCount"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "doneCount"
+    ).textContent =
+        completed;
+
+
+    document.getElementById(
+        "goalLabel"
+    ).textContent =
+        total +
+        (
+            total === 1
+                ? " goal"
+                : " goals"
+        );
+
+
+    updateProgressMessage(
+        percent,
+        total,
+        completed
+    );
+
+
+    updateStreak();
+
+
+    /* LIST */
+
+    if(filtered.length === 0){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="emptyIcon">
+                    ${
+                        currentFilter === "done"
+                            ? "🏆"
+                            : "🎯"
+                    }
+                </div>
+
+                <h3>
+                    ${
+                        currentFilter === "done"
+                            ? "Nothing completed yet"
+                            : "No goals here"
+                    }
+                </h3>
+
+                <p>
+                    ${
+                        currentFilter === "done"
+                            ? "Complete a goal and your achievement will appear here."
+                            : "Add a small goal and start making progress."
+                    }
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        filtered
+            .map(
+                goal => `
+
+                    <div
+                        class="goal ${
+                            goal.completed
+                                ? "completed"
+                                : ""
+                        }"
+                    >
+
+                        <button
+                            class="check"
+                            onclick="toggleGoal('${goal.id}')"
+                            aria-label="Complete goal"
+                        >
+                            ✓
+                        </button>
+
+
+                        <div class="goalInfo">
+
+                            <p class="goalName">
+                                ${escapeHTML(goal.name)}
+                            </p>
+
+
+                            <div class="goalMeta">
+
+                                <span
+                                    class="priority ${goal.priority}"
+                                >
+                                    ${priorityText(goal.priority)}
+                                </span>
+
+                                <span>
+                                    ${
+                                        goal.completed
+                                            ? "Completed"
+                                            : "Added " +
+                                              formatDate(goal.created)
+                                    }
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="goalActions">
+
+                            <button
+                                class="iconBtn"
+                                onclick="editGoal('${goal.id}')"
+                                title="Edit"
+                            >
+                                ✏️
+                            </button>
+
+
+                            <button
+                                class="iconBtn delete"
+                                onclick="deleteGoal('${goal.id}')"
+                                title="Delete"
+                            >
+                                🗑
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `
+            )
+            .join("");
+
+}
+
+
+/* =========================
+   PROGRESS MESSAGE
+========================= */
+
+function updateProgressMessage(
+    percent,
+    total,
+    completed
+){
+
+    const title =
+        document.getElementById(
+            "progressTitle"
+        );
+
+    const description =
+        document.getElementById(
+            "progressDescription"
+        );
+
+
+    if(total === 0){
+
+        title.textContent =
+            "Ready to start?";
+
+        description.textContent =
+            "Add your first goal and build momentum.";
+
+        return;
+
+    }
+
+
+    if(percent === 100){
+
+        title.textContent =
+            "All goals complete! 🎉";
+
+        description.textContent =
+            "Amazing work. You finished everything for today.";
+
+        return;
+
+    }
+
+
+    if(percent >= 70){
+
+        title.textContent =
+            "Almost there! 💪";
+
+        description.textContent =
+            completed +
+            " of " +
+            total +
+            " goals completed.";
+
+        return;
+
+    }
+
+
+    if(percent >= 40){
+
+        title.textContent =
+            "Good progress! 🚀";
+
+        description.textContent =
+            completed +
+            " of " +
+            total +
+            " goals completed.";
+
+        return;
+
+    }
+
+
+    title.textContent =
+        "Let's get started!";
+
+    description.textContent =
+        completed +
+        " of " +
+        total +
+        " goals completed.";
+
+}
+
+
+/* =========================
+   STREAK
+========================= */
+
+function updateStreak(){
+
+    const completedDates =
+        new Set(
+            goals
+                .filter(
+                    goal =>
+                        goal.completed &&
+                        goal.completedDate
+                )
+                .map(
+                    goal =>
+                        goal.completedDate
+                )
+        );
+
+
+    let streak = 0;
+
+    const date =
+        new Date();
+
+
+    while(true){
+
+        const key =
+            date.getFullYear() +
+            "-" +
+            String(
+                date.getMonth()+1
+            ).padStart(2,"0") +
+            "-" +
+            String(
+                date.getDate()
+            ).padStart(2,"0");
+
+
+        if(
+            completedDates.has(key)
+        ){
+
+            streak++;
+
+            date.setDate(
+                date.getDate() - 1
+            );
+
+        }else{
+
+            break;
+
+        }
+
+    }
+
+
+    document.getElementById(
+        "streakCount"
+    ).textContent =
+        streak;
+
+}
+
+
+/* =========================
+   PRIORITY
+========================= */
+
+function priorityText(priority){
+
+    if(priority === "high"){
+        return "🔴 High";
+    }
+
+    if(priority === "low"){
+        return "🟢 Low";
+    }
+
+    return "🟡 Medium";
+
+}
+
+
+/* =========================
+   HTML SAFETY
+========================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+
+    const dark =
+        document.body.classList.contains(
+            "dark"
+        );
+
+
+    localStorage.setItem(
+        "goalPocketDark",
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById(
+        "themeBtn"
+    ).textContent =
+        dark
+            ? "☀️"
+            : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            "goalPocketDark"
+        ) === "1";
+
+
+    if(dark){
+
+        document.body.classList.add(
+            "dark"
+        );
+
+        document.getElementById(
+            "themeBtn"
+        ).textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TIP
+========================= */
+
+const tips = [
+
+    "Make your goal specific enough that you know exactly when it is finished.",
+
+    "A tiny goal you complete is better than a huge goal you keep postponing.",
+
+    "Try choosing your three most important goals before starting your day.",
+
+    "Break difficult goals into smaller actions that take 10–20 minutes.",
+
+    "Celebrate completed goals. Progress becomes easier when it feels rewarding.",
+
+    "Keep tomorrow's first goal simple so you can start quickly."
+
+];
+
+
+document.getElementById("tip")
+    .textContent =
+    tips[
+        new Date().getDate()
+        % tips.length
+    ];
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () =>
+                toast.classList.remove(
+                    "show"
+                ),
+            2200
+        );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+render();
+
+</script>
+
+</body>
+</html>

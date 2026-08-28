@@ -1,0 +1,491 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#ea580c">
+<title>PixelArt Studio</title>
+
+<style>
+:root{
+--bg:#f8f7f4;
+--card:#fff;
+--text:#24221f;
+--muted:#89847d;
+--line:#e9e5de;
+--primary:#ea580c;
+--primary-soft:#fff1e7;
+--shadow:0 10px 30px rgba(55,45,30,.07)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#c2410c,#ea580c 55%,#f97316);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.11)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.17);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.17);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.84)
+}
+
+/* CONTENT */
+
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* CONFIG CONTROLS */
+
+.grid-settings{
+display:flex;
+gap:10px;
+align-items:center;
+margin-bottom:5px
+}
+
+.field{
+flex:1;
+display:flex;
+flex-direction:column;
+gap:5px
+}
+
+.field label{
+font-size:10px;
+font-weight:750;
+color:var(--muted)
+}
+
+.field select{
+width:100%;
+padding:10px;
+border:1px solid var(--line);
+border-radius:11px;
+background:var(--bg);
+color:var(--text);
+outline:none
+}
+
+/* TOOLBAR COLOR PICKER */
+
+.tools{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin-top:5px
+}
+
+.palette{
+display:flex;
+gap:6px;
+overflow-x:auto;
+scrollbar-width:none
+}
+.palette::-webkit-scrollbar{display:none}
+
+.color-swatch{
+width:32px;
+height:32px;
+border-radius:9px;
+border:2px solid transparent;
+cursor:pointer;
+flex-shrink:0
+}
+.color-swatch.active{
+border-color:var(--text);
+transform:scale(1.08)
+}
+
+.custom-picker-wrapper{
+position:relative;
+width:32px;
+height:32px;
+border-radius:9px;
+overflow:hidden;
+flex-shrink:0;
+border:1px solid var(--line)
+}
+
+.custom-picker-wrapper input[type="color"]{
+position:absolute;
+top:-5px;
+left:-5px;
+width:42px;
+height:42px;
+border:0;
+padding:0;
+cursor:pointer
+}
+
+.actions{
+display:flex;
+gap:6px
+}
+
+.btn-tool{
+padding:8px 12px;
+border:1px solid var(--line);
+border-radius:11px;
+background:var(--bg);
+color:var(--text);
+font-size:12px;
+font-weight:700
+}
+.btn-tool.active{
+background:var(--primary);
+color:white;
+border-color:var(--primary)
+}
+
+/* CANVAS MATRIX GRID */
+
+.canvas-container{
+display:flex;
+justify-content:center;
+align-items:center;
+padding:10px 0;
+background:var(--bg);
+border-radius:16px;
+margin-bottom:12px;
+overflow:hidden
+}
+
+.pixel-grid{
+display:grid;
+background:#fff;
+border:1px solid var(--line);
+box-shadow:0 4px 12px rgba(0,0,0,.03);
+user-select:none;
+touch-action:none
+}
+
+.pixel{
+background:#fff;
+border-right:1px solid rgba(0,0,0,.04);
+border-bottom:1px solid rgba(0,0,0,.04);
+box-sizing:border-box
+}
+
+.btn-action{
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:white;
+font-weight:800
+}
+
+/* DARK MODE */
+
+body.dark{
+--bg:#121214;
+--card:#1a1a1e;
+--text:#f3f3f5;
+--muted:#a1a1a5;
+--line:#2d2d34;
+--primary-soft:#2a1b15;
+--shadow:0 12px 35px rgba(0,0,0,.3)
+}
+body.dark .pixel-grid{
+background:#24242b
+}
+body.dark .pixel{
+background:#24242b;
+border-right:1px solid rgba(255,255,255,.03);
+border-bottom:1px solid rgba(255,255,255,.03)
+}
+
+@media(min-width:700px){
+body{padding:20px 0}
+.app{
+min-height:calc(100vh - 40px);
+border-radius:30px;
+box-shadow:0 20px 60px rgba(30,25,15,.12)
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🎨</div>
+<div class="brand-name">PixelArt</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+</div>
+
+<div class="hero">
+<h1>Create Retro Art.<br>Pixel by pixel.</h1>
+<p>Choose your canvas dimensions, pick shades, and draw instantly.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- SETTINGS PANEL -->
+<section class="card">
+<div class="grid-settings">
+<div class="field">
+<label>GRID DIMENSIONS</label>
+<select id="gridSize" onchange="initGrid()">
+<option value="8">8 x 8 (Retro Tiny)</option>
+<option value="12">12 x 12 (Simple)</option>
+<option value="16" selected>16 x 16 (Standard)</option>
+<option value="24">24 x 24 (Detailed)</option>
+</select>
+</div>
+</div>
+</section>
+
+<!-- STUDIO WORKSPACE -->
+<section class="card">
+<div class="title">
+<h2>🖌️ Artboard Studio</h2>
+</div>
+
+<div class="canvas-container">
+<div id="pixelGrid" class="pixel-grid"></div>
+</div>
+
+<!-- PALETTE & DRAWING UTILITIES -->
+<div class="tools">
+<div class="palette" id="palette">
+<!-- Dynamic swatches generated by JavaScript logic -->
+<div class="custom-picker-wrapper">
+<input type="color" id="customColor" value="#ea580c" onchange="selectCustomColor(this.value)">
+</div>
+</div>
+
+<div class="actions">
+<button id="drawModeBtn" class="btn-tool active" onclick="setMode('draw')">✏️</button>
+<button id="eraseModeBtn" class="btn-tool" onclick="setMode('erase')">🧼</button>
+</div>
+</div>
+</section>
+
+<button class="btn-action" onclick="clearCanvas()">Reset Canvas Grid</button>
+
+</main>
+
+</div>
+
+<script>
+// Canvas layout configuration defaults
+const presetColors = ["#000000", "#ea580c", "#dc2626", "#2563eb", "#16a34a", "#ca8a04", "#7c3aed", "#ffffff"];
+let selectedColor = presetColors[0];
+let currentMode = "draw"; // modes: 'draw' or 'erase'
+let isDrawing = false;
+
+// Dark/Light layout mode switching engine
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("dark") ? "☀️" : "🌙";
+}
+
+// Generate color swatches panel component UI interface inside workspace
+function buildPalette() {
+    const paletteContainer = document.getElementById("palette");
+    // Clear out any previously injected swatch components except custom dynamic picker block
+    const customPicker = paletteContainer.querySelector(".custom-picker-wrapper");
+    paletteContainer.innerHTML = "";
+    
+    presetColors.forEach(color => {
+        const swatch = document.createElement("div");
+        swatch.className = "color-swatch";
+        swatch.style.backgroundColor = color;
+        if (color === selectedColor && currentMode === "draw") swatch.classList.add("active");
+        
+        swatch.onclick = () => {
+            selectedColor = color;
+            setMode("draw");
+            document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+            swatch.classList.add("active");
+        };
+        paletteContainer.appendChild(swatch);
+    });
+    paletteContainer.appendChild(customPicker);
+}
+
+function selectCustomColor(val) {
+    selectedColor = val;
+    setMode("draw");
+    document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+}
+
+function setMode(mode) {
+    currentMode = mode;
+    document.getElementById("drawModeBtn").classList.toggle("active", mode === "draw");
+    document.getElementById("eraseModeBtn").classList.toggle("active", mode === "erase");
+    if (mode === "erase") {
+        document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+    }
+}
+
+// Main grid creation and injection engine logic
+function initGrid() {
+    const size = parseInt(document.getElementById("gridSize").value);
+    const container = document.getElementById("pixelGrid");
+    
+    container.innerHTML = "";
+    // Dynamically enforce container sizing footprint constraints
+    container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+    container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+    
+    // Set aspect dimension boxes based on responsive mobile container limits
+    const maxAvailableWidth = 340; 
+    const pixelSize = Math.floor(maxAvailableWidth / size);
+    container.style.width = `${pixelSize * size}px`;
+    container.style.height = `${pixelSize * size}px`;
+
+    for (let i = 0; i < size * size; i++) {
+        const pixel = document.createElement("div");
+        pixel.className = "pixel";
+        
+        // Touch or Drag continuous coloring actions pipeline
+        pixel.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            isDrawing = true;
+            paintPixel(pixel);
+        });
+        
+        pixel.addEventListener("mouseenter", () => {
+            if (isDrawing) paintPixel(pixel);
+        });
+
+        // Touch event handlers for seamless drawing on mobile viewports
+        pixel.addEventListener("touchstart", (e) => {
+            isDrawing = true;
+            paintPixel(pixel);
+        });
+
+        container.appendChild(pixel);
+    }
+}
+
+function paintPixel(pixelTarget) {
+    if (currentMode === "draw") {
+        pixelTarget.style.backgroundColor = selectedColor;
+    } else {
+        pixelTarget.style.backgroundColor = "";
+    }
+}
+
+// Global drawing loop trigger window lifecycle controls
+window.addEventListener("mouseup", () => isDrawing = false);// Track global screen touch finishes safelywindow.addEventListener("touchend", () => isDrawing = false);// Handle specific cross-element mobile drag tracking conversions via pointer targetsdocument.getElementById("pixelGrid").addEventListener("touchmove", (e) => {if (!isDrawing) return;e.preventDefault();const touch = e.touches[0];const element = document.elementFromPoint(touch.clientX, touch.clientY);if (element && element.classList.contains("pixel")) {paintPixel(element);}});function clearCanvas() {document.querySelectorAll(".pixel").forEach(p => p.style.backgroundColor = "");}// Active startup runtime loading loopsbuildPalette();initGrid();</script></body></html>

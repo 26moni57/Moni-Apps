@@ -1,0 +1,489 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#3f6212">
+<title>PassVault Secure</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Military Olive Drab & Brass Stencil Look */
+:root{
+--bg:#141e0b;
+--card:#243516;
+--text:#f4fceb;
+--muted:#a3e635;
+--line:#3f6212;
+--primary:#eab308;
+--primary2:#fde047;
+--soft:#3f2c06;
+--danger:#f43f5e;
+--shadow:0 10px 30px rgba(20,30,11,.6)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:"Courier New", Courier, monospace;
+background:var(--bg);
+color:var(--text);
+font-weight:700
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - SIGNATURE RUGGED DRAB TO BRASS GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1a2e05,#3f6212 55%,#ea580c);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.05);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.18);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.12);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:28px;
+line-height:1.1;
+letter-spacing:-.5px;
+text-transform:uppercase
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:12px;
+color:rgba(255,255,255,.7);
+font-family:system-ui, sans-serif
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px;
+font-family:system-ui, sans-serif
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+color:var(--muted)
+}
+
+.title span{
+font-size:11px;
+color:var(--muted)
+}
+
+/* VAULT LEDGER ROW CONTAINER */
+.vault-item {
+padding:14px 0;
+border-bottom:1px solid var(--line);
+display:flex;
+flex-direction:column;
+gap:5px
+}
+.vault-item:last-child{border-bottom:0}
+
+.vault-label {
+font-size:15px;
+font-weight:900;
+color:var(--primary2);
+text-transform:uppercase
+}
+
+.vault-credential-line {
+font-size:13px;
+color:var(--text);
+display:flex;
+align-items:center;
+gap:6px
+}
+
+.secret-mask {
+filter:blur(5px);
+user-select:none;
+transition:filter 0.2s
+}
+.secret-mask.reveal {
+filter:none;
+user-select:text
+}
+
+.vault-actions-row {
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:4px;
+font-family:system-ui, sans-serif
+}
+
+.action-btn {
+background:transparent;
+border:0;
+font-size:11px;
+font-weight:700;
+padding:2px 0;
+color:var(--muted);
+text-transform:uppercase
+}
+.action-btn.danger { color:var(--danger); }
+
+/* FLOATING FAB ACTION TRIGGER */
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:50%;
+background:var(--primary);
+color:var(--bg);
+font-size:28px;
+box-shadow:0 12px 28px rgba(234,179,8,.25);
+z-index:10;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+/* MODAL OVERLAY WRAPPERS */
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(20,30,11,.6)
+}
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0;
+border-top:2px solid var(--line)
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px;
+font-family:system-ui, sans-serif
+}
+
+.modal-head h2{
+margin:0;
+font-size:18px;
+text-transform:uppercase
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:50%;
+background:var(--bg);
+color:var(--text)
+}
+
+.field{margin-bottom:12px}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field input{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text)
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:var(--bg);
+font-weight:900;
+text-transform:uppercase;
+font-family:system-ui, sans-serif
+}
+
+.empty-state {
+text-align:center;
+padding:35px 15px;
+color:var(--muted);
+font-family:system-ui, sans-serif
+}
+.empty-icon { font-size:40px; margin-bottom:6px; }
+
+/* SPY DESERT INVERSION SKIN OVERRIDE */
+body.light-theme {
+--bg:#fefcbf;
+--card:#fef08a;
+--text:#422006;
+--muted:#713f12;
+--line:#ca8a04;
+--shadow:0 10px 30px rgba(113,63,18,0.06)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🗃️</div>
+<div class="brand-name">PassVault</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Secure Cipher.<br>Device Local Lock.</h1>
+<p>Keep sensitive login credentials safely tucked inside local browser database blocks.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- KEY VAULT STACK FEED CARD -->
+<section class="card">
+<div class="title">
+<h2>🔐 Active Credentials Stack</h2>
+<span id="vaultCountSpan">0 nodes</span>
+</div>
+
+<div id="vaultItemsContainer">
+<!-- Dynamic item nodes injected via JavaScript loops -->
+</div>
+</section>
+
+</main>
+
+<!-- FLOATING FAB INJECTION INTERACTION LINK -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- ADD CREDENTIAL OVERLAY SHEET PANEL -->
+<div class="overlay" id="overlay">
+<div class="modal">
+<div class="modal-head">
+<h2>Slot Node Key</h2>
+<button class="close" onclick="closeModal()">✕</button>
+</div>
+
+<div class="field">
+<label>Platform / Account Domain</label>
+<input type="text" id="passPlatform" placeholder="e.g., Secure Cluster Node 01">
+</div>
+
+<div class="field">
+<label>Identifier Username</label>
+<input type="text" id="passUser" placeholder="e.g., spy_operator">
+</div>
+
+<div class="field">
+<label>Secret Access Key Password</label>
+<input type="text" id="passSecret" placeholder="e.g., d0ub1e_0_s3v3n">
+</div>
+
+<button class="save" onclick="commitVaultEntryNode()">Encrypt Node Key</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// Load workspace persistence array directly out of sandbox browser variables local storage
+let credentialNodesList = JSON.parse(localStorage.getItem("spy_pass_vault_nodes")) || [
+    { id: 1, platform: "Central Network Terminal", user: "root_operator", secret: "k9#zX!99f_P2", revealed: false },
+    { id: 2, platform: "Backup Database Server", user: "db_mirror_sync", secret: "mY_s3cr3t_p@ss", revealed: false }
+];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function openModal() { document.getElementById("overlay").classList.add("show"); }
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+
+function commitVaultEntryNode() {
+    const platform = document.getElementById("passPlatform").value.trim();
+    const user = document.getElementById("passUser").value.trim();
+    const secret = document.getElementById("passSecret").value.trim();
+
+    if (!platform || !user || !secret) return alert("Please fulfill all active credential entry lines.");
+
+    credentialNodesList.push({ id: Date.now(), platform, user, secret, revealed: false });
+    saveAndRedrawView();
+    closeModal();
+
+    document.getElementById("passPlatform").value = "";
+    document.getElementById("passUser").value = "";
+    document.getElementById("passSecret").value = "";
+}
+
+function toggleSecretMaskState(id) {
+    const target = credentialNodesList.find(node => node.id === id);
+    if(target) {
+        target.revealed = !target.revealed;
+        render(); // instant view redraw loop trigger
+    }
+}
+
+function removeVaultNode(id) {
+    if(confirm("Permanently strip this cipher chain out of your device logs?")) {
+        credentialNodesList = credentialNodesList.filter(node => node.id !== id);
+        saveAndRedrawView();
+    }
+}
+
+function saveAndRedrawView() {
+    localStorage.setItem("spy_pass_vault_nodes", JSON.stringify(credentialNodesList));
+    render();
+}
+
+function render() {
+    const container = document.getElementById("vaultItemsContainer");
+    document.getElementById("vaultCountSpan").innerText = `${credentialNodesList.length} items`;
+
+    if (credentialNodesList.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📟</div>
+                <h3>Vault Registry Clear</h3>
+                <p>Tap the golden cross actuator to cipher down your account lines.</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = credentialNodesList.map(node => `
+        <div class="vault-item">
+            <div class="vault-label">${node.platform}</div>
+            <div class="vault-credential-line"><span>👤 ID:</span> <span>${node.user}</span></div>
+            <div class="vault-credential-line">
+                <span>🔑 KEY:</span> 
+                <span id="secret-${node.id}" class="secret-mask ${node.revealed ? 'reveal' : ''}">${node.secret}</span>
+            </div>
+            <div class="vault-actions-row">
+  <button class="action-btn" onclick="toggleSecretMaskState(${node.id})">
+                    ${node.revealed ? 'Shield Key' : 'Reveal Key'}
+                </button>
+                <button class="action-btn danger" onclick="removeVaultNode(${node.id})">Purge</button>
+            </div>
+        </div>
+    `).join("");
+}
+
+// Fire structural configuration processing layout setup immediately on launch triggers
+render();
+</script>
+
+</body>
+</html>

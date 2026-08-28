@@ -1,0 +1,409 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#db2777">
+<title>Soundboard Synthwave Pad</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Synthwave Hot Pink & Deep Indigo Neon Look */
+:root{
+--bg:#0b071e;
+--card:#180f42;
+--text:#fdfaee;
+--muted:#f472b6;
+--line:#311b75;
+--primary:#db2777;
+--primary2:#f472b6;
+--soft:#4338ca;
+--soft-glow:rgba(219,39,119,0.3);
+--green:#10b981;
+--danger:#ef4444;
+--shadow:0 12px 35px rgba(219,39,119,0.15)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text);
+user-select:none
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - STRIKING NEON PINK TO PURPLE RETRO RUN GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#311b75,#180f42 55%,#db2777);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:2px solid var(--primary2)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(244,114,182,0.07);
+border:1px dashed var(--primary2)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+/* VOLUME MIXER SYSTEM RANGE */
+.field{
+margin-bottom:4px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.slider-track-box {
+display:flex;
+align-items:center;
+gap:12px
+}
+
+.slider-track-box input[type="range"]{
+flex:1;
+accent-color:var(--primary);
+cursor:pointer
+}
+
+.volume-val-lbl {
+font-size:15px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--primary2);
+min-width:45px;
+text-align:right
+}
+
+/* SOUNDBOARD TRIGGER PADS MATRIX GRID */
+.sound-pads-grid {
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:4px
+}
+
+.interactive-fx-pad {
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:24px 12px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:18px;
+color:var(--text);
+transition:all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+cursor:pointer
+}
+
+.interactive-fx-pad:active {
+transform:scale(0.95);
+border-color:var(--primary2);
+background:var(--soft);
+box-shadow:0 0 15px var(--soft-glow)
+}
+
+.pad-emoji {
+font-size:26px;
+margin-bottom:6px
+}
+
+.pad-title {
+font-size:13.5px;
+font-weight:800;
+text-align:center;
+letter-spacing:-0.2px
+}
+
+.pad-desc {
+font-size:9.5px;
+color:var(--muted);
+margin-top:2px;
+text-align:center;
+font-weight:600
+}
+
+/* HIGH-GLOW LIGHT NEON SKIN OVERRIDE */
+body.light-theme {
+--bg:#faf5ff;
+--card:#ffffff;
+--text:#180f42;
+--muted:#db2777;
+--line:#e9d5ff;
+--shadow:0 10px 25px rgba(219,39,119,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🎹</div>
+<div class="brand-name">Soundboard</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Synthwave Board.<br>Instant FX Trigger.</h1>
+<p>Tap interactive layout trigger pads to synthesize clean audio waves locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- MASTER MIXER GAIN CARD -->
+<section class="card">
+<div class="field">
+<label>MASTER OUTPUT GAIN VOLUME</label>
+<div class="slider-track-box">
+<input type="range" id="volumeSliderInput" min="0" max="100" value="70" oninput="handleMasterGainUpdate(this.value)">
+<span class="volume-val-lbl" id="lblVolumePercent">70%</span>
+</div>
+</div>
+</section>
+
+<!-- PADS SURFACE FRAME CARD -->
+<section class="card">
+<div class="title">
+<h2>🎛️ Sample Control Desk Grid</h2>
+</div>
+
+<div class="sound-pads-grid">
+<div class="interactive-fx-pad" onclick="synthesizeHardwareAudioEffect('arcade')">
+<div class="pad-emoji">👾</div>
+<div class="pad-title">Retro Chime</div>
+<div class="pad-desc">Classic arcade jump</div>
+</div>
+
+<div class="interactive-fx-pad" onclick="synthesizeHardwareAudioEffect('spark')">
+<div class="pad-emoji">✨</div>
+<div class="pad-title">Success Spark</div>
+<div class="pad-desc">Arpeggio target hit</div>
+</div>
+
+<div class="interactive-fx-pad" onclick="synthesizeHardwareAudioEffect('beam')">
+<div class="pad-emoji">⚡</div>
+<div class="pad-title">Laser Beam</div>
+<div class="pad-desc">Frequency sweep drop</div>
+</div>
+
+<div class="interactive-fx-pad" onclick="synthesizeHardwareAudioEffect('ring')">
+<div class="pad-emoji">🔔</div>
+<div class="pad-title">Notice Ping</div>
+<div class="pad-desc">High crystal ring</div>
+</div>
+
+<div class="interactive-fx-pad" onclick="synthesizeHardwareAudioEffect('buzz')">
+<div class="pad-emoji">🚨</div>
+<div class="pad-title">Error Alert</div>
+<div class="pad-desc">Low square waves buzz</div>
+</div>
+
+<div class="interactive-fx-pad" onclick="synthesizeHardwareAudioEffect('score')">
+<div class="pad-emoji">🪙</div>
+<div class="pad-title">Level Up</div>
+<div class="pad-desc">Double chime sequence</div>
+</div>
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+let nativeAudioContextEngine = null;
+let masterOutputVolumeLevel = 0.7;
+
+function handleMasterGainUpdate(rawSliderVal) {
+    masterOutputVolumeLevel = parseInt(rawSliderVal) / 100;
+    document.getElementById("lblVolumePercent").innerText = rawSliderVal + "%";
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function synthesizeHardwareAudioEffect(soundPatchKeyType) {
+    // Instantiate Audio Context securely on active user tap thread interaction
+    if (!nativeAudioContextEngine) {
+        nativeAudioContextEngine = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (nativeAudioContextEngine.state === 'suspended') {
+        nativeAudioContextEngine.resume();
+    }
+
+    const currentMomentTimeline = nativeAudioContextEngine.currentTime;
+    const oscillatorNode = nativeAudioContextEngine.createOscillator();
+    const localGainNode = nativeAudioContextEngine.createGain();
+
+    oscillatorNode.connect(localGainNode);
+    localGainNode.connect(nativeAudioContextEngine.destination);
+
+    // Apply custom patch matrix data metrics structures based on chosen selector
+    switch (soundPatchKeyType) {
+        case 'arcade':
+            oscillatorNode.type = 'square';
+            oscillatorNode.frequency.setValueAtTime(160, currentMomentTimeline);
+            oscillatorNode.frequency.exponentialRampToValueAtTime(650, currentMomentTimeline + 0.16);
+            localGainNode.gain.setValueAtTime(masterOutputVolumeLevel * 0.18, currentMomentTimeline);
+            localGainNode.gain.exponentialRampToValueAtTime(0.001, currentMomentTimeline + 0.16);
+            oscillatorNode.start(currentMomentTimeline);
+            oscillatorNode.stop(currentMomentTimeline + 0.16);
+            break;
+
+        case 'spark':
+            oscillatorNode.type = 'triangle';
+            oscillatorNode.frequency.setValueAtTime(320, currentMomentTimeline);
+            oscillatorNode.frequency.setValueAtTime(480, currentMomentTimeline + 0.08);
+            oscillatorNode.frequency.setValueAtTime(640, currentMomentTimeline + 0.16);
+            oscillatorNode.frequency.setValueAtTime(960, currentMomentTimeline + 0.24);
+            localGainNode.gain.setValueAtTime(masterOutputVolumeLevel * 0.35, currentMomentTimeline);
+            localGainNode.gain.exponentialRampToValueAtTime(0.001, currentMomentTimeline + 0.38);
+            oscillatorNode.start(currentMomentTimeline);
+            oscillatorNode.stop(currentMomentTimeline + 0.38);
+            break;
+
+        case 'beam':
+            oscillatorNode.type = 'sawtooth';
+            oscillatorNode.frequency.setValueAtTime(900, currentMomentTimeline);
+            oscillatorNode.frequency.exponentialRampToValueAtTime(120, currentMomentTimeline + 0.24);
+            localGainNode.gain.setValueAtTime(masterOutputVolumeLevel * 0.12, currentMomentTimeline);
+            localGainNode.gain.linearRampToValueAtTime(0.001, currentMomentTimeline + 0.24);
+    break;case 'buzz':oscillatorNode.type = 'square';oscillatorNode.frequency.setValueAtTime(135, currentMomentTimeline);oscillatorNode.frequency.setValueAtTime(115, currentMomentTimeline + 0.12);localGainNode.gain.setValueAtTime(masterOutputVolumeLevel * 0.22, currentMomentTimeline);localGainNode.gain.linearRampToValueAtTime(0.001, currentMomentTimeline + 0.24);oscillatorNode.start(currentMomentTimeline);oscillatorNode.stop(currentMomentTimeline + 0.24);break;case 'score':oscillatorNode.type = 'sine';oscillatorNode.frequency.setValueAtTime(523.25, currentMomentTimeline); // C5 musical pitchoscillatorNode.frequency.setValueAtTime(783.99, currentMomentTimeline + 0.09); // G5 musical pitch accelerationlocalGainNode.gain.setValueAtTime(masterOutputVolumeLevel * 0.3, currentMomentTimeline);localGainNode.gain.exponentialRampToValueAtTime(0.001, currentMomentTimeline + 0.36);oscillatorNode.start(currentMomentTimeline);oscillatorNode.stop(currentMomentTimeline + 0.36);break;}}        oscillatorNode.start(currentMomentTimeline);
+            oscillatorNode.stop(currentMomentTimeline + 0.24);
+            break;
+
+        case 'ring':
+            oscillatorNode.type = 'sine';
+            oscillatorNode.frequency.setValueAtTime(1250, currentMomentTimeline);
+            localGainNode.gain.setValueAtTime(masterOutputVolumeLevel * 0.45, currentMomentTimeline);
+            localGainNode.gain.exponentialRampToValueAtTime(0.001, currentMomentTimeline + 0.32);
+            oscillatorNode.start(currentMomentTimeline);
+            oscillatorNode.stop(currentMomentTimeline + 0.32);
+ </script></body></html>

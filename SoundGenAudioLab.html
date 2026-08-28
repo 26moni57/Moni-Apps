@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#06b6d4">
+<title>SoundGen Audio Lab</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Cosmic Cyan & Pulsing Magenta Cyberpunk Look */
+:root{
+--bg:#05050d;
+--card:#0f0f26;
+--text:#e0f2fe;
+--muted:#67e8f9;
+--line:#1e1b4b;
+--primary:#06b6d4;
+--primary2:#d946ef;
+--soft:#4c1d95;
+--green:#10b981;
+--danger:#f43f5e;
+--shadow:0 10px 30px rgba(6,182,212,0.15)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - CORES RADAR CYBERPUNK GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#0f172a,#020617 50%,#d946ef);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:2px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(6,182,212,0.12);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.15);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.06);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* OSCILLATOR WAVE TYPE MACRO BOXES */
+.wave-selectors-grid {
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:8px;
+margin-bottom:6px
+}
+
+.btn-wave-node {
+padding:14px 4px;
+border:1px solid var(--line);
+border-radius:14px;
+background:var(--bg);
+color:var(--text);
+font-size:13px;
+font-weight:800;
+text-align:center;
+transition:all 0.15s ease
+}
+.btn-wave-node.active {
+background:var(--primary);
+color:var(--bg);
+border-color:var(--primary);
+box-shadow:0 0 15px rgba(6,182,212,0.4)
+}
+
+/* FREQUENCY PARAMETERS STEP RANGE PACK */
+.field{
+margin-bottom:12px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.slider-track-box {
+display:flex;
+align-items:center;
+gap:12px
+}
+
+.slider-track-box input[type="range"]{
+flex:1;
+accent-color:var(--primary2);
+cursor:pointer
+}
+
+.frequency-value-label {
+font-size:16px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--primary2);
+min-width:65px;
+text-align:right
+}
+
+/* AUDIO TEST RIG TRIGGERS CONTROLS */
+.btn-audio-trigger {
+width:100%;
+padding:15px;
+border:0;
+border-radius:14px;
+background:var(--primary2);
+color:white;
+font-weight:900;
+font-size:15px;
+letter-spacing:0.5px;
+text-transform:uppercase;
+transition:opacity 0.2s
+}
+.btn-audio-trigger.playing-active {
+background:var(--danger)
+}
+.btn-audio-trigger:active { opacity:0.9 }
+
+/* LOG HISTORY MATRIX SLICES FEED */
+.oscillations-row {
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 0;
+border-bottom:1px solid var(--line);
+font-size:12.5px
+}
+.oscillations-row:last-child { border-bottom:0 }
+
+.log-wave-title { font-weight:750; color:var(--text); }
+.log-frequency-val { font-family:"Courier New",Courier,monospace; font-weight:800; color:var(--primary); }
+
+/* VIVID NEON ELECTRIC LIGHT OVERRIDE SKIN */
+body.light-theme {
+--bg:#f8fafc;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#06b6d4;
+--line:#e2e8f0;
+--shadow:0 10px 25px rgba(6,182,212,0.05)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🧬</div>
+<div class="brand-name">SoundGen</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Wave Generator.<br>Audio Patch Lab.</h1>
+<p>Synthesize live oscillator waveforms locally via web client context frequency modules.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- OSCILLATOR SHAPE SELECTION MATRIX CARD -->
+<section class="card">
+<div class="title">
+<h2>⚙️ Select Oscillator Waveform</h2>
+</div>
+<div class="wave-selectors-grid">
+<button class="btn-wave-node active" id="waveSine" onclick="setOscillatorWaveformShape('sine')">Sine Wave</button>
+<button class="btn-wave-node" id="waveSquare" onclick="setOscillatorWaveformShape('square')">Square Wave</button>
+<button class="btn-wave-node" id="waveSawtooth" onclick="setOscillatorWaveformShape('sawtooth')">Sawtooth</button>
+<button class="btn-wave-node" id="waveTriangle" onclick="setOscillatorWaveformShape('triangle')">Triangle</button>
+</div>
+</section>
+
+<!-- FREQUENCY HERTZ CONTROLLER SLIDER PANEL -->
+<section class="card">
+<div class="field">
+<label>Oscillation Frequency Pitch (Hz)</label>
+<div class="slider-track-box">
+<input type="range" id="hzSliderRangeInput" min="100" max="2000" value="440" oninput="synchronizeFrequencyToneValue(this.value)">
+<span class="frequency-value-label" id="lblFrequencyHz">440 Hz</span>
+</div>
+</div>
+</section>
+
+<!-- RUNTIME AUDIO TRIGGER KEY -->
+<section class="card">
+<button id="masterAudioPlaybackBtn" class="btn-audio-trigger" onclick="toggleAudioSignalPlaybackState()">Trigger Audio Tone</button>
+</section>
+
+<!-- COMPILED PATCH LAB LOG HISTORY STACK -->
+<section class="card">
+<div class="title">
+<h2>📜 Active Test Bench Ledger</h2>
+</div>
+<div id="patchesHistoryLogBox">
+<!-- Generated dynamically via Javascript actions loops -->
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+let globalAudioContextObject = null;
+let activeOscillatorNodeInstance = null;
+let activeGainNodeInstance = null;
+
+let selectedWaveformShapeType = 'sine';
+let targetFrequencyPitchHertz = 440;
+let isAudioToneCurrentlyPlaying = false;
+let historicalPatchesLoggedArray = [];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function setOscillatorWaveformShape(shapeStringValue) {
+    selectedWaveformShapeType = shapeStringValue;
+    
+    // Refresh configuration button visibility metrics arrays
+    document.querySelectorAll(".btn-wave-node").forEach(btn => btn.classList.remove("active"));
+    
+    const elementId = "wave" + shapeStringValue.charAt(0).toUpperCase() + shapeStringValue.slice(1);
+    const targetElement = document.getElementById(elementId);
+    if (targetElement) targetElement.classList.add("active");
+
+    // Hot-swap oscillator shape settings live if note is active
+    if (isAudioToneCurrentlyPlaying && activeOscillatorNodeInstance) {
+        activeOscillatorNodeInstance.type = shapeStringValue;
+    }
+}
+
+function synchronizeFrequencyToneValue(hertzRawValue) {
+    targetFrequencyPitchHertz = parseInt(hertzRawValue);
+    document.getElementById("lblFrequencyHz").innerText = `${targetFrequencyPitchHertz} Hz`;
+
+    // Dynamic scale frequency pitch adjustments on active oscillator loop tracks
+    if (isAudioToneCurrentlyPlaying && activeOscillatorNodeInstance) {
+        activeOscillatorNodeInstance.frequency.setValueAtTime(targetFrequencyPitchHertz, globalAudioContextObject.currentTime);
+    }
+}
+
+function toggleAudioSignalPlaybackState() {
+    const playBtn = document.getElementById("masterAudioPlaybackBtn");
+
+    if (isAudioToneCurrentlyPlaying) {
+        // Safe disconnection termination teardown sequence
+        if (activeOscillatorNodeInstance) {
+            try { activeOscillatorNodeInstance.stop(); } catch(e) {}
+            activeOscillatorNodeInstance.disconnect();
+        }
+        isAudioToneCurrentlyPlaying = false;
+        playBtn.innerText = "Trigger Audio Tone";
+        playBtn.classList.remove("playing-active");
+    } else {
+        // Instantiate pipeline context allocations securely
+        if (!globalAudioContextObject) {
+            globalAudioContextObject = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (globalAudioContextObject.state === 'suspended') {
+            globalAudioContextObject.resume();
+        }
+
+        activeOscillatorNodeInstance = globalAudioContextObject.createOscillator();
+        activeGainNodeInstance = globalAudioContextObject.createGain();
+
+        activeOscillatorNodeInstance.type = selectedWaveformShapeType;
+        activeOscillatorNodeInstance.frequency.setValueAtTime(targetFrequencyPitchHertz, globalAudioContextObject.currentTime);
+        
+        // Enforce soft baseline padding multipliers to stop clipping distortion thresholds
+        activeGainNodeInstance.gain.setValueAtTime(0.12, globalAudioContextObject.currentTime);
+
+        activeOscillatorNodeInstance.connect(activeGainNodeInstance);
+        activeGainNodeInstance.connect(globalAudioContextObject.destination);
+
+        activeOscillatorNodeInstance.start();
+        isAudioToneCurrentlyPlaying = true;
+        
+        playBtn.innerText = "Halt Audio Tone";
+        playBtn.className = "btn-audio-trigger playing-active";
+
+        // Push test bench matrix nodes straight onto ledger tracking memory lists
+        historicalPatchesLoggedArray.unshift({
+            id: Date.now(),
+wave: selectedWaveformShapeType.toUpperCase(),pitch: targetFrequencyPitchHertz});redrawAudioPatchesLogView();}}function redrawAudioPatchesLogView() {const container = document.getElementById("patchesHistoryLogBox");if (historicalPatchesLoggedArray.length === 0) {container.innerHTML = <div style="text-align:center; padding:10px; color:var(--muted); font-size:12px;">Fire frequency generators to track patch bench metrics logs.</div>;return;}// Clamp slice array items limits to preserve look heights footprint bounds safelyconst recentSlices = historicalPatchesLoggedArray.slice(0, 3);container.innerHTML = recentSlices.map(patch => <div class="oscillations-row"> <span class="log-wave-title">🎛️ Waveform: ${patch.wave}</span> <span class="log-frequency-val">Pitch: ${patch.pitch} Hz</span> </div>).join("");}// Initial structural rendering loop runtime setup activationredrawAudioPatchesLogView();</script></body> </html>

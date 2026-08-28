@@ -1,0 +1,1484 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#f97316">
+<title>PantryPal</title>
+
+<style>
+:root{
+--bg:#f8f7f4;
+--card:#fff;
+--text:#24221f;
+--muted:#89847d;
+--line:#e9e5de;
+--primary:#f97316;
+--primary2:#fb923c;
+--soft:#fff1e7;
+--green:#16a34a;
+--green-soft:#eaf8ee;
+--danger:#dc2626;
+--shadow:0 10px 30px rgba(55,45,30,.07)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#ea580c,#f97316 55%,#fb923c);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.11)
+}
+
+.header:after{
+content:"";
+position:absolute;
+width:130px;
+height:130px;
+left:-70px;
+bottom:-85px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.17);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.17);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.84)
+}
+
+/* CONTENT */
+
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+.title span{
+font-size:10px;
+color:var(--muted)
+}
+
+/* STATS */
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px
+}
+
+.stat{
+padding:12px 7px;
+text-align:center;
+background:var(--bg);
+border-radius:14px
+}
+
+.stat strong{
+display:block;
+font-size:20px
+}
+
+.stat span{
+display:block;
+margin-top:3px;
+font-size:9px;
+color:var(--muted)
+}
+
+/* SEARCH */
+
+.search{
+position:relative
+}
+
+.search-icon{
+position:absolute;
+left:13px;
+top:11px
+}
+
+.search input{
+width:100%;
+padding:12px 12px 12px 37px;
+border:1px solid var(--line);
+border-radius:13px;
+outline:none;
+background:var(--bg);
+color:var(--text)
+}
+
+.search input:focus{
+border-color:var(--primary)
+}
+
+/* FILTER */
+
+.filters{
+display:flex;
+gap:7px;
+overflow-x:auto;
+padding:13px 0 3px;
+scrollbar-width:none
+}
+
+.filters::-webkit-scrollbar{display:none}
+
+.filter{
+flex-shrink:0;
+padding:9px 12px;
+border:0;
+border-radius:11px;
+background:var(--bg);
+color:var(--muted);
+font-size:10px;
+font-weight:750
+}
+
+.filter.active{
+background:var(--primary);
+color:white
+}
+
+/* ITEM */
+
+.food{
+display:flex;
+align-items:center;
+gap:11px;
+padding:13px 0;
+border-bottom:1px solid var(--line)
+}
+
+.food:last-child{border-bottom:0}
+
+.food-icon{
+width:42px;
+height:42px;
+display:grid;
+place-items:center;
+flex-shrink:0;
+border-radius:13px;
+background:var(--soft);
+font-size:20px
+}
+
+.food-info{
+flex:1;
+min-width:0
+}
+
+.food-name{
+font-size:13px;
+font-weight:800
+}
+
+.food-meta{
+margin-top:4px;
+font-size:9px;
+color:var(--muted)
+}
+
+.status{
+display:inline-block;
+margin-top:5px;
+padding:4px 7px;
+border-radius:7px;
+font-size:8px;
+font-weight:800
+}
+
+.status.ok{
+background:var(--green-soft);
+color:var(--green)
+}
+
+.status.low{
+background:#fff5df;
+color:#c47a00
+}
+
+.status.out{
+background:#fff0f0;
+color:var(--danger)
+}
+
+.food-actions{
+display:flex;
+gap:5px
+}
+
+.small{
+width:33px;
+height:33px;
+border:0;
+border-radius:9px;
+background:var(--bg)
+}
+
+/* ADD */
+
+.add{
+width:100%;
+margin-top:12px;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:white;
+font-weight:800
+}
+
+/* EMPTY */
+
+.empty{
+padding:30px 5px 15px;
+text-align:center;
+color:var(--muted)
+}
+
+.empty-icon{font-size:40px}
+
+.empty h3{
+margin:8px 0 4px;
+font-size:14px;
+color:var(--text)
+}
+
+.empty p{
+margin:0;
+font-size:11px
+}
+
+/* SHOPPING */
+
+.shop-item{
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px 0;
+border-bottom:1px solid var(--line)
+}
+
+.shop-item:last-child{border-bottom:0}
+
+.shop-check{
+width:24px;
+height:24px;
+border:2px solid #d5d0c8;
+border-radius:7px;
+background:transparent;
+color:white
+}
+
+.shop-item.done .shop-check{
+border-color:var(--green);
+background:var(--green)
+}
+
+.shop-item.done .shop-name{
+text-decoration:line-through;
+color:var(--muted)
+}
+
+.shop-name{
+flex:1;
+font-size:12px;
+font-weight:700
+}
+
+/* FAB */
+
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:20px;
+background:var(--primary);
+color:white;
+font-size:28px;
+box-shadow:0 12px 28px rgba(249,115,22,.28);
+z-index:10
+}
+
+/* MODAL */
+
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(0,0,0,.48)
+}
+
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px
+}
+
+.modal-head h2{
+margin:0;
+font-size:19px
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:10px;
+background:var(--bg)
+}
+
+.field{margin-bottom:12px}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+font-weight:750
+}
+
+.field input,
+.field select{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text)
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:white;
+font-weight:800
+}
+
+/* TOAST */
+
+.toast{
+position:fixed;
+left:50%;
+bottom:92px;
+z-index:50;
+transform:translate(-50%,20px);
+opacity:0;
+padding:11px 15px;
+border-radius:12px;
+background:#24221f;
+color:white;
+font-size:11px;
+white-space:nowrap;
+transition:.25s
+}
+
+.toast.show{
+opacity:1;
+transform:translate(-50%,0)
+}
+
+/* DARK */
+
+body.dark{
+--bg:#111716;
+--card:#19201e;
+--text:#f4f7f5;
+--muted:#98a49f;
+--line:#2a3531;
+--soft:#352319;
+--shadow:0 12px 35px rgba(0,0,0,.2)
+}
+
+@media(min-width:700px){
+body{padding:20px 0}
+.app{
+min-height:calc(100vh - 40px);
+border-radius:30px;
+box-shadow:0 20px 60px rgba(30,25,15,.12)
+}
+}
+
+@media(max-width:350px){
+.content{padding:14px}
+.header{padding:18px 15px 27px}
+.hero h1{font-size:26px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+<div class="topbar">
+
+<div class="brand">
+<div class="brand-icon">🍳</div>
+<div class="brand-name">PantryPal</div>
+</div>
+
+<button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+
+</div>
+
+<div class="hero">
+<h1>Your pantry.<br>Always organized.</h1>
+<p>Know what you have, what is low, and what to buy.</p>
+</div>
+
+</header>
+
+
+<main class="content">
+
+<!-- STATS -->
+
+<section class="card">
+
+<div class="title">
+<h2>📊 Pantry Overview</h2>
+<span id="totalLabel">0 items</span>
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<strong id="total">0</strong>
+<span>Total Items</span>
+</div>
+
+<div class="stat">
+<strong id="low">0</strong>
+<span>Running Low</span>
+</div>
+
+<div class="stat">
+<strong id="out">0</strong>
+<span>Out of Stock</span>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PANTRY -->
+
+<section class="card">
+
+<div class="title">
+<h2>🥫 My Pantry</h2>
+<span id="visible">0 items</span>
+</div>
+
+<div class="search">
+<span class="search-icon">🔍</span>
+<input
+id="search"
+type="search"
+placeholder="Search food..."
+oninput="render()"
+>
+</div>
+
+
+<div class="filters">
+
+<button class="filter active"
+onclick="setFilter('all',this)">
+All
+</button>
+
+<button class="filter"
+onclick="setFilter('grains',this)">
+🌾 Grains
+</button>
+
+<button class="filter"
+onclick="setFilter('dairy',this)">
+🥛 Dairy
+</button>
+
+<button class="filter"
+onclick="setFilter('fruits',this)">
+🍎 Fruits
+</button>
+
+<button class="filter"
+onclick="setFilter('vegetables',this)">
+🥕 Vegetables
+</button>
+
+<button class="filter"
+onclick="setFilter('other',this)">
+📦 Other
+</button>
+
+</div>
+
+<div id="foodList"></div>
+
+<button class="add" onclick="openModal()">
+＋ Add Pantry Item
+</button>
+
+</section>
+
+
+<!-- SHOPPING -->
+
+<section class="card">
+
+<div class="title">
+<h2>🛒 Shopping List</h2>
+<span id="shopCount">0 items</span>
+</div>
+
+<div id="shoppingList"></div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<button class="fab" onclick="openModal()">+</button>
+
+
+<!-- MODAL -->
+
+<div class="overlay" id="overlay">
+
+<div class="modal">
+
+<div class="modal-head">
+<h2>Add Pantry Item</h2>
+
+<button class="close" onclick="closeModal()">
+✕
+</button>
+</div>
+
+
+<div class="field">
+<label>Food name</label>
+
+<input
+id="foodName"
+type="text"
+placeholder="e.g. Rice"
+>
+</div>
+
+
+<div class="field">
+<label>Category</label>
+
+<select id="category">
+
+<option value="grains">🌾 Grains</option>
+<option value="dairy">🥛 Dairy</option>
+<option value="fruits">🍎 Fruits</option>
+<option value="vegetables">🥕 Vegetables</option>
+<option value="other">📦 Other</option>
+
+</select>
+</div>
+
+
+<div class="field">
+<label>Quantity</label>
+
+<input
+id="quantity"
+type="number"
+min="0"
+max="999"
+value="1"
+>
+</div>
+
+
+<div class="field">
+<label>Unit</label>
+
+<select id="unit">
+
+<option value="pcs">pieces</option>
+<option value="kg">kg</option>
+<option value="g">grams</option>
+<option value="liters">liters</option>
+<option value="packs">packs</option>
+<option value="bottles">bottles</option>
+
+</select>
+</div>
+
+
+<button class="save" onclick="saveFood()">
+💾 Add to Pantry
+</button>
+
+</div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+"use strict";
+
+
+let foods =
+JSON.parse(
+localStorage.getItem("pantryPalFoods") || "[]"
+);
+
+let shopping =
+JSON.parse(
+localStorage.getItem("pantryPalShopping") || "[]"
+);
+
+let activeFilter = "all";
+
+let toastTimer;
+
+
+/* DEFAULT DATA */
+
+if(foods.length === 0){
+
+foods = [
+
+{
+id:Date.now()+1,
+name:"Rice",
+category:"grains",
+quantity:5,
+unit:"kg"
+},
+
+{
+id:Date.now()+2,
+name:"Milk",
+category:"dairy",
+quantity:1,
+unit:"liters"
+},
+
+{
+id:Date.now()+3,
+name:"Eggs",
+category:"other",
+quantity:8,
+unit:"pcs"
+},
+
+{
+id:Date.now()+4,
+name:"Apples",
+category:"fruits",
+quantity:3,
+unit:"pcs"
+}
+
+];
+
+saveFoods();
+
+}
+
+
+/* STORAGE */
+
+function saveFoods(){
+
+localStorage.setItem(
+"pantryPalFoods",
+JSON.stringify(foods)
+);
+
+}
+
+function saveShopping(){
+
+localStorage.setItem(
+"pantryPalShopping",
+JSON.stringify(shopping)
+);
+
+}
+
+
+/* ICON */
+
+function icon(category){
+
+const icons={
+grains:"🌾",
+dairy:"🥛",
+fruits:"🍎",
+vegetables:"🥕",
+other:"📦"
+};
+
+return icons[category] || "📦";
+
+}
+
+
+/* CATEGORY */
+
+function categoryName(category){
+
+const names={
+grains:"Grains",
+dairy:"Dairy",
+fruits:"Fruits",
+vegetables:"Vegetables",
+other:"Other"
+};
+
+return names[category] || "Other";
+
+}
+
+
+/* STATUS */
+
+function status(quantity){
+
+quantity=Number(quantity);
+
+if(quantity<=0){
+
+return {
+text:"Out of stock",
+class:"out"
+};
+
+}
+
+if(quantity<=2){
+
+return {
+text:"Running low",
+class:"low"
+};
+
+}
+
+return {
+text:"In stock",
+class:"ok"
+};
+
+}
+
+
+/* RENDER */
+
+function render(){
+
+const list=
+document.getElementById("foodList");
+
+const query=
+document.getElementById("search")
+.value
+.toLowerCase()
+.trim();
+
+
+const filtered=
+foods.filter(food=>{
+
+const searchMatch=
+food.name
+.toLowerCase()
+.includes(query);
+
+const filterMatch=
+activeFilter==="all" ||
+food.category===activeFilter;
+
+return searchMatch && filterMatch;
+
+});
+
+
+document.getElementById("visible")
+.textContent=
+filtered.length+
+(filtered.length===1?" item":" items");
+
+
+if(filtered.length===0){
+
+list.innerHTML=`
+
+<div class="empty">
+
+<div class="empty-icon">🥫</div>
+
+<h3>No pantry items</h3>
+
+<p>Add something to your pantry.</p>
+
+</div>
+
+`;
+
+}else{
+
+list.innerHTML=
+filtered.map(food=>{
+
+const st=status(food.quantity);
+
+return `
+
+<div class="food">
+
+<div class="food-icon">
+${icon(food.category)}
+</div>
+
+<div class="food-info">
+
+<div class="food-name">
+${escapeHTML(food.name)}
+</div>
+
+<div class="food-meta">
+${categoryName(food.category)}
+· ${food.quantity} ${food.unit}
+</div>
+
+<div class="status ${st.class}">
+${st.text}
+</div>
+
+</div>
+
+<div class="food-actions">
+
+<button
+class="small"
+onclick="adjust(${food.id},-1)"
+title="Decrease"
+>
+−
+</button>
+
+<button
+class="small"
+onclick="adjust(${food.id},1)"
+title="Increase"
+>
++
+</button>
+
+<button
+class="small"
+onclick="deleteFood(${food.id})"
+title="Delete"
+>
+🗑️
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+updateStats();
+renderShopping();
+
+}
+
+
+/* STATS */
+
+function updateStats(){
+
+const total=foods.length;
+
+const low=foods.filter(
+x=>Number(x.quantity)>0 &&
+Number(x.quantity)<=2
+).length;
+
+const out=foods.filter(
+x=>Number(x.quantity)<=0
+).length;
+
+
+document.getElementById("total")
+.textContent=total;
+
+document.getElementById("low")
+.textContent=low;
+
+document.getElementById("out")
+.textContent=out;
+
+document.getElementById("totalLabel")
+.textContent=
+total+
+(total===1?" item":" items");
+
+}
+
+
+/* FILTER */
+
+function setFilter(filter,button){
+
+activeFilter=filter;
+
+document
+.querySelectorAll(".filter")
+.forEach(x=>x.classList.remove("active"));
+
+button.classList.add("active");
+
+render();
+
+}
+
+
+/* ADJUST */
+
+function adjust(id,amount){
+
+const food=
+foods.find(x=>x.id===id);
+
+if(!food)return;
+
+food.quantity=
+Math.max(
+0,
+Number(food.quantity)+amount
+);
+
+saveFoods();
+render();
+
+}
+
+
+/* DELETE */
+
+function deleteFood(id){
+
+const food=
+foods.find(x=>x.id===id);
+
+if(!food)return;
+
+if(!confirm(
+`Delete "${food.name}" from pantry?`
+))return;
+
+
+foods=
+foods.filter(x=>x.id!==id);
+
+saveFoods();
+render();
+
+showToast("Item removed.");
+
+}
+
+
+/* MODAL */
+
+function openModal(){
+
+document.getElementById("foodName")
+.value="";
+
+document.getElementById("category")
+.value="grains";
+
+document.getElementById("quantity")
+.value="1";
+
+document.getElementById("unit")
+.value="pcs";
+
+document.getElementById("overlay")
+.classList.add("show");
+
+setTimeout(
+()=>document.getElementById("foodName").focus(),
+50
+);
+
+}
+
+
+function closeModal(){
+
+document.getElementById("overlay")
+.classList.remove("show");
+
+}
+
+
+/* SAVE FOOD */
+
+function saveFood(){
+
+const name=
+document.getElementById("foodName")
+.value.trim();
+
+const category=
+document.getElementById("category")
+.value;
+
+const quantity=
+Math.max(
+0,
+Number(
+document.getElementById("quantity").value
+)||0
+);
+
+const unit=
+document.getElementById("unit")
+.value;
+
+
+if(!name){
+
+showToast("Enter a food name.");
+
+return;
+
+}
+
+
+foods.unshift({
+
+id:Date.now(),
+
+name:name,
+
+category:category,
+
+quantity:quantity,
+
+unit:unit
+
+});
+
+
+saveFoods();
+
+closeModal();
+
+render();
+
+showToast("🥫 Added to pantry!");
+
+}
+
+
+/* SHOPPING */
+
+function renderShopping(){
+
+const list=
+document.getElementById("shoppingList");
+
+
+/* Automatically show low/out items */
+
+const automatic=
+foods
+.filter(
+food=>Number(food.quantity)<=2
+)
+.map(food=>({
+
+id:"auto-"+food.id,
+
+name:food.name,
+
+done:false,
+
+automatic:true
+
+}));
+
+
+const combined=[
+...automatic,
+...shopping
+];
+
+
+document.getElementById("shopCount")
+.textContent=
+combined.length+
+(combined.length===1?" item":" items");
+
+
+if(combined.length===0){
+
+list.innerHTML=`
+
+<div class="empty">
+
+<div class="empty-icon">🛒</div>
+
+<h3>Your shopping list is empty</h3>
+
+<p>Low-stock items will appear here.</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+list.innerHTML=
+combined.map(item=>`
+
+<div class="shop-item ${
+item.done?"done":""
+}">
+
+<button
+class="shop-check"
+onclick="toggleShop('${String(item.id)}')"
+>
+${item.done?"✓":""}
+</button>
+
+<div class="shop-name">
+${escapeHTML(item.name)}
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* TOGGLE SHOPPING */
+
+function toggleShop(id){
+
+if(String(id).startsWith("auto-")){
+
+showToast(
+"Update the pantry quantity when you buy it."
+);
+
+return;
+
+}
+
+
+const item=
+shopping.find(
+x=>String(x.id)===String(id)
+);
+
+if(!item)return;
+
+item.done=!item.done;
+
+saveShopping();
+
+renderShopping();
+
+}
+
+
+/* ADD CUSTOM SHOPPING ITEM */
+
+function addShopping(name){
+
+shopping.push({
+
+id:Date.now(),
+
+name:name,
+
+done:false
+
+});
+
+saveShopping();
+
+renderShopping();
+
+}
+
+
+/* ESCAPE */
+
+function escapeHTML(text){
+
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+/* DARK MODE */
+
+function toggleTheme(){
+
+document.body.classList.toggle("dark");
+
+const dark=
+document.body.classList.contains("dark");
+
+localStorage.setItem(
+"pantryPalDark",
+dark?"1":"0"
+);
+
+document.getElementById("themeBtn")
+.textContent=
+dark?"☀️":"🌙";
+
+}
+
+
+function loadTheme(){
+
+const dark=
+localStorage.getItem(
+"pantryPalDark"
+)==="1";
+
+if(dark){
+
+document.body.classList.add("dark");
+
+document.getElementById("themeBtn")
+.textContent="☀️";
+
+}
+
+}
+
+
+/* TOAST */
+
+function showToast(message){
+
+const toast=
+document.getElementById("toast");
+
+toast.textContent=message;
+
+toast.classList.add("show");
+
+clearTimeout(toastTimer);
+
+toastTimer=
+setTimeout(
+()=>{
+toast.classList.remove("show");
+},
+2200
+);
+
+}
+
+
+/* OUTSIDE CLICK */
+
+document
+.getElementById("overlay")
+.addEventListener(
+"click",
+e=>{
+
+if(e.target.id==="overlay"){
+closeModal();
+}
+
+}
+);
+
+
+/* ESC */
+
+document.addEventListener(
+"keydown",
+e=>{
+
+if(e.key==="Escape"){
+closeModal();
+}
+
+}
+);
+
+
+/* START */
+
+loadTheme();
+render();
+
+</script>
+
+</body>
+</html>

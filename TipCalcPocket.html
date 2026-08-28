@@ -1,0 +1,409 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>TipCalc Pocket</title>
+
+<style>
+/* UNIFORM MIDNIGHT OCEAN STYLE */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#2563eb;
+--primary2:#3b82f6;
+--soft:#1e3a8a;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(15,23,42,.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#2563eb 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* FIELDS INPUT SETUP */
+.field{
+margin-bottom:14px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.3px
+}
+
+.input-with-symbol {
+position:relative;
+display:flex;
+align-items:center
+}
+
+.currency-symbol {
+position:absolute;
+left:14px;
+font-size:16px;
+font-weight:800;
+color:var(--muted)
+}
+
+.input-with-symbol input {
+width:100%;
+padding:13px 13px 13px 32px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-weight:700
+}
+.input-with-symbol input:focus {
+border-color:var(--primary2)
+}
+
+/* TIP MACRO BUTTONS SEGMENT */
+.macro-tips-grid {
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:6px;
+margin-top:2px
+}
+
+.btn-tip-percentage {
+padding:11px 2px;
+border:1px solid var(--line);
+border-radius:11px;
+background:var(--bg);
+color:var(--muted);
+font-size:12px;
+font-weight:800;
+text-align:center
+}
+.btn-tip-percentage.active {
+background:var(--primary);
+color:white;
+border-color:var(--primary)
+}
+
+/* STEP COUNTER ROW WRAPPER */
+.stepper-wrapper {
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:12px;
+padding:6px 8px
+}
+
+.btn-step-action {
+width:36px;
+height:36px;
+border:0;
+border-radius:9px;
+background:var(--card);
+color:var(--text);
+font-size:16px;
+font-weight:800;
+display:grid;
+place-items:center
+}
+
+.stepper-val {
+font-size:16px;
+font-weight:800;
+color:var(--text)
+}
+
+/* CALCULATION SUMMARY REPORT LAYOUT */
+.report-row {
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 0;
+border-bottom:1px solid var(--line)
+}
+.report-row:last-child { border-bottom:0 }
+
+.report-label {
+font-size:13px;
+font-weight:700;
+color:var(--muted)
+}
+
+.report-val {
+font-size:15px;
+font-weight:800;
+color:var(--text)
+}
+.report-row.highlighted-total .report-label { color:var(--text) }
+.report-row.highlighted-total .report-val { color:var(--green); font-size:19px }
+
+/* LIGHT SKIN OVERRIDE */
+body.light-theme {
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#dbeafe;
+--shadow:0 10px 30px rgba(51,65,85,0.06);
+--green-soft:#d1fae5
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">💵</div>
+<div class="brand-name">TipCalc</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Split Bills.<br>Calculate Exact Tips.</h1>
+<p>Compute dynamic meal tips, determine shared payments, and evaluate tabs instantly.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- CALCULATOR PARAMS CARD -->
+<section class="card">
+<div class="field">
+<label>BASE TOTAL BILL AMOUNT ($)</label>
+<div class="input-with-symbol">
+<span class="currency-symbol">$</span>
+<input type="number" id="baseBillInput" placeholder="0.00" step="0.01" min="0" oninput="calculateBillMatrix()">
+</div>
+</div>
+
+<div class="field">
+<label>TIP PERCENTAGE RATE</label>
+<div class="macro-tips-grid">
+<button class="btn-tip-percentage" id="tipPct10" onclick="selectTipRate(10)">10%</button>
+<button class="btn-tip-percentage active" id="tipPct15" onclick="selectTipRate(15)">15%</button>
+<button class="btn-tip-percentage" id="tipPct18" onclick="selectTipRate(18)">18%</button>
+<button class="btn-tip-percentage" id="tipPct20" onclick="selectTipRate(20)">20%</button>
+</div>
+</div>
+
+<div class="field">
+<label>SPLIT COUNT (NUMBER OF PEOPLE)</label>
+<div class="stepper-wrapper">
+<button class="btn-step-action" onclick="adjustSplitCount(-1)">-</button>
+<span class="stepper-val" id="splitCountVal">1</span>
+<button class="btn-step-action" onclick="adjustSplitCount(1)">+</button>
+</div>
+</div>
+</section>
+
+<!-- CALCULATION BREAKDOWN RESULTS CARD -->
+<section class="card">
+<div class="title">
+<h2>📊 Tab Summary Breakdown</h2>
+</div>
+
+<div class="report-box">
+<div class="report-row">
+<span class="report-label">Calculated Tip Total</span>
+<span class="report-val" id="lblCalculatedTip">$0.00</span>
+</div>
+<div class="report-row">
+<span class="report-label">Gross Bill Sum (With Tip)</span>
+<span class="report-val" id="lblGrossTotal">$0.00</span>
+</div>
+<div class="report-row highlighted-total">
+<span class="report-label">Individual Share (Per Person)</span>
+<span class="report-val" id="lblPerPersonShare">$0.00</span>
+</div>
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+let currentSelectedTipPct = 15;
+let currentPeopleSplitCount = 1;
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function selectTipRate(ratePctValue) {
+    currentSelectedTipPct = ratePctValue;
+    
+    // Toggle active classes on percentage element nodes buttons
+    document.querySelectorAll(".btn-tip-percentage").forEach(btn => btn.classList.remove("active"));
+    document.getElementById(`tipPct${ratePctValue}`).classList.add("active");
+    
+    calculateBillMatrix();
+}
+
+function adjustSplitCount(deltaValue) {
+    currentPeopleSplitCount = Math.max(1, currentPeopleSplitCount + deltaValue);
+    document.getElementById("splitCountVal").innerText = currentPeopleSplitCount;
+    calculateBillMatrix();
+}
+
+function calculateBillMatrix() {
+    const rawValue = parseFloat(document.getElementById("baseBillInput").value);
+    const baseBill = isNaN(rawValue) || rawValue < 0 ? 0 : rawValue;
+    
+    // Process core mathematical computations blocks
+    const calculatedTipTotal = baseBill * (currentSelectedTipPct / 100);
+    const grossTotalSumValue = baseBill + calculatedTipTotal;
+    const sharePerIndividualValue = grossTotalSumValue / currentPeopleSplitCount;
+    
+    // Push updates straight to reporting summary layout view blocks
+    document.getElementById("lblCalculatedTip").innerText = `$${calculatedTipTotal.toFixed(2)}`;
+    document.getElementById("lblGrossTotal").innerText = `$${grossTotalSumValue.toFixed(2)}`;
+    document.getElementById("lblPerPersonShare").innerText = `$${sharePerIndividualValue.toFixed(2)}`;
+}
+
+// Ensure clear display values configurations straight on instantiation boot sequences
+calculateBillMatrix();
+</script>
+
+</body>
+</html>

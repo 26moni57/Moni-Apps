@@ -1,0 +1,394 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>BizzCard Identity Desk</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Monochrome Neo-Brutalist High-Contrast Look */
+:root{
+--bg:#ffffff;
+--card:#ffffff;
+--text:#000000;
+--muted:#555555;
+--line:#000000;
+--border-thick:3px solid #000000;
+--border-thin:1.5px solid #000000;
+--primary:#000000;
+--primary-soft:#f3f4f6;
+--shadow:5px 5px 0px #000000
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden;
+border-left:var(--border-thick);
+border-right:var(--border-thick)
+}
+
+/* HEADER - NEO BRUTALIST BLOCK HEADER */
+.header{
+position:relative;
+padding:24px 18px;
+color:var(--text);
+background:#ffffff;
+border-bottom:var(--border-thick)
+}
+
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border:var(--border-thin);
+background:#000000;
+color:#ffffff;
+font-weight:900;
+font-size:20px
+}
+
+.brand-name{
+font-size:22px;
+font-weight:900;
+letter-spacing:-0.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:var(--border-thin);
+background:#ffffff;
+color:var(--text);
+font-weight:bold
+}
+
+.hero{
+margin-top:20px
+}
+
+.hero h1{
+margin:0;
+font-size:28px;
+font-weight:900;
+line-height:1.1;
+text-transform:uppercase
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:var(--muted);
+font-weight:600
+}
+
+/* CONTENT */
+.content{padding:18px; background:var(--primary-soft); min-height:calc(100vh - 150px)}
+
+.card{
+padding:18px;
+margin-bottom:18px;
+background:var(--card);
+border:var(--border-thick);
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px;
+border-bottom:var(--border-thin);
+padding-bottom:6px
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+font-weight:900;
+text-transform:uppercase
+}
+
+/* LIVE IDENTITY BUSINESS CARD PROFILE COMPONENT */
+.bizz-card-display {
+width:100%;
+min-height:190px;
+background:#ffffff;
+border:var(--border-thick);
+padding:16px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+position:relative
+}
+
+.bizz-top {
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px
+}
+
+.profile-avatar-box {
+width:52px;
+height:52px;
+background:var(--primary-soft);
+border:var(--border-thin);
+display:grid;
+place-items:center;
+font-size:24px;
+overflow:hidden
+}
+.profile-avatar-box img {
+width:100%;
+height:100%;
+object-fit:cover
+}
+
+.meta-identity {
+text-align:right
+}
+
+.bizz-name {
+font-size:18px;
+font-weight:900;
+text-transform:uppercase;
+letter-spacing:-0.3px
+}
+
+.bizz-role {
+font-size:11px;
+font-weight:700;
+color:var(--muted);
+margin-top:2px;
+text-transform:uppercase
+}
+
+.bizz-bottom {
+border-top:var(--border-thin);
+padding-top:10px;
+margin-top:20px;
+display:flex;
+flex-direction:column;
+gap:4px
+}
+
+.contact-line {
+font-size:11px;
+font-weight:700;
+display:flex;
+align-items:center;
+gap:6px
+}
+
+/* FIELD MODIFICATION LABELS */
+.field{
+margin-bottom:14px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label {
+font-size:10px;
+font-weight:900;
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field input {
+width:100%;
+padding:11px;
+border:var(--border-thin);
+outline:none;
+background:#ffffff;
+color:var(--text);
+font-weight:700
+}
+.field input:focus {
+background:var(--primary-soft)
+}
+
+.file-input-wrapper {
+position:relative;
+border:var(--border-thin);
+padding:10px;
+text-align:center;
+background:#ffffff;
+font-weight:700;
+font-size:12px;
+cursor:pointer
+}
+.file-input-wrapper input[type="file"] {
+position:absolute;
+inset:0;
+opacity:0;
+cursor:pointer
+}
+
+/* LIGHT INVERSION STYLING */
+body.invert-brutalism {
+--bg:#000000;
+--card:#000000;
+--text:#ffffff;
+--muted:#aaaaaa;
+--line:#ffffff;
+--border-thick:3px solid #ffffff;
+--border-thin:1.5px solid #ffffff;
+--primary-soft:#111111;
+--shadow:5px 5px 0px #ffffff
+}
+body.invert-brutalism .bizz-card-display {
+background:#000000
+}
+body.invert-brutalism .header {
+background:#000000
+}
+body.invert-brutalism .brand-icon {
+background:#ffffff;
+color:#000000
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">▩</div>
+<div class="brand-name">BizzCard</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleBrutalismTheme()">INV</button>
+</div>
+
+<div class="hero">
+<h1>Identity Desk.<br>Neo Brutalist Profile.</h1>
+<p>Formulate striking, layout identity passes and update credentials live.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- LIVE LAYOUT PRESENTATION DISPLAY INTERFACE -->
+<section class="card" style="padding:0; border:0; box-shadow:none; background:transparent;">
+<div class="bizz-card-display">
+<div class="bizz-top">
+<div id="avatarFrameNode" class="profile-avatar-box">👤</div>
+
+<div id="displayNameNode" class="bizz-name">ALEX JOHNSON</div>
+<div id="displayRoleNode" class="bizz-role">Lead Code Architect</div>
+</div>
+</div>
+<div class="bizz-bottom">
+<div class="contact-line"><span>✉</span> <span id="displayEmailNode">alex.dev@cluster.io</span></div>
+<div class="contact-line"><span>🌐</span> <span id="displayWebNode">www.cluster.io</span></div>
+</div>
+</div>
+</section>
+
+<!-- IDENTITY EDIT PARAMETERS PANEL FORM -->
+<section class="card">
+<div class="title">
+<h2>⚙ Edit Business Profile Fields</h2>
+</div>
+
+<div class="field">
+<label>Upload Profile Picture Image</label>
+<div class="file-input-wrapper">
+<span>CHOOSE IMAGE FILE FROM DEVICE</span>
+<input type="file" id="imageInputLoader" accept="image/*" onchange="processAvatarUploadImage(this)">
+</div>
+</div>
+
+<div class="field">
+<label>Cardholder Full Name</label>
+<input type="text" id="inputCardName" value="ALEX JOHNSON" oninput="synchronizeBizzCardView()">
+</div>
+
+<div class="field">
+<label>Professional Role / Title</label>
+<input type="text" id="inputCardRole" value="Lead Code Architect" oninput="synchronizeBizzCardView()">
+</div>
+
+<div class="field">
+<label>Professional Email Address</label>
+<input type="text" id="inputCardEmail" value="alex.dev@cluster.io" oninput="synchronizeBizzCardView()">
+</div>
+
+<div class="field">
+<label>Web Domain URL</label>
+<input type="text" id="inputCardWeb" value="www.cluster.io" oninput="synchronizeBizzCardView()">
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+function toggleBrutalismTheme() {
+    document.body.classList.toggle("invert-brutalism");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("invert-brutalism") ? "NRM" : "INV";
+}
+
+function processAvatarUploadImage(inputNode) {
+    const files = inputNode.files;
+    if (!files || files.length === 0) return;
+
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+        const frame = document.getElementById("avatarFrameNode");
+        frame.innerHTML = `<img src="${event.target.result}" alt="Profile Image">`;
+    };
+    fileReader.readAsDataURL(files[0]);
+}
+
+function synchronizeBizzCardView() {
+    // Collect raw character data modifications fields values pipelines straight onto layout targets
+    const nameValue = document.getElementById("inputCardName").value.trim().toUpperCase() || "IDENTITY NAME";
+    const roleValue = document.getElementById("inputCardRole").value.trim() || "Professional Role / Title";
+    const emailValue = document.getElementById("inputCardEmail").value.trim() || "email@domain.com";
+    const webValue = document.getElementById("inputCardWeb").value.trim() || "://domain.com";
+
+    document.getElementById("displayNameNode").innerText = nameValue;
+    document.getElementById("displayRoleNode").innerText = roleValue;
+    document.getElementById("displayEmailNode").innerText = emailValue;
+    document.getElementById("displayWebNode").innerText = webValue;
+}
+</script>
+
+</body>
+</html>

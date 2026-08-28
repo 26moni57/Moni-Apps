@@ -1,0 +1,2278 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>FilePocket</title>
+
+<style>
+:root{
+    --bg:#f5f7fb;
+    --card:#fff;
+    --text:#182033;
+    --muted:#7c8498;
+    --line:#e7eaf0;
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --soft:#eaf2ff;
+    --danger:#dc2626;
+    --success:#16a34a;
+    --shadow:0 12px 30px rgba(30,50,90,.07);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select,
+textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:440px;
+    min-height:100vh;
+    margin:auto;
+}
+
+/* HEADER */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 25px;
+    color:#fff;
+    background:
+        linear-gradient(
+            145deg,
+            #172554,
+            #2563eb 60%,
+            #60a5fa
+        );
+    border-radius:0 0 30px 30px;
+}
+
+.header:before{
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    right:-100px;
+    top:-130px;
+    border-radius:50%;
+    background:rgba(255,255,255,.10);
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.brandIcon{
+    width:43px;
+    height:43px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    background:rgba(255,255,255,.16);
+    font-size:21px;
+}
+
+.brandName{
+    font-size:21px;
+    font-weight:850;
+}
+
+.themeBtn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.15);
+    color:#fff;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:22px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:29px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    margin:8px 0 0;
+    max-width:360px;
+    color:rgba(255,255,255,.82);
+    font-size:12px;
+    line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+    padding:17px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:16px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:13px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:15px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* SEARCH */
+
+.searchBox{
+    position:relative;
+}
+
+.searchBox input{
+    width:100%;
+    padding:12px 42px 12px 39px;
+    border:1px solid var(--line);
+    border-radius:13px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+    font-size:11px;
+}
+
+.searchBox input:focus{
+    border-color:var(--primary);
+}
+
+.searchIcon{
+    position:absolute;
+    left:13px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:14px;
+}
+
+.clearSearch{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+    width:28px;
+    height:28px;
+    border:0;
+    border-radius:8px;
+    background:transparent;
+    color:var(--muted);
+}
+
+/* STORAGE */
+
+.storage{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.storageCircle{
+    width:78px;
+    height:78px;
+    flex:0 0 78px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:
+        conic-gradient(
+            var(--primary) var(--usage,0deg),
+            var(--soft) var(--usage,0deg)
+        );
+}
+
+.storageInner{
+    width:62px;
+    height:62px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:var(--card);
+    text-align:center;
+}
+
+.storageInner strong{
+    font-size:14px;
+}
+
+.storageInner span{
+    color:var(--muted);
+    font-size:7px;
+}
+
+.storageInfo{
+    flex:1;
+}
+
+.storageInfo strong{
+    display:block;
+    font-size:13px;
+}
+
+.storageInfo p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.4;
+}
+
+.storageBar{
+    height:6px;
+    margin-top:9px;
+    overflow:hidden;
+    border-radius:10px;
+    background:var(--soft);
+}
+
+.storageBar div{
+    width:0;
+    height:100%;
+    border-radius:10px;
+    background:var(--primary);
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:12px;
+}
+
+.stat{
+    padding:10px 4px;
+    border-radius:13px;
+    background:var(--bg);
+    text-align:center;
+}
+
+.statIcon{
+    font-size:16px;
+}
+
+.stat strong{
+    display:block;
+    margin-top:3px;
+    font-size:16px;
+}
+
+.stat span{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+/* CATEGORIES */
+
+.categories{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+}
+
+.category{
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:var(--card);
+    text-align:left;
+}
+
+.category:hover{
+    border-color:var(--primary);
+}
+
+.categoryTop{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.categoryIcon{
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    border-radius:10px;
+    background:var(--soft);
+    font-size:17px;
+}
+
+.categoryCount{
+    color:var(--muted);
+    font-size:9px;
+}
+
+.category strong{
+    display:block;
+    margin-top:9px;
+    font-size:11px;
+}
+
+.category small{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+/* FILTERS */
+
+.filters{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    padding-bottom:2px;
+}
+
+.filters::-webkit-scrollbar{
+    display:none;
+}
+
+.filter{
+    flex:0 0 auto;
+    padding:8px 11px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--card);
+    color:var(--muted);
+    font-size:9px;
+}
+
+.filter.active{
+    border-color:var(--primary);
+    background:var(--soft);
+    color:var(--primary);
+    font-weight:800;
+}
+
+/* FILE LIST */
+
+.fileList{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.fileItem{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:11px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:var(--card);
+}
+
+.fileIcon{
+    width:38px;
+    height:38px;
+    flex:0 0 38px;
+    display:grid;
+    place-items:center;
+    border-radius:11px;
+    background:var(--soft);
+    font-size:18px;
+}
+
+.fileInfo{
+    min-width:0;
+    flex:1;
+}
+
+.fileName{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:11px;
+    font-weight:750;
+}
+
+.fileMeta{
+    display:flex;
+    gap:5px;
+    margin-top:4px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.tag{
+    padding:2px 5px;
+    border-radius:5px;
+    background:var(--soft);
+    color:var(--primary);
+}
+
+.fileActions{
+    display:flex;
+    gap:4px;
+}
+
+.iconBtn{
+    width:28px;
+    height:28px;
+    border:0;
+    border-radius:8px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:11px;
+}
+
+.iconBtn.active{
+    color:#f59e0b;
+    background:#fff7df;
+}
+
+.iconBtn.danger{
+    color:var(--danger);
+}
+
+/* EMPTY */
+
+.empty{
+    padding:25px 10px;
+    text-align:center;
+}
+
+.emptyIcon{
+    font-size:35px;
+}
+
+.empty strong{
+    display:block;
+    margin-top:8px;
+    font-size:12px;
+}
+
+.empty p{
+    margin:5px auto 0;
+    max-width:240px;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.5;
+}
+
+/* ADD FILE */
+
+.addBtn{
+    position:fixed;
+    right:max(
+        calc((100vw - 440px) / 2 + 18px),
+        18px
+    );
+    bottom:22px;
+    z-index:20;
+    width:54px;
+    height:54px;
+    border:0;
+    border-radius:18px;
+    background:var(--primary);
+    color:#fff;
+    font-size:24px;
+    box-shadow:0 10px 25px rgba(37,99,235,.35);
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(8,12,28,.52);
+    padding:0;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modalBox{
+    width:100%;
+    max-width:440px;
+    max-height:90vh;
+    overflow:auto;
+    padding:20px;
+    border-radius:25px 25px 0 0;
+    background:var(--card);
+}
+
+.modalHead{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+}
+
+.modalHead h2{
+    margin:0;
+    font-size:17px;
+}
+
+.closeBtn{
+    width:32px;
+    height:32px;
+    border:0;
+    border-radius:10px;
+    background:var(--bg);
+    color:var(--muted);
+}
+
+.field{
+    margin-bottom:12px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:5px;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:750;
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.field textarea{
+    min-height:70px;
+    resize:vertical;
+}
+
+.saveBtn{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    background:var(--primary);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    z-index:100;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#171b2d;
+    color:#fff;
+    font-size:10px;
+    white-space:nowrap;
+    opacity:0;
+    transform:translate(-50%,20px);
+    pointer-events:none;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+    --bg:#0e1220;
+    --card:#171c2d;
+    --text:#f1f4ff;
+    --muted:#9aa3b8;
+    --line:#293044;
+    --soft:#1e315a;
+    --shadow:0 14px 35px rgba(0,0,0,.28);
+}
+
+body.dark .iconBtn.active{
+    background:#382e12;
+}
+
+@media(min-width:700px){
+
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(20,35,70,.13);
+    }
+
+    .modal{
+        align-items:center;
+        padding:20px;
+    }
+
+    .modalBox{
+        border-radius:24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brandIcon">🧹</div>
+
+            <div class="brandName">
+                FilePocket
+            </div>
+
+        </div>
+
+        <button
+            class="themeBtn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+    <div class="hero">
+
+        <h1>
+            Your files.<br>
+            Neat & easy.
+        </h1>
+
+        <p>
+            Organize important files, notes and documents in one simple pocket.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- SEARCH -->
+
+<section class="card">
+
+    <div class="searchBox">
+
+        <span class="searchIcon">
+            🔎
+        </span>
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Search your files..."
+            oninput="renderFiles()"
+        >
+
+        <button
+            class="clearSearch"
+            onclick="clearSearch()"
+        >
+            ×
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- STORAGE -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            💾 Pocket Overview
+        </h2>
+
+        <span>
+            Offline
+        </span>
+
+    </div>
+
+
+    <div class="storage">
+
+        <div
+            class="storageCircle"
+            id="storageCircle"
+        >
+
+            <div class="storageInner">
+
+                <strong id="storagePercent">
+                    0%
+                </strong>
+
+                <span>
+                    used
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="storageInfo">
+
+            <strong id="storageUsed">
+                0 KB organized
+            </strong>
+
+            <p>
+                Your FilePocket data stays on this device.
+            </p>
+
+            <div class="storageBar">
+
+                <div id="storageBar"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="statIcon">
+                📄
+            </div>
+
+            <strong id="totalFiles">
+                0
+            </strong>
+
+            <span>
+                Files
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <div class="statIcon">
+                ⭐
+            </div>
+
+            <strong id="favoriteFiles">
+                0
+            </strong>
+
+            <span>
+                Favorites
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <div class="statIcon">
+                🏷️
+            </div>
+
+            <strong id="tagCount">
+                0
+            </strong>
+
+            <span>
+                Tags
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CATEGORIES -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📁 Categories
+        </h2>
+
+        <span>
+            Quick access
+        </span>
+
+    </div>
+
+
+    <div class="categories">
+
+        <button
+            class="category"
+            onclick="setFilter('Documents')"
+        >
+
+            <div class="categoryTop">
+
+                <div class="categoryIcon">
+                    📄
+                </div>
+
+                <span
+                    class="categoryCount"
+                    id="countDocuments"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <strong>
+                Documents
+            </strong>
+
+            <small>
+                PDFs & text
+            </small>
+
+        </button>
+
+
+        <button
+            class="category"
+            onclick="setFilter('Images')"
+        >
+
+            <div class="categoryTop">
+
+                <div class="categoryIcon">
+                    🖼️
+                </div>
+
+                <span
+                    class="categoryCount"
+                    id="countImages"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <strong>
+                Images
+            </strong>
+
+            <small>
+                Photos & graphics
+            </small>
+
+        </button>
+
+
+        <button
+            class="category"
+            onclick="setFilter('Work')"
+        >
+
+            <div class="categoryTop">
+
+                <div class="categoryIcon">
+                    💼
+                </div>
+
+                <span
+                    class="categoryCount"
+                    id="countWork"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <strong>
+                Work
+            </strong>
+
+            <small>
+                Projects & tasks
+            </small>
+
+        </button>
+
+
+        <button
+            class="category"
+            onclick="setFilter('Personal')"
+        >
+
+            <div class="categoryTop">
+
+                <div class="categoryIcon">
+                    👤
+                </div>
+
+                <span
+                    class="categoryCount"
+                    id="countPersonal"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <strong>
+                Personal
+            </strong>
+
+            <small>
+                Private items
+            </small>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- FILTER -->
+
+<section class="card">
+
+    <div class="sectionTitle">
+
+        <h2>
+            📌 My Files
+        </h2>
+
+        <span id="filterLabel">
+            All files
+        </span>
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            data-filter="All"
+            onclick="setFilter('All')"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Favorites"
+            onclick="setFilter('Favorites')"
+        >
+            ⭐ Favorites
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Documents"
+            onclick="setFilter('Documents')"
+        >
+            📄 Documents
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Images"
+            onclick="setFilter('Images')"
+        >
+            🖼️ Images
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Work"
+            onclick="setFilter('Work')"
+        >
+            💼 Work
+        </button>
+
+        <button
+            class="filter"
+            data-filter="Personal"
+            onclick="setFilter('Personal')"
+        >
+            👤 Personal
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <div
+        class="fileList"
+        id="fileList"
+    ></div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<button
+    class="addBtn"
+    onclick="openModal()"
+    aria-label="Add file"
+>
+    +
+</button>
+
+
+<!-- MODAL -->
+
+<div
+    class="modal"
+    id="modal"
+    onclick="closeModalOutside(event)"
+>
+
+    <div
+        class="modalBox"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="modalHead">
+
+            <h2>
+                ➕ Add File
+            </h2>
+
+            <button
+                class="closeBtn"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                FILE NAME
+            </label>
+
+            <input
+                id="fileName"
+                type="text"
+                maxlength="100"
+                placeholder="e.g. Passport Copy"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                CATEGORY
+            </label>
+
+            <select id="fileCategory">
+
+                <option>
+                    Documents
+                </option>
+
+                <option>
+                    Images
+                </option>
+
+                <option>
+                    Work
+                </option>
+
+                <option>
+                    Personal
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                SIZE
+            </label>
+
+            <input
+                id="fileSize"
+                type="number"
+                min="0"
+                step="0.1"
+                placeholder="e.g. 2.5"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                UNIT
+            </label>
+
+            <select id="fileUnit">
+
+                <option value="KB">
+                    KB
+                </option>
+
+                <option value="MB">
+                    MB
+                </option>
+
+                <option value="GB">
+                    GB
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                TAG
+            </label>
+
+            <input
+                id="fileTag"
+                type="text"
+                maxlength="30"
+                placeholder="e.g. important"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                NOTE
+            </label>
+
+            <textarea
+                id="fileNote"
+                maxlength="200"
+                placeholder="Add a short note..."
+            ></textarea>
+
+        </div>
+
+
+        <button
+            class="saveBtn"
+            onclick="addFile()"
+        >
+            💾 Save File
+        </button>
+
+    </div>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================
+   STORAGE
+========================= */
+
+const FILES_KEY =
+    "filePocketFiles";
+
+const THEME_KEY =
+    "filePocketTheme";
+
+
+let files =
+    JSON.parse(
+        localStorage.getItem(
+            FILES_KEY
+        ) || "[]"
+    );
+
+
+let currentFilter =
+    "All";
+
+
+let toastTimer;
+
+
+/* =========================
+   DEFAULT FILES
+========================= */
+
+if(!files.length){
+
+    files = [
+
+        {
+            id:makeId(),
+            name:"Important Documents",
+            category:"Documents",
+            size:2.4,
+            unit:"MB",
+            tag:"important",
+            note:"Keep important documents together.",
+            favorite:true,
+            date:todayText()
+        },
+
+        {
+            id:makeId(),
+            name:"Vacation Photos",
+            category:"Images",
+            size:18.6,
+            unit:"MB",
+            tag:"travel",
+            note:"Favorite vacation memories.",
+            favorite:false,
+            date:todayText()
+        },
+
+        {
+            id:makeId(),
+            name:"Work Project Notes",
+            category:"Work",
+            size:820,
+            unit:"KB",
+            tag:"work",
+            note:"Project ideas and notes.",
+            favorite:true,
+            date:todayText()
+        }
+
+    ];
+
+    saveFiles();
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function makeId(){
+
+    return Date.now().toString(36) +
+        Math.random()
+        .toString(36)
+        .slice(2);
+
+}
+
+
+function saveFiles(){
+
+    localStorage.setItem(
+        FILES_KEY,
+        JSON.stringify(files)
+    );
+
+}
+
+
+function todayText(){
+
+    return new Date()
+        .toLocaleDateString(
+            undefined,
+            {
+                month:"short",
+                day:"numeric",
+                year:"numeric"
+            }
+        );
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+function sizeToKB(
+    size,
+    unit
+){
+
+    if(unit === "GB")
+        return size * 1024 * 1024;
+
+    if(unit === "MB")
+        return size * 1024;
+
+    return size;
+
+}
+
+
+function formatSize(
+    kb
+){
+
+    if(kb >= 1024 * 1024){
+
+        return (
+            kb /
+            (1024 * 1024)
+        ).toFixed(1) + " GB";
+
+    }
+
+
+    if(kb >= 1024){
+
+        return (
+            kb / 1024
+        ).toFixed(1) + " MB";
+
+    }
+
+
+    return (
+        kb.toFixed(1)
+    ) + " KB";
+
+}
+
+
+function getIcon(
+    category
+){
+
+    const icons = {
+
+        Documents:"📄",
+
+        Images:"🖼️",
+
+        Work:"💼",
+
+        Personal:"👤"
+
+    };
+
+
+    return icons[category] ||
+        "📄";
+
+}
+
+
+/* =========================
+   ADD FILE
+========================= */
+
+function addFile(){
+
+    const name =
+        document
+        .getElementById("fileName")
+        .value.trim();
+
+
+    const category =
+        document
+        .getElementById("fileCategory")
+        .value;
+
+
+    const size =
+        Number(
+            document
+            .getElementById("fileSize")
+            .value
+        );
+
+
+    const unit =
+        document
+        .getElementById("fileUnit")
+        .value;
+
+
+    const tag =
+        document
+        .getElementById("fileTag")
+        .value.trim();
+
+
+    const note =
+        document
+        .getElementById("fileNote")
+        .value.trim();
+
+
+    if(!name){
+
+        showToast(
+            "⚠️ Enter a file name."
+        );
+
+        return;
+
+    }
+
+
+    files.unshift({
+
+        id:makeId(),
+
+        name:name,
+
+        category:category,
+
+        size:size || 0,
+
+        unit:unit,
+
+        tag:tag,
+
+        note:note,
+
+        favorite:false,
+
+        date:todayText()
+
+    });
+
+
+    saveFiles();
+
+    closeModal();
+
+    resetForm();
+
+    render();
+
+    showToast(
+        "📁 File added!"
+    );
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteFile(id){
+
+    const file =
+        files.find(
+            x => x.id === id
+        );
+
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    if(
+        !confirm(
+            `Delete "${file.name}"?`
+        )
+    ){
+
+        return;
+
+    }
+
+
+    files =
+        files.filter(
+            x => x.id !== id
+        );
+
+
+    saveFiles();
+
+    render();
+
+    showToast(
+        "🗑️ File removed."
+    );
+
+}
+
+
+/* =========================
+   FAVORITE
+========================= */
+
+function toggleFavorite(id){
+
+    const file =
+        files.find(
+            x => x.id === id
+        );
+
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    file.favorite =
+        !file.favorite;
+
+
+    saveFiles();
+
+    renderFiles();
+
+    renderStats();
+
+    showToast(
+        file.favorite
+            ? "⭐ Added to favorites."
+            : "☆ Removed from favorites."
+    );
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(
+    filter
+){
+
+    currentFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(
+            ".filter"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.filter === filter
+                );
+
+            }
+        );
+
+
+    document.getElementById(
+        "filterLabel"
+    ).textContent =
+        filter === "All"
+            ? "All files"
+            : filter;
+
+
+    renderFiles();
+
+}
+
+
+function clearSearch(){
+
+    document.getElementById(
+        "search"
+    ).value = "";
+
+    renderFiles();
+
+}
+
+
+/* =========================
+   FILE LIST
+========================= */
+
+function renderFiles(){
+
+    const list =
+        document.getElementById(
+            "fileList"
+        );
+
+
+    const search =
+        document
+        .getElementById("search")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    let result =
+        [...files];
+
+
+    if(currentFilter === "Favorites"){
+
+        result =
+            result.filter(
+                x => x.favorite
+            );
+
+    }
+    else if(currentFilter !== "All"){
+
+        result =
+            result.filter(
+                x =>
+                    x.category ===
+                    currentFilter
+            );
+
+    }
+
+
+    if(search){
+
+        result =
+            result.filter(
+                x =>
+
+                    x.name
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    x.category
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    (x.tag || "")
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    (x.note || "")
+                    .toLowerCase()
+                    .includes(search)
+
+            );
+
+    }
+
+
+    if(!result.length){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="emptyIcon">
+                    ${
+                        search
+                            ? "🔎"
+                            : "📂"
+                    }
+                </div>
+
+                <strong>
+                    ${
+                        search
+                            ? "No files found"
+                            : "Your pocket is empty"
+                    }
+                </strong>
+
+                <p>
+                    ${
+                        search
+                            ? "Try another search term."
+                            : "Tap + to add your first file."
+                    }
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        result
+        .map(
+            file => `
+
+                <div class="fileItem">
+
+                    <div class="fileIcon">
+                        ${getIcon(file.category)}
+                    </div>
+
+
+                    <div class="fileInfo">
+
+                        <div class="fileName">
+                            ${escapeHTML(file.name)}
+                        </div>
+
+                        <div class="fileMeta">
+
+                            <span>
+                                ${escapeHTML(file.category)}
+                            </span>
+
+                            <span>
+                                •
+                            </span>
+
+                            <span>
+                                ${formatSize(
+                                    sizeToKB(
+                                        file.size,
+                                        file.unit
+                                    )
+                                )}
+                            </span>
+
+                            ${
+                                file.tag
+                                    ? `
+                                    <span class="tag">
+                                        #${escapeHTML(file.tag)}
+                                    </span>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="fileActions">
+
+                        <button
+                            class="iconBtn ${
+                                file.favorite
+                                    ? "active"
+                                    : ""
+                            }"
+                            onclick="toggleFavorite('${file.id}')"
+                            title="Favorite"
+                        >
+                            ${
+                                file.favorite
+                                    ? "★"
+                                    : "☆"
+                            }
+                        </button>
+
+
+                        <button
+                            class="iconBtn danger"
+                            onclick="deleteFile('${file.id}')"
+                            title="Delete"
+                        >
+                            🗑
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `
+        )
+        .join("");
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function renderStats(){
+
+    document.getElementById(
+        "totalFiles"
+    ).textContent =
+        files.length;
+
+
+    document.getElementById(
+        "favoriteFiles"
+    ).textContent =
+        files.filter(
+            x => x.favorite
+        ).length;
+
+
+    const tags =
+        new Set(
+            files
+            .map(
+                x => x.tag
+            )
+            .filter(Boolean)
+        );
+
+
+    document.getElementById(
+        "tagCount"
+    ).textContent =
+        tags.size;
+
+
+    const categories = [
+        "Documents",
+        "Images",
+        "Work",
+        "Personal"
+    ];
+
+
+    categories.forEach(
+        category => {
+
+            document.getElementById(
+                "count" + category
+            ).textContent =
+                files.filter(
+                    x =>
+                        x.category ===
+                        category
+                ).length;
+
+        }
+    );
+
+}
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function renderStorage(){
+
+    const totalKB =
+        files.reduce(
+            (sum,file) =>
+                sum +
+                sizeToKB(
+                    file.size,
+                    file.unit
+                ),
+            0
+        );
+
+
+    /*
+      FilePocket uses a simple
+      100 MB visual budget.
+    */
+
+    const capacityKB =
+        100 * 1024;
+
+
+    const percent =
+        Math.min(
+            100,
+            (totalKB /
+                capacityKB) *
+                100
+        );
+
+
+    document.getElementById(
+        "storagePercent"
+    ).textContent =
+        Math.round(percent) + "%";
+
+
+    document.getElementById(
+        "storageUsed"
+    ).textContent =
+        formatSize(totalKB) +
+        " organized";
+
+
+    document.getElementById(
+        "storageBar"
+    ).style.width =
+        percent + "%";
+
+
+    document
+        .getElementById(
+            "storageCircle"
+        )
+        .style.setProperty(
+            "--usage",
+            (percent * 3.6) +
+            "deg"
+        );
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+    renderFiles();
+
+    renderStats();
+
+    renderStorage();
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(){
+
+    document
+        .getElementById("modal")
+        .classList
+        .add("show");
+
+
+    setTimeout(
+        () =>
+            document
+            .getElementById("fileName")
+            .focus(),
+        100
+    );
+
+}
+
+
+function closeModal(){
+
+    document
+        .getElementById("modal")
+        .classList
+        .remove("show");
+
+}
+
+
+function closeModalOutside(
+    event
+){
+
+    if(
+        event.target.id ===
+        "modal"
+    ){
+
+        closeModal();
+
+    }
+
+}
+
+
+function resetForm(){
+
+    document.getElementById(
+        "fileName"
+    ).value = "";
+
+    document.getElementById(
+        "fileSize"
+    ).value = "";
+
+    document.getElementById(
+        "fileTag"
+    ).value = "";
+
+    document.getElementById(
+        "fileNote"
+    ).value = "";
+
+    document.getElementById(
+        "fileCategory"
+    ).value =
+        "Documents";
+
+    document.getElementById(
+        "fileUnit"
+    ).value =
+        "KB";
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body
+        .classList
+        .toggle("dark");
+
+
+    const dark =
+        document.body
+        .classList
+        .contains("dark");
+
+
+    localStorage.setItem(
+        THEME_KEY,
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById(
+        "themeBtn"
+    ).textContent =
+        dark
+            ? "☀️"
+            : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            THEME_KEY
+        ) === "1";
+
+
+    if(dark){
+
+        document.body
+            .classList
+            .add("dark");
+
+        document.getElementById(
+            "themeBtn"
+        ).textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(
+    message
+){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+
+}
+
+
+/* =========================
+   ESCAPE MODAL
+========================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Escape"
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+render();
+
+</script>
+
+</body>
+</html>

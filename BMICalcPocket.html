@@ -1,0 +1,350 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>BMICalc Pocket</title>
+
+<style>
+/* UNIFORM MIDNIGHT OCEAN STYLE */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#2563eb;
+--primary2:#3b82f6;
+--soft:#1e3a8a;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(15,23,42,.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#2563eb 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* FIELDS INPUT UNITS */
+.field{
+margin-bottom:14px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.3px
+}
+
+.field input,
+.field select{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-weight:700
+}
+
+.field input:focus,
+.field select:focus{
+border-color:var(--primary2)
+}
+
+/* STATUS CHIP */
+.bmi-score-box{
+text-align:center;
+padding:15px 0 5px
+}
+
+.bmi-value{
+font-size:48px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--text);
+margin-bottom:6px
+}
+
+.status-badge{
+display:inline-block;
+padding:6px 14px;
+border-radius:10px;
+font-size:11px;
+font-weight:800;
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+.status-badge.normal{ background:var(--green-soft); color:var(--green); }
+.status-badge.warn{ background:#f59e0b33; color:#f59e0b; }
+.status-badge.alert{ background:#ef444433; color:var(--danger); }
+
+/* LIGHT SKIN OVERRIDE */
+body.light-theme {
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#dbeafe;
+--shadow:0 10px 30px rgba(51,65,85,0.06);
+--green-soft:#d1fae5
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">⚖️</div>
+<div class="brand-name">BMICalc</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Health Index.<br>Body Mass Analytics.</h1>
+<p>Compute immediate physical body index scores and evaluate fitness profiles locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- METRICS PARAMETERS SELECTION FORM -->
+<section class="card">
+<div class="field">
+<label>UNIT METRIC SYSTEM</label>
+<select id="unitSystem" onchange="toggleUnitPlaceholders()">
+<option value="metric">Metric (kg / cm)</option>
+<option value="imperial">Imperial (lbs / inches)</option>
+</select>
+</div>
+
+<div class="field">
+<label id="weightLabel">WEIGHT VALUE (KG)</label>
+<input type="number" id="weightInput" placeholder="e.g., 70" step="0.1" min="1" oninput="calculateBodyMassIndex()">
+</div>
+
+<div class="field">
+<label id="heightLabel">HEIGHT VALUE (CM)</label>
+<input type="number" id="heightInput" placeholder="e.g., 175" step="0.1" min="1" oninput="calculateBodyMassIndex()">
+</div>
+</section>
+
+<!-- EVALUATION STATUS CARD BREAKDOWN -->
+<section class="card">
+<div class="title">
+<h2>📊 Calculated Profile Report</h2>
+</div>
+
+<div class="bmi-score-box">
+<div class="bmi-value" id="lblBmiScore">0.0</div>
+<span id="lblBmiStatus" class="status-badge normal">Status: Ready</span>
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function toggleUnitPlaceholders() {
+    const isMetric = document.getElementById("unitSystem").value === "metric";
+    document.getElementById("weightLabel").innerText = isMetric ? "WEIGHT VALUE (KG)" : "WEIGHT VALUE (LBS)";
+    document.getElementById("heightLabel").innerText = isMetric ? "HEIGHT VALUE (CM)" : "HEIGHT VALUE (INCHES)";
+    
+    document.getElementById("weightInput").placeholder = isMetric ? "e.g., 70" : "e.g., 154";
+    document.getElementById("heightInput").placeholder = isMetric ? "e.g., 175" : "e.g., 68";
+    
+    calculateBodyMassIndex();
+}
+
+function calculateBodyMassIndex() {
+    const system = document.getElementById("unitSystem").value;
+    const weight = parseFloat(document.getElementById("weightInput").value);
+    const height = parseFloat(document.getElementById("heightInput").value);
+    
+    const displayScore = document.getElementById("lblBmiScore");
+    const displayStatus = document.getElementById("lblBmiStatus");
+
+    if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+        displayScore.innerText = "0.0";
+        displayStatus.innerText = "Enter Parameters";
+        displayStatus.className = "status-badge warn";
+        return;
+    }
+
+    let bmi = 0;
+    if (system === "metric") {
+        // formula: weight(kg) / height(m)^2
+        const heightInMeters = height / 100;
+        bmi = weight / (heightInMeters * heightInMeters);
+    } else {
+        // formula: (weight(lbs) / height(inches)^2) * 703
+        bmi = (weight / (height * height)) * 703;
+    }
+
+    // Fix floating evaluation formatting limits metrics
+    const exactBmiValue = parseFloat(bmi.toFixed(1));
+    displayScore.innerText = exactBmiValue.toFixed(1);
+
+    // Apply risk status thresholds indicators layout rules mappings
+    if (exactBmiValue < 18.5) {
+        displayStatus.innerText = "📉 Underweight";
+        displayStatus.className = "status-badge warn";
+    } else if (exactBmiValue >= 18.5 && exactBmiValue <= 24.9) {
+        displayStatus.innerText = "🛡️ Normal / Healthy";
+        displayStatus.className = "status-badge normal";
+    } else if (exactBmiValue >= 25 && exactBmiValue <= 29.9) {
+        displayStatus.innerText = "⚡ Overweight";
+        displayStatus.className = "status-badge warn";
+    } else {
+        displayStatus.innerText = "🚨 Obesity Warning";
+        displayStatus.className = "status-badge alert";
+    }
+}
+
+// Initial calculation placeholder definitions layout trigger assignment setup
+calculateBodyMassIndex();
+</script>
+
+</body>
+</html>

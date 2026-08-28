@@ -1,0 +1,2079 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>FocusPocket</title>
+
+<style>
+:root{
+  --bg:#f5f7fb;
+  --card:#fff;
+  --text:#172033;
+  --muted:#7c8496;
+  --line:#e7eaf0;
+  --primary:#2563eb;
+  --primary-dark:#1d4ed8;
+  --soft:#eaf1ff;
+  --green:#16a34a;
+  --green-soft:#eaf8ef;
+  --orange:#f59e0b;
+  --orange-soft:#fff6df;
+  --red:#ef4444;
+  --shadow:0 12px 35px rgba(25,45,85,.08);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+button,input,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:100%;
+  max-width:500px;
+  min-height:100vh;
+  margin:auto;
+  background:var(--bg);
+}
+
+/* HEADER */
+
+.header{
+  position:relative;
+  overflow:hidden;
+  padding:18px 18px 25px;
+  color:#fff;
+  background:linear-gradient(145deg,#172554,#2563eb 58%,#60a5fa);
+  border-radius:0 0 30px 30px;
+}
+
+.header:before,
+.header:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+
+.header:before{
+  width:260px;
+  height:260px;
+  right:-130px;
+  top:-170px;
+}
+
+.header:after{
+  width:180px;
+  height:180px;
+  left:-110px;
+  bottom:-130px;
+}
+
+.topbar{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.16);
+  font-size:21px;
+}
+
+.brand b{
+  display:block;
+  font-size:18px;
+}
+
+.brand span{
+  display:block;
+  margin-top:2px;
+  color:#dbeafe;
+  font-size:7px;
+}
+
+.theme-btn{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+}
+
+.hero{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:29px;
+  line-height:1.08;
+  letter-spacing:-.8px;
+}
+
+.hero p{
+  margin:9px 0 0;
+  max-width:320px;
+  color:#dbeafe;
+  font-size:9px;
+  line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+  padding:15px;
+}
+
+.card{
+  margin-bottom:13px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+
+/* TIMER */
+
+.timer-card{
+  text-align:center;
+  padding:20px 14px 18px;
+}
+
+.mode{
+  display:inline-flex;
+  gap:5px;
+  padding:6px 9px;
+  border-radius:9px;
+  background:var(--soft);
+  color:var(--primary);
+  font-size:8px;
+  font-weight:900;
+}
+
+.timer-ring{
+  position:relative;
+  width:240px;
+  height:240px;
+  margin:18px auto;
+}
+
+.timer-ring svg{
+  width:100%;
+  height:100%;
+  transform:rotate(-90deg);
+}
+
+.timer-track,
+.timer-progress{
+  fill:none;
+  stroke-width:8;
+}
+
+.timer-track{
+  stroke:var(--line);
+}
+
+.timer-progress{
+  stroke:var(--primary);
+  stroke-linecap:round;
+  transition:stroke-dashoffset .4s linear;
+}
+
+.timer-center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.time{
+  font-size:48px;
+  font-weight:900;
+  letter-spacing:-2px;
+  font-variant-numeric:tabular-nums;
+}
+
+.timer-label{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.timer-task{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  text-align:center;
+  font-size:10px;
+}
+
+.timer-task:focus{
+  border-color:var(--primary);
+}
+
+.controls{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:12px;
+}
+
+.control{
+  height:43px;
+  padding:0 18px;
+  border:0;
+  border-radius:12px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.start{
+  min-width:120px;
+  background:var(--primary);
+  color:#fff;
+}
+
+.start:hover{
+  background:var(--primary-dark);
+}
+
+.secondary{
+  width:43px;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* MODE BUTTONS */
+
+.modes{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+}
+
+.mode-btn{
+  padding:9px 4px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--card);
+  color:var(--muted);
+  font-size:8px;
+  font-weight:800;
+}
+
+.mode-btn.active{
+  border-color:var(--primary);
+  background:var(--soft);
+  color:var(--primary);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.stat{
+  padding:12px 4px;
+  border-radius:14px;
+  text-align:center;
+  background:var(--bg);
+}
+
+.stat-icon{
+  font-size:16px;
+}
+
+.stat b{
+  display:block;
+  margin-top:3px;
+  font-size:17px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:7px;
+}
+
+/* SECTION */
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:11px;
+}
+
+.section-head h2{
+  margin:0;
+  font-size:14px;
+}
+
+.section-head span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* SESSIONS */
+
+.sessions{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.session{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:13px;
+}
+
+.session-icon{
+  width:35px;
+  height:35px;
+  display:grid;
+  place-items:center;
+  flex:0 0 35px;
+  border-radius:10px;
+  background:var(--green-soft);
+}
+
+.session-info{
+  min-width:0;
+  flex:1;
+}
+
+.session-task{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:9px;
+  font-weight:900;
+}
+
+.session-meta{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:7px;
+}
+
+.session-duration{
+  color:var(--primary);
+  font-size:8px;
+  font-weight:900;
+}
+
+/* SETTINGS */
+
+.setting-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 0;
+}
+
+.setting-row + .setting-row{
+  border-top:1px solid var(--line);
+}
+
+.setting-info b{
+  display:block;
+  font-size:9px;
+}
+
+.setting-info span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:7px;
+}
+
+.number-input{
+  width:68px;
+  padding:8px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  text-align:center;
+  font-size:9px;
+}
+
+/* SWITCH */
+
+.switch{
+  position:relative;
+  width:38px;
+  height:21px;
+}
+
+.switch input{
+  opacity:0;
+  width:0;
+  height:0;
+}
+
+.slider{
+  position:absolute;
+  inset:0;
+  border-radius:20px;
+  background:#d1d5db;
+  transition:.2s;
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  width:15px;
+  height:15px;
+  left:3px;
+  top:3px;
+  border-radius:50%;
+  background:#fff;
+  transition:.2s;
+}
+
+.switch input:checked + .slider{
+  background:var(--primary);
+}
+
+.switch input:checked + .slider:before{
+  transform:translateX(17px);
+}
+
+/* EMPTY */
+
+.empty{
+  padding:25px 10px;
+  text-align:center;
+}
+
+.empty-icon{
+  font-size:34px;
+}
+
+.empty b{
+  display:block;
+  margin-top:7px;
+  font-size:10px;
+}
+
+.empty p{
+  margin:5px auto 0;
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* FOOTER */
+
+.footer{
+  padding:5px 15px 25px;
+  text-align:center;
+  color:var(--muted);
+  font-size:7px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  z-index:100;
+  padding:11px 15px;
+  border-radius:11px;
+  background:#151923;
+  color:#fff;
+  font-size:9px;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+  --bg:#0b1020;
+  --card:#151b2d;
+  --text:#f4f7ff;
+  --muted:#9aa3b8;
+  --line:#273049;
+  --soft:#17284f;
+  --green-soft:#11291c;
+  --orange-soft:#302714;
+  --shadow:0 15px 40px rgba(0,0,0,.3);
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+  body{
+    padding:20px 0;
+  }
+
+  .app{
+    min-height:calc(100vh - 40px);
+    overflow:hidden;
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(20,40,80,.14);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+
+    <div class="topbar">
+
+      <div class="brand">
+        <div class="logo">🎯</div>
+
+        <div>
+          <b>FocusPocket</b>
+          <span>Small sessions. Big progress.</span>
+        </div>
+      </div>
+
+      <button
+        class="theme-btn"
+        id="themeBtn"
+        onclick="toggleTheme()"
+      >🌙</button>
+
+    </div>
+
+    <div class="hero">
+      <h1>Focus on<br>what matters.</h1>
+
+      <p>
+        A quiet little timer for deep work,
+        study sessions and distraction-free progress.
+      </p>
+    </div>
+
+  </header>
+
+
+  <main class="content">
+
+    <!-- TIMER -->
+    <section class="card timer-card">
+
+      <div class="mode" id="modeLabel">
+        🎯 Focus Session
+      </div>
+
+      <div class="timer-ring">
+
+        <svg viewBox="0 0 240 240">
+
+          <circle
+            class="timer-track"
+            cx="120"
+            cy="120"
+            r="106"
+          />
+
+          <circle
+            class="timer-progress"
+            id="progress"
+            cx="120"
+            cy="120"
+            r="106"
+          />
+
+        </svg>
+
+        <div class="timer-center">
+
+          <div
+            class="time"
+            id="time"
+          >
+            25:00
+          </div>
+
+          <div
+            class="timer-label"
+            id="timerLabel"
+          >
+            Ready to focus
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <input
+        class="timer-task"
+        id="taskInput"
+        maxlength="100"
+        placeholder="What are you focusing on?"
+      >
+
+
+      <div class="controls">
+
+        <button
+          class="control secondary"
+          onclick="resetTimer()"
+          title="Reset"
+        >
+          ↺
+        </button>
+
+        <button
+          class="control start"
+          id="startBtn"
+          onclick="toggleTimer()"
+        >
+          ▶ Start Focus
+        </button>
+
+        <button
+          class="control secondary"
+          onclick="skipTimer()"
+          title="Skip"
+        >
+          ⏭
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- MODES -->
+    <section class="card">
+
+      <div class="section-head">
+        <h2>⏱ Timer Mode</h2>
+        <span>Choose your pace</span>
+      </div>
+
+      <div class="modes">
+
+        <button
+          class="mode-btn active"
+          data-mode="focus"
+          onclick="setMode('focus')"
+        >
+          🎯 Focus<br>25 min
+        </button>
+
+        <button
+          class="mode-btn"
+          data-mode="short"
+          onclick="setMode('short')"
+        >
+          ☕ Short Break<br>5 min
+        </button>
+
+        <button
+          class="mode-btn"
+          data-mode="long"
+          onclick="setMode('long')"
+        >
+          🌿 Long Break<br>15 min
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- STATS -->
+    <section class="card">
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-icon">⏱️</div>
+          <b id="todayMinutes">0</b>
+          <span>Minutes Today</span>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">🎯</div>
+          <b id="todaySessions">0</b>
+          <span>Sessions Today</span>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">🔥</div>
+          <b id="streak">0</b>
+          <span>Day Streak</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- HISTORY -->
+    <section class="card">
+
+      <div class="section-head">
+
+        <h2>📊 Today's Focus</h2>
+
+        <span id="historyCount">
+          0 sessions
+        </span>
+
+      </div>
+
+      <div
+        class="sessions"
+        id="sessions"
+      ></div>
+
+    </section>
+
+
+    <!-- SETTINGS -->
+    <section class="card">
+
+      <div class="section-head">
+        <h2>⚙️ Settings</h2>
+        <span>Personalize</span>
+      </div>
+
+
+      <div class="setting-row">
+
+        <div class="setting-info">
+          <b>Focus duration</b>
+          <span>Minutes per focus session</span>
+        </div>
+
+        <input
+          class="number-input"
+          id="focusDuration"
+          type="number"
+          min="1"
+          max="120"
+          value="25"
+          onchange="updateDurationSettings()"
+        >
+
+      </div>
+
+
+      <div class="setting-row">
+
+        <div class="setting-info">
+          <b>Short break</b>
+          <span>Quick recovery time</span>
+        </div>
+
+        <input
+          class="number-input"
+          id="shortDuration"
+          type="number"
+          min="1"
+          max="60"
+          value="5"
+          onchange="updateDurationSettings()"
+        >
+
+      </div>
+
+
+      <div class="setting-row">
+
+        <div class="setting-info">
+          <b>Long break</b>
+          <span>Longer recovery time</span>
+        </div>
+
+        <input
+          class="number-input"
+          id="longDuration"
+          type="number"
+          min="1"
+          max="90"
+          value="15"
+          onchange="updateDurationSettings()"
+        >
+
+      </div>
+
+
+      <div class="setting-row">
+
+        <div class="setting-info">
+          <b>Sound notification</b>
+          <span>Play a sound when timer ends</span>
+        </div>
+
+        <label class="switch">
+          <input
+            type="checkbox"
+            id="soundToggle"
+            checked
+            onchange="saveSettings()"
+          >
+          <span class="slider"></span>
+        </label>
+
+      </div>
+
+
+      <div class="setting-row">
+
+        <div class="setting-info">
+          <b>Auto-start next timer</b>
+          <span>Automatically begin the next mode</span>
+        </div>
+
+        <label class="switch">
+          <input
+            type="checkbox"
+            id="autoToggle"
+            onchange="saveSettings()"
+          >
+          <span class="slider"></span>
+        </label>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer class="footer">
+    🔒 FocusPocket works completely offline.
+    Your data stays in this browser.
+  </footer>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================
+   STORAGE
+========================= */
+
+const STORAGE_KEY =
+  "focusPocketData";
+
+const SETTINGS_KEY =
+  "focusPocketSettings";
+
+const THEME_KEY =
+  "focusPocketTheme";
+
+
+let data =
+  JSON.parse(
+    localStorage.getItem(
+      STORAGE_KEY
+    ) || '{"sessions":[]}'
+  );
+
+
+let settings =
+  JSON.parse(
+    localStorage.getItem(
+      SETTINGS_KEY
+    ) || "{}"
+  );
+
+
+settings.focus =
+  Number(settings.focus) || 25;
+
+settings.short =
+  Number(settings.short) || 5;
+
+settings.long =
+  Number(settings.long) || 15;
+
+settings.sound =
+  settings.sound !== false;
+
+settings.auto =
+  settings.auto === true;
+
+
+let mode =
+  "focus";
+
+let totalSeconds =
+  settings.focus * 60;
+
+let remaining =
+  totalSeconds;
+
+let timer =
+  null;
+
+let running =
+  false;
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const timeEl =
+  document.getElementById("time");
+
+const progressEl =
+  document.getElementById("progress");
+
+const startBtn =
+  document.getElementById("startBtn");
+
+const timerLabel =
+  document.getElementById("timerLabel");
+
+const modeLabel =
+  document.getElementById("modeLabel");
+
+const taskInput =
+  document.getElementById("taskInput");
+
+
+/* =========================
+   RING
+========================= */
+
+const RADIUS = 106;
+
+const CIRCUMFERENCE =
+  2 * Math.PI * RADIUS;
+
+progressEl.style.strokeDasharray =
+  CIRCUMFERENCE;
+
+progressEl.style.strokeDashoffset =
+  0;
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function today(){
+
+  const d =
+    new Date();
+
+  return [
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,"0"),
+    String(d.getDate()).padStart(2,"0")
+  ].join("-");
+
+}
+
+
+function formatTime(seconds){
+
+  const mins =
+    Math.floor(seconds / 60);
+
+  const secs =
+    seconds % 60;
+
+  return (
+    String(mins).padStart(2,"0") +
+    ":" +
+    String(secs).padStart(2,"0")
+  );
+
+}
+
+
+function saveData(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+
+function saveSettings(){
+
+  settings.sound =
+    document.getElementById(
+      "soundToggle"
+    ).checked;
+
+  settings.auto =
+    document.getElementById(
+      "autoToggle"
+    ).checked;
+
+  localStorage.setItem(
+    SETTINGS_KEY,
+    JSON.stringify(settings)
+  );
+
+}
+
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent =
+    message;
+
+  toast.classList.add("show");
+
+  clearTimeout(
+    window.toastTimer
+  );
+
+  window.toastTimer =
+    setTimeout(
+      () => {
+        toast.classList.remove("show");
+      },
+      2200
+    );
+
+}
+
+
+/* =========================
+   MODE
+========================= */
+
+function durationForMode(){
+
+  if(mode === "focus"){
+    return settings.focus * 60;
+  }
+
+  if(mode === "short"){
+    return settings.short * 60;
+  }
+
+  return settings.long * 60;
+
+}
+
+
+function setMode(newMode){
+
+  if(running){
+
+    showToast(
+      "⏸ Pause the timer before changing mode."
+    );
+
+    return;
+
+  }
+
+  mode =
+    newMode;
+
+  totalSeconds =
+    durationForMode();
+
+  remaining =
+    totalSeconds;
+
+  document
+    .querySelectorAll(".mode-btn")
+    .forEach(btn => {
+
+      btn.classList.toggle(
+        "active",
+        btn.dataset.mode === mode
+      );
+
+    });
+
+
+  updateModeUI();
+
+  updateTimerUI();
+
+}
+
+
+function updateModeUI(){
+
+  if(mode === "focus"){
+
+    modeLabel.textContent =
+      "🎯 Focus Session";
+
+    timerLabel.textContent =
+      running
+        ? "Stay focused"
+        : "Ready to focus";
+
+  }
+  else if(mode === "short"){
+
+    modeLabel.textContent =
+      "☕ Short Break";
+
+    timerLabel.textContent =
+      running
+        ? "Take a breather"
+        : "Ready for a break";
+
+  }
+  else{
+
+    modeLabel.textContent =
+      "🌿 Long Break";
+
+    timerLabel.textContent =
+      running
+        ? "Recharge your mind"
+        : "Ready for a longer break";
+
+  }
+
+}
+
+
+/* =========================
+   TIMER UI
+========================= */
+
+function updateTimerUI(){
+
+  timeEl.textContent =
+    formatTime(remaining);
+
+  const ratio =
+    totalSeconds > 0
+      ? remaining / totalSeconds
+      : 0;
+
+  progressEl.style.strokeDashoffset =
+    CIRCUMFERENCE * (1 - ratio);
+
+
+  document.title =
+    `${formatTime(remaining)} · FocusPocket`;
+
+}
+
+
+function toggleTimer(){
+
+  if(running){
+
+    pauseTimer();
+
+  }
+  else{
+
+    startTimer();
+
+  }
+
+}
+
+
+function startTimer(){
+
+  if(remaining <= 0){
+
+    resetTimer();
+
+  }
+
+
+  running =
+    true;
+
+
+  startBtn.textContent =
+    "⏸ Pause";
+
+  startBtn.classList.add("running");
+
+  updateModeUI();
+
+
+  timer =
+    setInterval(
+      tick,
+      1000
+    );
+
+}
+
+
+function pauseTimer(){
+
+  running =
+    false;
+
+  clearInterval(timer);
+
+  timer =
+    null;
+
+  startBtn.textContent =
+    "▶ Resume";
+
+  timerLabel.textContent =
+    "Paused";
+
+}
+
+
+function tick(){
+
+  if(remaining > 0){
+
+    remaining--;
+
+    updateTimerUI();
+
+    return;
+
+  }
+
+
+  finishTimer();
+
+}
+
+
+function resetTimer(){
+
+  clearInterval(timer);
+
+  timer =
+    null;
+
+  running =
+    false;
+
+  totalSeconds =
+    durationForMode();
+
+  remaining =
+    totalSeconds;
+
+  startBtn.textContent =
+    "▶ Start Focus";
+
+  updateModeUI();
+
+  updateTimerUI();
+
+}
+
+
+function skipTimer(){
+
+  if(running){
+
+    clearInterval(timer);
+
+    timer =
+      null;
+
+    running =
+      false;
+
+  }
+
+
+  switchModeAfterFinish(
+    false
+  );
+
+}
+
+
+/* =========================
+   FINISH
+========================= */
+
+function finishTimer(){
+
+  clearInterval(timer);
+
+  timer =
+    null;
+
+  running =
+    false;
+
+
+  if(mode === "focus"){
+
+    recordSession();
+
+    showToast(
+      "🎉 Focus session complete!"
+    );
+
+    playNotification();
+
+  }
+  else{
+
+    showToast(
+      "☀️ Break finished. Ready?"
+    );
+
+    playNotification();
+
+  }
+
+
+  if(settings.auto){
+
+    switchModeAfterFinish(
+      true
+    );
+
+  }
+  else{
+
+    startBtn.textContent =
+      "▶ Start Focus";
+
+    remaining =
+      durationForMode();
+
+    totalSeconds =
+      remaining;
+
+    updateModeUI();
+
+    updateTimerUI();
+
+  }
+
+}
+
+
+/* =========================
+   NEXT MODE
+========================= */
+
+function switchModeAfterFinish(
+  autoStart
+){
+
+  if(mode === "focus"){
+
+    mode =
+      "short";
+
+  }
+  else{
+
+    mode =
+      "focus";
+
+  }
+
+
+  totalSeconds =
+    durationForMode();
+
+  remaining =
+    totalSeconds;
+
+
+  document
+    .querySelectorAll(".mode-btn")
+    .forEach(btn => {
+
+      btn.classList.toggle(
+        "active",
+        btn.dataset.mode === mode
+      );
+
+    });
+
+
+  updateModeUI();
+
+  updateTimerUI();
+
+
+  if(autoStart){
+
+    setTimeout(
+      startTimer,
+      700
+    );
+
+  }
+  else{
+
+    startBtn.textContent =
+      "▶ Start Focus";
+
+  }
+
+}
+
+
+/* =========================
+   SESSION RECORD
+========================= */
+
+function recordSession(){
+
+  const session = {
+
+    id:
+      Date.now(),
+
+    date:
+      today(),
+
+    task:
+      taskInput.value.trim() ||
+      "Focus session",
+
+    minutes:
+      settings.focus,
+
+    time:
+      new Date().toISOString()
+
+  };
+
+
+  data.sessions.push(
+    session
+  );
+
+
+  saveData();
+
+  taskInput.value =
+    "";
+
+  renderStats();
+
+  renderSessions();
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function renderStats(){
+
+  const todaySessions =
+    data.sessions.filter(
+      session =>
+        session.date === today()
+    );
+
+
+  const minutes =
+    todaySessions.reduce(
+      (sum, session) =>
+        sum + Number(session.minutes),
+      0
+    );
+
+
+  document.getElementById(
+    "todayMinutes"
+  ).textContent =
+    minutes;
+
+
+  document.getElementById(
+    "todaySessions"
+  ).textContent =
+    todaySessions.length;
+
+
+  document.getElementById(
+    "streak"
+  ).textContent =
+    calculateStreak();
+
+}
+
+
+function calculateStreak(){
+
+  const days =
+    [
+      ...new Set(
+        data.sessions.map(
+          session =>
+            session.date
+        )
+      )
+    ]
+    .sort()
+    .reverse();
+
+
+  if(!days.length){
+    return 0;
+  }
+
+
+  let streak =
+    0;
+
+
+  let current =
+    new Date();
+
+
+  for(
+    let i = 0;
+    i < days.length;
+    i++
+  ){
+
+    const expected =
+      new Date(current);
+
+    expected.setDate(
+      expected.getDate() - i
+    );
+
+
+    const expectedString =
+      [
+        expected.getFullYear(),
+        String(
+          expected.getMonth()+1
+        ).padStart(2,"0"),
+        String(
+          expected.getDate()
+        ).padStart(2,"0")
+      ].join("-");
+
+
+    if(
+      days[i] ===
+      expectedString
+    ){
+
+      streak++;
+
+    }
+    else{
+
+      break;
+
+    }
+
+  }
+
+
+  return streak;
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function renderSessions(){
+
+  const container =
+    document.getElementById(
+      "sessions"
+    );
+
+
+  const sessions =
+    data.sessions
+      .filter(
+        session =>
+          session.date === today()
+      )
+      .sort(
+        (a,b) =>
+          b.id - a.id
+      );
+
+
+  document.getElementById(
+    "historyCount"
+  ).textContent =
+    `${sessions.length} ${
+      sessions.length === 1
+        ? "session"
+        : "sessions"
+    }`;
+
+
+  if(!sessions.length){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          🎯
+        </div>
+
+        <b>No focus sessions yet</b>
+
+        <p>
+          Complete your first focus session
+          and it will appear here.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    sessions
+      .map(
+        session => `
+
+          <div class="session">
+
+            <div class="session-icon">
+              🎯
+            </div>
+
+            <div class="session-info">
+
+              <div class="session-task">
+                ${escapeHTML(session.task)}
+              </div>
+
+              <div class="session-meta">
+                ${formatSessionTime(session.time)}
+              </div>
+
+            </div>
+
+            <div class="session-duration">
+              ${session.minutes} min
+            </div>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+function escapeHTML(text){
+
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function formatSessionTime(time){
+
+  return new Date(time)
+    .toLocaleTimeString(
+      undefined,
+      {
+        hour:"numeric",
+        minute:"2-digit"
+      }
+    );
+
+}
+
+
+/* =========================
+   SETTINGS
+========================= */
+
+function loadSettings(){
+
+  document.getElementById(
+    "focusDuration"
+  ).value =
+    settings.focus;
+
+  document.getElementById(
+    "shortDuration"
+  ).value =
+    settings.short;
+
+  document.getElementById(
+    "longDuration"
+  ).value =
+    settings.long;
+
+  document.getElementById(
+    "soundToggle"
+  ).checked =
+    settings.sound;
+
+  document.getElementById(
+    "autoToggle"
+  ).checked =
+    settings.auto;
+
+}
+
+
+function updateDurationSettings(){
+
+  const focus =
+    Math.max(
+      1,
+      Math.min(
+        120,
+        Number(
+          document.getElementById(
+            "focusDuration"
+          ).value
+        ) || 25
+      )
+    );
+
+
+  const short =
+    Math.max(
+      1,
+      Math.min(
+        60,
+        Number(
+          document.getElementById(
+            "shortDuration"
+          ).value
+        ) || 5
+      )
+    );
+
+
+  const long =
+    Math.max(
+      1,
+      Math.min(
+        90,
+        Number(
+          document.getElementById(
+            "longDuration"
+          ).value
+        ) || 15
+      )
+    );
+
+
+  settings.focus =
+    focus;
+
+  settings.short =
+    short;
+
+  settings.long =
+    long;
+
+
+  localStorage.setItem(
+    SETTINGS_KEY,
+    JSON.stringify(settings)
+  );
+
+
+  if(!running){
+
+    totalSeconds =
+      durationForMode();
+
+    remaining =
+      totalSeconds;
+
+    updateTimerUI();
+
+  }
+
+
+  showToast(
+    "⚙️ Timer settings updated."
+  );
+
+}
+
+
+/* =========================
+   SOUND
+========================= */
+
+function playNotification(){
+
+  if(!settings.sound){
+    return;
+  }
+
+
+  try{
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    const audio =
+      new AudioContext();
+
+
+    const oscillator =
+      audio.createOscillator();
+
+    const gain =
+      audio.createGain();
+
+
+    oscillator.type =
+      "sine";
+
+    oscillator.frequency.value =
+      880;
+
+    gain.gain.setValueAtTime(
+      .0001,
+      audio.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .25,
+      audio.currentTime + .03
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .0001,
+      audio.currentTime + .5
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+      audio.destination
+    );
+
+    oscillator.start();
+
+    oscillator.stop(
+      audio.currentTime + .5
+    );
+
+  }
+  catch(error){
+
+    console.log(
+      "Audio unavailable"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+  document.body.classList.toggle(
+    "dark"
+  );
+
+
+  const dark =
+    document.body.classList.contains(
+      "dark"
+    );
+
+
+  localStorage.setItem(
+    THEME_KEY,
+    dark ? "1" : "0"
+  );
+
+
+  document.getElementById(
+    "themeBtn"
+  ).textContent =
+    dark ? "☀️" : "🌙";
+
+}
+
+
+function loadTheme(){
+
+  if(
+    localStorage.getItem(
+      THEME_KEY
+    ) === "1"
+  ){
+
+    document.body.classList.add(
+      "dark"
+    );
+
+    document.getElementById(
+      "themeBtn"
+    ).textContent =
+      "☀️";
+
+  }
+
+}
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.code === "Space" &&
+      event.target.tagName !== "INPUT"
+    ){
+
+      event.preventDefault();
+
+      toggleTimer();
+
+    }
+
+    if(
+      event.key === "r" ||
+      event.key === "R"
+    ){
+
+      if(
+        event.target.tagName !== "INPUT"
+      ){
+
+        resetTimer();
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================
+   INIT
+========================= */
+
+loadTheme();
+
+loadSettings();
+
+updateModeUI();
+
+updateTimerUI();
+
+renderStats();
+
+renderSessions();
+
+</script>
+
+</body>
+</html>

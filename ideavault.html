@@ -1,0 +1,1151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdeaVault</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f5fb;
+    color: #30283d;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 100px;
+}
+
+/* HEADER */
+
+.header {
+    padding: 28px 20px 34px;
+    color: white;
+    background: linear-gradient(135deg, #7c3aed, #c026d3);
+    border-radius: 0 0 32px 32px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.count {
+    padding: 8px 11px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.18);
+    font-size: 10px;
+}
+
+.header h1 {
+    margin: 28px 0 5px;
+    font-size: 30px;
+}
+
+.header p {
+    margin: 0;
+    opacity: .85;
+}
+
+/* CONTENT */
+
+.content {
+    padding: 20px;
+}
+
+/* SEARCH */
+
+.search {
+    position: relative;
+}
+
+.search span {
+    position: absolute;
+    left: 15px;
+    top: 13px;
+}
+
+.search input {
+    width: 100%;
+    padding: 15px 15px 15px 42px;
+    border: 0;
+    border-radius: 16px;
+    outline: none;
+    background: white;
+    box-shadow: 0 5px 18px rgba(50,30,80,.06);
+}
+
+/* FILTERS */
+
+.filters {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 15px 0 5px;
+}
+
+.filter {
+    border: 0;
+    white-space: nowrap;
+    padding: 9px 13px;
+    border-radius: 12px;
+    background: white;
+    color: #85808f;
+    cursor: pointer;
+}
+
+.filter.active {
+    background: #7c3aed;
+    color: white;
+}
+
+/* IDEA */
+
+.idea {
+    margin-top: 12px;
+    padding: 17px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 18px rgba(50,30,80,.06);
+}
+
+.idea-top {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.idea-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #f0eaff;
+    font-size: 22px;
+}
+
+.info {
+    flex: 1;
+    min-width: 0;
+}
+
+.title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.category {
+    margin-top: 5px;
+    color: #8a8493;
+    font-size: 10px;
+}
+
+.idea-text {
+    margin-top: 13px;
+    color: #65606d;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 12px;
+}
+
+.tag {
+    padding: 5px 8px;
+    border-radius: 8px;
+    background: #f4f1f8;
+    color: #776f83;
+    font-size: 9px;
+}
+
+.star {
+    border: 0;
+    background: transparent;
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-top: 13px;
+}
+
+.actions button {
+    border: 0;
+    padding: 8px 10px;
+    border-radius: 9px;
+    background: #f5f3f7;
+    cursor: pointer;
+}
+
+/* EMPTY */
+
+.empty {
+    padding: 50px 20px;
+    text-align: center;
+    color: #8b8593;
+}
+
+.empty-icon {
+    font-size: 48px;
+}
+
+/* ADD */
+
+.add {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 60px;
+    height: 60px;
+    border: 0;
+    border-radius: 20px;
+    background: #7c3aed;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(124,58,237,.3);
+}
+
+/* MODAL */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    background: rgba(0,0,0,.45);
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(420px,100%);
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 24px 20px 30px;
+    background: white;
+    border-radius: 28px 28px 0 0;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd8e5;
+    border-radius: 13px;
+    outline: none;
+    background: white;
+    font-family: inherit;
+}
+
+.modal textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.row {
+    display: flex;
+    gap: 8px;
+}
+
+.row > * {
+    flex: 1;
+}
+
+.save {
+    width: 100%;
+    padding: 15px;
+    border: 0;
+    border-radius: 14px;
+    background: #7c3aed;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    background: transparent;
+    color: #77717f;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="top">
+
+        <div class="logo">
+            🧠 IdeaVault
+        </div>
+
+        <div
+            class="count"
+            id="count"
+        >
+            0 ideas
+        </div>
+
+    </div>
+
+    <h1>
+        Save that thought.
+    </h1>
+
+    <p>
+        Great ideas shouldn't disappear.
+    </p>
+
+</header>
+
+
+<main class="content">
+
+    <div class="search">
+
+        <span>🔍</span>
+
+        <input
+            id="search"
+            type="text"
+            placeholder="Search your ideas..."
+            oninput="render()"
+        >
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="setFilter('all',this)"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('favorite',this)"
+        >
+            ⭐ Favorites
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('app',this)"
+        >
+            📱 Apps
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('business',this)"
+        >
+            💼 Business
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('content',this)"
+        >
+            ✍️ Content
+        </button>
+
+    </div>
+
+
+    <section id="ideas"></section>
+
+</main>
+
+</div>
+
+
+<button
+    class="add"
+    onclick="openModal()"
+>
+    +
+</button>
+
+
+<!-- MODAL -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+<div class="modal">
+
+    <h2 id="modalTitle">
+        New Idea
+    </h2>
+
+    <input
+        id="title"
+        type="text"
+        placeholder="Idea title"
+    >
+
+    <textarea
+        id="description"
+        placeholder="Describe your idea..."
+    ></textarea>
+
+    <div class="row">
+
+        <select id="category">
+
+            <option value="app">
+                📱 App
+            </option>
+
+            <option value="business">
+                💼 Business
+            </option>
+
+            <option value="content">
+                ✍️ Content
+            </option>
+
+            <option value="website">
+                🌐 Website
+            </option>
+
+            <option value="product">
+                📦 Product
+            </option>
+
+            <option value="other">
+                ✨ Other
+            </option>
+
+        </select>
+
+        <input
+            id="tags"
+            type="text"
+            placeholder="Tags"
+        >
+
+    </div>
+
+
+    <button
+        class="save"
+        onclick="saveIdea()"
+    >
+        Save Idea
+    </button>
+
+    <button
+        class="cancel"
+        onclick="closeModal()"
+    >
+        Cancel
+    </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/*
+    IdeaVault
+*/
+
+let ideas =
+    JSON.parse(
+        localStorage.getItem(
+            "ideaVaultData"
+        )
+    ) || [];
+
+let activeFilter =
+    "all";
+
+let editingId =
+    null;
+
+
+/* SAVE */
+
+function saveData() {
+
+    localStorage.setItem(
+        "ideaVaultData",
+        JSON.stringify(ideas)
+    );
+
+}
+
+
+/* FILTER */
+
+function setFilter(filter, button) {
+
+    activeFilter =
+        filter;
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(
+            b =>
+                b.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+    render();
+
+}
+
+
+/* RENDER */
+
+function render() {
+
+    const container =
+        document.getElementById(
+            "ideas"
+        );
+
+    const query =
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        ideas.filter(idea => {
+
+            const searchable =
+                (
+                    idea.title +
+                    " " +
+                    idea.description +
+                    " " +
+                    idea.tags.join(" ")
+                )
+                .toLowerCase();
+
+
+            const searchMatch =
+                searchable.includes(
+                    query
+                );
+
+
+            let filterMatch =
+                true;
+
+
+            if (
+                activeFilter ===
+                "favorite"
+            ) {
+
+                filterMatch =
+                    idea.favorite;
+
+            } else if (
+                activeFilter !==
+                "all"
+            ) {
+
+                filterMatch =
+                    idea.category ===
+                    activeFilter;
+
+            }
+
+
+            return (
+                searchMatch &&
+                filterMatch
+            );
+
+        });
+
+
+    /*
+        Favorites first,
+        newest ideas after.
+    */
+
+    filtered.sort(
+        (a,b) => {
+
+            if (
+                a.favorite !==
+                b.favorite
+            ) {
+
+                return a.favorite
+                    ? -1
+                    : 1;
+
+            }
+
+            return b.created -
+                   a.created;
+
+        }
+    );
+
+
+    document.getElementById("count")
+        .innerText =
+        ideas.length +
+        (
+            ideas.length === 1
+                ? " idea"
+                : " ideas"
+        );
+
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    💡
+                </div>
+
+                <h3>
+                    Your vault is empty
+                </h3>
+
+                <p>
+                    Tap + and capture your next idea.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        filtered
+            .map(idea => {
+
+                const tags =
+                    idea.tags
+                        .filter(Boolean)
+                        .map(
+                            tag =>
+                                `<span class="tag">
+                                    #${escapeHTML(tag)}
+                                </span>`
+                        )
+                        .join("");
+
+
+                return `
+
+                <article class="idea">
+
+                    <div class="idea-top">
+
+                        <div class="idea-icon">
+                            ${categoryIcon(
+                                idea.category
+                            )}
+                        </div>
+
+                        <div class="info">
+
+                            <div class="title">
+                                ${escapeHTML(
+                                    idea.title
+                                )}
+                            </div>
+
+                            <div class="category">
+                                ${categoryName(
+                                    idea.category
+                                )}
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="star"
+                            onclick="toggleFavorite(${idea.id})"
+                            title="Favorite"
+                        >
+                            ${
+                                idea.favorite
+                                    ? "⭐"
+                                    : "☆"
+                            }
+                        </button>
+
+                    </div>
+
+
+                    ${
+                        idea.description
+                            ?
+                            `<div class="idea-text">
+                                ${escapeHTML(
+                                    idea.description
+                                )}
+                            </div>`
+                            :
+                            ""
+                    }
+
+
+                    ${
+                        tags
+                            ?
+                            `<div class="tags">
+                                ${tags}
+                            </div>`
+                            :
+                            ""
+                    }
+
+
+                    <div class="actions">
+
+                        <button
+                            onclick="editIdea(${idea.id})"
+                        >
+                            ✏️ Edit
+                        </button>
+
+                        <button
+                            onclick="deleteIdea(${idea.id})"
+                        >
+                            🗑️ Delete
+                        </button>
+
+                    </div>
+
+                </article>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+/* CATEGORY ICON */
+
+function categoryIcon(category) {
+
+    const icons = {
+
+        app: "📱",
+
+        business: "💼",
+
+        content: "✍️",
+
+        website: "🌐",
+
+        product: "📦",
+
+        other: "✨"
+
+    };
+
+    return (
+        icons[category] ||
+        "💡"
+    );
+
+}
+
+
+/* CATEGORY NAME */
+
+function categoryName(category) {
+
+    const names = {
+
+        app: "App idea",
+
+        business: "Business idea",
+
+        content: "Content idea",
+
+        website: "Website idea",
+
+        product: "Product idea",
+
+        other: "Other idea"
+
+    };
+
+    return (
+        names[category] ||
+        "Idea"
+    );
+
+}
+
+
+/* OPEN */
+
+function openModal() {
+
+    editingId =
+        null;
+
+
+    document.getElementById("modalTitle")
+        .innerText =
+        "New Idea";
+
+
+    document.getElementById("title")
+        .value =
+        "";
+
+    document.getElementById("description")
+        .value =
+        "";
+
+    document.getElementById("category")
+        .value =
+        "app";
+
+    document.getElementById("tags")
+        .value =
+        "";
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+
+    document.getElementById("title")
+        .focus();
+
+}
+
+
+/* CLOSE */
+
+function closeModal() {
+
+    document.getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* SAVE IDEA */
+
+function saveIdea() {
+
+    const title =
+        document.getElementById("title")
+            .value
+            .trim();
+
+    const description =
+        document.getElementById(
+            "description"
+        )
+        .value
+        .trim();
+
+    const category =
+        document.getElementById("category")
+            .value;
+
+    const tags =
+        document.getElementById("tags")
+            .value
+            .split(",")
+            .map(
+                tag =>
+                    tag.trim()
+            )
+            .filter(Boolean);
+
+
+    if (!title) {
+
+        alert(
+            "Please enter an idea title."
+        );
+
+        return;
+
+    }
+
+
+    if (editingId !== null) {
+
+        const idea =
+            ideas.find(
+                i => i.id === editingId
+            );
+
+
+        if (idea) {
+
+            idea.title =
+                title;
+
+            idea.description =
+                description;
+
+            idea.category =
+                category;
+
+            idea.tags =
+                tags;
+
+        }
+
+    } else {
+
+        ideas.unshift({
+
+            id:
+                Date.now(),
+
+            title:
+                title,
+
+            description:
+                description,
+
+            category:
+                category,
+
+            tags:
+                tags,
+
+            favorite:
+                false,
+
+            created:
+                Date.now()
+
+        });
+
+    }
+
+
+    saveData();
+
+    closeModal();
+
+    render();
+
+}
+
+
+/* EDIT */
+
+function editIdea(id) {
+
+    const idea =
+        ideas.find(
+            i => i.id === id
+        );
+
+
+    if (!idea) {
+        return;
+    }
+
+
+    editingId =
+        id;
+
+
+    document.getElementById("modalTitle")
+        .innerText =
+        "Edit Idea";
+
+
+    document.getElementById("title")
+        .value =
+        idea.title;
+
+    document.getElementById("description")
+        .value =
+        idea.description;
+
+    document.getElementById("category")
+        .value =
+        idea.category;
+
+    document.getElementById("tags")
+        .value =
+        idea.tags.join(", ");
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+}
+
+
+/* FAVORITE */
+
+function toggleFavorite(id) {
+
+    const idea =
+        ideas.find(
+            i => i.id === id
+        );
+
+
+    if (!idea) {
+        return;
+    }
+
+
+    idea.favorite =
+        !idea.favorite;
+
+
+    saveData();
+
+    render();
+
+}
+
+
+/* DELETE */
+
+function deleteIdea(id) {
+
+    const idea =
+        ideas.find(
+            i => i.id === id
+        );
+
+
+    if (!idea) {
+        return;
+    }
+
+
+    if (
+        !confirm(
+            'Delete "' +
+            idea.title +
+            '"?'
+        )
+    ) {
+        return;
+    }
+
+
+    ideas =
+        ideas.filter(
+            i => i.id !== id
+        );
+
+
+    saveData();
+
+    render();
+
+}
+
+
+/* ESCAPE */
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* OUTSIDE MODAL */
+
+document
+    .getElementById("overlay")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target === this
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+/* START */
+
+render();
+
+</script>
+
+</body>
+</html>

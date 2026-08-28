@@ -1,0 +1,758 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickTimer</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #10131b;
+    color: white;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 40px;
+}
+
+/* Header */
+
+.header {
+    padding: 28px 20px 22px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.badge {
+    font-size: 11px;
+    background: #242936;
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: #aeb5c4;
+}
+
+.header h1 {
+    margin: 28px 0 5px;
+    font-size: 31px;
+}
+
+.header p {
+    color: #9299a8;
+    margin: 0;
+}
+
+/* Timer */
+
+.timer-card {
+    margin: 10px 20px;
+    padding: 30px 20px;
+    background: #191d27;
+    border: 1px solid #292e3a;
+    border-radius: 28px;
+    text-align: center;
+}
+
+.circle {
+    width: 250px;
+    height: 250px;
+    margin: auto;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    position: relative;
+    background:
+        conic-gradient(
+            #8b7cff var(--progress),
+            #292e39 var(--progress)
+        );
+}
+
+.circle::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    background: #191d27;
+}
+
+.timer-content {
+    position: relative;
+    z-index: 2;
+}
+
+.time {
+    font-size: 49px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.status {
+    color: #9299a8;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 27px;
+}
+
+.main-button {
+    flex: 1;
+    border: 0;
+    border-radius: 15px;
+    padding: 15px;
+    background: #8b7cff;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.reset-button {
+    width: 55px;
+    border: 0;
+    border-radius: 15px;
+    background: #292e39;
+    color: white;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+/* Content */
+
+.content {
+    padding: 8px 20px;
+}
+
+.title {
+    font-size: 17px;
+    margin: 20px 0 12px;
+}
+
+/* Presets */
+
+.presets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+}
+
+.preset {
+    border: 1px solid #292e3a;
+    background: #191d27;
+    color: #bfc5d1;
+    padding: 14px 5px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.preset strong {
+    display: block;
+    color: white;
+    font-size: 16px;
+}
+
+.preset small {
+    color: #858c9c;
+    font-size: 9px;
+}
+
+/* Custom */
+
+.custom {
+    background: #191d27;
+    border: 1px solid #292e3a;
+    padding: 16px;
+    border-radius: 18px;
+}
+
+.inputs {
+    display: flex;
+    gap: 9px;
+}
+
+.inputs input {
+    width: 50%;
+    background: #10131b;
+    color: white;
+    border: 1px solid #303644;
+    padding: 13px;
+    border-radius: 12px;
+    outline: none;
+}
+
+.custom button {
+    width: 100%;
+    margin-top: 9px;
+    border: 0;
+    padding: 13px;
+    border-radius: 12px;
+    background: #292e39;
+    color: white;
+    cursor: pointer;
+}
+
+/* Tips */
+
+.tip {
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 17px;
+    background: #191d27;
+    border: 1px solid #292e3a;
+    color: #9299a8;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.tip strong {
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+
+        <div class="top">
+
+            <div class="logo">
+                ⏱️ QuickTimer
+            </div>
+
+            <div class="badge">
+                FOCUS MODE
+            </div>
+
+        </div>
+
+        <h1>Stay on track.</h1>
+
+        <p>
+            Set a timer and get things done.
+        </p>
+
+    </header>
+
+
+    <section class="timer-card">
+
+        <div
+            class="circle"
+            id="circle"
+            style="--progress: 0deg"
+        >
+
+            <div class="timer-content">
+
+                <div
+                    class="time"
+                    id="time"
+                >
+                    05:00
+                </div>
+
+                <div
+                    class="status"
+                    id="status"
+                >
+                    Ready
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <button
+                class="main-button"
+                id="startButton"
+                onclick="toggleTimer()"
+            >
+                ▶ Start
+            </button>
+
+            <button
+                class="reset-button"
+                onclick="resetTimer()"
+            >
+                ↻
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <main class="content">
+
+        <h2 class="title">
+            Quick presets
+        </h2>
+
+
+        <div class="presets">
+
+            <button
+                class="preset"
+                onclick="setTimer(60)"
+            >
+                <strong>1 min</strong>
+                <small>Quick break</small>
+            </button>
+
+            <button
+                class="preset"
+                onclick="setTimer(300)"
+            >
+                <strong>5 min</strong>
+                <small>Short focus</small>
+            </button>
+
+            <button
+                class="preset"
+                onclick="setTimer(600)"
+            >
+                <strong>10 min</strong>
+                <small>Deep focus</small>
+            </button>
+
+            <button
+                class="preset"
+                onclick="setTimer(900)"
+            >
+                <strong>15 min</strong>
+                <small>Study</small>
+            </button>
+
+            <button
+                class="preset"
+                onclick="setTimer(1500)"
+            >
+                <strong>25 min</strong>
+                <small>Pomodoro</small>
+            </button>
+
+            <button
+                class="preset"
+                onclick="setTimer(3600)"
+            >
+                <strong>60 min</strong>
+                <small>Deep work</small>
+            </button>
+
+        </div>
+
+
+        <h2 class="title">
+            Custom timer
+        </h2>
+
+
+        <div class="custom">
+
+            <div class="inputs">
+
+                <input
+                    id="minutes"
+                    type="number"
+                    min="0"
+                    max="999"
+                    placeholder="Minutes"
+                >
+
+                <input
+                    id="seconds"
+                    type="number"
+                    min="0"
+                    max="59"
+                    placeholder="Seconds"
+                >
+
+            </div>
+
+            <button onclick="setCustomTimer()">
+                Set Custom Timer
+            </button>
+
+        </div>
+
+
+        <div class="tip">
+
+            💡 <strong>Focus tip:</strong>
+            Put your phone on silent, choose a timer,
+            and focus on just one task until the timer ends.
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+let totalSeconds = 300;
+
+let remainingSeconds = 300;
+
+let timer = null;
+
+let running = false;
+
+
+/* Display */
+
+function updateDisplay() {
+
+    const minutes =
+        Math.floor(
+            remainingSeconds / 60
+        );
+
+    const seconds =
+        remainingSeconds % 60;
+
+
+    document.getElementById("time")
+        .innerText =
+        String(minutes).padStart(2, "0")
+        + ":" +
+        String(seconds).padStart(2, "0");
+
+
+    let progress = 0;
+
+    if (totalSeconds > 0) {
+
+        progress =
+            (
+                1 -
+                remainingSeconds / totalSeconds
+            ) * 360;
+
+    }
+
+
+    document.getElementById("circle")
+        .style
+        .setProperty(
+            "--progress",
+            progress + "deg"
+        );
+
+}
+
+
+/* Set timer */
+
+function setTimer(seconds) {
+
+    stopTimer();
+
+    totalSeconds =
+        seconds;
+
+    remainingSeconds =
+        seconds;
+
+    document.getElementById("status")
+        .innerText =
+        "Ready";
+
+    updateDisplay();
+
+}
+
+
+/* Start / pause */
+
+function toggleTimer() {
+
+    if (remainingSeconds <= 0) {
+
+        return;
+
+    }
+
+
+    if (running) {
+
+        pauseTimer();
+
+    } else {
+
+        startTimer();
+
+    }
+
+}
+
+
+/* Start */
+
+function startTimer() {
+
+    running = true;
+
+
+    document.getElementById("startButton")
+        .innerText =
+        "Ⅱ Pause";
+
+
+    document.getElementById("status")
+        .innerText =
+        "Running";
+
+
+    timer =
+        setInterval(() => {
+
+            remainingSeconds--;
+
+            updateDisplay();
+
+
+            if (remainingSeconds <= 0) {
+
+                finishTimer();
+
+            }
+
+        }, 1000);
+
+}
+
+
+/* Pause */
+
+function pauseTimer() {
+
+    clearInterval(timer);
+
+    timer = null;
+
+    running = false;
+
+
+    document.getElementById("startButton")
+        .innerText =
+        "▶ Resume";
+
+
+    document.getElementById("status")
+        .innerText =
+        "Paused";
+
+}
+
+
+/* Stop */
+
+function stopTimer() {
+
+    clearInterval(timer);
+
+    timer = null;
+
+    running = false;
+
+
+    document.getElementById("startButton")
+        .innerText =
+        "▶ Start";
+
+}
+
+
+/* Reset */
+
+function resetTimer() {
+
+    stopTimer();
+
+    remainingSeconds =
+        totalSeconds;
+
+
+    document.getElementById("status")
+        .innerText =
+        "Ready";
+
+
+    updateDisplay();
+
+}
+
+
+/* Finished */
+
+function finishTimer() {
+
+    clearInterval(timer);
+
+    timer = null;
+
+    running = false;
+
+    remainingSeconds = 0;
+
+
+    document.getElementById("startButton")
+        .innerText =
+        "✓ Done";
+
+
+    document.getElementById("status")
+        .innerText =
+        "Time's up! 🎉";
+
+
+    updateDisplay();
+
+
+    playSound();
+
+}
+
+
+/* Custom */
+
+function setCustomTimer() {
+
+    const minutes =
+        Number(
+            document.getElementById("minutes")
+                .value
+        ) || 0;
+
+
+    const seconds =
+        Number(
+            document.getElementById("seconds")
+                .value
+        ) || 0;
+
+
+    if (
+        minutes === 0 &&
+        seconds === 0
+    ) {
+
+        alert(
+            "Please enter a time."
+        );
+
+        return;
+
+    }
+
+
+    if (seconds > 59) {
+
+        alert(
+            "Seconds must be between 0 and 59."
+        );
+
+        return;
+
+    }
+
+
+    setTimer(
+        minutes * 60 +
+        seconds
+    );
+
+}
+
+
+/* Sound */
+
+function playSound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        const audio =
+            new AudioContext();
+
+
+        const oscillator =
+            audio.createOscillator();
+
+
+        const gain =
+            audio.createGain();
+
+
+        oscillator.connect(gain);
+
+        gain.connect(audio.destination);
+
+
+        oscillator.frequency.value =
+            880;
+
+
+        gain.gain.value =
+            0.15;
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+            audio.currentTime + 0.5
+        );
+
+    } catch (error) {
+
+        console.log(
+            "Audio unavailable"
+        );
+
+    }
+
+}
+
+
+/* Initial */
+
+updateDisplay();
+
+</script>
+
+</body>
+</html>

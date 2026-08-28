@@ -1,0 +1,503 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#15803d">
+<title>RecipePocket Ledger</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Basil Olive Leaf Green & Lemon Zest Yellow Culinary Look */
+:root{
+--bg:#09120a;
+--card:#142416;
+--text:#f0fdf4;
+--muted:#86efac;
+--line:#1e3922;
+--primary:#15803d;
+--primary2:#22c55e;
+--accent:#eab308;
+--accent-soft:#3a2d04;
+--danger:#ef4444;
+--shadow:0 12px 35px rgba(21,128,61,0.12)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - GOURMET GARDEN AMBER ACCENT GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#06230c,#15803d 55%,var(--accent));
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--accent)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(234,179,8,0.06);
+border:1px dashed var(--accent)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+.title span{
+font-size:11px;
+color:var(--muted)
+}
+
+/* RECIPE ROW STREAM CARDS */
+.recipe-row {
+padding:14px 0;
+border-bottom:1px solid var(--line);
+display:flex;
+gap:12px;
+align-items:flex-start
+}
+.recipe-row:last-child{border-bottom:0}
+
+.recipe-icon {
+width:40px;
+height:40px;
+border-radius:12px;
+background:var(--bg);
+display:grid;
+place-items:center;
+font-size:18px;
+flex-shrink:0;
+border:1px solid var(--line)
+}
+
+.recipe-body {
+flex:1;
+min-width:0
+}
+
+.recipe-title {
+font-size:15px;
+font-weight:800;
+color:var(--text);
+word-wrap:break-word
+}
+
+.recipe-ingredients {
+font-size:11.5px;
+color:var(--muted);
+margin-top:3px;
+line-height:1.4;
+word-wrap:break-word
+}
+
+.recipe-meta-row {
+font-size:9.5px;
+color:var(--muted);
+margin-top:5px;
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.btn-remove-row {
+background:transparent;
+border:0;
+color:var(--danger);
+font-size:11px;
+font-weight:700;
+padding:2px 4px;
+cursor:pointer
+}
+
+/* FLOATING FAB ACTION TRIGGER */
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:50%;
+background:var(--primary);
+color:white;
+font-size:28px;
+box-shadow:0 12px 28px rgba(21,128,61,.3);
+z-index:10;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+/* MODAL CONTAINER DRAWER OVERLAY */
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(2px)
+}
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0;
+border-top:1px solid var(--line)
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px
+}
+
+.modal-head h2{
+margin:0;
+font-size:18px;
+font-weight:800
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:50%;
+background:var(--bg);
+color:var(--text)
+}
+
+.field{margin-bottom:12px}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field input,
+.field textarea{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text)
+}
+
+.field textarea {
+height:80px;
+resize:none
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:white;
+font-weight:800
+}
+
+.empty-state {
+text-align:center;
+padding:35px 15px;
+color:var(--muted)
+}
+.empty-icon { font-size:40px; margin-bottom:6px; }
+
+/* BASIL FRESH LIGHT SKIN OVERRIDE SKIN */
+body.light-theme {
+--bg:#f0fdf4;
+--card:#ffffff;
+--text:#06230c;
+--muted:#16a34a;
+--line:#cbd5e1;
+--shadow:0 10px 25px rgba(21,128,61,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🍳</div>
+<div class="brand-name">RecipePocket</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Culinary Log.<br>Gourmet Cooking Files.</h1>
+<p>Log custom recipes formulas, list active cooking ingredients, and trace preparation times locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- MASTER LEDGER RECEPTACLE CARD -->
+<section class="card">
+<div class="title">
+<h2>🍱 Archived Recipe Deck</h2>
+<span id="lblActiveCountSpan">0 saved</span>
+</div>
+
+<div id="recipesLogContainer">
+<!-- Dynamic entries injected via JavaScript -->
+</div>
+</section>
+
+</main>
+
+<!-- FLOATING FAB INJECTION ACTION KEYS TRIGGER -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- ADD ENTRY DRAWER POPUP OVERLAY PANEL CONTROL SHEET -->
+<div class="overlay" id="overlay">
+<div class="modal">
+<div class="modal-head">
+<h2>Slot New Recipe</h2>
+<button class="close" onclick="closeModal()">✕</button>
+</div>
+
+<div class="field">
+<label>Dish Name / Formula Title</label>
+<input type="text" id="inputRecipeName" placeholder="e.g., Avocado Garlic Crust Toast">
+</div>
+
+<div class="field">
+<label>Ingredients Required Component List</label>
+<textarea id="inputRecipeIngredients" placeholder="e.g., 2 Slices Sourdough, 1 Ripe Avocado, Chili Flakes"></textarea>
+</div>
+
+<div class="field" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:0;">
+<div>
+<label>Prep Time (mins)</label>
+<input type="number" id="inputRecipeTime" placeholder="15" min="1">
+</div>
+<div>
+<label>Category Icon</label>
+<select id="selectRecipeIcon">
+<option value="🥗">🥗 Salad / Fresh</option>
+<option value="🍝">🍝 Pasta / Warm</option>
+<option value="🍰">🍰 Dessert / Sweet</option>
+<option value="☕">☕ Brew / Liquid</option>
+</select>
+</div>
+</div>
+
+<button class="save" style="margin-top:14px;" onclick="commitRecipeNodeToPocket()">Lock Recipe Row</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// Load active state map directly out of browser local storage persistence sandbox variables lists
+let recipeRecordsArray = JSON.parse(localStorage.getItem("gourmet_recipe_pocket_items")) || [
+    { id: 1, name: "Basil Pesto Penne", ingredients: "Penne Pasta, Fresh Basil, Pine Nuts, Olive Oil, Parmesan", time: 20, icon: "🍝" },
+    { id: 2, name: "Matcha Mint Green Tea", ingredients: "Ceremonial Matcha Powder, Mint Sprigs, Almond Milk, Honey", time: 5, icon: "☕" }
+];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function openModal() { document.getElementById("overlay").classList.add("show"); }
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+
+function commitRecipeNodeToPocket() {
+    const name = document.getElementById("inputRecipeName").value.trim();
+    const ingredients = document.getElementById("inputRecipeIngredients").value.trim();
+    const time = parseInt(document.getElementById("inputRecipeTime").value) || 15;
+    const icon = document.getElementById("selectRecipeIcon").value;
+
+    if (!name || !ingredients) return alert("Please specify complete recipe descriptions parameters lines.");
+
+    recipeRecordsArray.unshift({
+        id: Date.now(),
+        name,
+        ingredients,
+        time,
+        icon
+    });
+
+    saveAndRedrawRecipePocketView();
+    closeModal();
+
+    // Reset standard input elements back to defaults configurations rules
+    document.getElementById("inputRecipeName").value = "";
+    document.getElementById("inputRecipeIngredients").value = "";
+    document.getElementById("inputRecipeTime").value = "";
+}
+
+function deleteRecipeCardNode(id) {
+    recipeRecordsArray = recipeRecordsArray.filter(item => item.id !== id);
+    saveAndRedrawRecipePocketView();
+}
+
+function saveAndRedrawRecipePocketView() {
+    localStorage.setItem("gourmet_recipe_pocket_items", JSON.stringify(recipeRecordsArray));
+    render();
+}
+
+function render() {
+    const container = document.getElementById("recipesLogContainer");
+    document.getElementById("lblActiveCountSpan").innerText = `${recipeRecordsArray.length} items`;
+
+    if (recipeRecordsArray.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">🍃</div>
+                <h3>Recipe Deck Empty</h3>
+                <p>Tap the basil-green plus switch to line up your culinary creations.</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = recipeRecordsArray.map(item => `
+<div class="recipe-row">
+            <div class="recipe-icon">${item.icon}</div>
+            <div class="recipe-body">
+                <div class="recipe-title">${item.name}</div>
+                <div class="recipe-ingredients">${item.ingredients}</div>
+                <div class="recipe-meta-row">
+                    <span>⏱️ Time: ${item.time} mins</span>
+                    <button class="btn-remove-row" onclick="deleteRecipeCardNode(${item.id})">✕ Remove</button>
+                </div>
+            </div>
+        </div>
+    `).join("");
+}
+
+// Initial structural rendering loop initialization configurations updates on boot launch execution paths
+render();
+</script></body> </html>

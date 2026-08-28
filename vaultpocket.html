@@ -1,0 +1,2339 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>VaultPocket</title>
+
+<style>
+:root{
+  --bg:#f6f5fb;
+  --card:#fff;
+  --text:#191724;
+  --muted:#858091;
+  --line:#e8e5ef;
+  --primary:#7c3aed;
+  --primary2:#6d28d9;
+  --soft:#f0eaff;
+  --danger:#dc2626;
+  --success:#16a34a;
+  --shadow:0 12px 32px rgba(52,35,86,.09);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+  width:100%;
+  max-width:470px;
+  min-height:100vh;
+  margin:auto;
+}
+
+/* HEADER */
+
+.header{
+  position:relative;
+  overflow:hidden;
+  padding:20px 18px 27px;
+  color:#fff;
+  background:linear-gradient(145deg,#4c1d95,#7c3aed 58%,#a855f7);
+  border-radius:0 0 30px 30px;
+}
+
+.header:before,
+.header:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+
+.header:before{
+  width:250px;
+  height:250px;
+  right:-120px;
+  top:-170px;
+}
+
+.header:after{
+  width:140px;
+  height:140px;
+  left:-80px;
+  bottom:-95px;
+}
+
+.topbar{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.15);
+  font-size:21px;
+}
+
+.brand b{
+  font-size:21px;
+}
+
+.theme{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  color:#fff;
+  background:rgba(255,255,255,.15);
+}
+
+.hero{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:29px;
+  line-height:1.08;
+  letter-spacing:-.8px;
+}
+
+.hero p{
+  margin:8px 0 0;
+  color:#eee8ff;
+  font-size:10px;
+  line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+  padding:16px;
+}
+
+.card{
+  margin-bottom:14px;
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+
+/* SECURITY STATUS */
+
+.security{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.securityIcon{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:var(--soft);
+  font-size:20px;
+}
+
+.securityInfo{
+  flex:1;
+}
+
+.securityInfo b{
+  display:block;
+  font-size:11px;
+}
+
+.securityInfo span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.status{
+  padding:6px 8px;
+  border-radius:8px;
+  background:#dcfce7;
+  color:var(--success);
+  font-size:7px;
+  font-weight:800;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.stat{
+  padding:11px 4px;
+  text-align:center;
+  border-radius:14px;
+  background:var(--bg);
+}
+
+.stat b{
+  display:block;
+  margin-top:3px;
+  font-size:17px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* SEARCH */
+
+.search{
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  padding:12px 40px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:10px;
+}
+
+.search span{
+  position:absolute;
+  left:13px;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+.search button{
+  position:absolute;
+  right:5px;
+  top:50%;
+  transform:translateY(-50%);
+  width:30px;
+  height:30px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+}
+
+/* FILTERS */
+
+.filters{
+  display:flex;
+  gap:6px;
+  overflow:auto;
+}
+
+.filters::-webkit-scrollbar{
+  display:none;
+}
+
+.filter{
+  flex:0 0 auto;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--card);
+  color:var(--muted);
+  font-size:8px;
+}
+
+.filter.active{
+  border-color:var(--primary);
+  background:var(--soft);
+  color:var(--primary);
+  font-weight:800;
+}
+
+/* VAULT ENTRIES */
+
+.entries{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.entry{
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--card);
+}
+
+.entryTop{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.entryIcon{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:var(--soft);
+  font-size:19px;
+}
+
+.entryInfo{
+  min-width:0;
+  flex:1;
+}
+
+.entryTitle{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  font-size:11px;
+  font-weight:800;
+}
+
+.entryCategory{
+  display:inline-block;
+  margin-top:5px;
+  padding:4px 7px;
+  border-radius:7px;
+  background:var(--soft);
+  color:var(--primary);
+  font-size:7px;
+  font-weight:800;
+}
+
+.entryActions{
+  display:flex;
+  gap:5px;
+}
+
+.iconBtn{
+  width:29px;
+  height:29px;
+  border:0;
+  border-radius:9px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.iconBtn.favorite.active{
+  color:#f59e0b;
+  background:#fff6d8;
+}
+
+.secretPreview{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-top:10px;
+  padding:8px 9px;
+  border-radius:9px;
+  background:var(--bg);
+}
+
+.secretDots{
+  flex:1;
+  overflow:hidden;
+  color:var(--muted);
+  font-size:8px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.copyBtn{
+  border:0;
+  border-radius:7px;
+  padding:6px 8px;
+  background:var(--soft);
+  color:var(--primary);
+  font-size:7px;
+  font-weight:800;
+}
+
+/* EMPTY */
+
+.empty{
+  padding:32px 10px;
+  text-align:center;
+}
+
+.emptyIcon{
+  font-size:38px;
+}
+
+.empty b{
+  display:block;
+  margin-top:7px;
+  font-size:11px;
+}
+
+.empty p{
+  margin:5px auto 0;
+  max-width:270px;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.5;
+}
+
+/* FAB */
+
+.fab{
+  position:fixed;
+  right:max(calc((100vw - 470px)/2 + 18px),18px);
+  bottom:20px;
+  width:56px;
+  height:56px;
+  border:0;
+  border-radius:18px;
+  background:var(--primary);
+  color:#fff;
+  font-size:26px;
+  box-shadow:0 12px 28px rgba(124,58,237,.35);
+  z-index:20;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(10,5,20,.65);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalBox{
+  width:100%;
+  max-width:470px;
+  max-height:92vh;
+  overflow:auto;
+  padding:20px;
+  border-radius:25px 25px 0 0;
+  background:var(--card);
+}
+
+.modalHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+
+.modalHead h2{
+  margin:0;
+  font-size:17px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.field{
+  margin-bottom:12px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  color:var(--muted);
+  font-size:8px;
+  font-weight:800;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:10px;
+}
+
+.field textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.passwordWrap{
+  position:relative;
+}
+
+.passwordWrap input{
+  padding-right:45px;
+}
+
+.eye{
+  position:absolute;
+  right:5px;
+  top:50%;
+  transform:translateY(-50%);
+  width:34px;
+  height:34px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+}
+
+.primary{
+  width:100%;
+  padding:12px;
+  border:0;
+  border-radius:12px;
+  background:var(--primary);
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+
+.deleteBtn{
+  width:100%;
+  margin-top:8px;
+  padding:11px;
+  border:0;
+  border-radius:11px;
+  background:#fee2e2;
+  color:var(--danger);
+  font-size:9px;
+  font-weight:800;
+}
+
+/* LOCK SCREEN */
+
+.lockScreen{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    linear-gradient(
+      145deg,
+      #160d2d,
+      #4c1d95,
+      #7c3aed
+    );
+}
+
+.lockCard{
+  width:100%;
+  max-width:350px;
+  padding:28px 22px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:25px;
+  text-align:center;
+  color:#fff;
+  background:rgba(255,255,255,.10);
+  backdrop-filter:blur(20px);
+}
+
+.lockIcon{
+  width:65px;
+  height:65px;
+  display:grid;
+  place-items:center;
+  margin:0 auto 15px;
+  border-radius:20px;
+  background:rgba(255,255,255,.14);
+  font-size:30px;
+}
+
+.lockCard h2{
+  margin:0;
+  font-size:21px;
+}
+
+.lockCard p{
+  margin:7px 0 18px;
+  color:#e9ddff;
+  font-size:9px;
+  line-height:1.5;
+}
+
+.pin{
+  width:100%;
+  padding:13px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:12px;
+  outline:none;
+  text-align:center;
+  letter-spacing:7px;
+  background:rgba(0,0,0,.15);
+  color:#fff;
+  font-size:18px;
+}
+
+.unlock{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border:0;
+  border-radius:12px;
+  background:#fff;
+  color:#5b21b6;
+  font-size:10px;
+  font-weight:900;
+}
+
+.setupText{
+  margin-top:12px;
+  color:#ddd0f5;
+  font-size:7px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  z-index:200;
+  transform:translate(-50%,20px);
+  opacity:0;
+  padding:11px 15px;
+  border-radius:12px;
+  background:#171225;
+  color:#fff;
+  font-size:9px;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+body.dark{
+  --bg:#0e0b15;
+  --card:#191521;
+  --text:#f5f1ff;
+  --muted:#a59caf;
+  --line:#2d2738;
+  --soft:#2a1d42;
+  --shadow:0 14px 35px rgba(0,0,0,.35);
+}
+
+body.dark .status{
+  background:#123b27;
+}
+
+body.dark .iconBtn.favorite.active{
+  background:#3b3016;
+}
+
+@media(min-width:700px){
+  body{
+    padding:20px 0;
+  }
+
+  .app{
+    min-height:calc(100vh - 40px);
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(40,25,70,.16);
+  }
+
+  .modal{
+    align-items:center;
+    padding:20px;
+  }
+
+  .modalBox{
+    border-radius:24px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOCK SCREEN -->
+
+<div
+  class="lockScreen"
+  id="lockScreen"
+>
+
+  <div class="lockCard">
+
+    <div class="lockIcon">
+      🔐
+    </div>
+
+    <h2>
+      VaultPocket
+    </h2>
+
+    <p id="lockDescription">
+      Create a local PIN to protect this vault.
+    </p>
+
+    <input
+      id="pinInput"
+      class="pin"
+      type="password"
+      inputmode="numeric"
+      maxlength="8"
+      placeholder="••••"
+      autocomplete="off"
+    >
+
+    <button
+      class="unlock"
+      onclick="unlockVault()"
+      id="unlockButton"
+    >
+      Create PIN
+    </button>
+
+    <div class="setupText">
+      Your PIN is stored locally in this browser.
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- APP -->
+
+<div
+  class="app hidden"
+  id="app"
+>
+
+<header class="header">
+
+  <div class="topbar">
+
+    <div class="brand">
+
+      <div class="logo">
+        🔐
+      </div>
+
+      <b>
+        VaultPocket
+      </b>
+
+    </div>
+
+    <button
+      class="theme"
+      id="themeBtn"
+      onclick="toggleTheme()"
+    >
+      🌙
+    </button>
+
+  </div>
+
+
+  <div class="hero">
+
+    <h1>
+      Your private space,<br>
+      in your pocket.
+    </h1>
+
+    <p>
+      Keep useful private notes and snippets organized locally.
+    </p>
+
+  </div>
+
+</header>
+
+
+<main class="content">
+
+  <!-- STATUS -->
+
+  <section class="card">
+
+    <div class="security">
+
+      <div class="securityIcon">
+        🛡️
+      </div>
+
+      <div class="securityInfo">
+
+        <b>
+          Vault unlocked
+        </b>
+
+        <span>
+          Local browser storage
+        </span>
+
+      </div>
+
+      <div class="status">
+        SECURE
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- STATS -->
+
+  <section class="card">
+
+    <div class="stats">
+
+      <div class="stat">
+        🔐
+        <b id="totalCount">0</b>
+        <span>Entries</span>
+      </div>
+
+      <div class="stat">
+        ⭐
+        <b id="favoriteCount">0</b>
+        <span>Favorites</span>
+      </div>
+
+      <div class="stat">
+        🏷️
+        <b id="categoryCount">0</b>
+        <span>Categories</span>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SEARCH -->
+
+  <section class="card">
+
+    <div class="search">
+
+      <span>
+        🔎
+      </span>
+
+      <input
+        id="search"
+        type="search"
+        placeholder="Search your vault..."
+        oninput="render()"
+      >
+
+      <button
+        onclick="clearSearch()"
+      >
+        ×
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- FILTERS -->
+
+  <section class="card">
+
+    <div class="filters">
+
+      <button
+        class="filter active"
+        data-filter="All"
+        onclick="setFilter('All')"
+      >
+        All
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Notes"
+        onclick="setFilter('Notes')"
+      >
+        📝 Notes
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Codes"
+        onclick="setFilter('Codes')"
+      >
+        🔑 Codes
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Links"
+        onclick="setFilter('Links')"
+      >
+        🔗 Links
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Other"
+        onclick="setFilter('Other')"
+      >
+        📁 Other
+      </button>
+
+      <button
+        class="filter"
+        data-filter="Favorites"
+        onclick="setFilter('Favorites')"
+      >
+        ⭐ Favorites
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ENTRIES -->
+
+  <section class="card">
+
+    <div
+      style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:11px;
+      "
+    >
+
+      <h2
+        style="
+          margin:0;
+          font-size:14px;
+        "
+      >
+        🗃️ Vault
+      </h2>
+
+      <small
+        id="filterText"
+        style="
+          color:var(--muted);
+          font-size:8px;
+        "
+      >
+        All
+      </small>
+
+    </div>
+
+    <div
+      class="entries"
+      id="entries"
+    ></div>
+
+  </section>
+
+</main>
+
+</div>
+
+
+<!-- FAB -->
+
+<button
+  class="fab hidden"
+  id="fab"
+  onclick="openEntryModal()"
+>
+  +
+</button>
+
+
+<!-- ENTRY MODAL -->
+
+<div
+  class="modal"
+  id="entryModal"
+  onclick="outsideClose(event)"
+>
+
+  <div
+    class="modalBox"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modalHead">
+
+      <h2 id="modalTitle">
+        ➕ Add Secret
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeEntryModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        TITLE
+      </label>
+
+      <input
+        id="entryTitle"
+        maxlength="80"
+        placeholder="e.g. Wi-Fi information"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        SECRET / CONTENT
+      </label>
+
+      <div class="passwordWrap">
+
+        <textarea
+          id="secret"
+          placeholder="Enter your private text..."
+        ></textarea>
+
+        <button
+          class="eye"
+          onclick="toggleSecretVisibility()"
+          id="eyeButton"
+        >
+          👁️
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        CATEGORY
+      </label>
+
+      <select id="category">
+
+        <option value="Notes">
+          📝 Notes
+        </option>
+
+        <option value="Codes">
+          🔑 Codes
+        </option>
+
+        <option value="Links">
+          🔗 Links
+        </option>
+
+        <option value="Other">
+          📁 Other
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div
+      class="field"
+      style="
+        display:flex;
+        align-items:center;
+        gap:8px;
+      "
+    >
+
+      <input
+        id="favorite"
+        type="checkbox"
+        style="width:auto"
+      >
+
+      <label
+        for="favorite"
+        style="
+          margin:0;
+          color:var(--text);
+          font-size:9px;
+        "
+      >
+        ⭐ Add to favorites
+      </label>
+
+    </div>
+
+
+    <button
+      class="primary"
+      onclick="saveEntry()"
+    >
+      💾 Save to Vault
+    </button>
+
+
+    <button
+      class="deleteBtn hidden"
+      id="deleteFromModal"
+      onclick="deleteCurrentEntry()"
+    >
+      🗑️ Delete Entry
+    </button>
+
+  </div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+
+/* =========================
+   DATA
+========================= */
+
+const DATA_KEY =
+  "vaultPocketEntries";
+
+const PIN_KEY =
+  "vaultPocketPin";
+
+let entries =
+  JSON.parse(
+    localStorage.getItem(
+      DATA_KEY
+    ) || "[]"
+  );
+
+let filter =
+  "All";
+
+let editingId =
+  null;
+
+let secretVisible =
+  false;
+
+let toastTimer;
+
+
+/* =========================
+   INIT
+========================= */
+
+function init(){
+
+  loadTheme();
+
+  checkPin();
+
+}
+
+
+function checkPin(){
+
+  const savedPin =
+    localStorage.getItem(
+      PIN_KEY
+    );
+
+
+  if(savedPin){
+
+    document.getElementById(
+      "lockDescription"
+    ).textContent =
+      "Enter your PIN to unlock your vault.";
+
+    document.getElementById(
+      "unlockButton"
+    ).textContent =
+      "Unlock Vault";
+
+  }
+
+}
+
+
+function unlockVault(){
+
+  const input =
+    document.getElementById(
+      "pinInput"
+    );
+
+
+  const pin =
+    input.value.trim();
+
+
+  if(
+    !/^\d{4,8}$/.test(pin)
+  ){
+
+    showToast(
+      "Enter a 4–8 digit PIN."
+    );
+
+    input.focus();
+
+    return;
+
+  }
+
+
+  const savedPin =
+    localStorage.getItem(
+      PIN_KEY
+    );
+
+
+  if(!savedPin){
+
+    localStorage.setItem(
+      PIN_KEY,
+      pin
+    );
+
+    openApp();
+
+    showToast(
+      "🔐 PIN created."
+    );
+
+  }
+  else if(pin === savedPin){
+
+    openApp();
+
+    showToast(
+      "🔓 Vault unlocked."
+    );
+
+  }
+  else{
+
+    input.value = "";
+
+    showToast(
+      "❌ Incorrect PIN."
+    );
+
+  }
+
+}
+
+
+function openApp(){
+
+  document.getElementById(
+    "lockScreen"
+  ).classList.add(
+    "hidden"
+  );
+
+  document.getElementById(
+    "app"
+  ).classList.remove(
+    "hidden"
+  );
+
+  document.getElementById(
+    "fab"
+  ).classList.remove(
+    "hidden"
+  );
+
+  render();
+
+}
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function saveData(){
+
+  localStorage.setItem(
+    DATA_KEY,
+    JSON.stringify(entries)
+  );
+
+}
+
+
+function makeId(){
+
+  return (
+    Date.now().toString(36) +
+    Math.random()
+      .toString(36)
+      .slice(2)
+  );
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(value){
+
+  filter =
+    value;
+
+
+  document
+    .querySelectorAll(
+      ".filter"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.filter ===
+          value
+        );
+
+      }
+    );
+
+
+  document.getElementById(
+    "filterText"
+  ).textContent =
+    value;
+
+
+  render();
+
+}
+
+
+function clearSearch(){
+
+  document.getElementById(
+    "search"
+  ).value = "";
+
+  render();
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+  const query =
+    document.getElementById(
+      "search"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+  let list =
+    [...entries];
+
+
+  if(
+    filter ===
+    "Favorites"
+  ){
+
+    list =
+      list.filter(
+        e =>
+          e.favorite
+      );
+
+  }
+  else if(
+    filter !==
+    "All"
+  ){
+
+    list =
+      list.filter(
+        e =>
+          e.category ===
+          filter
+      );
+
+  }
+
+
+  if(query){
+
+    list =
+      list.filter(
+        e => {
+
+          const text =
+            [
+              e.title,
+              e.category,
+              e.secret
+            ]
+            .join(" ")
+            .toLowerCase();
+
+
+          return text.includes(
+            query
+          );
+
+        }
+      );
+
+  }
+
+
+  list.sort(
+    (a,b) =>
+      (b.favorite-a.favorite) ||
+      (b.created-a.created)
+  );
+
+
+  const categories =
+    new Set(
+      entries.map(
+        e => e.category
+      )
+    );
+
+
+  document.getElementById(
+    "totalCount"
+  ).textContent =
+    entries.length;
+
+
+  document.getElementById(
+    "favoriteCount"
+  ).textContent =
+    entries.filter(
+      e => e.favorite
+    ).length;
+
+
+  document.getElementById(
+    "categoryCount"
+  ).textContent =
+    categories.size;
+
+
+  const container =
+    document.getElementById(
+      "entries"
+    );
+
+
+  if(!list.length){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emptyIcon">
+          🔐
+        </div>
+
+        <b>
+          ${
+            query
+              ? "No entries found"
+              : "Your vault is empty"
+          }
+        </b>
+
+        <p>
+          ${
+            query
+              ? "Try a different search."
+              : "Tap + to add your first private note."
+          }
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    list
+      .map(
+        entry => {
+
+          const icon =
+            getCategoryIcon(
+              entry.category
+            );
+
+
+          const preview =
+            entry.secret
+              ? "••••••••••••••"
+              : "Empty entry";
+
+
+          return `
+
+            <article class="entry">
+
+              <div class="entryTop">
+
+                <div class="entryIcon">
+                  ${icon}
+                </div>
+
+
+                <div class="entryInfo">
+
+                  <div class="entryTitle">
+                    ${escapeHTML(
+                      entry.title
+                    )}
+                  </div>
+
+                  <span class="entryCategory">
+                    ${escapeHTML(
+                      entry.category
+                    )}
+                  </span>
+
+                </div>
+
+
+                <div class="entryActions">
+
+                  <button
+                    class="iconBtn favorite ${
+                      entry.favorite
+                        ? "active"
+                        : ""
+                    }"
+                    onclick="toggleFavorite('${entry.id}')"
+                  >
+                    ${
+                      entry.favorite
+                        ? "★"
+                        : "☆"
+                    }
+                  </button>
+
+                  <button
+                    class="iconBtn"
+                    onclick="editEntry('${entry.id}')"
+                  >
+                    ✎
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <div class="secretPreview">
+
+                <span class="secretDots">
+                  ${preview}
+                </span>
+
+                <button
+                  class="copyBtn"
+                  onclick="copyEntry('${entry.id}')"
+                >
+                  📋 Copy
+                </button>
+
+              </div>
+
+            </article>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+function getCategoryIcon(category){
+
+  const icons = {
+
+    Notes:"📝",
+
+    Codes:"🔑",
+
+    Links:"🔗",
+
+    Other:"📁"
+
+  };
+
+
+  return (
+    icons[category] ||
+    "🔐"
+  );
+
+}
+
+
+/* =========================
+   ADD
+========================= */
+
+function openEntryModal(){
+
+  editingId =
+    null;
+
+  secretVisible =
+    false;
+
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    "➕ Add Secret";
+
+
+  document.getElementById(
+    "entryTitle"
+  ).value = "";
+
+
+  document.getElementById(
+    "secret"
+  ).value = "";
+
+
+  document.getElementById(
+    "category"
+  ).value =
+    "Notes";
+
+
+  document.getElementById(
+    "favorite"
+  ).checked =
+    false;
+
+
+  document.getElementById(
+    "deleteFromModal"
+  ).classList.add(
+    "hidden"
+  );
+
+
+  document.getElementById(
+    "eyeButton"
+  ).textContent =
+    "👁️";
+
+
+  document.getElementById(
+    "entryModal"
+  ).classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    () =>
+      document.getElementById(
+        "entryTitle"
+      ).focus(),
+    100
+  );
+
+}
+
+
+/* =========================
+   EDIT
+========================= */
+
+function editEntry(id){
+
+  const entry =
+    entries.find(
+      e =>
+        e.id === id
+    );
+
+
+  if(!entry){
+    return;
+  }
+
+
+  editingId =
+    id;
+
+  secretVisible =
+    false;
+
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    "✏️ Edit Secret";
+
+
+  document.getElementById(
+    "entryTitle"
+  ).value =
+    entry.title;
+
+
+  document.getElementById(
+    "secret"
+  ).value =
+    entry.secret;
+
+
+  document.getElementById(
+    "category"
+  ).value =
+    entry.category;
+
+
+  document.getElementById(
+    "favorite"
+  ).checked =
+    !!entry.favorite;
+
+
+  document.getElementById(
+    "deleteFromModal"
+  ).classList.remove(
+    "hidden"
+  );
+
+
+  document.getElementById(
+    "eyeButton"
+  ).textContent =
+    "👁️";
+
+
+  document.getElementById(
+    "entryModal"
+  ).classList.add(
+    "show"
+  );
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+function saveEntry(){
+
+  const title =
+    document.getElementById(
+      "entryTitle"
+    )
+    .value
+    .trim();
+
+
+  const secret =
+    document.getElementById(
+      "secret"
+    ).value;
+
+
+  const category =
+    document.getElementById(
+      "category"
+    ).value;
+
+
+  const favorite =
+    document.getElementById(
+      "favorite"
+    ).checked;
+
+
+  if(!title){
+
+    showToast(
+      "⚠️ Enter a title."
+    );
+
+    return;
+
+  }
+
+
+  if(!secret.trim()){
+
+    showToast(
+      "⚠️ Enter some content."
+    );
+
+    return;
+
+  }
+
+
+  if(editingId){
+
+    const entry =
+      entries.find(
+        e =>
+          e.id ===
+          editingId
+      );
+
+
+    if(!entry){
+      return;
+    }
+
+
+    entry.title =
+      title;
+
+    entry.secret =
+      secret;
+
+    entry.category =
+      category;
+
+    entry.favorite =
+      favorite;
+
+    entry.updated =
+      Date.now();
+
+
+    showToast(
+      "💾 Entry updated."
+    );
+
+  }
+  else{
+
+    entries.unshift({
+
+      id:makeId(),
+
+      title,
+
+      secret,
+
+      category,
+
+      favorite,
+
+      created:Date.now(),
+
+      updated:Date.now()
+
+    });
+
+
+    showToast(
+      "🔐 Secret saved."
+    );
+
+  }
+
+
+  saveData();
+
+  closeEntryModal();
+
+  render();
+
+}
+
+
+/* =========================
+   COPY
+========================= */
+
+async function copyEntry(id){
+
+  const entry =
+    entries.find(
+      e =>
+        e.id === id
+    );
+
+
+  if(!entry){
+    return;
+  }
+
+
+  try{
+
+    await navigator.clipboard.writeText(
+      entry.secret
+    );
+
+    showToast(
+      "📋 Copied to clipboard."
+    );
+
+  }
+  catch{
+
+    const textarea =
+      document.createElement(
+        "textarea"
+      );
+
+    textarea.value =
+      entry.secret;
+
+    document.body.appendChild(
+      textarea
+    );
+
+    textarea.select();
+
+    document.execCommand(
+      "copy"
+    );
+
+    textarea.remove();
+
+    showToast(
+      "📋 Copied."
+    );
+
+  }
+
+}
+
+
+/* =========================
+   FAVORITE
+========================= */
+
+function toggleFavorite(id){
+
+  const entry =
+    entries.find(
+      e =>
+        e.id === id
+    );
+
+
+  if(!entry){
+    return;
+  }
+
+
+  entry.favorite =
+    !entry.favorite;
+
+
+  entry.updated =
+    Date.now();
+
+
+  saveData();
+
+  render();
+
+
+  showToast(
+    entry.favorite
+      ? "⭐ Added to favorites."
+      : "☆ Removed from favorites."
+  );
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteCurrentEntry(){
+
+  if(!editingId){
+    return;
+  }
+
+
+  const entry =
+    entries.find(
+      e =>
+        e.id ===
+        editingId
+    );
+
+
+  if(!entry){
+    return;
+  }
+
+
+  if(
+    !confirm(
+      `Delete "${entry.title}"?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  entries =
+    entries.filter(
+      e =>
+        e.id !==
+        editingId
+    );
+
+
+  saveData();
+
+  closeEntryModal();
+
+  render();
+
+
+  showToast(
+    "🗑️ Entry deleted."
+  );
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function closeEntryModal(){
+
+  document.getElementById(
+    "entryModal"
+  ).classList.remove(
+    "show"
+  );
+
+  editingId =
+    null;
+
+}
+
+
+function outsideClose(event){
+
+  if(
+    event.target.id ===
+    "entryModal"
+  ){
+
+    closeEntryModal();
+
+  }
+
+}
+
+
+/* =========================
+   SECRET VISIBILITY
+========================= */
+
+function toggleSecretVisibility(){
+
+  const field =
+    document.getElementById(
+      "secret"
+    );
+
+
+  secretVisible =
+    !secretVisible;
+
+
+  if(secretVisible){
+
+    field.style.filter =
+      "none";
+
+    document.getElementById(
+      "eyeButton"
+    ).textContent =
+      "🙈";
+
+  }
+  else{
+
+    field.style.filter =
+      "blur(5px)";
+
+    document.getElementById(
+      "eyeButton"
+    ).textContent =
+      "👁️";
+
+  }
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+  document.body
+    .classList
+    .toggle("dark");
+
+
+  const dark =
+    document.body
+      .classList
+      .contains("dark");
+
+
+  localStorage.setItem(
+    "vaultPocketTheme",
+    dark ? "1" : "0"
+  );
+
+
+  document.getElementById(
+    "themeBtn"
+  ).textContent =
+    dark
+      ? "☀️"
+      : "🌙";
+
+}
+
+
+function loadTheme(){
+
+  const dark =
+    localStorage.getItem(
+      "vaultPocketTheme"
+    ) === "1";
+
+
+  if(dark){
+
+    document.body
+      .classList
+      .add("dark");
+
+
+    document.getElementById(
+      "themeBtn"
+    ).textContent =
+      "☀️";
+
+  }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+
+  toast.textContent =
+    message;
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      () =>
+        toast.classList.remove(
+          "show"
+        ),
+      2200
+    );
+
+}
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Escape"
+    ){
+
+      closeEntryModal();
+
+    }
+
+
+    if(
+      event.ctrlKey &&
+      event.key.toLowerCase() ===
+      "n"
+    ){
+
+      event.preventDefault();
+
+      if(
+        !document
+          .getElementById("app")
+          .classList
+          .contains("hidden")
+      ){
+
+        openEntryModal();
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================
+   START
+========================= */
+
+init();
+
+</script>
+
+</body>
+</html>

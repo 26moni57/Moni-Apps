@@ -1,0 +1,417 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>WaterPocket Tracker</title>
+
+<style>
+/* UNIFORM MIDNIGHT OCEAN STYLE */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#2563eb;
+--primary2:#3b82f6;
+--soft:#1e3a8a;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(15,23,42,.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#2563eb 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* HYDRO PROGRESS LOOK */
+.hydro-display-panel {
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:15px 0 5px;
+text-align:center
+}
+
+.hydro-digits {
+font-size:52px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+color:var(--text);
+margin-bottom:4px
+}
+
+.hydro-meta {
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+/* PROGRESS METERS TRACK BAR */
+.progress-container {
+width:100%;
+height:10px;
+background:var(--bg);
+border-radius:20px;
+margin-top:14px;
+border:1px solid var(--line);
+overflow:hidden
+}
+
+.progress-fill-bar {
+width:0%;
+height:100%;
+background:linear-gradient(90deg, var(--primary2), #06b6d4);
+transition:width 0.4s ease-out
+}
+
+/* QUICK LOG QUICK PRESETS GRID */
+.log-macros-grid {
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-top:2px
+}
+
+.btn-macro-drink {
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:14px 5px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:14px;
+color:var(--text);
+transition:border-color 0.15s, background 0.15s
+}
+.btn-macro-drink:active {
+border-color:var(--primary2);
+background:var(--soft)
+}
+
+.macro-emoji { font-size:20px; margin-bottom:4px; }
+.macro-title { font-size:12px; font-weight:800; }
+
+/* FEED LOG TILES STACK */
+.history-row-item {
+padding:10px 0;
+border-bottom:1px solid var(--line);
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:12px
+}
+.history-row-item:last-child { border-bottom:0 }
+
+.log-volume-label { font-weight:750; color:var(--text); }
+.log-time-label { font-size:10px; color:var(--muted); }
+
+.btn-delete-log {
+background:transparent;
+border:0;
+color:var(--danger);
+font-size:11px;
+font-weight:700;
+padding:2px 4px;
+cursor:pointer
+}
+
+.btn-reset-session {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--line);
+color:var(--text);
+font-weight:800;
+transition:opacity 0.2s
+}
+.btn-reset-session:active { opacity:0.9 }
+
+/* LIGHT SKIN OVERRIDE */
+body.light-theme {
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#dbeafe;
+--shadow:0 10px 30px rgba(51,65,85,0.06)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">💧</div>
+<div class="brand-name">WaterPocket</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Hydration Sync.<br>Track Daily Intake.</h1>
+<p>Log liquid measurements, evaluate target parameters, and maintain logs locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- DYNAMIC OVERVIEW MONITOR CARD -->
+<section class="card">
+<div class="hydro-display-panel">
+<div id="lblCurrentVolume" class="hydro-digits">0 ml</div>
+<span id="lblTargetProgress" class="hydro-meta">0% of 2000ml Target</span>
+</div>
+<div class="progress-container">
+<div id="progressFill" class="progress-fill-bar"></div>
+</div>
+</section>
+
+<!-- EXPRESS INPUT LOG CONTROLS -->
+<section class="card">
+<div class="title">
+<h2>⚡ Express Logger Presets</h2>
+</div>
+<div class="log-macros-grid">
+<button class="btn-macro-drink" onclick="logHydrationIntake(250)">
+<span class="macro-emoji">☕</span>
+<span class="macro-title">+250 ml</span>
+</button>
+<button class="btn-macro-drink" onclick="logHydrationIntake(500)">
+<span class="macro-emoji">🥛</span>
+<span class="macro-title">+500 ml</span>
+</button>
+<button class="btn-macro-drink" onclick="logHydrationIntake(750)">
+<span class="macro-emoji">🍼</span>
+<span class="macro-title">+750 ml</span>
+</button>
+</div>
+</section>
+
+<!-- TIMELINE RECENT LOG HISTORIES -->
+<section class="card">
+<div class="title">
+<h2>📜 Intake Log History</h2>
+</div>
+<div id="recentHydrationHistoryBox">
+<!-- Generated dynamically via Javascript actions loops -->
+</div>
+</section>
+
+<button class="btn-reset-session" onclick="resetDayHydrationLogs()">Reset Today's Logs</button>
+
+</main>
+
+</div>
+
+<script>
+// Base hydration target variables configuration values
+const DAILY_VOLUME_TARGET = 2000; 
+
+// Fetch state logs out of local device sandbox workspace spaces
+let hydrationHistoryLogs = JSON.parse(localStorage.getItem("water_pocket_history")) || [];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function logHydrationIntake(amountMlValue) {
+    const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    
+    hydrationHistoryLogs.unshift({
+        id: Date.now(),
+        volume: amountMlValue,
+        time: timeStr
+    });
+    
+    saveAndRedrawView();
+}
+
+function deleteHydrationLog(id) {
+    hydrationHistoryLogs = hydrationHistoryLogs.filter(l => l.id !== id);
+    saveAndRender();
+}
+
+function resetDayHydrationLogs() {
+    if(confirm("Completely wipe down today's fluid tracking history values?")) {
+        hydrationHistoryLogs = [];
+        saveAndRedrawView();
+    }
+}
+
+function saveAndRedrawView() {
+    localStorage.setItem("water_pocket_history", JSON.stringify(hydrationHistoryLogs));
+    render();
+}
+
+function render() {
+    // Summarize logged volumes sum tracking math matrix pipelines
+    const combinedTotalVolume = hydrationHistoryLogs.reduce((acc, curr) => acc + curr.volume, 0);
+    const percentageScoreInt = Math.min(100, Math.floor((combinedTotalVolume / DAILY_VOLUME_TARGET) * 100));
+    
+    // Bind numerical indices adjustments to dashboard monitor elements nodes
+    document.getElementById("lblCurrentVolume").innerText = `${combinedTotalVolume} ml`;
+    document.getElementById("lblTargetProgress").innerText = `${percentageScoreInt}% of ${DAILY_VOLUME_TARGET}ml Target`;
+    document.getElementById("progressFill").style.width = `${percentageScoreInt}%`;
+    
+    const container = document.getElementById("recentHydrationHistoryBox");
+    
+    if(hydrationHistoryLogs.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:15px; color:var(--muted); font-size:12px;">No water logged yet. Tap a preset above!</div>`;
+        return;
+    }
+    
+    // Limit list length array boundaries safely to retain sleek layout design heights
+    const topLogs = hydrationHistoryLogs.slice(0, 4);
+    container.innerHTML = topLogs.map(log => `
+        <div class="history-row-item">
+            <span class="log-volume-label">💧 +${log.volume} ml</span>
+            <div>
+                <span class="log-time-label" style="margin-right:8px;">Logged at ${log.time}</span>
+                <button class="btn-delete-log" onclick="deleteHydrationLog(${log.id})">✕</button>
+            </div>
+        </div>
+    `).join("");
+}
+
+// Initial structural rendering activation blueprint loop
+render();
+</script>
+
+</body>
+</html>

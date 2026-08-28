@@ -1,0 +1,2013 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>BookPocket — Personal Library</title>
+
+<style>
+:root{
+  --bg:#f6f5fb;
+  --card:#fff;
+  --text:#1d1930;
+  --muted:#817b91;
+  --line:#e8e4ef;
+  --primary:#7c3aed;
+  --primary2:#8b5cf6;
+  --soft:#f1ebff;
+  --green:#16a34a;
+  --green-soft:#eaf8ef;
+  --orange:#f59e0b;
+  --orange-soft:#fff7df;
+  --red:#ef4444;
+  --shadow:0 12px 35px rgba(48,32,90,.08);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:100%;
+  max-width:570px;
+  min-height:100vh;
+  margin:auto;
+}
+
+/* HEADER */
+
+.header{
+  position:relative;
+  overflow:hidden;
+  padding:18px 18px 26px;
+  color:#fff;
+  background:
+    linear-gradient(
+      145deg,
+      #4c1d95,
+      #7c3aed 58%,
+      #a78bfa
+    );
+  border-radius:0 0 30px 30px;
+}
+
+.header:before,
+.header:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+
+.header:before{
+  width:270px;
+  height:270px;
+  right:-145px;
+  top:-180px;
+}
+
+.header:after{
+  width:200px;
+  height:200px;
+  left:-130px;
+  bottom:-155px;
+}
+
+.topbar{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.16);
+  font-size:21px;
+}
+
+.brand b{
+  display:block;
+  font-size:18px;
+}
+
+.brand span{
+  display:block;
+  margin-top:2px;
+  color:#ede9fe;
+  font-size:7px;
+}
+
+.theme{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+}
+
+.hero{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:29px;
+  line-height:1.05;
+  letter-spacing:-.8px;
+}
+
+.hero p{
+  max-width:370px;
+  margin:8px 0 0;
+  color:#ede9fe;
+  font-size:9px;
+  line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+  padding:15px;
+}
+
+.card{
+  margin-bottom:13px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+
+/* SEARCH */
+
+.search{
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  height:44px;
+  padding:0 40px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:10px;
+}
+
+.search input:focus{
+  border-color:var(--primary);
+}
+
+.search-icon{
+  position:absolute;
+  left:14px;
+  top:13px;
+  font-size:14px;
+}
+
+.clear{
+  position:absolute;
+  right:7px;
+  top:7px;
+  width:30px;
+  height:30px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:var(--muted);
+}
+
+.filters{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:9px;
+}
+
+.filters select{
+  width:100%;
+  height:37px;
+  padding:0 9px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  outline:none;
+  background:var(--card);
+  color:var(--text);
+  font-size:8px;
+}
+
+.add-btn{
+  width:100%;
+  height:38px;
+  margin-top:8px;
+  border:0;
+  border-radius:10px;
+  background:var(--primary);
+  color:#fff;
+  font-size:8px;
+  font-weight:900;
+}
+
+.add-btn:hover{
+  background:#6d28d9;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+}
+
+.stat{
+  padding:11px 3px;
+  border-radius:14px;
+  text-align:center;
+  background:var(--bg);
+}
+
+.stat-icon{
+  font-size:16px;
+}
+
+.stat b{
+  display:block;
+  margin-top:3px;
+  font-size:16px;
+}
+
+.stat span{
+  display:block;
+  margin-top:2px;
+  color:var(--muted);
+  font-size:6.5px;
+}
+
+/* SECTION */
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:11px;
+}
+
+.section-head h2{
+  margin:0;
+  font-size:14px;
+}
+
+.section-head span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* BOOK LIST */
+
+.book-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.book{
+  display:flex;
+  gap:10px;
+  min-width:0;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--card);
+  transition:.2s;
+}
+
+.book:hover{
+  border-color:#cfc0f7;
+  transform:translateY(-1px);
+}
+
+.cover{
+  width:52px;
+  height:70px;
+  flex:0 0 52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:5px;
+  overflow:hidden;
+  border-radius:7px;
+  background:
+    linear-gradient(
+      145deg,
+      #ddd6fe,
+      #8b5cf6
+    );
+  color:#fff;
+  text-align:center;
+  font-size:8px;
+  font-weight:900;
+  box-shadow:0 5px 12px rgba(124,58,237,.18);
+}
+
+.cover span{
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+}
+
+.book-info{
+  min-width:0;
+  flex:1;
+}
+
+.book-title{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+  font-weight:900;
+}
+
+.author{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:7.5px;
+}
+
+.book-bottom{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:8px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:18px;
+  padding:0 7px;
+  border-radius:7px;
+  font-size:6.5px;
+  font-weight:800;
+}
+
+.badge.want{
+  background:var(--soft);
+  color:var(--primary);
+}
+
+.badge.reading{
+  background:var(--orange-soft);
+  color:#b45309;
+}
+
+.badge.finished{
+  background:var(--green-soft);
+  color:var(--green);
+}
+
+.rating{
+  color:#f59e0b;
+  font-size:7px;
+}
+
+.book-actions{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.small{
+  width:28px;
+  height:28px;
+  border:0;
+  border-radius:8px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.small:hover{
+  color:var(--primary);
+}
+
+/* EMPTY */
+
+.empty{
+  padding:28px 10px;
+  text-align:center;
+}
+
+.empty-icon{
+  font-size:38px;
+}
+
+.empty b{
+  display:block;
+  margin-top:7px;
+  font-size:10px;
+}
+
+.empty p{
+  max-width:280px;
+  margin:5px auto 0;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.5;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:15px;
+  background:rgba(18,12,35,.58);
+  backdrop-filter:blur(5px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:535px;
+  max-height:91vh;
+  overflow:auto;
+  padding:18px;
+  border-radius:23px;
+  background:var(--card);
+  box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.modal-head h3{
+  margin:0;
+  font-size:15px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:9px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.field{
+  margin-bottom:11px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  font-size:8px;
+  font-weight:900;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:9px;
+}
+
+.field textarea{
+  min-height:85px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:var(--primary);
+}
+
+.modal-actions{
+  display:flex;
+  gap:7px;
+  margin-top:15px;
+}
+
+.modal-actions button{
+  flex:1;
+  height:40px;
+  border:0;
+  border-radius:10px;
+  font-size:9px;
+  font-weight:900;
+}
+
+.cancel{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.save{
+  background:var(--primary);
+  color:#fff;
+}
+
+/* STAR PICKER */
+
+.stars{
+  display:flex;
+  gap:4px;
+}
+
+.star{
+  width:34px;
+  height:34px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:var(--bg);
+  color:#c7c1d2;
+  font-size:17px;
+}
+
+.star.active{
+  color:#f59e0b;
+  background:var(--orange-soft);
+}
+
+/* DETAILS */
+
+.detail-cover{
+  width:85px;
+  height:112px;
+  display:grid;
+  place-items:center;
+  margin:4px auto 13px;
+  padding:10px;
+  border-radius:10px;
+  background:linear-gradient(145deg,#ddd6fe,#7c3aed);
+  color:#fff;
+  text-align:center;
+  font-size:11px;
+  font-weight:900;
+}
+
+.detail-title{
+  text-align:center;
+  font-size:16px;
+  font-weight:900;
+}
+
+.detail-author{
+  margin-top:4px;
+  color:var(--muted);
+  text-align:center;
+  font-size:8px;
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:15px;
+}
+
+.detail-box{
+  padding:10px;
+  border-radius:11px;
+  background:var(--bg);
+}
+
+.detail-box span{
+  display:block;
+  color:var(--muted);
+  font-size:7px;
+}
+
+.detail-box b{
+  display:block;
+  margin-top:4px;
+  font-size:9px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  z-index:100;
+  max-width:calc(100% - 30px);
+  padding:11px 15px;
+  border-radius:11px;
+  background:#171320;
+  color:#fff;
+  font-size:9px;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+  --bg:#0d0b17;
+  --card:#171426;
+  --text:#f7f4ff;
+  --muted:#a7a0b7;
+  --line:#2b253d;
+  --soft:#251d45;
+  --green-soft:#12271a;
+  --orange-soft:#302714;
+  --shadow:0 15px 40px rgba(0,0,0,.32);
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+
+  body{
+    padding:20px 0;
+  }
+
+  .app{
+    min-height:calc(100vh - 40px);
+    overflow:hidden;
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(30,20,60,.14);
+  }
+
+  .modal{
+    align-items:center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+  <div class="topbar">
+
+    <div class="brand">
+
+      <div class="logo">📚</div>
+
+      <div>
+        <b>BookPocket</b>
+        <span>Your personal offline library.</span>
+      </div>
+
+    </div>
+
+    <button
+      class="theme"
+      id="themeBtn"
+      onclick="toggleTheme()"
+    >🌙</button>
+
+  </div>
+
+  <div class="hero">
+
+    <h1>
+      Your books.<br>
+      Your little library.
+    </h1>
+
+    <p>
+      Keep track of what you're reading,
+      what you loved, and what you want to read next.
+    </p>
+
+  </div>
+
+</header>
+
+
+<main class="content">
+
+  <!-- SEARCH -->
+
+  <section class="card">
+
+    <div class="search">
+
+      <span class="search-icon">🔍</span>
+
+      <input
+        id="search"
+        type="search"
+        placeholder="Search books or authors..."
+        oninput="render()"
+      >
+
+      <button
+        class="clear"
+        onclick="clearSearch()"
+      >×</button>
+
+    </div>
+
+    <div class="filters">
+
+      <select
+        id="statusFilter"
+        onchange="render()"
+      >
+        <option value="all">📚 All books</option>
+        <option value="want">📌 Want to Read</option>
+        <option value="reading">📖 Reading</option>
+        <option value="finished">✅ Finished</option>
+        <option value="favorite">⭐ Favorites</option>
+      </select>
+
+      <select
+        id="sortFilter"
+        onchange="render()"
+      >
+        <option value="recent">Recently Added</option>
+        <option value="title">Title A–Z</option>
+        <option value="author">Author A–Z</option>
+        <option value="rating">Highest Rated</option>
+      </select>
+
+    </div>
+
+    <button
+      class="add-btn"
+      onclick="openBookModal()"
+    >
+      + Add a Book
+    </button>
+
+  </section>
+
+
+  <!-- STATS -->
+
+  <section class="card">
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-icon">📚</div>
+        <b id="total">0</b>
+        <span>Total</span>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">📖</div>
+        <b id="reading">0</b>
+        <span>Reading</span>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">✅</div>
+        <b id="finished">0</b>
+        <span>Finished</span>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">⭐</div>
+        <b id="favorites">0</b>
+        <span>Favorites</span>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- BOOKS -->
+
+  <section class="card">
+
+    <div class="section-head">
+
+      <h2 id="listTitle">📚 My Library</h2>
+
+      <span id="countLabel">0 books</span>
+
+    </div>
+
+    <div
+      class="book-list"
+      id="bookList"
+    ></div>
+
+  </section>
+
+</main>
+
+
+<footer style="
+  padding:5px 15px 25px;
+  text-align:center;
+  color:var(--muted);
+  font-size:7px;
+">
+  🔒 BookPocket works offline and stores your library locally.
+</footer>
+
+</div>
+
+
+<!-- BOOK MODAL -->
+
+<div
+  class="modal"
+  id="bookModal"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h3 id="modalTitle">📚 Add Book</h3>
+
+      <button
+        class="close"
+        onclick="closeModal()"
+      >×</button>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Book Title</label>
+
+      <input
+        id="bookTitle"
+        maxlength="120"
+        placeholder="e.g. Atomic Habits"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Author</label>
+
+      <input
+        id="bookAuthor"
+        maxlength="100"
+        placeholder="e.g. James Clear"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Genre</label>
+
+      <input
+        id="bookGenre"
+        maxlength="50"
+        placeholder="e.g. Self Development"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Status</label>
+
+      <select id="bookStatus">
+
+        <option value="want">📌 Want to Read</option>
+
+        <option value="reading">📖 Currently Reading</option>
+
+        <option value="finished">✅ Finished</option>
+
+      </select>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Rating</label>
+
+      <div
+        class="stars"
+        id="starPicker"
+      >
+
+        <button class="star" data-rating="1">★</button>
+        <button class="star" data-rating="2">★</button>
+        <button class="star" data-rating="3">★</button>
+        <button class="star" data-rating="4">★</button>
+        <button class="star" data-rating="5">★</button>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Notes</label>
+
+      <textarea
+        id="bookNotes"
+        placeholder="Favorite quotes, thoughts, reminders..."
+      ></textarea>
+
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="cancel"
+        onclick="closeModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="save"
+        onclick="saveBook()"
+      >
+        Save Book
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- DETAILS MODAL -->
+
+<div
+  class="modal"
+  id="detailModal"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h3>📖 Book Details</h3>
+
+      <button
+        class="close"
+        onclick="closeDetail()"
+      >×</button>
+
+    </div>
+
+    <div id="detailContent"></div>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* ================================
+   STORAGE
+================================ */
+
+const STORAGE_KEY = "bookPocketData";
+const THEME_KEY = "bookPocketTheme";
+
+let books =
+  JSON.parse(
+    localStorage.getItem(STORAGE_KEY) || "[]"
+  );
+
+if(!Array.isArray(books)){
+  books=[];
+}
+
+let editingId=null;
+let selectedRating=0;
+
+
+/* ================================
+   HELPERS
+================================ */
+
+function uid(){
+
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2,8);
+
+}
+
+function save(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(books)
+  );
+
+}
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent=message;
+
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer=setTimeout(()=>{
+    toast.classList.remove("show");
+  },2200);
+
+}
+
+function formatDate(date){
+
+  return new Date(date).toLocaleDateString(
+    undefined,
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
+
+}
+
+function stars(rating){
+
+  rating=Number(rating)||0;
+
+  return "★★★★★"
+    .split("")
+    .map((s,i)=>
+      i<rating ? "★" : "☆"
+    )
+    .join("");
+
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+function statusLabel(status){
+
+  if(status==="reading")
+    return "📖 Reading";
+
+  if(status==="finished")
+    return "✅ Finished";
+
+  return "📌 Want to Read";
+
+}
+
+function statusClass(status){
+
+  if(status==="reading")
+    return "reading";
+
+  if(status==="finished")
+    return "finished";
+
+  return "want";
+
+}
+
+
+/* ================================
+   MODAL
+================================ */
+
+function openBookModal(book=null){
+
+  editingId =
+    book ? book.id : null;
+
+  document.getElementById("modalTitle")
+    .textContent =
+      book
+        ? "✏️ Edit Book"
+        : "📚 Add Book";
+
+  document.getElementById("bookTitle")
+    .value =
+      book?.title || "";
+
+  document.getElementById("bookAuthor")
+    .value =
+      book?.author || "";
+
+  document.getElementById("bookGenre")
+    .value =
+      book?.genre || "";
+
+  document.getElementById("bookStatus")
+    .value =
+      book?.status || "want";
+
+  document.getElementById("bookNotes")
+    .value =
+      book?.notes || "";
+
+  selectedRating =
+    book?.rating || 0;
+
+  updateStars();
+
+  document.getElementById("bookModal")
+    .classList.add("show");
+
+  setTimeout(()=>{
+    document.getElementById("bookTitle")
+      .focus();
+  },100);
+
+}
+
+
+function closeModal(){
+
+  document.getElementById("bookModal")
+    .classList.remove("show");
+
+  editingId=null;
+
+}
+
+
+function closeDetail(){
+
+  document.getElementById("detailModal")
+    .classList.remove("show");
+
+}
+
+
+/* ================================
+   STAR PICKER
+================================ */
+
+document
+  .querySelectorAll(".star")
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+
+        selectedRating =
+          Number(button.dataset.rating);
+
+        updateStars();
+
+      }
+    );
+
+  });
+
+
+function updateStars(){
+
+  document
+    .querySelectorAll(".star")
+    .forEach(button=>{
+
+      const rating =
+        Number(button.dataset.rating);
+
+      button.classList.toggle(
+        "active",
+        rating<=selectedRating
+      );
+
+    });
+
+}
+
+
+/* ================================
+   SAVE BOOK
+================================ */
+
+function saveBook(){
+
+  const title =
+    document.getElementById("bookTitle")
+      .value.trim();
+
+  const author =
+    document.getElementById("bookAuthor")
+      .value.trim();
+
+  const genre =
+    document.getElementById("bookGenre")
+      .value.trim();
+
+  const status =
+    document.getElementById("bookStatus")
+      .value;
+
+  const notes =
+    document.getElementById("bookNotes")
+      .value.trim();
+
+  if(!title){
+
+    showToast("Please enter the book title.");
+
+    return;
+
+  }
+
+  if(editingId){
+
+    const book =
+      books.find(
+        b=>b.id===editingId
+      );
+
+    if(book){
+
+      book.title=title;
+      book.author=author || "Unknown Author";
+      book.genre=genre || "Other";
+      book.status=status;
+      book.rating=selectedRating;
+      book.notes=notes;
+      book.updated=Date.now();
+
+    }
+
+    showToast("✏️ Book updated.");
+
+  }
+  else{
+
+    books.unshift({
+
+      id:uid(),
+
+      title,
+
+      author:
+        author || "Unknown Author",
+
+      genre:
+        genre || "Other",
+
+      status,
+
+      rating:selectedRating,
+
+      notes,
+
+      favorite:false,
+
+      created:Date.now(),
+
+      updated:Date.now()
+
+    });
+
+    showToast("📚 Book added.");
+
+  }
+
+  save();
+
+  closeModal();
+
+  render();
+
+}
+
+
+/* ================================
+   FILTER
+================================ */
+
+function getBooks(){
+
+  const query =
+    document.getElementById("search")
+      .value.trim()
+      .toLowerCase();
+
+  const status =
+    document.getElementById("statusFilter")
+      .value;
+
+  const sort =
+    document.getElementById("sortFilter")
+      .value;
+
+  let result=[...books];
+
+  if(status==="favorite"){
+
+    result=result.filter(
+      b=>b.favorite
+    );
+
+  }
+  else if(status!=="all"){
+
+    result=result.filter(
+      b=>b.status===status
+    );
+
+  }
+
+  if(query){
+
+    result=result.filter(book=>
+      book.title.toLowerCase().includes(query) ||
+      book.author.toLowerCase().includes(query) ||
+      book.genre.toLowerCase().includes(query)
+    );
+
+  }
+
+  if(sort==="title"){
+
+    result.sort(
+      (a,b)=>
+        a.title.localeCompare(b.title)
+    );
+
+  }
+  else if(sort==="author"){
+
+    result.sort(
+      (a,b)=>
+        a.author.localeCompare(b.author)
+    );
+
+  }
+  else if(sort==="rating"){
+
+    result.sort(
+      (a,b)=>
+        (b.rating||0)-(a.rating||0)
+    );
+
+  }
+  else{
+
+    result.sort(
+      (a,b)=>
+        b.updated-a.updated
+    );
+
+  }
+
+  return result;
+
+}
+
+
+/* ================================
+   RENDER
+================================ */
+
+function render(){
+
+  updateStats();
+
+  const list =
+    document.getElementById("bookList");
+
+  const result =
+    getBooks();
+
+  const status =
+    document.getElementById("statusFilter")
+      .value;
+
+  document.getElementById("countLabel")
+    .textContent =
+      `${result.length} ${
+        result.length===1
+          ? "book"
+          : "books"
+      }`;
+
+  if(status==="reading")
+    document.getElementById("listTitle")
+      .textContent="📖 Currently Reading";
+
+  else if(status==="finished")
+    document.getElementById("listTitle")
+      .textContent="✅ Finished Books";
+
+  else if(status==="want")
+    document.getElementById("listTitle")
+      .textContent="📌 Want to Read";
+
+  else if(status==="favorite")
+    document.getElementById("listTitle")
+      .textContent="⭐ Favorites";
+
+  else
+    document.getElementById("listTitle")
+      .textContent="📚 My Library";
+
+
+  if(!result.length){
+
+    list.innerHTML=`
+
+      <div class="empty">
+
+        <div class="empty-icon">📚</div>
+
+        <b>No books found</b>
+
+        <p>
+          Add your first book to start building
+          your personal library.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  list.innerHTML =
+    result.map(renderBook).join("");
+
+}
+
+
+function renderBook(book){
+
+  return `
+
+    <div class="book">
+
+      <div
+        class="cover"
+        onclick="showDetails('${book.id}')"
+        style="cursor:pointer"
+      >
+        <span>
+          ${escapeHTML(book.title)}
+        </span>
+      </div>
+
+
+      <div
+        class="book-info"
+        onclick="showDetails('${book.id}')"
+        style="cursor:pointer"
+      >
+
+        <div class="book-title">
+          ${escapeHTML(book.title)}
+        </div>
+
+        <div class="author">
+          ${escapeHTML(book.author)}
+        </div>
+
+        <div class="book-bottom">
+
+          <span
+            class="badge ${statusClass(book.status)}"
+          >
+            ${statusLabel(book.status)}
+          </span>
+
+          <span class="rating">
+            ${stars(book.rating)}
+          </span>
+
+          ${
+            book.genre
+              ? `
+                <span
+                  class="badge"
+                  style="
+                    background:var(--bg);
+                    color:var(--muted)
+                  "
+                >
+                  ${escapeHTML(book.genre)}
+                </span>
+              `
+              : ""
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="book-actions">
+
+        <button
+          class="small"
+          onclick="toggleFavorite('${book.id}')"
+          title="Favorite"
+        >
+          ${book.favorite ? "⭐" : "☆"}
+        </button>
+
+        <button
+          class="small"
+          onclick="editBook('${book.id}')"
+          title="Edit"
+        >
+          ✏️
+        </button>
+
+        <button
+          class="small"
+          onclick="deleteBook('${book.id}')"
+          title="Delete"
+        >
+          🗑️
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ================================
+   STATS
+================================ */
+
+function updateStats(){
+
+  document.getElementById("total")
+    .textContent=books.length;
+
+  document.getElementById("reading")
+    .textContent =
+      books.filter(
+        b=>b.status==="reading"
+      ).length;
+
+  document.getElementById("finished")
+    .textContent =
+      books.filter(
+        b=>b.status==="finished"
+      ).length;
+
+  document.getElementById("favorites")
+    .textContent =
+      books.filter(
+        b=>b.favorite
+      ).length;
+
+}
+
+
+/* ================================
+   FAVORITE
+================================ */
+
+function toggleFavorite(id){
+
+  const book =
+    books.find(
+      b=>b.id===id
+    );
+
+  if(!book) return;
+
+  book.favorite =
+    !book.favorite;
+
+  book.updated=Date.now();
+
+  save();
+
+  render();
+
+  showToast(
+    book.favorite
+      ? "⭐ Added to favorites."
+      : "☆ Removed from favorites."
+  );
+
+}
+
+
+/* ================================
+   EDIT
+================================ */
+
+function editBook(id){
+
+  const book =
+    books.find(
+      b=>b.id===id
+    );
+
+  if(book){
+    openBookModal(book);
+  }
+
+}
+
+
+/* ================================
+   DELETE
+================================ */
+
+function deleteBook(id){
+
+  const book =
+    books.find(
+      b=>b.id===id
+    );
+
+  if(!book) return;
+
+  const ok =
+    confirm(
+      `Delete "${book.title}"?`
+    );
+
+  if(!ok) return;
+
+  books =
+    books.filter(
+      b=>b.id!==id
+    );
+
+  save();
+
+  render();
+
+  showToast("🗑️ Book deleted.");
+
+}
+
+
+/* ================================
+   DETAILS
+================================ */
+
+function showDetails(id){
+
+  const book =
+    books.find(
+      b=>b.id===id
+    );
+
+  if(!book) return;
+
+  document.getElementById("detailContent")
+    .innerHTML=`
+
+      <div class="detail-cover">
+
+        ${escapeHTML(book.title)}
+
+      </div>
+
+
+      <div class="detail-title">
+
+        ${escapeHTML(book.title)}
+
+      </div>
+
+
+      <div class="detail-author">
+
+        by ${escapeHTML(book.author)}
+
+      </div>
+
+
+      <div
+        style="
+          margin-top:8px;
+          text-align:center;
+          color:#f59e0b;
+          font-size:12px
+        "
+      >
+        ${stars(book.rating)}
+      </div>
+
+
+      <div class="detail-grid">
+
+        <div class="detail-box">
+          <span>Status</span>
+          <b>
+            ${statusLabel(book.status)}
+          </b>
+        </div>
+
+        <div class="detail-box">
+          <span>Genre</span>
+          <b>
+            ${escapeHTML(book.genre)}
+          </b>
+        </div>
+
+        <div class="detail-box">
+          <span>Added</span>
+          <b>
+            ${formatDate(book.created)}
+          </b>
+        </div>
+
+        <div class="detail-box">
+          <span>Favorite</span>
+          <b>
+            ${book.favorite ? "Yes ⭐" : "No"}
+          </b>
+        </div>
+
+      </div>
+
+
+      ${
+        book.notes
+          ? `
+            <div
+              style="
+                margin-top:12px;
+                padding:12px;
+                border-radius:12px;
+                background:var(--bg);
+                font-size:9px;
+                line-height:1.6;
+                white-space:pre-wrap
+              "
+            >
+              <strong>📝 Notes</strong><br><br>
+              ${escapeHTML(book.notes)}
+            </div>
+          `
+          : `
+            <div
+              style="
+                margin-top:12px;
+                padding:12px;
+                border-radius:12px;
+                background:var(--bg);
+                color:var(--muted);
+                font-size:8px;
+                text-align:center
+              "
+            >
+              No notes added.
+            </div>
+          `
+      }
+
+
+      <div class="modal-actions">
+
+        <button
+          class="cancel"
+          onclick="closeDetail()"
+        >
+          Close
+        </button>
+
+        <button
+          class="save"
+          onclick="editBook('${book.id}');closeDetail()"
+        >
+          ✏️ Edit Book
+        </button>
+
+      </div>
+
+    `;
+
+  document.getElementById("detailModal")
+    .classList.add("show");
+
+}
+
+
+/* ================================
+   SEARCH
+================================ */
+
+function clearSearch(){
+
+  document.getElementById("search")
+    .value="";
+
+  render();
+
+}
+
+
+/* ================================
+   THEME
+================================ */
+
+function toggleTheme(){
+
+  document.body.classList.toggle("dark");
+
+  const dark =
+    document.body.classList.contains("dark");
+
+  localStorage.setItem(
+    THEME_KEY,
+    dark ? "1" : "0"
+  );
+
+  document.getElementById("themeBtn")
+    .textContent =
+      dark ? "☀️" : "🌙";
+
+}
+
+function loadTheme(){
+
+  if(
+    localStorage.getItem(THEME_KEY)==="1"
+  ){
+
+    document.body.classList.add("dark");
+
+    document.getElementById("themeBtn")
+      .textContent="☀️";
+
+  }
+
+}
+
+
+/* ================================
+   MODAL CLICK OUTSIDE
+================================ */
+
+document
+  .querySelectorAll(".modal")
+  .forEach(modal=>{
+
+    modal.addEventListener(
+      "click",
+      e=>{
+
+        if(e.target===modal){
+
+          modal.classList.remove("show");
+
+        }
+
+      }
+    );
+
+  });
+
+
+/* ================================
+   ESC
+================================ */
+
+document.addEventListener(
+  "keydown",
+  e=>{
+
+    if(e.key==="Escape"){
+
+      document
+        .querySelectorAll(".modal.show")
+        .forEach(modal=>{
+          modal.classList.remove("show");
+        });
+
+    }
+
+  }
+);
+
+
+/* ================================
+   INIT
+================================ */
+
+loadTheme();
+render();
+
+</script>
+
+</body>
+</html>

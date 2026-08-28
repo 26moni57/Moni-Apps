@@ -1,0 +1,458 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0d9488">
+<title>PassGen Stealth Vault</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Stealth Slate Carbon & Neon Teal Guard Security Look */
+:root{
+--bg:#090d16;
+--card:#0f172a;
+--text:#f8fafc;
+--muted:#38bdf8;
+--line:#1e293b;
+--primary:#0d9488;
+--primary2:#14b8a6;
+--soft:#115e59;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#f43f5e;
+--shadow:0 12px 35px rgba(13,148,136,0.1)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - SECURE CARBON MATRIX TO NEON TEAL GLOW */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#020617,#0f172a 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:2px solid var(--primary2)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(20,184,166,0.08);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* PASSWORD VISUAL DISPLAY KEYHOLE */
+.output-box-wrapper {
+position:relative;
+margin-bottom:4px
+}
+
+.output-box-wrapper input {
+width:100%;
+padding:15px 46px 15px 15px;
+border:1px solid var(--line);
+border-radius:14px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-family:"Courier New",Courier,monospace;
+font-size:18px;
+font-weight:700;
+letter-spacing:1px;
+text-align:center
+}
+
+.copy-btn-node {
+position:absolute;
+right:10px;
+top:9px;
+width:36px;
+height:36px;
+border:0;
+border-radius:9px;
+background:var(--card);
+color:var(--text);
+font-size:15px;
+display:grid;
+place-items:center
+}
+
+.complexity-badge {
+display:inline-block;
+margin-top:10px;
+padding:5px 12px;
+border-radius:8px;
+font-size:10px;
+font-weight:800;
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+.complexity-badge.weak{ background:#4c1d24; color:var(--danger); }
+.complexity-badge.medium{ background:#422006; color:#f59e0b; }
+.complexity-badge.strong{ background:var(--green-soft); color:var(--green); }
+
+/* SLIDER RANGE & CHECKBOX LAYOUTS */
+.field{
+margin-bottom:14px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.slider-track-box {
+display:flex;
+align-items:center;
+gap:12px
+}
+
+.slider-track-box input[type="range"]{
+flex:1;
+accent-color:var(--primary);
+cursor:pointer
+}
+
+.length-counter-val {
+font-size:15px;
+font-weight:800;
+color:var(--primary2);
+min-width:20px
+}
+
+.check-row-item {
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:11px 0;
+border-bottom:1px solid var(--line)
+}
+.check-row-item:last-child{border-bottom:0}
+
+.check-label-title {
+font-size:13px;
+font-weight:700
+}
+
+.check-row-item input[type="checkbox"]{
+width:18px;
+height:18px;
+accent-color:var(--primary);
+cursor:pointer
+}
+
+.btn-action-master {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:var(--bg);
+font-weight:900;
+font-size:15px;
+transition:opacity 0.2s
+}
+.btn-action-master:active { opacity:0.9 }
+
+/* POPUP NOTIFICATION TOAST */
+.toast{
+position:fixed;
+left:50%;
+bottom:40px;
+z-index:50;
+transform:translate(-50%,20px);
+opacity:0;
+padding:11px 15px;
+border-radius:12px;
+background:#f8fafc;
+color:#090d16;
+font-size:11px;
+font-weight:700;
+white-space:nowrap;
+transition:.25s;
+pointer-events:none;
+box-shadow:0 10px 25px rgba(0,0,0,0.3)
+}
+
+.toast.show{
+opacity:1;
+transform:translate(-50%,0)
+}
+
+/* STEALTH INTENSE LIGHT INVERSION SKIN OVERRIDE */
+body.light-theme {
+--bg:#f0fdfa;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#0d9488;
+--line:#cbd5e1;
+--shadow:0 10px 25px rgba(13,148,136,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🛡️</div>
+<div class="brand-name">PassGen</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Stealth Cryptbox.<br>Unbreakable Keys.</h1>
+<p>Generate highly-secure random strings locally on your device hardware layout blocks.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- KEY DISPLAY NODE MONITOR -->
+<section class="card">
+<div class="output-box-wrapper">
+<input type="text" id="passOutputBoxNode" readonly value="Click Generate">
+<button class="copy-btn-node" onclick="copyCipherToClipboard()" title="Copy token">📋</button>
+</div>
+<div style="text-align: center;">
+<span id="lblComplexityMeter" class="complexity-badge strong">Status: Ready</span>
+</div>
+</section>
+
+<!-- CIPHER FORM DESIGN OPTIONS PARAMETERS -->
+<section class="card">
+<div class="title">
+<h2>⚙️ Matrix Parameters</h2>
+</div>
+
+<div class="field">
+<label>CHARACTER POOL LENGTH MATRIX</label>
+<div class="slider-track-box">
+<input type="range" id="sliderPassLength" min="6" max="32" value="14" oninput="updatePassLengthSliderMetrics(this.value)">
+<span class="length-counter-val" id="lblLengthIndicator">14</span>
+</div>
+</div>
+
+<div class="check-options-stack">
+<div class="check-row-item">
+<span class="check-label-title">Uppercase Letters (A-Z)</span>
+<input type="checkbox" id="chkUpper" checked onchange="fireRandomKeyCalculation()">
+</div>
+<div class="check-row-item">
+<span class="check-label-title">Lowercase Letters (a-z)</span>
+<input type="checkbox" id="chkLower" checked onchange="fireRandomKeyCalculation()">
+</div>
+<div class="check-row-item">
+<span class="check-label-title">Numeric Digits (0-9)</span>
+<input type="checkbox" id="chkNumbers" checked onchange="fireRandomKeyCalculation()">
+</div>
+<div class="check-row-item">
+<span class="check-label-title">Special Symbols (!@#$)</span>
+<input type="checkbox" id="chkSymbols" checked onchange="fireRandomKeyCalculation()">
+</div>
+</div>
+</section>
+
+<button class="btn-action-master" onclick="fireRandomKeyCalculation()">Generate Security Cipher</button>
+
+</main>
+
+<!-- COMPLETED ACTION TOAST NOTIFICATION -->
+<div class="toast" id="toast">Copied cipher to clipboard!</div>
+
+</div>
+
+<script>
+function updatePassLengthSliderMetrics(val) {
+    document.getElementById("lblLengthIndicator").innerText = val;
+    fireRandomKeyCalculation();
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function triggerToastNotification(msg) {
+    const t = document.getElementById("toast");
+    t.innerText = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2000);
+}
+
+function fireRandomKeyCalculation() {
+    const targetLength = parseInt(document.getElementById("sliderPassLength").value);
+    const hasUpper = document.getElementById("chkUpper").checked;
+    const hasLower = document.getElementById("chkLower").checked;
+    const hasNumbers = document.getElementById("chkNumbers").checked;
+    const hasSymbols = document.getElementById("chkSymbols").checked;
+
+    const upperPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowerPool = "abcdefghijklmnopqrstuvwxyz";
+    const numberPool = "0123456789";
+    const symbolPool = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+    let cumulativePool = "";
+    if (hasUpper) cumulativePool += upperPool;
+    if (hasLower) cumulativePool += lowerPool;
+    if (hasNumbers) cumulativePool += numberPool;
+    if (hasSymbols) cumulativePool += symbolPool;
+
+    const outputNode = document.getElementById("passOutputBoxNode");
+
+    if (!cumulativePool) {
+        outputNode.value = "Select Options";
+        updateComplexityRatingBadge(0, 0);
+        return;
+    }
+
+    let finalKeyString = "";
+    for (let i = 0; i < targetLength; i++) {
+        const randomIndex = Math.floor(Math.random() * cumulativePool.length);
+        finalKeyString += cumulativePool[randomIndex];
+    }
+
+    outputNode.value = finalKeyString;
+    
+    const optionsCount = [hasUpper, hasLower, hasNumbers, hasSymbols].filter(Boolean).length;
+    updateComplexityRatingBadge(targetLength, optionsCount);
+}
+
+function updateComplexityRatingBadge(len, checkedPoolsCount) {
+    const badge = document.getElementById("lblComplexityMeter");
+    if (len === 0) {
+        badge.innerText = "No Pool Selected";
+        badge.className = "complexity-badge weak";
+        return;
+    }
+
+    const calculatedWeightScore = len * checkedPoolsCount;
+
+    if (calculatedWeightScore < 20) {
+        badge.innerText = "⚠️ Fragile Vulnerable";
+        badge.className = "complexity-badge weak";
+    } else if (calculatedWeightScore < 42) {
+        badge.innerText = "⚡ Moderate Defense";
+        badge.className = "complexity-badge medium";
+    } else {
+badge.innerText = "🛡️ Vault Grade Cipher";badge.className = "complexity-badge strong";}}function copyCipherToClipboard() {const inputNode = document.getElementById("passOutputBoxNode");if (inputNode.value === "Click Generate" || inputNode.value === "Select Options") return;inputNode.select();inputNode.setSelectionRange(0, 99999); // Mobile tap selector safety clamping parametersnavigator.clipboard.writeText(inputNode.value);triggerToastNotification("Cipher copied to device clipboard!");}// Automatically deploy a clean initialization random sample key structure on launch boot loop tracksfireRandomKeyCalculation();</script></body></html>

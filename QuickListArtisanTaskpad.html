@@ -1,0 +1,513 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#854d0e">
+<title>QuickList Artisan Taskpad</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Harvest Wheat & Espresso Forest Artisan Look */
+:root{
+--bg:#1c1917;
+--card:#2e2a24;
+--text:#f5f5f4;
+--muted:#ca8a04;
+--line:#443e38;
+--primary:#854d0e;
+--primary2:#eab308;
+--soft:#451a03;
+--green:#16a34a;
+--green-soft:#142d1b;
+--danger:#dc2626;
+--shadow:0 12px 35px rgba(28,25,23,0.6)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:"Baskerville", Georgia, serif;
+background:var(--bg);
+color:var(--text);
+user-select:none
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - ORGANIC HARVEST AMBER TO MATTE ESPRESSO STACK */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#451a03,#2e2a24 60%,#854d0e);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--primary2)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(234,179,8,0.05);
+border:1px dashed var(--primary2)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px;
+font-weight:normal
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+font-family:system-ui, -apple-system, sans-serif;
+color:rgba(255,255,255,.65)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+.title span{
+font-size:11px;
+color:var(--muted)
+}
+
+/* CHECKLIST ROWS FEED ITEMS STACK */
+.list-item-row {
+display:flex;
+align-items:center;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid var(--line);
+transition:all 0.2s cubic-bezier(0.4, 0, 0.2, 1)
+}
+.list-item-row:last-child{border-bottom:0}
+
+.square-check-btn {
+width:24px;
+height:24px;
+border:2px solid var(--line);
+border-radius:7px;
+background:transparent;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+transition:all 0.2s ease;
+padding:0;
+flex-shrink:0
+}
+.list-item-row.done .square-check-btn {
+background:var(--green);
+border-color:var(--green)
+}
+
+.item-details-box {
+flex:1;
+min-width:0
+}
+
+.item-text-title {
+font-size:15px;
+line-height:1.4;
+color:var(--text);
+word-wrap:break-word
+}
+.list-item-row.done .item-text-title {
+color:var(--muted);
+text-decoration:line-through
+}
+
+.item-tag-badge {
+display:inline-block;
+margin-top:4px;
+padding:2px 6px;
+border-radius:6px;
+font-size:8.5px;
+font-weight:800;
+text-transform:uppercase;
+font-family:system-ui, -apple-system, sans-serif;
+background:var(--soft);
+color:var(--primary2)
+}
+
+.btn-remove-row {
+background:transparent;
+border:0;
+color:var(--line);
+font-size:14px;
+padding:4px;
+cursor:pointer;
+transition:color 0.15s
+}
+.btn-remove-row:hover {
+color:var(--danger)
+}
+
+/* FLOATING FAB INTERACTION ACTUATOR */
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:50%;
+background:var(--primary);
+color:white;
+font-size:28px;
+box-shadow:0 12px 28px rgba(133,77,14,.3);
+z-index:10;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+/* MODAL DRAWER OVERLAY WRAPPERS SHEETS */
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(2px)
+}
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0;
+border-top:1px solid var(--line)
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.modal-head h2{
+margin:0;
+font-size:18px;
+font-weight:800
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:50%;
+background:var(--bg);
+color:var(--text)
+}
+
+.field{margin-bottom:12px; font-family:system-ui, -apple-system, sans-serif}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+.field input,
+.field select{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+font-family:"Baskerville", Georgia, serif
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:white;
+font-weight:800;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.empty-state {
+text-align:center;
+padding:35px 15px;
+color:var(--muted);
+font-family:system-ui, -apple-system, sans-serif
+}
+.empty-icon { font-size:40px; margin-bottom:6px; }
+
+/* LUXURY CORDUROY LIGHT OVERRIDE SKIN SKIN */
+body.light-theme {
+--bg:#fbfaf7;
+--card:#f5f2eb;
+--text:#2e2a24;
+--muted:#854d0e;
+--line:#dccfc7;
+--shadow:0 10px 25px rgba(133,77,14,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">📜</div>
+<div class="brand-name">QuickList</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Artisan Taskpad.<br>Minimalist Lines.</h1>
+<p>Log simple todo operations, structure priorities tags, and maintain logs locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- COMPACT TASKPAD LIST VIEW PANEL CARD -->
+<section class="card">
+<div class="title">
+<h2>📝 Clipboard Checkrows</h2>
+<span id="lblActiveItemsCounter">0 entries</span>
+</div>
+
+<div id="checklistItemsLogBox">
+<!-- Generated dynamically via JavaScript execution blocks -->
+</div>
+</section>
+
+</main>
+
+<!-- FLOATING FAB INJECTION ACTION KEYS TRIGGER -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- ADD ENTRY DRAWER POPUP OVERLAY PANEL CONTROL SHEET -->
+<div class="overlay" id="overlay">
+<div class="modal">
+<div class="modal-head">
+<h2>Append Task Item</h2>
+<button class="close" onclick="closeModal()">✕</button>
+</div>
+
+<div class="field">
+<label>Task Row Title Label</label>
+<input type="text" id="inputTaskTextLabel" placeholder="e.g., Finalize project directory mapping layouts">
+</div>
+
+<div class="field">
+<label>Priority Tag Allocation</label>
+<select id="selectTaskPriorityTag">
+<option value="Urgent">🔥 Urgent Priority</option>
+<option value="Routine" selected>☕ Standard Routine</option>
+<option value="Backlog">📦 Loose Backlog</option>
+</select>
+</div>
+
+<button class="save" onclick="commitQuicklistCheckItem()">Lock Row Note</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// Load active task state list parameters directly out of browser local storage persistence sandbox
+let checklistRecordsArray = JSON.parse(localStorage.getItem("quick_list_artisan_items")) || [
+    { id: 1, text: "Assemble bespoke CSS root layouts templates", tag: "Urgent", done: true },
+    { id: 2, text: "Design high-contrast monochrome styles themes", tag: "Routine", done: false },
+    { id: 3, text: "Verify local database persistence loops states", tag: "Backlog", done: false }
+];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function openModal() { document.getElementById("overlay").classList.add("show"); }
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+
+function commitQuicklistCheckItem() {
+    const textStr = document.getElementById("inputTaskTextLabel").value.trim();
+    const tagChoice = document.getElementById("selectTaskPriorityTag").value;
+
+    if (!textStr) return alert("Please specify a valid task row string configuration first.");
+
+    checklistRecordsArray.push({
+        id: Date.now(),
+        text: textStr,
+        tag: tagChoice,
+        done: false
+    });
+
+    saveAndRedrawTaskpadView();
+    closeModal();
+
+    document.getElementById("inputTaskTextLabel").value = "";
+}
+
+function toggleTaskCheckmarkState(id) {
+    const target = checklistRecordsArray.find(item => item.id === id);
+    if (target) {
+        target.done = !target.done;
+        saveAndRedrawTaskpadView();
+    }
+}
+
+function removeTaskRowItem(id) {
+    checklistRecordsArray = checklistRecordsArray.filter(item => item.id !== id);
+    saveAndRedrawTaskpadView();
+}
+
+function saveAndRedrawTaskpadView() {
+    localStorage.setItem("quick_list_artisan_items", JSON.stringify(checklistRecordsArray));
+    render();
+}
+
+function render() {
+    const container = document.getElementById("checklistItemsLogBox");
+    document.getElementById("lblActiveItemsCounter").innerText = `${checklistRecordsArray.length} items`;
+
+    if (checklistRecordsArray.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">🍃</div>
+                <h3>Artisan Sheet Clear</h3>
+                <p>Tap the amber plus switch to draw your first todo line block row.</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = checklistRecordsArray.map(item => `
+        <div class="list-item-row ${item.done ? 'done' : ''}">
+            <button class="square-check-btn" onclick="toggleTaskCheckmarkState(${item.id})">
+                ${item.done ? '✓' : ''}
+            </button>
+            <div class="item-details-box">
+                <div class="item-text-title">${item.text}</div>
+                <span class="item-tag-badge">${item.tag}</span>
+            </div>
+            <button class="btn-remove-row" onclick="removeTaskRowItem(${item.id})">✕</button>
+        </div>
+    `).join("");
+}
+
+// Initial structural rendering activation pass configurations updates on boot lifecycle window execution
+render();
+</script>
+
+</body>
+</html>

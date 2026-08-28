@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>DayPlan Planner</title>
+
+<style>
+/* UNIFORM MIDNIGHT OCEAN STYLE */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#2563eb;
+--primary2:#3b82f6;
+--soft:#1e3a8a;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(15,23,42,.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#2563eb 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+.title span{
+font-size:10px;
+color:var(--muted)
+}
+
+/* TIMELINE CONTAINER & TRACK LAYOUT */
+.timeline {
+position:relative;
+padding-left:24px;
+margin-top:5px
+}
+
+/* Vertical structural timeline connecting line string */
+.timeline::before {
+content:"";
+position:absolute;
+left:6px;
+top:8px;
+bottom:8px;
+width:2px;
+background:var(--line)
+}
+
+.time-block {
+position:relative;
+margin-bottom:20px;
+display:flex;
+align-items:flex-start;
+gap:12px
+}
+.time-block:last-child {margin-bottom:5px}
+
+/* Interactive circle badge overlaying timeline wire track */
+.time-node {
+position:absolute;
+left:-24px;
+top:5px;
+width:14px;
+height:14px;
+border-radius:50%;
+background:var(--card);
+border:3px solid var(--primary2);
+z-index:2;
+transition:background 0.2s, border-color 0.2s
+}
+
+.time-block.done .time-node {
+border-color:var(--green);
+background:var(--green)
+}
+
+.block-body {
+flex:1;
+min-width:0;
+cursor:pointer
+}
+
+.time-stamp {
+font-size:11px;
+font-weight:800;
+color:var(--primary2);
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+.time-block.done .time-stamp {
+color:var(--muted)
+}
+
+.task-desc {
+font-size:14px;
+font-weight:750;
+color:var(--text);
+margin-top:2px;
+word-wrap:break-word
+}
+.time-block.done .task-desc {
+text-decoration:line-through;
+color:var(--muted)
+}
+
+.btn-remove-block {
+background:transparent;
+border:0;
+color:var(--danger);
+font-size:12px;
+font-weight:700;
+padding:4px;
+flex-shrink:0
+}
+
+/* FLOATING TRIGGER ACTION FAB BUTTON */
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:20px;
+background:var(--primary);
+color:white;
+font-size:28px;
+box-shadow:0 12px 28px rgba(37,99,235,.28);
+z-index:10;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+/* OVERLAY MODAL FORM POPUP SHEET */
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(0,0,0,.6)
+}
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0;
+border-top:1px solid var(--line)
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px
+}
+
+.modal-head h2{
+margin:0;
+font-size:19px
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:10px;
+background:var(--bg);
+color:var(--text)
+}
+
+.field{margin-bottom:12px}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+font-weight:750;
+color:var(--muted)
+}
+
+.field input{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text)
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:white;
+font-weight:800
+}
+
+.empty-state {
+text-align:center;
+padding:35px 15px;
+color:var(--muted)
+}
+.empty-icon { font-size:40px; margin-bottom:6px; }
+
+/* LIGHT THEME INVERSION OVERRIDE STYLE SKIN */
+body.light-theme {
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#dbeafe;
+--shadow:0 10px 30px rgba(51,65,85,0.06)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">📅</div>
+<div class="brand-name">DayPlan</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Structure Time.<br>Master The Day.</h1>
+<p>Block chronologic event routines and mark active timeline metrics locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- HORIZONTAL ROUTINE SCHEDULE WRAPPER CARD -->
+<section class="card">
+<div class="title">
+<h2>⏰ Timeline Timeblocks</h2>
+<span id="blocksCountSpan">0 blocks</span>
+</div>
+
+<div id="timelineContainer" class="timeline">
+<!-- Rendered dynamically by JavaScript execution loops -->
+</div>
+</section>
+
+</main>
+
+<!-- FLOATING TRIGGER KEY CONTROLLER ACTUATOR -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- ACTION ENTRY INJECTION SLIDE MODAL -->
+<div class="overlay" id="overlay">
+<div class="modal">
+<div class="modal-head">
+<h2>Slot Routine Timeblock</h2>
+<button class="close" onclick="closeModal()">✕</button>
+</div>
+
+<div class="field">
+<label>TARGET BLOCK START TIME (e.g., 08:30 AM)</label>
+<input type="text" id="blockTime" placeholder="e.g., 09:00 AM">
+</div>
+
+<div class="field">
+<label>SCHEDULED ACTION / TASK DESCRIPTION</label>
+<input type="text" id="blockTask" placeholder="e.g., Morning Dev Sync Session">
+</div>
+
+<button class="save" onclick="appendDayPlanBlock()">Lock Routine Block</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// Load active day timeline parameters straight out of browser operational state memory lists
+let planBlocks = JSON.parse(localStorage.getItem("day_plan_timeblocks")) || [
+    { id: 1, time: "08:00 AM", task: "Breakfast & Morning Exercise", done: true },
+    { id: 2, time: "09:30 AM", task: "Html App Core Development Sprint", done: false },
+    { id: 3, theme: "02:00 PM", task: "Code Architecture Review Sync", done: false }
+];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function openModal() { document.getElementById("overlay").classList.add("show"); }
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+
+function appendDayPlanBlock() {
+    const time = document.getElementById("blockTime").value.trim();
+    const task = document.getElementById("blockTask").value.trim();
+
+    if (!time || !task) return alert("Please specify both a time stamp marker and task description.");
+
+    planBlocks.push({ id: Date.now(), time, task, done: false });
+    saveAndRender();
+    closeModal();
+
+    // Reset temporary value constraints holders input boundaries elements
+    document.getElementById("blockTime").value = "";
+    document.getElementById("blockTask").value = "";
+}
+
+function toggleBlockCompletion(id) {
+    const block = planBlocks.find(b => b.id === id);
+    if(block) {
+        block.done = !block.done;
+        saveAndRender();
+    }
+}
+
+function removeDayPlanBlock(id, event) {
+    event.stopPropagation(); // Avoid running toggle completion logic loop accidentally when delete is tapped
+    planBlocks = planBlocks.filter(b => b.id !== id);
+    saveAndRender();
+}
+
+function saveAndRender() {
+    localStorage.setItem("day_plan_timeblocks", JSON.stringify(planBlocks));
+    render();
+}
+
+function render() {
+    const container = document.getElementById("timelineContainer");
+    document.getElementById("blocksCountSpan").innerText = planBlocks.length + " blocks";
+
+    if (planBlocks.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state" style="margin-left: -24px;">
+                <div class="empty-icon">🍃</div>
+                <h3>Day Timeline Empty</h3>
+                <p>Tap the floating button below to slot your first routine time block frame here.</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = planBlocks.map(b => `
+        <div class="time-block ${b.done ? 'done' : ''}">
+            <div class="time-node"></div>
+            <div class="block-body" onclick="toggleBlockCompletion(${b.id})">
+                <div class="time-stamp">${b.time}</div>
+                <div class="task-desc">${b.task}</div>
+            </div>
+            <button class="btn-remove-block" onclick="removeDayPlanBlock(${b.id}, event)">✕</button>
+        </div>
+    `).join("");
+}
+
+// Bootstrap rendering layout parameters directly on load lifecycle window sequences framework triggers
+render();
+</script>
+
+</body>
+</html>

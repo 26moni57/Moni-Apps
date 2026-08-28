@@ -1,0 +1,423 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7f1d1d">
+<title>CoinToss Probability Pad</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Vegas Velvet Crimson & Antique Brass Gold Look */
+:root{
+--bg:#310404;
+--card:#5c0c0c;
+--text:#fef2f2;
+--muted:#fca5a5;
+--line:#7f1d1d;
+--primary:#ca8a04;
+--primary2:#fde047;
+--soft:#422006;
+--green:#10b981;
+--danger:#ef4444;
+--shadow:0 12px 35px rgba(127,29,29,0.5)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text);
+user-select:none
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - SIGNATURE RICH VEGAS VELVET CRIMSOM TO ACCENT GOLD GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#450a0a,#7f1d1d 55%,#ca8a04);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--primary)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(202,138,4,0.06);
+border:1px dashed var(--primary)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.05);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+/* 3D-STYLED FLIPPING COIN SCREEN ELEMENT */
+.coin-box-panel {
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:25px 0;
+position:relative
+}
+
+.gold-bullion-coin {
+width:96px;
+height:90px;
+background:linear-gradient(135deg, var(--primary2), var(--primary));
+color:#422006;
+border-radius:50%;
+display:grid;
+place-items:center;
+font-size:22px;
+font-weight:900;
+box-shadow:0 8px 24px rgba(0,0,0,0.4), inset 0 2px 6px rgba(255,255,255,0.4);
+border:4px double #422006;
+transition:transform 0.1s ease-out;
+will-change:transform
+}
+
+.gold-bullion-coin.toss-animation {
+transform:scaleY(0.1) rotate(180deg);
+opacity:0.8
+}
+
+/* SCORE MONITOR METRICS GRID SPREAD */
+.stats-split-row {
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-bottom:4px
+}
+
+.stat-node-box {
+padding:12px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:14px;
+text-align:center
+}
+
+.stat-node-box strong {
+display:block;
+font-size:20px;
+color:var(--primary2);
+font-family:"Courier New",Courier,monospace
+}
+
+.stat-node-box span {
+display:block;
+margin-top:3px;
+font-size:9px;
+color:var(--muted);
+text-transform:uppercase;
+font-weight:750
+}
+
+.btn-trigger-action {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:var(--bg);
+font-weight:900;
+font-size:15px;
+text-transform:uppercase;
+transition:opacity 0.2s
+}
+.btn-trigger-action:active { opacity:0.9 }
+
+/* LOG HISTORY ROWS LEDGER FEED STACK */
+.history-row {
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 0;
+border-bottom:1px solid var(--line);
+font-size:13px
+}
+.history-row:last-child { border-bottom:0 }
+
+.history-label { font-weight:700; color:var(--text); }
+.history-val { font-family:"Courier New",Courier,monospace; font-weight:900; color:var(--primary2); }
+
+/* LUXURY AMBER SHADE OVERRIDE SKIN LIGHT INVERSION */
+body.light-theme {
+--bg:#fffbeb;
+--card:#fef3c7;
+--text:#451a03;
+--muted:#b45309;
+--line:#fde68a;
+--shadow:0 10px 25px rgba(202,138,4,0.04)
+}
+body.light-theme .gold-bullion-coin {
+background:linear-gradient(135deg, #451a03, #78350f);
+color:#fffbeb;
+border-color:#fde68a
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🪙</div>
+<div class="brand-name">CoinToss</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Probability Sync.<br>Toss Statistics.</h1>
+<p>Simulate continuous coin flips, evaluate win/loss distribution fields, and save logs locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- COIN CORE PREVIEW BOX SCREEN -->
+<section class="card">
+<div class="coin-box-panel">
+<div id="coinVisualNode" class="gold-bullion-coin">HEADS</div>
+</div>
+</section>
+
+<!-- ENGINE ACTIVATION LAUNCH ROW -->
+<section class="card" style="padding:10px;">
+<button class="btn-trigger-action" onclick="fireCoinTossProbabilitySession()">Flip Gold Token</button>
+</section>
+
+<!-- REPORT METRICS DISTRIBUTION COUNTERS -->
+<section class="card">
+<div class="stats-split-row">
+<div class="stat-node-box">
+<strong id="lblHeadsRatio">0% (0)</strong>
+<span>Heads Distribution</span>
+</div>
+<div class="stat-node-box">
+<strong id="lblTailsRatio">0% (0)</strong>
+<span>Tails Distribution</span>
+</div>
+</div>
+</section>
+
+<!-- TIMELINE RECENT FLIP LOG RECORDS FEED -->
+<section class="card">
+<div class="title">
+<h2>📜 Recent Toss Log Ledger</h2>
+</div>
+<div id="tossHistoryLogBox">
+<!-- Generated dynamically via Javascript actions loops execution -->
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+let headsTotalCountValue = 0;
+let tailsTotalCountValue = 0;
+let lockoutFlippingState = false;
+let historicalFlipsLoggedArray = [];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function fireCoinTossProbabilitySession() {
+    if (lockoutFlippingState) return;
+    lockoutFlippingState = true;
+
+    const coin = document.getElementById("coinVisualNode");
+    coin.classList.add("toss-animation");
+    
+    // Synthesize high-frequency rotating token chime bleep
+    triggerSynthesizedTactileTone(587, 0.06);
+
+    let animationTicksCount = 0;
+    const flippingEngineInterval = setInterval(() => {
+        coin.innerText = animationTicksCount % 2 === 0 ? "HEADS" : "TAILS";
+        animationTicksCount++;
+
+        if (animationTicksCount >= 5) {
+            clearInterval(flippingEngineInterval);
+
+            // Core deterministic random index probability selector matrix
+            const ultimateResultOutcome = Math.random() < 0.5 ? "HEADS" : "TAILS";
+            coin.innerText = ultimateResultOutcome;
+            coin.classList.remove("toss-animation");
+
+            if (ultimateResultOutcome === "HEADS") headsTotalCountValue++;
+            else tailsTotalCountValue++;
+
+            triggerSynthesizedTactileTone(880, 0.12); // Landing chord feedback signal
+
+            // Append item node straight onto local tracking memory feeds list
+            const currentMomentTime = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            historicalFlipsLoggedArray.unshift({
+                id: Date.now(),
+                outcome: ultimateResultOutcome,
+                time: currentMomentTime
+            });
+
+            lockoutFlippingState = false;
+            saveAndRedrawProbabilityMetrics();
+        }
+    }, 85);
+}
+
+function triggerSynthesizedTactileTone(frequencyHzValue, durationSecondsValue) {
+    if (window.AudioContext || window.webkitAudioContext) {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(frequencyHzValue, ctx.currentTime);
+            gain.gain.setValueAtTime(0.12, ctx.currentTime);
+            osc.start();
+            osc.stop(ctx.currentTime + durationSecondsValue);
+        } catch (e) {}
+    }
+}
+
+function saveAndRedrawProbabilityMetrics() {
+    const totalFlips = headsTotalCountValue + tailsTotalCountValue;
+    
+    const headsPercent = totalFlips > 0 ? Math.round((headsTotalCountValue / totalFlips) * 100) : 0;
+    const tailsPercent = totalFlips > 0 ? Math.round((tailsTotalCountValue / totalFlips) * 100) : 0;
+
+    document.getElementById("lblHeadsRatio").innerText = `${headsPercent}% (${headsTotalCountValue})`;
+    document.getElementById("lblTailsRatio").innerText = `${tailsPercent}% (${tailsTotalCountValue})`;
+
+    const container = document.getElementById("tossHistoryLogBox");
+
+    if (historicalFlipsLoggedArray.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:10px; color:var(--muted); font-size:12px;">Flip the gold token to launch logs timeline streams.</div>`;
+        return;
+    }
+
+    // Clamp slices indices parameters boundary allocations safely to retain look heights layout heights
+    const topLogs = historicalFlipsLoggedArray.slice(0, 4);
+    container.innerHTML = topLogs.map(log => `
+        <div class="history-row">
+            <span class="history-label">🪙 Token Outcome: ${log.outcome}</span>
+            <span class="history-val">Logged at ${log.time}</span>
+        </div>
+    `).join("");
+}
+
+// Initial structural rendering loop initialization pass configurationssaveAndRedrawProbabilityMetrics();</script></body></html>

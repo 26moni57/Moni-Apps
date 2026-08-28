@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>ColourPad Studio</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Grape Violet & Canary Yellow Palette Look */
+:root{
+--bg:#120b24;
+--card:#1e123a;
+--text:#f5f3ff;
+--muted:#a78bfa;
+--line:#3b2272;
+--primary:#7c3aed;
+--primary2:#c084fc;
+--yellow:#eab308;
+--yellow-soft:#3a2d04;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(18,11,36,.6)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - SIGNATURE DYNAMIC GRAPE TO GOLD GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#4c1d95,#7c3aed 50%,var(--yellow));
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:2px solid var(--primary2)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.07)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.18);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.12);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.7)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* PALETTE MATRIX VISUAL BOXES */
+.swatch-row-grid {
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin:5px 0
+}
+
+.color-block {
+height:84px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.06);
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
+align-items:center;
+padding-bottom:10px;
+cursor:pointer;
+transition:transform 0.15s ease-out;
+box-shadow:0 4px 10px rgba(0,0,0,0.15)
+}
+.color-block:active {
+transform:scale(0.95)
+}
+
+.hex-label {
+font-size:9.5px;
+font-weight:900;
+font-family:"Courier New",Courier,monospace;
+background:rgba(0,0,0,0.65);
+color:white;
+padding:2px 5px;
+border-radius:6px;
+letter-spacing:0.3px
+}
+
+/* CONTROLLERS TRIGGER BUTTONS */
+.btn-palette-trigger {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--yellow);
+color:var(--bg);
+font-weight:850;
+font-size:15px;
+transition:opacity 0.2s
+}
+.btn-palette-trigger:active { opacity:0.9 }
+
+/* LOG HISTORY LIST SWATCHES */
+.history-palette-item {
+padding:10px 0;
+border-bottom:1px solid var(--line);
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+.history-palette-item:last-child { border-bottom:0 }
+
+.mini-swatch-track {
+display:flex;
+gap:4px
+}
+
+.mini-dot {
+width:16px;
+height:16px;
+border-radius:50%;
+border:1px solid rgba(255,255,255,0.1)
+}
+
+.btn-wipe-palette {
+background:transparent;
+border:0;
+color:var(--danger);
+font-size:11px;
+font-weight:700;
+padding:4px;
+cursor:pointer
+}
+
+/* ACTION TOAST POPUP NOTIFICATION */
+.toast{
+position:fixed;
+left:50%;
+bottom:40px;
+z-index:50;
+transform:translate(-50%,20px);
+opacity:0;
+padding:11px 15px;
+border-radius:12px;
+background:#f5f3ff;
+color:#120b24;
+font-size:11px;
+font-weight:700;
+white-space:nowrap;
+transition:.25s;
+pointer-events:none;
+box-shadow:0 10px 25px rgba(0,0,0,0.3)
+}
+
+.toast.show{
+opacity:1;
+transform:translate(-50%,0)
+}
+
+/* CRISP BRIGHT CANARY LIGHT OVERRIDE SKIN */
+body.light-theme {
+--bg:#faf5ff;
+--card:#ffffff;
+--text:#1e123a;
+--muted:#7c3aed;
+--line:#e9d5ff;
+--yellow:#eab308;
+--shadow:0 10px 30px rgba(124,58,237,0.04)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🎨</div>
+<div class="brand-name">ColourPad</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Palette Sandbox.<br>Instant Inspiration.</h1>
+<p>Generate striking color harmony sets and lock raw HEX code strings instantly.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- CORES DISPLAY INTERACTIVE GRID WORKSPACE -->
+<section class="card">
+<div class="title">
+<h2>✨ Active Color Swatch Array</h2>
+<span>Tap cell to copy HEX</span>
+</div>
+<div class="swatch-row-grid">
+<div id="block0" class="color-block" onclick="copyHexCodeLabel(0)"><span id="lbl0" class="hex-label">#7C3AED</span></div>
+<div id="block1" class="color-block" onclick="copyHexCodeLabel(1)"><span id="lbl1" class="hex-label">#EAB308</span></div>
+<div id="block2" class="color-block" onclick="copyHexCodeLabel(2)"><span id="lbl2" class="hex-label">#10B981</span></div>
+<div id="block3" class="color-block" onclick="copyHexCodeLabel(3)"><span id="lbl3" class="hex-label">#EF4444</span></div>
+</div>
+</section>
+
+<!-- ACTIONS TRIGGERS BUTTON PANEL -->
+<section class="card">
+<button class="btn-palette-trigger" onclick="generateRandomPaletteMatrix()">Roll Harmonized Palette</button>
+</section>
+
+<!-- RECENT PALETTES HISTORIC TRACKER -->
+<section class="card">
+<div class="title">
+<h2>📜 Saved Swatch History</h2>
+</div>
+<div id="palettesHistoryLogBox">
+<!-- Generated dynamically via Javascript actions loops -->
+</div>
+</section>
+
+</main>
+
+<!-- COMPLETED ACTION TOAST -->
+<div class="toast" id="toast">Hex copied to clipboard!</div>
+
+</div>
+
+<script>
+let activeColorsArray = ["#7c3aed", "#eab308", "#10b981", "#ef4444"];
+let archivedPalettesList = JSON.parse(localStorage.getItem("colour_pad_vault")) || [];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function generateRandomPaletteMatrix() {
+    activeColorsArray = [];
+    for (let i = 0; i < 4; i++) {
+        // Compute randomized hexadecimal string arrays profiles parameters loops safely
+        const randomHex = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
+        activeColorsArray.push(randomHex);
+    }
+    
+    // Archive active set into tracking logs memory lists sandbox
+    archivedPalettesList.unshift([...activeColorsArray]);
+    if (archivedPalettesList.length > 5) archivedPalettesList.pop(); // Enforce strict array boundary sizing logs
+    
+    localStorage.setItem("colour_pad_vault", JSON.stringify(archivedPalettesList));
+    synchronizePaletteWorkspaceUI();
+}
+
+function synchronizePaletteWorkspaceUI() {
+    for (let i = 0; i < 4; i++) {
+        const color = activeColorsArray[i];
+        document.getElementById(`block${i}`).style.backgroundColor = color;
+        document.getElementById(`lbl${i}`).innerText = color;
+    }
+    redrawHistorySwatchesLog();
+}
+
+function copyHexCodeLabel(indexInt) {
+    const targetHexStr = activeColorsArray[indexInt];
+    navigator.clipboard.writeText(targetHexStr);
+
+    const toast = document.getElementById("toast");
+    toast.innerText = `Copied ${targetHexStr} to Clipboard!`;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
+function clearPaletteHistoryRow(indexInt) {
+    archivedPalettesList.splice(indexInt, 1);
+    localStorage.setItem("colour_pad_vault", JSON.stringify(archivedPalettesList));
+    redrawHistorySwatchesLog();
+}
+
+function redrawHistorySwatchesLog() {
+    const container = document.getElementById("palettesHistoryLogBox");
+    
+    if (archivedPalettesList.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:10px; color:var(--muted); font-size:12px;">Roll palettes above to compile historic swatch trees.</div>`;
+        return;
+    }
+    
+    container.innerHTML = archivedPalettesList.map((palette, pIndex) => `
+        <div class="history-palette-item">
+            <div class="mini-swatch-track">
+                <div class="mini-dot" style="background-color: ${palette[0]}"></div>
+                <div class="mini-dot" style="background-color: ${palette[1]}"></div>
+                <div class="mini-dot" style="background-color: ${palette[2]}"></div>
+                <div class="mini-dot" style="background-color: ${palette[3]}"></div>
+            </div>
+            <button class="btn-wipe-palette" onclick="clearPaletteHistoryRow(${pIndex})">✕</button>
+        </div>
+    `).join("");
+}
+
+// Ensure proper initial color display profiles mapping values straight on boot sequences
+synchronizePaletteWorkspaceUI();
+</script>
+
+</body>
+</html>

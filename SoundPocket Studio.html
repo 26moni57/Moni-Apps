@@ -1,0 +1,428 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>SoundPocket Studio</title>
+
+<style>
+/* CSS PALETTE: Midnight Ocean Blue Style Uniform Look */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#2563eb;
+--primary2:#3b82f6;
+--soft:#1e3a8a;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(15,23,42,.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#2563eb 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* SOUNDBOARD TRIGGER MATRIX GRID */
+.sound-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+margin-bottom:6px
+}
+
+.sound-pad{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:24px 12px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:18px;
+color:var(--text);
+transition:transform 0.1s, border-color 0.1s;
+user-select:none
+}
+
+.sound-pad:active{
+transform:scale(0.96);
+border-color:var(--primary2);
+background:var(--soft)
+}
+
+.pad-emoji{
+font-size:28px;
+margin-bottom:6px
+}
+
+.pad-title{
+font-size:13px;
+font-weight:750;
+text-align:center
+}
+
+.pad-desc{
+font-size:9px;
+color:var(--muted);
+margin-top:2px;
+text-align:center
+}
+
+/* CONFIG VOLUME CONTROLLER */
+.field{
+margin-bottom:4px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted)
+}
+
+.slider-wrapper{
+display:flex;
+align-items:center;
+gap:12px
+}
+
+.slider-wrapper input[type="range"]{
+flex:1;
+accent-color:var(--primary);
+cursor:pointer
+}
+
+.volume-val{
+font-size:14px;
+font-weight:800;
+color:var(--primary2);
+min-width:35px;
+text-align:right
+}
+
+/* LIGHT THEME INVERSION OVERRIDE */
+body.light-theme {
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#dbeafe;
+--shadow:0 10px 30px rgba(51,65,85,0.06)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🔊</div>
+<div class="brand-name">SoundPocket</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Audio Desk.<br>Instant FX Trigger.</h1>
+<p>Tap interactive trigger pads to play clean, hardware-synthesized wave effects instantly.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- MASTER MIXER SETTINGS -->
+<section class="card">
+<div class="field">
+<label>MASTER OUTPUT GAIN VOLUME</label>
+<div class="slider-wrapper">
+<input type="range" id="volumeSlider" min="0" max="100" value="70" oninput="handleVolumeChange(this.value)">
+<span class="volume-val" id="volumeLabel">70%</span>
+</div>
+</div>
+</section>
+
+<!-- PADS BOARD CANVAS MATRIX -->
+<section class="card">
+<div class="title">
+<h2>🎹 Soundboard Control Surface</h2>
+</div>
+
+<div class="sound-grid">
+<div class="sound-pad" onclick="playSound('retro')">
+<div class="pad-emoji">👾</div>
+<div class="pad-title">Retro Chime</div>
+<div class="pad-desc">Classic arcade jump</div>
+</div>
+
+<div class="sound-pad" onclick="playSound('success')">
+<div class="pad-emoji">✨</div>
+<div class="pad-title">Success Spark</div>
+<div class="pad-desc">Arpeggio accomplishment</div>
+</div>
+
+<div class="sound-pad" onclick="playSound('laser')">
+<div class="pad-emoji">⚡</div>
+<div class="pad-title">Laser Beam</div>
+<div class="pad-desc">Frequency drop sweep</div>
+</div>
+
+<div class="sound-pad" onclick="playSound('ping')">
+<div class="pad-emoji">🔔</div>
+<div class="pad-title">Notice Ping</div>
+<div class="pad-desc">High crystal ring</div>
+</div>
+
+<div class="sound-pad" onclick="playSound('error')">
+<div class="pad-emoji">🚨</div>
+<div class="pad-title">Error Alert</div>
+<div class="pad-desc">Low square wave buzz</div>
+</div>
+
+<div class="sound-pad" onclick="playSound('coin')">
+<div class="pad-emoji">🪙</div>
+<div class="pad-title">Level Up</div>
+<div class="pad-desc">Double tone score</div>
+</div>
+</div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+// Web Audio API Global Engine Context Placeholder Memory Setup
+let audioCtx = null;
+let masterVolumeLevel = 0.7;
+
+// Volume slider configuration tracking updater
+function handleVolumeChange(val) {
+    masterVolumeLevel = parseInt(val) / 100;
+    document.getElementById("volumeLabel").innerText = val + "%";
+}
+
+// Skin layout dynamic alternative design runtime color switcher loops
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+// Active dynamic hardware sound patch synthesis logic calculations module
+function playSound(type) {
+    // Instantiate Audio Context pipeline securely inside user activity thread interactions loops
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    
+    // Safety check fallback to intercept closed context execution states
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    // Enforce configurations parameters metrics based on choice target dictionary selectors mapping
+    switch (type) {
+        case 'retro':
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+            gainNode.gain.setValueAtTime(masterVolumeLevel * 0.2, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+            osc.start(now);
+            osc.stop(now + 0.18);
+            break;
+
+        case 'success':
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.setValueAtTime(450, now + 0.08);
+            osc.frequency.setValueAtTime(600, now + 0.16);
+            osc.frequency.setValueAtTime(900, now + 0.24);
+            gainNode.gain.setValueAtTime(masterVolumeLevel * 0.4, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+            osc.start(now);
+            osc.stop(now + 0.4);
+            break;
+
+        case 'laser':
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.exponentialRampToValueAtTime(110, now + 0.25);
+            gainNode.gain.setValueAtTime(masterVolumeLevel * 0.15, now);
+            gainNode.gain.linearRampToValueAtTime(0.01, now + 0.25);
+            osc.start(now);
+            osc.stop(now + 0.25);
+            break;
+
+        case 'ping':
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1200, now);
+            gainNode.gain.setValueAtTime(masterVolumeLevel * 0.5, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+            osc.start(now);
+            osc.stop(now + 0.3);
+            break;
+
+        case 'error':
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(130, now);
+            osc.frequency.setValueAtTime(120, now + 0.13);
+            gainNode.gain.setValueAtTime(masterVolumeLevel * 0.25, now);
+            gainNode.gain.linearRampToValueAtTime(0.01, now + 0.25);
+            osc.start(now);
+            osc.stop(now + 0.25);
+            break;
+
+        case 'coin':
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, now); // D5 frequency pitch
+            osc.frequency.setValueAtTime(880, now + 0.1);    // A5 frequency pitch escalation
+            gainNode.gain.setValueAtTime(masterVolumeLevel * 0.35, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+            osc.start(now);
+            osc.stop(now + 0.35);
+            break;
+    }
+}
+</script>
+
+</body>
+</html>

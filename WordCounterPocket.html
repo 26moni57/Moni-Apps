@@ -1,0 +1,361 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>WordCounter Pocket</title>
+
+<style>
+/* UNIFORM MIDNIGHT OCEAN STYLE */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#2563eb;
+--primary2:#3b82f6;
+--soft:#1e3a8a;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(15,23,42,.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#2563eb 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+/* TEXT AREA INTERFACE */
+.field{
+margin-bottom:6px;
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.field label{
+font-size:11px;
+font-weight:750;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:0.3px
+}
+
+.field textarea {
+width:100%;
+height:160px;
+padding:13px;
+border:1px solid var(--line);
+border-radius:14px;
+outline:none;
+background:var(--bg);
+color:var(--text);
+resize:none;
+line-height:1.5
+}
+.field textarea:focus {
+border-color:var(--primary2)
+}
+
+/* METRICS INDEX CONTAINER GRID */
+.metrics-grid {
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-bottom:5px
+}
+
+.metric-node {
+padding:12px;
+background:var(--bg);
+border:1px solid var(--line);
+border-radius:14px;
+text-align:center
+}
+
+.metric-node strong {
+display:block;
+font-size:20px;
+color:var(--primary2);
+font-family:"Courier New",Courier,monospace;
+font-weight:900
+}
+
+.metric-node span {
+display:block;
+margin-top:4px;
+font-size:9px;
+color:var(--muted);
+text-transform:uppercase;
+font-weight:750
+}
+
+.btn-action-clear {
+width:100%;
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:white;
+font-weight:800;
+transition:opacity 0.2s
+}
+.btn-action-clear:active { opacity:0.9 }
+
+/* LIGHT SKIN OVERRIDE */
+body.light-theme {
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#dbeafe;
+--shadow:0 10px 30px rgba(51,65,85,0.06)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">📝</div>
+<div class="brand-name">WordCounter</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Analyze Text.<br>Instant Metadata.</h1>
+<p>Evaluate exact word strings, parse text densities, and compute reading speeds locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- TEXT INPUT CARD -->
+<section class="card">
+<div class="field">
+<label>PASTE OR TYPE YOUR CONTENT TEXT</label>
+<textarea id="textWorkspace" placeholder="Start typing or copy-paste text data blocks here..." oninput="analyzeTextMetadata()"></textarea>
+</div>
+</section>
+
+<!-- ANALYSIS METRICS RESULTS PANEL -->
+<section class="card">
+<div class="title">
+<h2>📊 Text Density Metrics</h2>
+</div>
+
+<div class="metrics-grid">
+<div class="metric-node">
+<strong id="metricWords">0</strong>
+<span>Total Words</span>
+</div>
+<div class="metric-node">
+<strong id="metricChars">0</strong>
+<span>Characters</span>
+</div>
+<div class="metric-node">
+<strong id="metricSentences">0</strong>
+<span>Sentences</span>
+</div>
+<div class="metric-node">
+<strong id="metricParagraphs">0</strong>
+<span>Paragraphs</span>
+</div>
+</div>
+
+<div class="metric-node" style="margin-top:10px; display:flex; justify-content:space-between; align-items:center; text-align:left; padding:10px 14px;">
+<span style="font-size:12px; color:var(--text); text-transform:none; font-weight:700; margin:0;">⏱️ Estimated Reading Time:</span>
+<strong id="metricReadingTime" style="font-size:14px; color:var(--green);">0s</strong>
+</div>
+</section>
+
+<button class="btn-action-clear" onclick="clearWorkspaceText()">Clear Workspace Text</button>
+
+</main>
+
+</div>
+
+<script>
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function clearWorkspaceText() {
+    document.getElementById("textWorkspace").value = "";
+    analyzeTextMetadata();
+}
+
+function analyzeTextMetadata() {
+    const rawText = document.getElementById("textWorkspace").value;
+    
+    // Core calculation processing matrices block
+    const characterCount = rawText.length;
+    
+    // Extract clean words list trimming edge spaces white blocks safely
+    const wordsArray = rawText.trim().split(/\s+/).filter(w => w.length > 0);
+    const wordCount = wordsArray.length;
+    
+    // Sentence extraction using typical terminal punctuation markers
+    const sentencesArray = rawText.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    const sentenceCount = sentencesArray.length;
+    
+    // Paragraph breakdown using newline block splits
+    const paragraphsArray = rawText.split(/\n+/).filter(p => p.trim().length > 0);
+    const paragraphCount = paragraphsArray.length;
+    
+    // Read time computation baseline parameter assumption: 200 Words Per Minute standard rules
+    let readingTimeStr = "0s";
+    if (wordCount > 0) {
+        const totalMinutes = wordCount / 200;
+        if (totalMinutes < 1) {
+            const totalSeconds = Math.ceil(totalMinutes * 60);
+            readingTimeStr = `${totalSeconds}s`;
+        } else {
+            readingTimeStr = `${Math.ceil(totalMinutes)}m`;
+        }
+    }
+
+    // Push computational indices matrix straight to display layout nodes elements
+    document.getElementById("metricWords").innerText = wordCount;
+    document.getElementById("metricChars").innerText = characterCount;
+    document.getElementById("metricSentences").innerText = sentenceCount;
+    document.getElementById("metricParagraphs").innerText = paragraphCount;
+    document.getElementById("metricReadingTime").innerText = readingTimeStr;
+}
+
+// Enforce clean output definitions baseline initially on system startup initialization boot
+analyzeTextMetadata();
+</script>
+
+</body>
+</html>

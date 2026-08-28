@@ -1,0 +1,2129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f766e">
+<title>BookmarkPocket</title>
+
+<style>
+:root{
+    --bg:#f4f8f7;
+    --card:#ffffff;
+    --text:#152522;
+    --muted:#7b8b87;
+    --line:#e1ebe8;
+    --primary:#0f766e;
+    --primary-dark:#115e59;
+    --soft:#e5f5f2;
+    --danger:#dc2626;
+    --warning:#f59e0b;
+    --shadow:0 12px 30px rgba(20,55,50,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:440px;
+    min-height:100vh;
+    margin:auto;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:20px 18px 28px;
+    color:#fff;
+    background:
+        linear-gradient(
+            145deg,
+            #064e3b,
+            #0f766e 58%,
+            #2dd4bf
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header::before,
+.header::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+}
+
+.header::before{
+    width:230px;
+    height:230px;
+    right:-120px;
+    top:-145px;
+}
+
+.header::after{
+    width:130px;
+    height:130px;
+    left:-75px;
+    bottom:-90px;
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.brand-icon{
+    width:43px;
+    height:43px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    background:rgba(255,255,255,.15);
+    font-size:21px;
+}
+
+.brand-name{
+    font-size:21px;
+    font-weight:850;
+}
+
+.theme-btn{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.15);
+    color:#fff;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:21px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    margin:8px 0 0;
+    max-width:350px;
+    color:rgba(255,255,255,.82);
+    font-size:12px;
+    line-height:1.5;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    padding:17px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:16px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+}
+
+.section-title h2{
+    margin:0;
+    font-size:15px;
+}
+
+.section-title span{
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box{
+    position:relative;
+}
+
+.search-box input{
+    width:100%;
+    padding:12px 40px;
+    border:1px solid var(--line);
+    border-radius:13px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+    font-size:11px;
+}
+
+.search-box input:focus{
+    border-color:var(--primary);
+}
+
+.search-icon{
+    position:absolute;
+    left:13px;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+.clear-search{
+    position:absolute;
+    right:7px;
+    top:50%;
+    transform:translateY(-50%);
+    width:28px;
+    height:28px;
+    border:0;
+    background:transparent;
+    color:var(--muted);
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.stat{
+    padding:11px 4px;
+    border-radius:14px;
+    background:var(--bg);
+    text-align:center;
+}
+
+.stat-icon{
+    font-size:17px;
+}
+
+.stat strong{
+    display:block;
+    margin-top:3px;
+    font-size:17px;
+}
+
+.stat span{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+}
+
+.filters::-webkit-scrollbar{
+    display:none;
+}
+
+.filter{
+    flex:0 0 auto;
+    padding:8px 11px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--card);
+    color:var(--muted);
+    font-size:9px;
+}
+
+.filter.active{
+    border-color:var(--primary);
+    background:var(--soft);
+    color:var(--primary);
+    font-weight:800;
+}
+
+/* =========================
+   BOOKMARKS
+========================= */
+
+.bookmarks{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.bookmark{
+    padding:13px;
+    border:1px solid var(--line);
+    border-radius:15px;
+    background:var(--card);
+}
+
+.bookmark-top{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+}
+
+.site-icon{
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:var(--soft);
+    font-size:19px;
+}
+
+.bookmark-info{
+    min-width:0;
+    flex:1;
+}
+
+.bookmark-title{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:12px;
+    font-weight:800;
+}
+
+.bookmark-url{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    margin-top:4px;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.bookmark-actions{
+    display:flex;
+    gap:5px;
+}
+
+.icon-btn{
+    width:29px;
+    height:29px;
+    border:0;
+    border-radius:9px;
+    background:var(--bg);
+    color:var(--muted);
+}
+
+.icon-btn.favorite.active{
+    background:#fff5d8;
+    color:var(--warning);
+}
+
+.bookmark-description{
+    margin:10px 0 0;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.45;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+}
+
+.bookmark-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-top:11px;
+}
+
+.category{
+    padding:4px 7px;
+    border-radius:7px;
+    background:var(--soft);
+    color:var(--primary);
+    font-size:8px;
+    font-weight:800;
+}
+
+.bookmark-date{
+    color:var(--muted);
+    font-size:8px;
+}
+
+.open-btn{
+    padding:7px 10px;
+    border:0;
+    border-radius:9px;
+    background:var(--soft);
+    color:var(--primary);
+    font-size:9px;
+    font-weight:800;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    padding:30px 10px;
+    text-align:center;
+}
+
+.empty-icon{
+    font-size:38px;
+}
+
+.empty strong{
+    display:block;
+    margin-top:8px;
+    font-size:12px;
+}
+
+.empty p{
+    max-width:260px;
+    margin:5px auto 0;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.5;
+}
+
+/* =========================
+   FAB
+========================= */
+
+.fab{
+    position:fixed;
+    right:max(
+        calc((100vw - 440px) / 2 + 18px),
+        18px
+    );
+    bottom:22px;
+    z-index:30;
+    width:56px;
+    height:56px;
+    border:0;
+    border-radius:18px;
+    background:var(--primary);
+    color:#fff;
+    font-size:26px;
+    box-shadow:0 10px 25px rgba(15,118,110,.35);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:60;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(8,20,18,.58);
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:440px;
+    max-height:92vh;
+    overflow:auto;
+    padding:20px;
+    border-radius:25px 25px 0 0;
+    background:var(--card);
+}
+
+.modal-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:16px;
+}
+
+.modal-head h2{
+    margin:0;
+    font-size:17px;
+}
+
+.close-btn{
+    width:32px;
+    height:32px;
+    border:0;
+    border-radius:10px;
+    background:var(--bg);
+    color:var(--muted);
+}
+
+.field{
+    margin-bottom:12px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:5px;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:800;
+}
+
+.field input,
+.field textarea,
+.field select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+    font-size:10px;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+    border-color:var(--primary);
+}
+
+.field textarea{
+    min-height:85px;
+    resize:vertical;
+    line-height:1.5;
+}
+
+.save-btn{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    background:var(--primary);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    z-index:100;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#152522;
+    color:#fff;
+    font-size:10px;
+    white-space:nowrap;
+    opacity:0;
+    transform:translate(-50%,20px);
+    pointer-events:none;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark{
+    --bg:#0d1715;
+    --card:#17211f;
+    --text:#effaf7;
+    --muted:#98aaa6;
+    --line:#2a3835;
+    --soft:#173e39;
+    --shadow:0 14px 35px rgba(0,0,0,.3);
+}
+
+body.dark .icon-btn.favorite.active{
+    background:#3b3217;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media(min-width:700px){
+
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(20,55,50,.14);
+    }
+
+    .modal{
+        align-items:center;
+        padding:20px;
+    }
+
+    .modal-box{
+        border-radius:24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">🔖</div>
+            <div class="brand-name">BookmarkPocket</div>
+        </div>
+
+        <button
+            class="theme-btn"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+    <div class="hero">
+
+        <h1>
+            Save what<br>
+            matters online.
+        </h1>
+
+        <p>
+            Keep useful websites, articles and resources organized in one simple pocket.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+    <!-- SEARCH -->
+
+    <section class="card">
+
+        <div class="search-box">
+
+            <span class="search-icon">🔎</span>
+
+            <input
+                id="search"
+                type="search"
+                placeholder="Search bookmarks..."
+                oninput="renderBookmarks()"
+            >
+
+            <button
+                class="clear-search"
+                onclick="clearSearch()"
+            >
+                ×
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- STATS -->
+
+    <section class="card">
+
+        <div class="section-title">
+
+            <h2>
+                📊 Bookmark Stats
+            </h2>
+
+            <span>
+                All bookmarks
+            </span>
+
+        </div>
+
+        <div class="stats">
+
+            <div class="stat">
+                <div class="stat-icon">🔖</div>
+                <strong id="totalBookmarks">0</strong>
+                <span>Bookmarks</span>
+            </div>
+
+            <div class="stat">
+                <div class="stat-icon">⭐</div>
+                <strong id="favoriteBookmarks">0</strong>
+                <span>Favorites</span>
+            </div>
+
+            <div class="stat">
+                <div class="stat-icon">🗂️</div>
+                <strong id="categoryCount">0</strong>
+                <span>Categories</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FILTER -->
+
+    <section class="card">
+
+        <div class="section-title">
+
+            <h2>
+                🗂️ My Bookmarks
+            </h2>
+
+            <span id="filterLabel">
+                All
+            </span>
+
+        </div>
+
+        <div class="filters">
+
+            <button
+                class="filter active"
+                data-filter="All"
+                onclick="setFilter('All')"
+            >
+                All
+            </button>
+
+            <button
+                class="filter"
+                data-filter="Favorites"
+                onclick="setFilter('Favorites')"
+            >
+                ⭐ Favorites
+            </button>
+
+            <button
+                class="filter"
+                data-filter="Work"
+                onclick="setFilter('Work')"
+            >
+                💼 Work
+            </button>
+
+            <button
+                class="filter"
+                data-filter="Learning"
+                onclick="setFilter('Learning')"
+            >
+                📚 Learning
+            </button>
+
+            <button
+                class="filter"
+                data-filter="Tools"
+                onclick="setFilter('Tools')"
+            >
+                🛠️ Tools
+            </button>
+
+            <button
+                class="filter"
+                data-filter="Other"
+                onclick="setFilter('Other')"
+            >
+                📁 Other
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- BOOKMARK LIST -->
+
+    <section class="card">
+
+        <div
+            class="bookmarks"
+            id="bookmarks"
+        ></div>
+
+    </section>
+
+</main>
+
+</div>
+
+
+<!-- FAB -->
+
+<button
+    class="fab"
+    onclick="openBookmarkModal()"
+    aria-label="Add bookmark"
+>
+    +
+</button>
+
+
+<!-- ADD / EDIT MODAL -->
+
+<div
+    class="modal"
+    id="bookmarkModal"
+    onclick="closeOutside(event)"
+>
+
+    <div
+        class="modal-box"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="modal-head">
+
+            <h2 id="modalTitle">
+                ➕ Add Bookmark
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeBookmarkModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                WEBSITE NAME
+            </label>
+
+            <input
+                id="bookmarkTitle"
+                type="text"
+                maxlength="80"
+                placeholder="e.g. My Favorite Website"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                URL
+            </label>
+
+            <input
+                id="bookmarkUrl"
+                type="url"
+                placeholder="https://example.com"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                DESCRIPTION
+            </label>
+
+            <textarea
+                id="bookmarkDescription"
+                maxlength="300"
+                placeholder="What is this bookmark useful for?"
+            ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                CATEGORY
+            </label>
+
+            <select id="bookmarkCategory">
+
+                <option value="Work">
+                    💼 Work
+                </option>
+
+                <option value="Learning">
+                    📚 Learning
+                </option>
+
+                <option value="Tools">
+                    🛠️ Tools
+                </option>
+
+                <option value="Other">
+                    📁 Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                ICON
+            </label>
+
+            <select id="bookmarkIcon">
+
+                <option>🔖</option>
+                <option>🌐</option>
+                <option>📚</option>
+                <option>💼</option>
+                <option>🛠️</option>
+                <option>🎨</option>
+                <option>🎵</option>
+                <option>🎬</option>
+                <option>💡</option>
+                <option>📌</option>
+
+            </select>
+
+        </div>
+
+
+        <button
+            class="save-btn"
+            onclick="saveBookmark()"
+        >
+            💾 Save Bookmark
+        </button>
+
+    </div>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================
+   STORAGE
+========================= */
+
+const STORAGE_KEY =
+    "bookmarkPocketBookmarks";
+
+const THEME_KEY =
+    "bookmarkPocketTheme";
+
+
+let bookmarks =
+    JSON.parse(
+        localStorage.getItem(
+            STORAGE_KEY
+        ) || "[]"
+    );
+
+
+let currentFilter =
+    "All";
+
+
+let editingId =
+    null;
+
+
+let toastTimer;
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function makeId(){
+
+    return (
+        Date.now().toString(36) +
+        Math.random()
+            .toString(36)
+            .slice(2)
+    );
+
+}
+
+
+function saveBookmarks(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(bookmarks)
+    );
+
+}
+
+
+function getBookmark(id){
+
+    return bookmarks.find(
+        bookmark =>
+            bookmark.id === id
+    );
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+function normalizeUrl(url){
+
+    let value =
+        url.trim();
+
+
+    if(
+        !/^https?:\/\//i.test(
+            value
+        )
+    ){
+
+        value =
+            "https://" +
+            value;
+
+    }
+
+
+    return value;
+
+}
+
+
+function formatDate(timestamp){
+
+    const date =
+        new Date(timestamp);
+
+    const today =
+        new Date();
+
+
+    if(
+        date.toDateString() ===
+        today.toDateString()
+    ){
+
+        return "Today";
+
+    }
+
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            month:"short",
+            day:"numeric"
+        }
+    );
+
+}
+
+
+/* =========================
+   DEFAULT BOOKMARKS
+========================= */
+
+if(!bookmarks.length){
+
+    bookmarks = [
+
+        {
+            id:makeId(),
+
+            title:"Google",
+
+            url:"https://www.google.com",
+
+            description:
+                "A quick place to search the web.",
+
+            category:"Tools",
+
+            icon:"🌐",
+
+            favorite:true,
+
+            created:Date.now(),
+
+            updated:Date.now()
+        },
+
+
+        {
+            id:makeId(),
+
+            title:"MDN Web Docs",
+
+            url:"https://developer.mozilla.org",
+
+            description:
+                "Useful web development documentation and references.",
+
+            category:"Learning",
+
+            icon:"📚",
+
+            favorite:true,
+
+            created:Date.now(),
+
+            updated:Date.now()
+        },
+
+
+        {
+            id:makeId(),
+
+            title:"GitHub",
+
+            url:"https://github.com",
+
+            description:
+                "Save projects, repositories and developer resources here.",
+
+            category:"Work",
+
+            icon:"🛠️",
+
+            favorite:false,
+
+            created:Date.now(),
+
+            updated:Date.now()
+        }
+
+    ];
+
+
+    saveBookmarks();
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(filter){
+
+    currentFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(
+            ".filter"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.filter ===
+                    filter
+                );
+
+            }
+        );
+
+
+    document.getElementById(
+        "filterLabel"
+    ).textContent =
+        filter;
+
+
+    renderBookmarks();
+
+}
+
+
+function clearSearch(){
+
+    document.getElementById(
+        "search"
+    ).value = "";
+
+    renderBookmarks();
+
+}
+
+
+/* =========================
+   RENDER BOOKMARKS
+========================= */
+
+function renderBookmarks(){
+
+    const container =
+        document.getElementById(
+            "bookmarks"
+        );
+
+
+    const search =
+        document.getElementById(
+            "search"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    let result =
+        [...bookmarks];
+
+
+    if(
+        currentFilter ===
+        "Favorites"
+    ){
+
+        result =
+            result.filter(
+                bookmark =>
+                    bookmark.favorite
+            );
+
+    }
+    else if(
+        currentFilter !==
+        "All"
+    ){
+
+        result =
+            result.filter(
+                bookmark =>
+                    bookmark.category ===
+                    currentFilter
+            );
+
+    }
+
+
+    if(search){
+
+        result =
+            result.filter(
+                bookmark => {
+
+                    const content =
+                        [
+                            bookmark.title,
+                            bookmark.url,
+                            bookmark.description,
+                            bookmark.category
+                        ]
+                        .join(" ")
+                        .toLowerCase();
+
+
+                    return content.includes(
+                        search
+                    );
+
+                }
+            );
+
+    }
+
+
+    result.sort(
+        (a,b) =>
+            (b.favorite - a.favorite) ||
+            ((b.updated || 0) -
+             (a.updated || 0))
+    );
+
+
+    if(!result.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ${
+                        search
+                            ? "🔎"
+                            : "🔖"
+                    }
+                </div>
+
+                <strong>
+                    ${
+                        search
+                            ? "No bookmarks found"
+                            : "No bookmarks yet"
+                    }
+                </strong>
+
+                <p>
+                    ${
+                        search
+                            ? "Try a different search."
+                            : "Tap + to save your first website."
+                    }
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        result
+        .map(
+            bookmark => `
+
+                <article class="bookmark">
+
+                    <div class="bookmark-top">
+
+                        <div class="site-icon">
+                            ${escapeHTML(
+                                bookmark.icon
+                            )}
+                        </div>
+
+
+                        <div class="bookmark-info">
+
+                            <div class="bookmark-title">
+                                ${escapeHTML(
+                                    bookmark.title
+                                )}
+                            </div>
+
+                            <div class="bookmark-url">
+                                ${escapeHTML(
+                                    bookmark.url
+                                )}
+                            </div>
+
+                        </div>
+
+
+                        <div class="bookmark-actions">
+
+                            <button
+                                class="icon-btn favorite ${
+                                    bookmark.favorite
+                                        ? "active"
+                                        : ""
+                                }"
+                                onclick="toggleFavorite('${bookmark.id}')"
+                                title="Favorite"
+                            >
+                                ${
+                                    bookmark.favorite
+                                        ? "★"
+                                        : "☆"
+                                }
+                            </button>
+
+
+                            <button
+                                class="icon-btn"
+                                onclick="openEdit('${bookmark.id}')"
+                                title="Edit"
+                            >
+                                ✎
+                            </button>
+
+
+                            <button
+                                class="icon-btn"
+                                onclick="deleteBookmark('${bookmark.id}')"
+                                title="Delete"
+                            >
+                                🗑
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    ${
+                        bookmark.description
+                            ? `
+                                <div class="bookmark-description">
+                                    ${escapeHTML(
+                                        bookmark.description
+                                    )}
+                                </div>
+                            `
+                            : ""
+                    }
+
+
+                    <div class="bookmark-bottom">
+
+                        <span class="category">
+                            ${escapeHTML(
+                                bookmark.category
+                            )}
+                        </span>
+
+
+                        <span class="bookmark-date">
+                            ${formatDate(
+                                bookmark.updated
+                            )}
+                        </span>
+
+
+                        <button
+                            class="open-btn"
+                            onclick="openBookmark('${bookmark.id}')"
+                        >
+                            Open ↗
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `
+        )
+        .join("");
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function renderStats(){
+
+    const categories =
+        new Set(
+            bookmarks.map(
+                bookmark =>
+                    bookmark.category
+            )
+        );
+
+
+    document.getElementById(
+        "totalBookmarks"
+    ).textContent =
+        bookmarks.length;
+
+
+    document.getElementById(
+        "favoriteBookmarks"
+    ).textContent =
+        bookmarks.filter(
+            bookmark =>
+                bookmark.favorite
+        ).length;
+
+
+    document.getElementById(
+        "categoryCount"
+    ).textContent =
+        categories.size;
+
+}
+
+
+/* =========================
+   ADD / EDIT
+========================= */
+
+function openBookmarkModal(){
+
+    editingId =
+        null;
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "➕ Add Bookmark";
+
+
+    document.getElementById(
+        "bookmarkTitle"
+    ).value = "";
+
+
+    document.getElementById(
+        "bookmarkUrl"
+    ).value = "";
+
+
+    document.getElementById(
+        "bookmarkDescription"
+    ).value = "";
+
+
+    document.getElementById(
+        "bookmarkCategory"
+    ).value =
+        "Work";
+
+
+    document.getElementById(
+        "bookmarkIcon"
+    ).value =
+        "🔖";
+
+
+    document.getElementById(
+        "bookmarkModal"
+    )
+    .classList
+    .add("show");
+
+
+    setTimeout(
+        () =>
+            document
+            .getElementById(
+                "bookmarkTitle"
+            )
+            .focus(),
+        100
+    );
+
+}
+
+
+function openEdit(id){
+
+    const bookmark =
+        getBookmark(id);
+
+
+    if(!bookmark){
+
+        return;
+
+    }
+
+
+    editingId =
+        id;
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "✏️ Edit Bookmark";
+
+
+    document.getElementById(
+        "bookmarkTitle"
+    ).value =
+        bookmark.title;
+
+
+    document.getElementById(
+        "bookmarkUrl"
+    ).value =
+        bookmark.url;
+
+
+    document.getElementById(
+        "bookmarkDescription"
+    ).value =
+        bookmark.description;
+
+
+    document.getElementById(
+        "bookmarkCategory"
+    ).value =
+        bookmark.category;
+
+
+    document.getElementById(
+        "bookmarkIcon"
+    ).value =
+        bookmark.icon;
+
+
+    document.getElementById(
+        "bookmarkModal"
+    )
+    .classList
+    .add("show");
+
+}
+
+
+function closeBookmarkModal(){
+
+    document.getElementById(
+        "bookmarkModal"
+    )
+    .classList
+    .remove("show");
+
+
+    editingId =
+        null;
+
+}
+
+
+function closeOutside(event){
+
+    if(
+        event.target.id ===
+        "bookmarkModal"
+    ){
+
+        closeBookmarkModal();
+
+    }
+
+}
+
+
+/* =========================
+   SAVE BOOKMARK
+========================= */
+
+function saveBookmark(){
+
+    const title =
+        document.getElementById(
+            "bookmarkTitle"
+        )
+        .value
+        .trim();
+
+
+    const rawUrl =
+        document.getElementById(
+            "bookmarkUrl"
+        )
+        .value
+        .trim();
+
+
+    const description =
+        document.getElementById(
+            "bookmarkDescription"
+        )
+        .value
+        .trim();
+
+
+    const category =
+        document.getElementById(
+            "bookmarkCategory"
+        )
+        .value;
+
+
+    const icon =
+        document.getElementById(
+            "bookmarkIcon"
+        )
+        .value;
+
+
+    if(!title){
+
+        showToast(
+            "⚠️ Enter a website name."
+        );
+
+        return;
+
+    }
+
+
+    if(!rawUrl){
+
+        showToast(
+            "⚠️ Enter a URL."
+        );
+
+        return;
+
+    }
+
+
+    const url =
+        normalizeUrl(
+            rawUrl
+        );
+
+
+    try{
+
+        new URL(url);
+
+    }
+    catch{
+
+        showToast(
+            "⚠️ Please enter a valid URL."
+        );
+
+        return;
+
+    }
+
+
+    if(editingId){
+
+        const bookmark =
+            getBookmark(
+                editingId
+            );
+
+
+        bookmark.title =
+            title;
+
+        bookmark.url =
+            url;
+
+        bookmark.description =
+            description;
+
+        bookmark.category =
+            category;
+
+        bookmark.icon =
+            icon;
+
+        bookmark.updated =
+            Date.now();
+
+
+        showToast(
+            "🔖 Bookmark updated."
+        );
+
+    }
+    else{
+
+        bookmarks.unshift({
+
+            id:makeId(),
+
+            title:title,
+
+            url:url,
+
+            description:description,
+
+            category:category,
+
+            icon:icon,
+
+            favorite:false,
+
+            created:Date.now(),
+
+            updated:Date.now()
+
+        });
+
+
+        showToast(
+            "🔖 Bookmark saved."
+        );
+
+    }
+
+
+    saveBookmarks();
+
+    closeBookmarkModal();
+
+    render();
+
+}
+
+
+/* =========================
+   FAVORITE
+========================= */
+
+function toggleFavorite(id){
+
+    const bookmark =
+        getBookmark(id);
+
+
+    if(!bookmark){
+
+        return;
+
+    }
+
+
+    bookmark.favorite =
+        !bookmark.favorite;
+
+
+    bookmark.updated =
+        Date.now();
+
+
+    saveBookmarks();
+
+    render();
+
+
+    showToast(
+        bookmark.favorite
+            ? "⭐ Added to favorites."
+            : "☆ Removed from favorites."
+    );
+
+}
+
+
+/* =========================
+   OPEN URL
+========================= */
+
+function openBookmark(id){
+
+    const bookmark =
+        getBookmark(id);
+
+
+    if(!bookmark){
+
+        return;
+
+    }
+
+
+    let url =
+        normalizeUrl(
+            bookmark.url
+        );
+
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteBookmark(id){
+
+    const bookmark =
+        getBookmark(id);
+
+
+    if(!bookmark){
+
+        return;
+
+    }
+
+
+    if(
+        !confirm(
+            `Delete "${bookmark.title}"?`
+        )
+    ){
+
+        return;
+
+    }
+
+
+    bookmarks =
+        bookmarks.filter(
+            item =>
+                item.id !== id
+        );
+
+
+    saveBookmarks();
+
+    render();
+
+
+    showToast(
+        "🗑️ Bookmark deleted."
+    );
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body
+        .classList
+        .toggle("dark");
+
+
+    const dark =
+        document.body
+        .classList
+        .contains("dark");
+
+
+    localStorage.setItem(
+        THEME_KEY,
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById(
+        "themeBtn"
+    ).textContent =
+        dark
+            ? "☀️"
+            : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            THEME_KEY
+        ) === "1";
+
+
+    if(dark){
+
+        document.body
+            .classList
+            .add("dark");
+
+
+        document.getElementById(
+            "themeBtn"
+        ).textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+
+}
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            closeBookmarkModal();
+
+        }
+
+
+        if(
+            event.ctrlKey &&
+            event.key.toLowerCase() ===
+            "n"
+        ){
+
+            event.preventDefault();
+
+            openBookmarkModal();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+    renderBookmarks();
+
+    renderStats();
+
+}
+
+
+loadTheme();
+
+render();
+
+</script>
+
+</body>
+</html>

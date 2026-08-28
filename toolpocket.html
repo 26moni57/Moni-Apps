@@ -1,0 +1,1901 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#ea580c">
+<title>ToolPocket — Offline Tool Tracker</title>
+
+<style>
+:root{
+  --bg:#f6f7f9;
+  --card:#fff;
+  --text:#17181c;
+  --muted:#777d89;
+  --line:#e4e6eb;
+  --primary:#ea580c;
+  --primary-dark:#c2410c;
+  --soft:#fff1e8;
+  --danger:#dc2626;
+  --green:#16a34a;
+  --shadow:0 12px 35px rgba(35,25,15,.08);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+
+.app{
+  width:100%;
+  max-width:620px;
+  min-height:100vh;
+  margin:auto;
+  background:var(--bg);
+}
+
+/* HEADER */
+
+.header{
+  position:relative;
+  overflow:hidden;
+  padding:18px 18px 27px;
+  color:#fff;
+  border-radius:0 0 30px 30px;
+  background:linear-gradient(145deg,#7c2d12,#ea580c 58%,#f97316);
+}
+
+.header:before,
+.header:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.09);
+}
+
+.header:before{
+  width:300px;
+  height:300px;
+  right:-160px;
+  top:-210px;
+}
+
+.header:after{
+  width:190px;
+  height:190px;
+  left:-120px;
+  bottom:-145px;
+}
+
+.topbar{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.15);
+  font-size:21px;
+}
+
+.brand b{
+  display:block;
+  font-size:18px;
+}
+
+.brand span{
+  display:block;
+  margin-top:2px;
+  color:#ffedd5;
+  font-size:7px;
+}
+
+.theme{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  color:#fff;
+  background:rgba(255,255,255,.15);
+}
+
+.hero{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero-label{
+  color:#ffedd5;
+  font-size:8px;
+  font-weight:800;
+}
+
+.title{
+  margin-top:4px;
+  font-size:30px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.hero p{
+  margin:7px 0 0;
+  color:#ffedd5;
+  font-size:8px;
+}
+
+/* CONTENT */
+
+.content{
+  padding:15px;
+}
+
+.card{
+  margin-bottom:13px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+}
+
+.stat{
+  padding:11px 4px;
+  border-radius:14px;
+  text-align:center;
+  background:var(--bg);
+}
+
+.stat .ico{
+  font-size:16px;
+}
+
+.stat b{
+  display:block;
+  margin-top:3px;
+  font-size:13px;
+}
+
+.stat span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:6.5px;
+}
+
+.head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:11px;
+}
+
+.head h2{
+  margin:0;
+  font-size:14px;
+}
+
+.head span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+.search{
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  height:42px;
+  padding:0 38px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:9px;
+}
+
+.search-icon{
+  position:absolute;
+  left:13px;
+  top:12px;
+}
+
+.clear{
+  position:absolute;
+  right:4px;
+  top:4px;
+  width:32px;
+  height:32px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+}
+
+.filters{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  padding:9px 0 2px;
+}
+
+.filters::-webkit-scrollbar{
+  display:none;
+}
+
+.filter{
+  flex:0 0 auto;
+  padding:7px 11px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--card);
+  color:var(--muted);
+  font-size:7px;
+  font-weight:800;
+}
+
+.filter.active{
+  border-color:var(--primary);
+  background:var(--primary);
+  color:#fff;
+}
+
+.primary{
+  width:100%;
+  height:40px;
+  margin-top:9px;
+  border:0;
+  border-radius:10px;
+  background:var(--primary);
+  color:#fff;
+  font-size:8px;
+  font-weight:900;
+}
+
+.primary:hover{
+  background:var(--primary-dark);
+}
+
+/* TOOL LIST */
+
+.tool-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.tool{
+  display:flex;
+  gap:10px;
+  padding:11px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--card);
+}
+
+.tool-icon{
+  width:45px;
+  height:45px;
+  flex:0 0 45px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:var(--soft);
+  font-size:21px;
+}
+
+.tool-info{
+  min-width:0;
+  flex:1;
+}
+
+.tool-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+  font-weight:900;
+}
+
+.tool-meta{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:7px;
+}
+
+.tool-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  margin-top:7px;
+}
+
+.tag{
+  padding:4px 6px;
+  border-radius:6px;
+  background:var(--bg);
+  color:var(--muted);
+  font-size:6px;
+  font-weight:800;
+}
+
+.condition-good{
+  color:var(--green);
+}
+
+.condition-warning{
+  color:#d97706;
+}
+
+.condition-bad{
+  color:var(--danger);
+}
+
+.tool-actions{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.small{
+  width:29px;
+  height:29px;
+  border:0;
+  border-radius:8px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.small:hover{
+  background:var(--soft);
+  color:var(--primary);
+}
+
+.empty{
+  padding:30px 10px;
+  text-align:center;
+}
+
+.empty .emoji{
+  font-size:40px;
+}
+
+.empty b{
+  display:block;
+  margin-top:7px;
+  font-size:10px;
+}
+
+.empty p{
+  max-width:290px;
+  margin:5px auto;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.5;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:15px;
+  background:rgba(20,15,10,.6);
+  backdrop-filter:blur(5px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.box{
+  width:100%;
+  max-width:570px;
+  max-height:93vh;
+  overflow:auto;
+  padding:18px;
+  border-radius:24px;
+  background:var(--card);
+  box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.modal-head h3{
+  margin:0;
+  font-size:15px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:9px;
+  background:var(--bg);
+  color:var(--muted);
+}
+
+.field{
+  margin-bottom:11px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  font-size:8px;
+  font-weight:900;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-size:9px;
+}
+
+.field input,
+.field select{
+  height:40px;
+}
+
+.field textarea{
+  min-height:65px;
+  resize:vertical;
+}
+
+.modal-actions{
+  display:flex;
+  gap:7px;
+  margin-top:15px;
+}
+
+.modal-actions button{
+  flex:1;
+  height:40px;
+  border:0;
+  border-radius:10px;
+  font-size:9px;
+  font-weight:900;
+}
+
+.cancel{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.save{
+  background:var(--primary);
+  color:#fff;
+}
+
+/* DETAIL */
+
+.detail-top{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding-bottom:13px;
+  border-bottom:1px solid var(--line);
+}
+
+.detail-icon{
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  border-radius:17px;
+  background:var(--soft);
+  font-size:28px;
+}
+
+.detail-name{
+  font-size:16px;
+  font-weight:900;
+}
+
+.detail-company{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:13px;
+}
+
+.detail-item{
+  padding:10px;
+  border-radius:11px;
+  background:var(--bg);
+}
+
+.detail-item span{
+  display:block;
+  color:var(--muted);
+  font-size:6px;
+}
+
+.detail-item b{
+  display:block;
+  margin-top:4px;
+  font-size:8px;
+}
+
+.detail-note{
+  margin-top:10px;
+  padding:11px;
+  border-radius:11px;
+  background:var(--bg);
+  font-size:8px;
+  line-height:1.5;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  z-index:100;
+  max-width:calc(100% - 30px);
+  padding:11px 15px;
+  border-radius:11px;
+  background:#17130f;
+  color:#fff;
+  font-size:9px;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+  --bg:#10100f;
+  --card:#1b1a18;
+  --text:#fafafa;
+  --muted:#a7a29b;
+  --line:#322f2b;
+  --soft:#322017;
+  --shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+@media(min-width:700px){
+
+  body{
+    padding:20px 0;
+  }
+
+  .app{
+    min-height:calc(100vh - 40px);
+    overflow:hidden;
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(30,20,10,.14);
+  }
+
+  .modal{
+    align-items:center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+  <div class="topbar">
+
+    <div class="brand">
+
+      <div class="logo">🧰</div>
+
+      <div>
+        <b>ToolPocket</b>
+        <span>YOUR OFFLINE TOOL TRACKER</span>
+      </div>
+
+    </div>
+
+    <button
+      class="theme"
+      id="themeBtn"
+      onclick="toggleTheme()"
+    >🌙</button>
+
+  </div>
+
+  <div class="hero">
+
+    <div class="hero-label">
+      KNOW WHAT YOU OWN
+    </div>
+
+    <div class="title">
+      ToolPocket
+    </div>
+
+    <p>
+      Keep your tools, equipment and warranties organized.
+    </p>
+
+  </div>
+
+</header>
+
+
+<main class="content">
+
+<section class="card">
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="ico">🧰</div>
+      <b id="toolCount">0</b>
+      <span>Tools</span>
+    </div>
+
+    <div class="stat">
+      <div class="ico">💰</div>
+      <b id="totalValue">$0</b>
+      <span>Total Value</span>
+    </div>
+
+    <div class="stat">
+      <div class="ico">📂</div>
+      <b id="categoryCount">0</b>
+      <span>Categories</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="card">
+
+  <div class="head">
+    <h2>🧰 My Tools</h2>
+    <span id="resultCount">0 tools</span>
+  </div>
+
+  <div class="search">
+
+    <span class="search-icon">🔍</span>
+
+    <input
+      id="search"
+      placeholder="Search tools, brands or locations..."
+      oninput="renderTools()"
+    >
+
+    <button
+      class="clear"
+      onclick="clearSearch()"
+    >×</button>
+
+  </div>
+
+  <div
+    class="filters"
+    id="filters"
+  ></div>
+
+  <button
+    class="primary"
+    onclick="openEditor()"
+  >
+    + Add Tool
+  </button>
+
+</section>
+
+
+<section class="card">
+
+  <div
+    class="tool-list"
+    id="toolList"
+  ></div>
+
+</section>
+
+</main>
+
+
+<footer style="
+padding:5px 15px 25px;
+text-align:center;
+color:var(--muted);
+font-size:7px
+">
+🔒 ToolPocket stores everything locally in your browser.
+</footer>
+
+</div>
+
+
+<!-- EDITOR -->
+
+<div
+  class="modal"
+  id="editorModal"
+>
+
+<div class="box">
+
+  <div class="modal-head">
+
+    <h3 id="editorTitle">
+      🧰 Add Tool
+    </h3>
+
+    <button
+      class="close"
+      onclick="closeEditor()"
+    >×</button>
+
+  </div>
+
+
+  <div class="field">
+
+    <label>TOOL / ITEM NAME</label>
+
+    <input
+      id="toolName"
+      maxlength="100"
+      placeholder="e.g. Cordless Drill"
+    >
+
+  </div>
+
+
+  <div class="field">
+
+    <label>BRAND / MAKER</label>
+
+    <input
+      id="brand"
+      maxlength="80"
+      placeholder="e.g. DeWalt"
+    >
+
+  </div>
+
+
+  <div class="field">
+
+    <label>CATEGORY</label>
+
+    <select id="category">
+
+      <option value="Power Tools">
+        🔌 Power Tools
+      </option>
+
+      <option value="Hand Tools">
+        🔨 Hand Tools
+      </option>
+
+      <option value="Garden">
+        🌱 Garden
+      </option>
+
+      <option value="Automotive">
+        🚗 Automotive
+      </option>
+
+      <option value="Workshop">
+        🛠️ Workshop
+      </option>
+
+      <option value="Electronics">
+        ⚡ Electronics
+      </option>
+
+      <option value="Other">
+        📦 Other
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="field">
+
+    <label>LOCATION</label>
+
+    <input
+      id="location"
+      maxlength="100"
+      placeholder="e.g. Garage Shelf A"
+    >
+
+  </div>
+
+
+  <div class="field">
+
+    <label>CONDITION</label>
+
+    <select id="condition">
+
+      <option value="Excellent">
+        🟢 Excellent
+      </option>
+
+      <option value="Good">
+        🟢 Good
+      </option>
+
+      <option value="Fair">
+        🟡 Fair
+      </option>
+
+      <option value="Needs Repair">
+        🔴 Needs Repair
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="field">
+
+    <label>PURCHASE DATE</label>
+
+    <input
+      id="purchaseDate"
+      type="date"
+    >
+
+  </div>
+
+
+  <div class="field">
+
+    <label>WARRANTY UNTIL</label>
+
+    <input
+      id="warrantyDate"
+      type="date"
+    >
+
+  </div>
+
+
+  <div class="field">
+
+    <label>ESTIMATED VALUE</label>
+
+    <input
+      id="value"
+      type="number"
+      min="0"
+      step="0.01"
+      placeholder="0.00"
+    >
+
+  </div>
+
+
+  <div class="field">
+
+    <label>NOTES</label>
+
+    <textarea
+      id="notes"
+      maxlength="500"
+      placeholder="Specifications, serial number, accessories, maintenance notes..."
+    ></textarea>
+
+  </div>
+
+
+  <div class="modal-actions">
+
+    <button
+      class="cancel"
+      onclick="closeEditor()"
+    >
+      Cancel
+    </button>
+
+    <button
+      class="save"
+      onclick="saveTool()"
+    >
+      Save Tool
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- DETAIL MODAL -->
+
+<div
+  class="modal"
+  id="detailModal"
+>
+
+<div class="box">
+
+  <div class="modal-head">
+
+    <h3>
+      🧰 Tool Details
+    </h3>
+
+    <button
+      class="close"
+      onclick="closeDetail()"
+    >×</button>
+
+  </div>
+
+  <div id="detailContent"></div>
+
+  <div class="modal-actions">
+
+    <button
+      class="cancel"
+      onclick="closeDetail()"
+    >
+      Close
+    </button>
+
+    <button
+      class="save"
+      id="detailEditBtn"
+    >
+      ✏️ Edit
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+
+"use strict";
+
+const STORAGE_KEY = "toolPocketData";
+const THEME_KEY = "toolPocketTheme";
+
+let data =
+  JSON.parse(
+    localStorage.getItem(STORAGE_KEY) || "null"
+  );
+
+if(!data || typeof data !== "object"){
+  data = {tools:[]};
+}
+
+if(!Array.isArray(data.tools)){
+  data.tools = [];
+}
+
+let editingId = null;
+let activeCategory = "All";
+let activeDetailId = null;
+
+
+/* HELPERS */
+
+function uid(){
+
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2,8);
+
+}
+
+function save(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+function esc(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+function money(value){
+
+  const n = Number(value) || 0;
+
+  return "$" + n.toLocaleString(
+    undefined,
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+  );
+
+}
+
+function formatDate(value){
+
+  if(!value)return "Not set";
+
+  const d = new Date(value + "T00:00:00");
+
+  if(Number.isNaN(d.getTime())){
+    return value;
+  }
+
+  return d.toLocaleDateString(
+    undefined,
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric"
+    }
+  );
+
+}
+
+function toast(message){
+
+  const t =
+    document.getElementById("toast");
+
+  t.textContent = message;
+
+  t.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(
+      ()=>t.classList.remove("show"),
+      2200
+    );
+
+}
+
+
+/* EDITOR */
+
+function openEditor(tool=null){
+
+  editingId =
+    tool?.id || null;
+
+  document.getElementById("editorTitle")
+    .textContent =
+      tool
+        ? "✏️ Edit Tool"
+        : "🧰 Add Tool";
+
+  document.getElementById("toolName")
+    .value =
+      tool?.name || "";
+
+  document.getElementById("brand")
+    .value =
+      tool?.brand || "";
+
+  document.getElementById("category")
+    .value =
+      tool?.category || "Power Tools";
+
+  document.getElementById("location")
+    .value =
+      tool?.location || "";
+
+  document.getElementById("condition")
+    .value =
+      tool?.condition || "Good";
+
+  document.getElementById("purchaseDate")
+    .value =
+      tool?.purchaseDate || "";
+
+  document.getElementById("warrantyDate")
+    .value =
+      tool?.warrantyDate || "";
+
+  document.getElementById("value")
+    .value =
+      tool?.value ?? "";
+
+  document.getElementById("notes")
+    .value =
+      tool?.notes || "";
+
+  document
+    .getElementById("editorModal")
+    .classList.add("show");
+
+}
+
+
+function closeEditor(){
+
+  document
+    .getElementById("editorModal")
+    .classList.remove("show");
+
+  editingId = null;
+
+}
+
+
+/* SAVE */
+
+function saveTool(){
+
+  const name =
+    document.getElementById("toolName")
+      .value.trim();
+
+  const brand =
+    document.getElementById("brand")
+      .value.trim();
+
+  const category =
+    document.getElementById("category")
+      .value;
+
+  const location =
+    document.getElementById("location")
+      .value.trim();
+
+  const condition =
+    document.getElementById("condition")
+      .value;
+
+  const purchaseDate =
+    document.getElementById("purchaseDate")
+      .value;
+
+  const warrantyDate =
+    document.getElementById("warrantyDate")
+      .value;
+
+  const value =
+    Number(
+      document.getElementById("value")
+        .value
+    ) || 0;
+
+  const notes =
+    document.getElementById("notes")
+      .value.trim();
+
+
+  if(!name){
+
+    toast("Please enter a tool name.");
+
+    return;
+
+  }
+
+
+  const existing =
+    editingId
+      ? data.tools.find(
+          x=>x.id===editingId
+        )
+      : null;
+
+
+  const tool = {
+
+    id:
+      editingId || uid(),
+
+    name,
+
+    brand,
+
+    category,
+
+    location,
+
+    condition,
+
+    purchaseDate,
+
+    warrantyDate,
+
+    value,
+
+    notes,
+
+    created:
+      existing?.created ||
+      Date.now()
+
+  };
+
+
+  if(editingId){
+
+    const index =
+      data.tools.findIndex(
+        x=>x.id===editingId
+      );
+
+    if(index >= 0){
+      data.tools[index] = tool;
+    }
+
+    toast("✏️ Tool updated.");
+
+  }else{
+
+    data.tools.unshift(tool);
+
+    toast("🧰 Tool added.");
+
+  }
+
+
+  save();
+
+  closeEditor();
+
+  render();
+
+}
+
+
+/* DELETE */
+
+function deleteTool(id){
+
+  const tool =
+    data.tools.find(
+      x=>x.id===id
+    );
+
+  if(!tool)return;
+
+  if(!confirm(
+    `Delete "${tool.name}"?`
+  ))return;
+
+  data.tools =
+    data.tools.filter(
+      x=>x.id!==id
+    );
+
+  save();
+
+  closeDetail();
+
+  render();
+
+  toast("🗑️ Tool deleted.");
+
+}
+
+
+/* CATEGORY */
+
+function getCategories(){
+
+  return [
+    "All",
+    ...new Set(
+      data.tools
+        .map(x=>x.category)
+        .filter(Boolean)
+    )
+  ];
+
+}
+
+
+function renderFilters(){
+
+  const box =
+    document.getElementById("filters");
+
+  box.innerHTML =
+    getCategories()
+      .map(category=>`
+
+        <button
+          class="
+            filter
+            ${activeCategory===category
+              ?"active":""
+            }
+          "
+          onclick="setCategory(${JSON.stringify(category)})"
+        >
+          ${esc(category)}
+        </button>
+
+      `)
+      .join("");
+
+}
+
+
+function setCategory(category){
+
+  activeCategory = category;
+
+  renderFilters();
+
+  renderTools();
+
+}
+
+
+/* CONDITION */
+
+function conditionClass(condition){
+
+  if(
+    condition==="Excellent" ||
+    condition==="Good"
+  ){
+    return "condition-good";
+  }
+
+  if(condition==="Fair"){
+    return "condition-warning";
+  }
+
+  return "condition-bad";
+
+}
+
+
+function conditionIcon(condition){
+
+  if(condition==="Excellent")return "🟢";
+  if(condition==="Good")return "🟢";
+  if(condition==="Fair")return "🟡";
+
+  return "🔴";
+
+}
+
+
+/* TOOL ICON */
+
+function categoryIcon(category){
+
+  const icons = {
+
+    "Power Tools":"🔌",
+    "Hand Tools":"🔨",
+    "Garden":"🌱",
+    "Automotive":"🚗",
+    "Workshop":"🛠️",
+    "Electronics":"⚡",
+    "Other":"📦"
+
+  };
+
+  return icons[category] || "🧰";
+
+}
+
+
+/* RENDER TOOLS */
+
+function renderTools(){
+
+  const query =
+    document.getElementById("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const tools =
+    data.tools.filter(tool=>{
+
+      const text =
+        [
+          tool.name,
+          tool.brand,
+          tool.location,
+          tool.category,
+          tool.condition,
+          tool.notes
+        ]
+        .join(" ")
+        .toLowerCase();
+
+
+      const matchesSearch =
+        !query ||
+        text.includes(query);
+
+
+      const matchesCategory =
+        activeCategory==="All" ||
+        tool.category===activeCategory;
+
+
+      return (
+        matchesSearch &&
+        matchesCategory
+      );
+
+    });
+
+
+  document.getElementById("resultCount")
+    .textContent =
+      `${tools.length} ${
+        tools.length===1
+          ?"tool"
+          :"tools"
+      }`;
+
+
+  const list =
+    document.getElementById("toolList");
+
+
+  if(!tools.length){
+
+    list.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emoji">
+          🧰
+        </div>
+
+        <b>
+          No tools found
+        </b>
+
+        <p>
+          Add your first tool to start
+          building your personal inventory.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    tools.map(tool=>`
+
+      <div class="tool">
+
+        <div class="tool-icon">
+          ${categoryIcon(tool.category)}
+        </div>
+
+
+        <div class="tool-info">
+
+          <div class="tool-name">
+            ${esc(tool.name)}
+          </div>
+
+          <div class="tool-meta">
+            ${esc(
+              tool.brand ||
+              "No brand"
+            )}
+            ${tool.location
+              ? " · " + esc(tool.location)
+              : ""
+            }
+          </div>
+
+
+          <div class="tool-tags">
+
+            <span class="tag">
+              ${esc(tool.category)}
+            </span>
+
+            <span
+              class="
+                tag
+                ${conditionClass(tool.condition)}
+              "
+            >
+              ${conditionIcon(tool.condition)}
+              ${esc(tool.condition)}
+            </span>
+
+            <span class="tag">
+              ${money(tool.value)}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="tool-actions">
+
+          <button
+            class="small"
+            title="View"
+            onclick="openDetail('${tool.id}')"
+          >
+            👁️
+          </button>
+
+          <button
+            class="small"
+            title="Edit"
+            onclick="openEditor(data.tools.find(x=>x.id==='${tool.id}'))"
+          >
+            ✏️
+          </button>
+
+          <button
+            class="small"
+            title="Delete"
+            onclick="deleteTool('${tool.id}')"
+          >
+            🗑️
+          </button>
+
+        </div>
+
+      </div>
+
+    `)
+    .join("");
+
+}
+
+
+/* DETAILS */
+
+function openDetail(id){
+
+  const tool =
+    data.tools.find(
+      x=>x.id===id
+    );
+
+  if(!tool)return;
+
+  activeDetailId = id;
+
+
+  document.getElementById("detailContent")
+    .innerHTML = `
+
+      <div class="detail-top">
+
+        <div class="detail-icon">
+          ${categoryIcon(tool.category)}
+        </div>
+
+        <div>
+
+          <div class="detail-name">
+            ${esc(tool.name)}
+          </div>
+
+          <div class="detail-company">
+            ${esc(
+              tool.brand ||
+              "No brand specified"
+            )}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-grid">
+
+        <div class="detail-item">
+          <span>Category</span>
+          <b>${esc(tool.category)}</b>
+        </div>
+
+        <div class="detail-item">
+          <span>Condition</span>
+          <b class="${conditionClass(tool.condition)}">
+            ${conditionIcon(tool.condition)}
+            ${esc(tool.condition)}
+          </b>
+        </div>
+
+        <div class="detail-item">
+          <span>Location</span>
+          <b>
+            ${esc(tool.location || "Not set")}
+          </b>
+        </div>
+
+        <div class="detail-item">
+          <span>Estimated Value</span>
+          <b>${money(tool.value)}</b>
+        </div>
+
+        <div class="detail-item">
+          <span>Purchased</span>
+          <b>${formatDate(tool.purchaseDate)}</b>
+        </div>
+
+        <div class="detail-item">
+          <span>Warranty Until</span>
+          <b>${formatDate(tool.warrantyDate)}</b>
+        </div>
+
+      </div>
+
+
+      ${
+        tool.notes
+          ? `
+            <div class="detail-note">
+              <strong>📝 Notes</strong><br>
+              ${esc(tool.notes)}
+            </div>
+          `
+          : ""
+      }
+
+    `;
+
+
+  document.getElementById("detailEditBtn")
+    .onclick = ()=>{
+      closeDetail();
+      openEditor(tool);
+    };
+
+
+  document
+    .getElementById("detailModal")
+    .classList.add("show");
+
+}
+
+
+function closeDetail(){
+
+  document
+    .getElementById("detailModal")
+    .classList.remove("show");
+
+  activeDetailId = null;
+
+}
+
+
+/* STATS */
+
+function renderStats(){
+
+  const total =
+    data.tools.reduce(
+      (sum,tool)=>
+        sum + (Number(tool.value)||0),
+      0
+    );
+
+
+  document.getElementById("toolCount")
+    .textContent =
+      data.tools.length;
+
+
+  document.getElementById("totalValue")
+    .textContent =
+      money(total);
+
+
+  document.getElementById("categoryCount")
+    .textContent =
+      new Set(
+        data.tools
+          .map(x=>x.category)
+      ).size;
+
+}
+
+
+/* SEARCH */
+
+function clearSearch(){
+
+  document.getElementById("search")
+    .value="";
+
+  renderTools();
+
+}
+
+
+/* THEME */
+
+function toggleTheme(){
+
+  document.body
+    .classList
+    .toggle("dark");
+
+
+  const dark =
+    document.body.classList
+      .contains("dark");
+
+
+  localStorage.setItem(
+    THEME_KEY,
+    dark ? "1" : "0"
+  );
+
+
+  document.getElementById("themeBtn")
+    .textContent =
+      dark ? "☀️" : "🌙";
+
+}
+
+
+function loadTheme(){
+
+  if(
+    localStorage.getItem(THEME_KEY)
+    === "1"
+  ){
+
+    document.body
+      .classList
+      .add("dark");
+
+    document.getElementById("themeBtn")
+      .textContent="☀️";
+
+  }
+
+}
+
+
+/* MODALS */
+
+document
+  .getElementById("editorModal")
+  .addEventListener("click",e=>{
+
+    if(e.target.id==="editorModal"){
+      closeEditor();
+    }
+
+  });
+
+
+document
+  .getElementById("detailModal")
+  .addEventListener("click",e=>{
+
+    if(e.target.id==="detailModal"){
+      closeDetail();
+    }
+
+  });
+
+
+document.addEventListener(
+  "keydown",
+  e=>{
+
+    if(e.key==="Escape"){
+
+      closeEditor();
+      closeDetail();
+
+    }
+
+  }
+);
+
+
+/* INITIALIZE */
+
+loadTheme();
+
+renderStats();
+
+renderFilters();
+
+renderTools();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0f766e">
+<title>DailyQuote Board</title>
+
+<style>
+/* BRAND NEW CSS PALETTE: Teal Ink & Vintage Book Paper Literary Look */
+:root{
+--bg:#f4f0e6;
+--card:#fdfaf7;
+--text:#1c2d29;
+--muted:#0f766e;
+--line:#e6dfd1;
+--primary:#0f766e;
+--primary2:#14b8a6;
+--soft:#ccfbf1;
+--danger:#e11d48;
+--shadow:0 12px 35px rgba(28,45,41,0.06)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Georgia, serif;
+background:var(--bg);
+color:var(--text);
+user-select:none
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER - TRANQUIL LITERARY TEAL GRADIENT */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#115e59,#0f766e 55%,#14b8a6);
+border-radius:0 0 31px 31px;
+overflow:hidden;
+border-bottom:3px solid var(--line)
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.05);
+border:1px dashed var(--line)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.12);
+font-size:20px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:900;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.12);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px;
+font-weight:normal
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+font-family:system-ui, -apple-system, sans-serif;
+color:rgba(255,255,255,.75)
+}
+
+/* CONTENT CONTAINER */
+.content{padding:18px}
+
+.card{
+padding:22px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:24px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.title h2{
+margin:0;
+font-size:14px;
+text-transform:uppercase;
+font-weight:800;
+letter-spacing:0.5px;
+color:var(--muted)
+}
+
+/* QUOTE BOARD PANEL AREA */
+.quote-container {
+display:flex;
+flex-direction:column;
+padding:10px 0;
+min-height:130px;
+justify-content:center;
+transition:opacity 0.2s ease-in-out
+}
+
+.quote-text {
+font-size:18px;
+line-height:1.5;
+font-style:italic;
+color:var(--text);
+text-align:center
+}
+
+.quote-author {
+font-size:13px;
+font-weight:bold;
+font-family:system-ui, -apple-system, sans-serif;
+color:var(--primary);
+text-align:center;
+margin-top:14px;
+text-transform:uppercase;
+letter-spacing:0.5px
+}
+
+/* BUTTON CONTROLS ROW */
+.button-stack-grid {
+display:grid;
+grid-template-columns:3fr 1fr;
+gap:10px;
+margin-top:4px;
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.btn-action-trigger {
+padding:14px;
+border:0;
+border-radius:14px;
+background:var(--primary);
+color:white;
+font-weight:800;
+font-size:14.5px;
+transition:opacity 0.15s
+}
+.btn-action-trigger:active { opacity:0.85 }
+
+.btn-icon-shortcut {
+padding:14px;
+border:1px solid var(--line);
+border-radius:14px;
+background:var(--card);
+color:var(--primary);
+font-size:16px;
+display:grid;
+place-items:center
+}
+
+/* ARCHIVED LOG LEDGER FEED LIST */
+.favorite-quote-row {
+padding:11px 0;
+border-bottom:1px solid var(--line);
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:13px
+}
+.favorite-quote-row:last-child { border-bottom:0 }
+
+.fav-excerpt-text {
+font-style:italic;
+color:var(--text);
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+max-width:260px
+}
+
+.btn-wipe-row {
+background:transparent;
+border:0;
+color:var(--danger);
+font-size:11px;
+font-weight:700;
+padding:4px;
+font-family:system-ui, -apple-system, sans-serif;
+cursor:pointer
+}
+
+/* NOTIFICATION TOAST OVERLAY PANEL */
+.toast{
+position:fixed;
+left:50%;
+bottom:40px;
+z-index:50;
+transform:translate(-50%,20px);
+opacity:0;
+padding:11px 16px;
+border-radius:12px;
+background:var(--text);
+color:var(--card);
+font-size:11.5px;
+font-weight:700;
+white-space:nowrap;
+transition:.25s;
+pointer-events:none;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+font-family:system-ui, -apple-system, sans-serif
+}
+
+.toast.show{
+opacity:1;
+transform:translate(-50%,0)
+}
+
+/* ANTIQUE TEXTURED INVERSION SKIN OVERRIDE */
+body.light-theme {
+--bg:#121c17;
+--card:#1a2b25;
+--text:#f4f0e6;
+--muted:#14b8a6;
+--line:#263e35;
+--shadow:0 10px 30px rgba(0,0,0,0.2)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">📜</div>
+<div class="brand-name">DailyQuote</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+</div>
+
+<div class="hero">
+<h1>Gather Wisdom.<br>Timeless Excerpts.</h1>
+<p>Unlock structured classic literary reflections and bookmark fav passages locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- INTERACTIVE MAIN TEXT FRAME DISPLAY CARD -->
+<section class="card">
+<div id="quoteCanvasPanel" class="quote-container">
+<div id="lblQuoteTextString" class="quote-text">"Loading deep internal literary patterns..."</div>
+<div id="lblQuoteAuthorString" class="quote-author">Author Node</div>
+</div>
+</section>
+
+<!-- CONTROLLER TRIGGERS CONFIG WRAPPER -->
+<section class="card" style="padding:10px; background:transparent; border:0; box-shadow:none; margin-bottom:5px;">
+<div class="button-stack-grid">
+<button class="btn-action-trigger" onclick="rollNextWisdomQuote()">Roll New Quote</button>
+<button class="btn-icon-shortcut" onclick="addActiveQuoteToFavorites()" title="Bookmark code node">❤️</button>
+</div>
+</section>
+
+<!-- FAVORITES PERSISTENT BOOKMARK STACK LEDGER -->
+<section class="card">
+<div class="title">
+<h2>📌 Bookmarked Insights Notebook</h2>
+</div>
+<div id="favoritesLogListContainer">
+<!-- Dynamic entry rows injected by JavaScript -->
+</div>
+</section>
+
+</main>
+
+<!-- COMPLETED ACTION TEXT CONFIRMATION TOAST -->
+<div class="toast" id="toastNotificationPanel">Snippet copied to clipboard!</div>
+
+</div>
+
+<script>
+// Static quotation database ledger configuration mapping
+const wisdomQuotesDatabase = [
+    { text: "The only true wisdom is in knowing you know nothing.", author: "Socrates" },
+    { text: "The journey of a thousand miles begins with one step.", author: "Lao Tzu" },
+    { text: "That which does not kill us makes us stronger.", author: "Friedrich Nietzsche" },
+    { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+    { text: "Be yourself; everyone else is already taken.", author: "Oscar Wilde" },
+    { text: "To be plain text is to be clean code architecture.", author: "Compiler Axiom" }
+];
+
+let activeQuoteIndexPointer = 0;
+let bookmarkedQuotesArray = JSON.parse(localStorage.getItem("literary_quote_notebook")) || [];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "☀️" : "🌙";
+}
+
+function rollNextWisdomQuote() {
+    const canvas = document.getElementById("quoteCanvasPanel");
+    canvas.style.opacity = 0; 
+    
+    setTimeout(() => {
+        let nextIndexIdx = Math.floor(Math.random() * wisdomQuotesDatabase.length);
+        if(nextIndexIdx === activeQuoteIndexPointer) {
+            nextIndexIdx = (nextIndexIdx + 1) % wisdomQuotesDatabase.length;
+        }
+        activeQuoteIndexPointer = nextIndexIdx;
+        
+        const quoteObj = wisdomQuotesDatabase[activeQuoteIndexPointer];
+        document.getElementById("lblQuoteTextString").innerText = `"${quoteObj.text}"`;
+        document.getElementById("lblQuoteAuthorString").innerText = quoteObj.author;
+        
+        canvas.style.opacity = 1;
+    }, 200);
+}
+
+function addActiveQuoteToFavorites() {
+    const activeItem = wisdomQuotesDatabase[activeQuoteIndexPointer];
+    
+    const alreadySaved = bookmarkedQuotesArray.some(q => q.text === activeItem.text);
+    if(alreadySaved) {
+        showToastNotificationPanel("Insight already archived in notebook.");
+        return;
+    }
+
+    bookmarkedQuotesArray.unshift({ id: Date.now(), text: activeItem.text, author: activeItem.author });
+    if(bookmarkedQuotesArray.length > 4) bookmarkedQuotesArray.pop(); 
+
+    saveAndRedrawNotebookView();
+    showToastNotificationPanel("Insight bookmarked safely!");
+}
+
+function wipeNotebookRow(id) {
+    bookmarkedQuotesArray = bookmarkedQuotesArray.filter(q => q.id !== id);
+    saveAndRedrawNotebookView();
+}
+
+function saveAndRedrawNotebookView() {
+    localStorage.setItem("literary_quote_notebook", JSON.stringify(bookmarkedQuotesArray));
+    render();
+}
+
+function showToastNotificationPanel(messageTextString) {
+    const toast = document.getElementById("toastNotificationPanel");
+    toast.innerText = messageTextString;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
+function render() {
+    const container = document.getElementById("favoritesLogListContainer");
+
+    if (bookmarkedQuotesArray.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--muted); font-size:12.5px; font-family:system-ui, sans-serif;">Notebook is blank. Tap the heart target to bookmark lines.</div>`;
+        return;
+    }
+
+    container.innerHTML = bookmarkedQuotesArray.map(q => `
+        <div class="favorite-quote-row">
+            <span class="fav-excerpt-text" title="${q.text}">"${q.text}"</span>
+            <button class="btn-wipe-row" onclick="wipeNotebookRow(${q.id})">Wipe</button>
+        </div>
+    `).join("");
+}
+
+// Initial structural rendering loop initialization configurations updates on boot launch execution pathsrollNextWisdomQuote();render();</script></body></html>

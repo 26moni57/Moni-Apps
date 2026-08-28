@@ -1,0 +1,521 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>SleepPocket Tracker</title>
+
+<style>
+/* UNIFORM MIDNIGHT OCEAN STYLE */
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--line:#334155;
+--primary:#2563eb;
+--primary2:#3b82f6;
+--soft:#1e3a8a;
+--green:#10b981;
+--green-soft:#064e3b;
+--danger:#ef4444;
+--shadow:0 10px 30px rgba(15,23,42,.4)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+margin:auto;
+overflow:hidden
+}
+
+/* HEADER */
+.header{
+position:relative;
+padding:21px 18px 31px;
+color:white;
+background:linear-gradient(145deg,#1e3a8a,#2563eb 55%,#0d9488);
+border-radius:0 0 31px 31px;
+overflow:hidden
+}
+
+.header:before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+right:-90px;
+top:-105px;
+border-radius:50%;
+background:rgba(255,255,255,.08)
+}
+
+.topbar{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.brand-icon{
+width:41px;
+height:41px;
+display:grid;
+place-items:center;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+font-size:22px
+}
+
+.brand-name{
+font-size:21px;
+font-weight:850;
+letter-spacing:-.5px
+}
+
+.theme{
+width:40px;
+height:40px;
+border:0;
+border-radius:13px;
+background:rgba(255,255,255,.15);
+color:#fff
+}
+
+.hero{
+position:relative;
+z-index:2;
+margin-top:25px
+}
+
+.hero h1{
+margin:0;
+font-size:30px;
+line-height:1.08;
+letter-spacing:-.8px
+}
+
+.hero p{
+margin:8px 0 0;
+font-size:13px;
+color:rgba(255,255,255,.8)
+}
+
+/* CONTENT */
+.content{padding:18px}
+
+.card{
+padding:17px;
+margin-bottom:14px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:21px;
+box-shadow:var(--shadow)
+}
+
+.title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:14px
+}
+
+.title h2{
+margin:0;
+font-size:15px
+}
+
+.title span{
+font-size:10px;
+color:var(--muted)
+}
+
+/* OVERVIEW AVG STATS GRID */
+.stats{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:8px
+}
+
+.stat{
+padding:14px 7px;
+text-align:center;
+background:var(--bg);
+border-radius:14px;
+border:1px solid var(--line)
+}
+
+.stat strong{
+display:block;
+font-size:19px;
+letter-spacing:-0.5px;
+color:var(--primary2)
+}
+
+.stat span{
+display:block;
+margin-top:4px;
+font-size:9px;
+color:var(--muted);
+text-transform:uppercase;
+font-weight:700
+}
+
+/* SLEEP HISTORY ITEMS */
+.sleep-item {
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px 0;
+border-bottom:1px solid var(--line)
+}
+.sleep-item:last-child{border-bottom:0}
+
+.sleep-icon {
+width:40px;
+height:40px;
+border-radius:12px;
+background:var(--bg);
+display:grid;
+place-items:center;
+font-size:18px;
+flex-shrink:0
+}
+
+.sleep-details {
+flex:1;
+min-width:0
+}
+
+.sleep-title {
+font-size:14px;
+font-weight:750;
+color:var(--text)
+}
+
+.sleep-meta {
+font-size:9px;
+color:var(--muted);
+margin-top:3px
+}
+
+.sleep-badge-col {
+text-align:right;
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:4px
+}
+
+.sleep-duration {
+font-size:14px;
+font-weight:800;
+color:var(--text)
+}
+
+.quality-tag {
+display:inline-block;
+padding:3px 6px;
+border-radius:6px;
+font-size:8px;
+font-weight:800;
+text-transform:uppercase
+}
+.quality-tag.excellent { background:var(--green-soft); color:var(--green); }
+.quality-tag.good { background:#3b82f633; color:var(--primary2); }
+.quality-tag.poor { background:#ef444433; color:var(--danger); }
+
+.btn-delete-row {
+background:transparent;
+border:0;
+color:var(--danger);
+font-size:10px;
+font-weight:700;
+padding:2px 0 0;
+cursor:pointer
+}
+
+/* FLOATING ACTION TRIGGER FAB */
+.fab{
+position:fixed;
+right:max(22px,calc((100vw - 430px)/2 + 22px));
+bottom:23px;
+width:59px;
+height:59px;
+border:0;
+border-radius:20px;
+background:var(--primary);
+color:white;
+font-size:28px;
+box-shadow:0 12px 28px rgba(37,99,235,.28);
+z-index:10;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+/* MODAL CONTAINER OVERLAY OVERRIDES */
+.overlay{
+position:fixed;
+inset:0;
+z-index:20;
+display:none;
+align-items:flex-end;
+justify-content:center;
+background:rgba(0,0,0,.6)
+}
+.overlay.show{display:flex}
+
+.modal{
+width:min(430px,100%);
+max-height:92vh;
+overflow:auto;
+padding:23px 18px 30px;
+background:var(--card);
+border-radius:28px 28px 0 0;
+border-top:1px solid var(--line)
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px
+}
+
+.modal-head h2{
+margin:0;
+font-size:19px
+}
+
+.close{
+width:35px;
+height:35px;
+border:0;
+border-radius:10px;
+background:var(--bg);
+color:var(--text)
+}
+
+.field{margin-bottom:12px}
+
+.field label{
+display:block;
+margin-bottom:6px;
+font-size:11px;
+font-weight:750;
+color:var(--muted)
+}
+
+.field input,
+.field select{
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:12px;
+outline:none;
+background:var(--bg);
+color:var(--text)
+}
+
+.save{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+background:var(--primary);
+color:white;
+font-weight:800
+}
+
+.empty-state {
+text-align:center;
+padding:35px 15px;
+color:var(--muted)
+}
+.empty-icon { font-size:40px; margin-bottom:6px; }
+
+/* LIGHT SKIN INVERSION STYLE OVERRIDE */
+body.light-theme {
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--line:#cbd5e1;
+--soft:#dbeafe;
+--shadow:0 10px 30px rgba(51,65,85,0.06)
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🌙</div>
+<div class="brand-name">SleepPocket</div>
+</div>
+<button class="theme" id="themeBtn" onclick="toggleTheme()">☀️</button>
+</div>
+
+<div class="hero">
+<h1>Rest Deeply.<br>Track Rest Quality.</h1>
+<p>Log bedtime durations, verify waking times, and trace cycle health loops locally.</p>
+</div>
+</header>
+
+<main class="content">
+
+<!-- OVERVIEW CARD METRICS PANEL -->
+<section class="card">
+<div class="stats">
+<div class="stat">
+<strong id="avgSleep">0.0h</strong>
+<span>Avg Duration</span>
+</div>
+<div class="stat">
+<strong id="sleepCount">0 Nights</strong>
+<span>Logged Logs</span>
+</div>
+</div>
+</section>
+
+<!-- SLEEP ENTRIES HISTORIC FEED STACK -->
+<section class="card">
+<div class="title">
+<h2>📊 Sleep History Records</h2>
+<span id="historyCountSpan">0 records</span>
+</div>
+
+<div id="sleepLogContainer">
+<!-- Rendered dynamically by JavaScript execution processing loops -->
+</div>
+</section>
+
+</main>
+
+<!-- FLOATING DRAWER TRIGGER KEY ACTION -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- ADD ENTRY MODAL SHEET DRAWER POPUP -->
+<div class="overlay" id="overlay">
+<div class="modal">
+<div class="modal-head">
+<h2>Log Night Sleep Rest</h2>
+<button class="close" onclick="closeModal()">✕</button>
+</div>
+
+<div class="field">
+<label>BEDTIME INITIAL START TIME</label>
+<input type="datetime-local" id="sleepStart">
+</div>
+
+<div class="field">
+<label>WAKE UP END TIME</label>
+<input type="datetime-local" id="sleepEnd">
+</div>
+
+<div class="field">
+<label>SLEEP QUALITY RATING</label>
+<select id="sleepQuality">
+<option value="excellent">✨ Excellent Rest</option>
+<option value="good" selected>👍 Good / Refreshing</option>
+<option value="poor">🥱 Restless / Poor</option>
+</select>
+</div>
+
+<button class="save" onclick="commitSleepLogEntry()">Commit Log to Pocket</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// Fetch workspace memory parameters strings array sequence out of browser local sandbox storage
+let logs = JSON.parse(localStorage.getItem("sleep_pocket_logs")) || [
+    { id: 1, start: "2026-08-25 22:30", end: "2026-08-26 06:30", hours: 8.0, quality: "excellent" },
+    { id: 2, start: "2026-08-26 23:15", end: "2026-08-27 06:45", hours: 7.5, quality: "good" }
+];
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const btn = document.getElementById("themeBtn");
+    btn.innerText = document.body.classList.contains("light-theme") ? "🌙" : "☀️";
+}
+
+function openModal() {
+    document.getElementById("overlay").classList.add("show");
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById("sleepEnd").value = now.toISOString().slice(0, 16);
+    
+    // Auto populate default 8 hour offset estimate for start parameter choice metrics ease
+    const past = new Date(now.getTime() - (8 * 60 * 60 * 1000));
+    document.getElementById("sleepStart").value = past.toISOString().slice(0, 16);
+}
+function closeModal() { document.getElementById("overlay").classList.remove("show"); }
+
+function commitSleepLogEntry() {
+    const startVal = document.getElementById("sleepStart").value;
+    const endVal = document.getElementById("sleepEnd").value;
+    const quality = document.getElementById("sleepQuality").value;
+
+    if (!startVal || !endVal) return alert("Please clarify complete datetime configurations points.");
+
+    const dStart = new Date(startVal);
+    const dEnd = new Date(endVal);
+
+    if (dEnd <= dStart) return alert("Wake up time must extend beyond bedtime setup limits.");
+
+    // Parse out structural hours values total counts
+    const hours = parseFloat(((dEnd - dStart) / (1000 * 60 * 60)).toFixed(1));
+
+    const cleanStart = startVal.replace('T', ' ');
+    const cleanEnd = endVal.replace('T', ' ');
+
+    logs.unshift({ id: Date.now(), start: cleanStart, end: cleanEnd, hours, quality });
+    saveAndRender();
+    closeModal();
+}
+
+function deleteSleepEntry(id) {
+    logs = logs.filter(l => l.id !== id);
+    saveAndRender();
+}
+
+function saveAndRender() {
+    localStorage.setItem("sleep_pocket_logs", JSON.stringify(logs));
+    render();
+}
+
+function render() {
+    const container = document.getElementById("sleepLogContainer");
+    
+    // Formulate averages indices configurations parameters loops sum actions
+    const totalHours = logs.reduce((acc, curr) => acc + curr.hours, 0);
+const avg = logs.length > 0 ? (totalHours / logs.length).toFixed(1) : "0.0";document.getElementById("avgSleep").innerText = ${avg}h;document.getElementById("sleepCount").innerText = ${logs.length} Nights;document.getElementById("historyCountSpan").innerText = ${logs.length} records;if (logs.length === 0) {container.innerHTML =  <div class="empty-state"> <div class="empty-icon">💤</div> <h3>Sleep Logs Empty</h3> <p>Tap the floating button below to track your last cycle sleep rest index.</p> </div>;return;}container.innerHTML = logs.map(l => <div class="sleep-item"> <div class="sleep-icon">${l.quality === 'excellent' ? '✨' : l.quality === 'good' ? '🛌' : '⏰'}</div> <div class="sleep-details"> <div class="sleep-title">${l.hours} Hours Rested</div> <div class="sleep-meta">${l.start.split(' ')[0]} • Up at ${l.end.split(' ')[1]}</div> </div> <div class="sleep-badge-col"> <span class="quality-tag ${l.quality}">${l.quality}</span> <button class="btn-delete-row" onclick="deleteSleepEntry(${l.id})">Delete</button> </div> </div>).join("");}// Kickstart local structure system processing execution immediately on boot up runtime activationrender();</script </body> </html>

@@ -1,0 +1,2010 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6366f1">
+<title>LaundryFlow</title>
+
+<style>
+:root{
+    --bg:#f5f6fb;
+    --card:#fff;
+    --text:#1d2130;
+    --muted:#858b9b;
+    --line:#e7e9f0;
+    --primary:#6366f1;
+    --primary-dark:#4f46e5;
+    --soft:#eeefff;
+    --green:#16a34a;
+    --green-soft:#eaf8ef;
+    --orange:#f59e0b;
+    --orange-soft:#fff6df;
+    --red:#dc2626;
+    --red-soft:#fff0f0;
+    --shadow:0 10px 30px rgba(40,45,80,.07);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:auto;
+    overflow:hidden;
+}
+
+/* HEADER */
+
+.header{
+    position:relative;
+    overflow:hidden;
+    padding:21px 18px 31px;
+    color:#fff;
+    background:
+        linear-gradient(
+            145deg,
+            #4338ca,
+            #6366f1 58%,
+            #818cf8
+        );
+    border-radius:0 0 31px 31px;
+}
+
+.header::before{
+    content:"";
+    position:absolute;
+    width:190px;
+    height:190px;
+    right:-85px;
+    top:-105px;
+    border-radius:50%;
+    background:rgba(255,255,255,.11);
+}
+
+.header::after{
+    content:"";
+    position:absolute;
+    width:135px;
+    height:135px;
+    left:-70px;
+    bottom:-90px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.brand-icon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:rgba(255,255,255,.17);
+    font-size:22px;
+}
+
+.brand-name{
+    font-size:21px;
+    font-weight:850;
+}
+
+.theme{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.17);
+    color:white;
+    font-size:17px;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    margin-top:25px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1.08;
+    letter-spacing:-.8px;
+}
+
+.hero p{
+    max-width:330px;
+    margin:8px 0 0;
+    color:rgba(255,255,255,.84);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* CONTENT */
+
+.content{
+    padding:18px;
+}
+
+.card{
+    margin-bottom:14px;
+    padding:17px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:21px;
+    box-shadow:var(--shadow);
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.section-title h2{
+    margin:0;
+    font-size:15px;
+}
+
+.section-title span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* TIMER */
+
+.timer-card{
+    text-align:center;
+}
+
+.timer-circle{
+    width:145px;
+    height:145px;
+    margin:5px auto 15px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:
+        conic-gradient(
+            var(--primary) var(--timer-progress,0%),
+            #e9eaf3 0
+        );
+    position:relative;
+}
+
+.timer-circle::after{
+    content:"";
+    position:absolute;
+    width:117px;
+    height:117px;
+    border-radius:50%;
+    background:var(--card);
+}
+
+.timer-inner{
+    position:relative;
+    z-index:2;
+}
+
+.timer-time{
+    font-size:29px;
+    font-weight:850;
+    letter-spacing:1px;
+}
+
+.timer-label{
+    margin-top:3px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+.timer-buttons{
+    display:flex;
+    gap:8px;
+}
+
+.timer-btn{
+    flex:1;
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    background:var(--bg);
+    color:var(--text);
+    font-size:11px;
+    font-weight:750;
+}
+
+.timer-btn.primary{
+    background:var(--primary);
+    color:#fff;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.stat{
+    padding:12px 6px;
+    text-align:center;
+    border-radius:14px;
+    background:var(--bg);
+}
+
+.stat strong{
+    display:block;
+    font-size:19px;
+}
+
+.stat span{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* SEARCH */
+
+.search{
+    position:relative;
+}
+
+.search-icon{
+    position:absolute;
+    top:11px;
+    left:13px;
+}
+
+.search input{
+    width:100%;
+    padding:12px 12px 12px 37px;
+    border:1px solid var(--line);
+    border-radius:13px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.search input:focus{
+    border-color:var(--primary);
+}
+
+/* FILTER */
+
+.filters{
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    padding:13px 0 3px;
+    scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{
+    display:none;
+}
+
+.filter{
+    flex-shrink:0;
+    padding:9px 12px;
+    border:0;
+    border-radius:11px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:10px;
+    font-weight:750;
+}
+
+.filter.active{
+    background:var(--primary);
+    color:#fff;
+}
+
+/* LOAD */
+
+.load{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:13px 0;
+    border-bottom:1px solid var(--line);
+}
+
+.load:last-child{
+    border-bottom:0;
+}
+
+.load-icon{
+    width:43px;
+    height:43px;
+    flex-shrink:0;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:var(--soft);
+    font-size:21px;
+}
+
+.load-info{
+    flex:1;
+    min-width:0;
+}
+
+.load-name{
+    font-size:13px;
+    font-weight:800;
+}
+
+.load-meta{
+    margin-top:4px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+.load-status{
+    display:inline-block;
+    margin-top:5px;
+    padding:4px 7px;
+    border-radius:7px;
+    font-size:8px;
+    font-weight:800;
+}
+
+.status-ready{
+    color:var(--orange);
+    background:var(--orange-soft);
+}
+
+.status-washing{
+    color:var(--primary-dark);
+    background:var(--soft);
+}
+
+.status-done{
+    color:var(--green);
+    background:var(--green-soft);
+}
+
+.load-actions{
+    display:flex;
+    gap:5px;
+}
+
+.small-btn{
+    width:32px;
+    height:32px;
+    border:0;
+    border-radius:9px;
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* DETERGENT */
+
+.detergent{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.detergent-icon{
+    width:50px;
+    height:50px;
+    display:grid;
+    place-items:center;
+    flex-shrink:0;
+    border-radius:15px;
+    background:var(--soft);
+    font-size:25px;
+}
+
+.detergent-info{
+    flex:1;
+}
+
+.detergent-info h3{
+    margin:0;
+    font-size:14px;
+}
+
+.detergent-info p{
+    margin:4px 0 0;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.detergent-bar{
+    height:8px;
+    margin-top:10px;
+    overflow:hidden;
+    border-radius:20px;
+    background:#e8eaf0;
+}
+
+.detergent-fill{
+    width:70%;
+    height:100%;
+    border-radius:inherit;
+    background:var(--primary);
+    transition:.3s;
+}
+
+.detergent-value{
+    text-align:right;
+    margin-top:5px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+.detergent-actions{
+    display:flex;
+    gap:7px;
+    margin-top:12px;
+}
+
+.detergent-actions button{
+    flex:1;
+    padding:10px;
+    border:0;
+    border-radius:10px;
+    background:var(--bg);
+    font-size:10px;
+    font-weight:750;
+}
+
+/* ADD */
+
+.add{
+    width:100%;
+    margin-top:12px;
+    padding:14px;
+    border:0;
+    border-radius:14px;
+    background:var(--primary);
+    color:white;
+    font-weight:800;
+}
+
+/* EMPTY */
+
+.empty{
+    padding:30px 8px 16px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.empty-icon{
+    font-size:40px;
+}
+
+.empty h3{
+    margin:8px 0 4px;
+    color:var(--text);
+    font-size:14px;
+}
+
+.empty p{
+    margin:0;
+    font-size:11px;
+}
+
+/* FAB */
+
+.fab{
+    position:fixed;
+    right:max(22px,calc((100vw - 430px)/2 + 22px));
+    bottom:23px;
+    z-index:10;
+    width:59px;
+    height:59px;
+    border:0;
+    border-radius:20px;
+    background:var(--primary);
+    color:#fff;
+    font-size:28px;
+    box-shadow:0 12px 28px rgba(99,102,241,.28);
+}
+
+/* MODAL */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(0,0,0,.48);
+}
+
+.overlay.show{
+    display:flex;
+}
+
+.modal{
+    width:min(430px,100%);
+    max-height:92vh;
+    overflow:auto;
+    padding:23px 18px 30px;
+    background:var(--card);
+    border-radius:28px 28px 0 0;
+}
+
+.modal-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:17px;
+}
+
+.modal-head h2{
+    margin:0;
+    font-size:19px;
+}
+
+.close{
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:10px;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.field{
+    margin-bottom:12px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:6px;
+    font-size:11px;
+    font-weight:750;
+}
+
+.field input,
+.field select{
+    width:100%;
+    padding:13px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.save{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:13px;
+    background:var(--primary);
+    color:#fff;
+    font-weight:800;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:92px;
+    z-index:50;
+    transform:translate(-50%,20px);
+    opacity:0;
+    padding:11px 15px;
+    border-radius:12px;
+    background:#1d2130;
+    color:#fff;
+    font-size:11px;
+    white-space:nowrap;
+    pointer-events:none;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* DARK */
+
+body.dark{
+    --bg:#10121b;
+    --card:#191c28;
+    --text:#f2f3f7;
+    --muted:#969bab;
+    --line:#2a2e3c;
+    --soft:#28294c;
+    --shadow:0 12px 35px rgba(0,0,0,.22);
+}
+
+body.dark .timer-circle::after{
+    background:var(--card);
+}
+
+body.dark .detergent-bar{
+    background:#2b2e3a;
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+    body{
+        padding:20px 0;
+    }
+
+    .app{
+        min-height:calc(100vh - 40px);
+        border-radius:30px;
+        box-shadow:0 20px 60px rgba(35,40,70,.12);
+    }
+}
+
+/* SMALL */
+
+@media(max-width:350px){
+    .content{
+        padding:14px;
+    }
+
+    .header{
+        padding:18px 15px 27px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+
+    .load-icon{
+        width:38px;
+        height:38px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- HEADER -->
+<header class="header">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🧺
+            </div>
+
+            <div class="brand-name">
+                LaundryFlow
+            </div>
+
+        </div>
+
+        <button
+            class="theme"
+            id="themeBtn"
+            onclick="toggleTheme()"
+        >
+            🌙
+        </button>
+
+    </div>
+
+    <div class="hero">
+
+        <h1>
+            Fresh clothes.<br>
+            Zero laundry stress.
+        </h1>
+
+        <p>
+            Keep your washing routine simple, organized and on time.
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- TIMER -->
+
+<section class="card timer-card">
+
+    <div class="section-title">
+
+        <h2>
+            ⏱️ Wash Timer
+        </h2>
+
+        <span id="timerState">
+            Ready
+        </span>
+
+    </div>
+
+
+    <div
+        class="timer-circle"
+        id="timerCircle"
+    >
+
+        <div class="timer-inner">
+
+            <div
+                class="timer-time"
+                id="timerDisplay"
+            >
+                30:00
+            </div>
+
+            <div class="timer-label">
+                washing time
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="timer-buttons">
+
+        <button
+            class="timer-btn primary"
+            id="timerStart"
+            onclick="startTimer()"
+        >
+            ▶ Start
+        </button>
+
+        <button
+            class="timer-btn"
+            onclick="resetTimer()"
+        >
+            ↺ Reset
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- OVERVIEW -->
+
+<section class="card">
+
+    <div class="section-title">
+
+        <h2>
+            📊 Laundry Overview
+        </h2>
+
+        <span id="loadLabel">
+            0 loads
+        </span>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            <strong id="totalLoads">0</strong>
+            <span>Total Loads</span>
+        </div>
+
+        <div class="stat">
+            <strong id="washingLoads">0</strong>
+            <span>Washing</span>
+        </div>
+
+        <div class="stat">
+            <strong id="doneLoads">0</strong>
+            <span>Completed</span>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- LOADS -->
+
+<section class="card">
+
+    <div class="section-title">
+
+        <h2>
+            👕 My Laundry
+        </h2>
+
+        <span id="visibleLoads">
+            0 loads
+        </span>
+
+    </div>
+
+
+    <div class="search">
+
+        <span class="search-icon">
+            🔍
+        </span>
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Search laundry..."
+            oninput="renderLoads()"
+        >
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="setFilter('all',this)"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('ready',this)"
+        >
+            🧺 Ready
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('washing',this)"
+        >
+            🫧 Washing
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('done',this)"
+        >
+            ✅ Done
+        </button>
+
+    </div>
+
+
+    <div id="loadList"></div>
+
+
+    <button
+        class="add"
+        onclick="openModal()"
+    >
+        ＋ Add Laundry Load
+    </button>
+
+</section>
+
+
+<!-- DETERGENT -->
+
+<section class="card">
+
+    <div class="section-title">
+
+        <h2>
+            🧴 Detergent
+        </h2>
+
+        <span id="detergentStatus">
+            Good
+        </span>
+
+    </div>
+
+
+    <div class="detergent">
+
+        <div class="detergent-icon">
+            🧴
+        </div>
+
+        <div class="detergent-info">
+
+            <h3>
+                Detergent Level
+            </h3>
+
+            <p>
+                Track your remaining detergent.
+            </p>
+
+            <div class="detergent-bar">
+
+                <div
+                    class="detergent-fill"
+                    id="detergentFill"
+                ></div>
+
+            </div>
+
+            <div
+                class="detergent-value"
+                id="detergentValue"
+            >
+                70% remaining
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="detergent-actions">
+
+        <button onclick="changeDetergent(-10)">
+            − Use
+        </button>
+
+        <button onclick="changeDetergent(10)">
+            ＋ Add
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- FAB -->
+
+<button
+    class="fab"
+    onclick="openModal()"
+>
+    +
+</button>
+
+
+<!-- MODAL -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+    <div class="modal">
+
+        <div class="modal-head">
+
+            <h2>
+                Add Laundry Load
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Load name
+            </label>
+
+            <input
+                id="loadName"
+                type="text"
+                placeholder="e.g. White Clothes"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Type
+            </label>
+
+            <select id="loadType">
+
+                <option value="👕 Clothes">
+                    👕 Clothes
+                </option>
+
+                <option value="🛏️ Bedding">
+                    🛏️ Bedding
+                </option>
+
+                <option value="🧦 Delicates">
+                    🧦 Delicates
+                </option>
+
+                <option value="🏃 Sportswear">
+                    🏃 Sportswear
+                </option>
+
+                <option value="🧺 Towels">
+                    🧺 Towels
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Washing time
+            </label>
+
+            <select id="loadTime">
+
+                <option value="15">
+                    15 minutes
+                </option>
+
+                <option value="30" selected>
+                    30 minutes
+                </option>
+
+                <option value="45">
+                    45 minutes
+                </option>
+
+                <option value="60">
+                    60 minutes
+                </option>
+
+                <option value="90">
+                    90 minutes
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <button
+            class="save"
+            onclick="saveLoad()"
+        >
+            🧺 Add Laundry
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================
+   STORAGE
+========================= */
+
+let loads =
+    JSON.parse(
+        localStorage.getItem("laundryFlowLoads") || "[]"
+    );
+
+let detergent =
+    Number(
+        localStorage.getItem("laundryFlowDetergent")
+    );
+
+if(Number.isNaN(detergent)){
+    detergent = 70;
+}
+
+let activeFilter = "all";
+
+let toastTimer;
+
+
+/* =========================
+   DEFAULT DATA
+========================= */
+
+if(loads.length === 0){
+
+    loads = [
+
+        {
+            id:Date.now()+1,
+            name:"White Clothes",
+            type:"👕 Clothes",
+            time:30,
+            status:"ready"
+        },
+
+        {
+            id:Date.now()+2,
+            name:"Bed Sheets",
+            type:"🛏️ Bedding",
+            time:45,
+            status:"washing"
+        },
+
+        {
+            id:Date.now()+3,
+            name:"Towels",
+            type:"🧺 Towels",
+            time:30,
+            status:"done"
+        }
+
+    ];
+
+    saveLoads();
+
+}
+
+
+/* =========================
+   STORAGE FUNCTIONS
+========================= */
+
+function saveLoads(){
+
+    localStorage.setItem(
+        "laundryFlowLoads",
+        JSON.stringify(loads)
+    );
+
+}
+
+function saveDetergent(){
+
+    localStorage.setItem(
+        "laundryFlowDetergent",
+        String(detergent)
+    );
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function renderLoads(){
+
+    const container =
+        document.getElementById("loadList");
+
+    const query =
+        document.getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        loads.filter(load => {
+
+            const searchMatch =
+                load.name
+                    .toLowerCase()
+                    .includes(query);
+
+            const filterMatch =
+                activeFilter === "all" ||
+                load.status === activeFilter;
+
+            return searchMatch && filterMatch;
+
+        });
+
+
+    document.getElementById("visibleLoads")
+        .textContent =
+        filtered.length +
+        (
+            filtered.length === 1
+                ? " load"
+                : " loads"
+        );
+
+
+    if(filtered.length === 0){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🧺
+                </div>
+
+                <h3>
+                    No laundry loads
+                </h3>
+
+                <p>
+                    Add a load to start your laundry routine.
+                </p>
+
+            </div>
+
+        `;
+
+    }else{
+
+        container.innerHTML =
+            filtered.map(load => {
+
+                const statusText =
+                    load.status === "ready"
+                        ? "Ready to wash"
+                        : load.status === "washing"
+                            ? "Currently washing"
+                            : "Completed";
+
+
+                const statusClass =
+                    load.status === "ready"
+                        ? "status-ready"
+                        : load.status === "washing"
+                            ? "status-washing"
+                            : "status-done";
+
+
+                return `
+
+                    <div class="load">
+
+                        <div class="load-icon">
+                            ${load.type.split(" ")[0]}
+                        </div>
+
+
+                        <div class="load-info">
+
+                            <div class="load-name">
+                                ${escapeHTML(load.name)}
+                            </div>
+
+                            <div class="load-meta">
+                                ${escapeHTML(load.type)}
+                                · ${load.time} min
+                            </div>
+
+                            <div
+                                class="load-status ${statusClass}"
+                            >
+                                ${statusText}
+                            </div>
+
+                        </div>
+
+
+                        <div class="load-actions">
+
+                            ${
+                                load.status !== "done"
+                                ? `
+                                    <button
+                                        class="small-btn"
+                                        onclick="advanceLoad(${load.id})"
+                                    >
+                                        ${
+                                            load.status === "ready"
+                                                ? "▶"
+                                                : "✓"
+                                        }
+                                    </button>
+                                `
+                                : `
+                                    <button
+                                        class="small-btn"
+                                        onclick="advanceLoad(${load.id})"
+                                    >
+                                        ↺
+                                    </button>
+                                `
+                            }
+
+
+                            <button
+                                class="small-btn"
+                                onclick="deleteLoad(${load.id})"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    updateStats();
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats(){
+
+    const total =
+        loads.length;
+
+    const washing =
+        loads.filter(
+            load => load.status === "washing"
+        ).length;
+
+    const done =
+        loads.filter(
+            load => load.status === "done"
+        ).length;
+
+
+    document.getElementById("totalLoads")
+        .textContent = total;
+
+    document.getElementById("washingLoads")
+        .textContent = washing;
+
+    document.getElementById("doneLoads")
+        .textContent = done;
+
+
+    document.getElementById("loadLabel")
+        .textContent =
+        total +
+        (total === 1 ? " load" : " loads");
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+function advanceLoad(id){
+
+    const load =
+        loads.find(
+            item => item.id === id
+        );
+
+    if(!load) return;
+
+
+    if(load.status === "ready"){
+
+        load.status = "washing";
+
+        showToast(
+            "🫧 Washing started!"
+        );
+
+    }else if(load.status === "washing"){
+
+        load.status = "done";
+
+        showToast(
+            "✅ Laundry completed!"
+        );
+
+    }else{
+
+        load.status = "ready";
+
+        showToast(
+            "Laundry marked ready."
+        );
+
+    }
+
+
+    saveLoads();
+
+    renderLoads();
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteLoad(id){
+
+    const load =
+        loads.find(
+            item => item.id === id
+        );
+
+    if(!load) return;
+
+
+    if(
+        !confirm(
+            `Delete "${load.name}"?`
+        )
+    ){
+        return;
+    }
+
+
+    loads =
+        loads.filter(
+            item => item.id !== id
+        );
+
+
+    saveLoads();
+
+    renderLoads();
+
+    showToast(
+        "Laundry load deleted."
+    );
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function setFilter(filter,button){
+
+    activeFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(
+            item =>
+                item.classList.remove("active")
+        );
+
+
+    button.classList.add("active");
+
+    renderLoads();
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(){
+
+    document.getElementById("loadName")
+        .value = "";
+
+    document.getElementById("loadType")
+        .value = "👕 Clothes";
+
+    document.getElementById("loadTime")
+        .value = "30";
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+
+    setTimeout(
+        () => {
+            document
+                .getElementById("loadName")
+                .focus();
+        },
+        50
+    );
+
+}
+
+
+function closeModal(){
+
+    document.getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   SAVE LOAD
+========================= */
+
+function saveLoad(){
+
+    const name =
+        document.getElementById("loadName")
+            .value
+            .trim();
+
+    const type =
+        document.getElementById("loadType")
+            .value;
+
+    const time =
+        Number(
+            document.getElementById("loadTime")
+                .value
+        );
+
+
+    if(!name){
+
+        showToast(
+            "Please enter a load name."
+        );
+
+        return;
+
+    }
+
+
+    loads.unshift({
+
+        id:Date.now(),
+
+        name:name,
+
+        type:type,
+
+        time:time,
+
+        status:"ready"
+
+    });
+
+
+    saveLoads();
+
+    closeModal();
+
+    renderLoads();
+
+    showToast(
+        "🧺 Laundry load added!"
+    );
+
+}
+
+
+/* =========================
+   DETERGENT
+========================= */
+
+function changeDetergent(amount){
+
+    detergent =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                detergent + amount
+            )
+        );
+
+
+    saveDetergent();
+
+    renderDetergent();
+
+
+    if(detergent === 0){
+
+        showToast(
+            "⚠️ Detergent is empty."
+        );
+
+    }else if(detergent <= 20){
+
+        showToast(
+            "⚠️ Detergent is running low."
+        );
+
+    }else{
+
+        showToast(
+            "Detergent updated."
+        );
+
+    }
+
+}
+
+
+function renderDetergent(){
+
+    document.getElementById("detergentFill")
+        .style.width =
+        detergent + "%";
+
+
+    document.getElementById("detergentValue")
+        .textContent =
+        detergent + "% remaining";
+
+
+    const status =
+        document.getElementById(
+            "detergentStatus"
+        );
+
+
+    if(detergent === 0){
+
+        status.textContent =
+            "Empty";
+
+    }else if(detergent <= 20){
+
+        status.textContent =
+            "Low";
+
+    }else{
+
+        status.textContent =
+            "Good";
+
+    }
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+let timerSeconds = 1800;
+let timerInitial = 1800;
+let timerInterval = null;
+
+
+function updateTimerDisplay(){
+
+    const minutes =
+        Math.floor(timerSeconds / 60);
+
+    const seconds =
+        timerSeconds % 60;
+
+
+    document.getElementById("timerDisplay")
+        .textContent =
+        String(minutes).padStart(2,"0")
+        + ":" +
+        String(seconds).padStart(2,"0");
+
+
+    const progress =
+        timerInitial === 0
+            ? 0
+            : (
+                (timerInitial - timerSeconds)
+                / timerInitial
+            ) * 100;
+
+
+    document.getElementById("timerCircle")
+        .style.setProperty(
+            "--timer-progress",
+            progress + "%"
+        );
+
+
+    document.getElementById("timerState")
+        .textContent =
+        timerInterval
+            ? "Washing"
+            : timerSeconds === 0
+                ? "Finished"
+                : "Ready";
+
+}
+
+
+function startTimer(){
+
+    if(timerInterval){
+        return;
+    }
+
+
+    if(timerSeconds === 0){
+        resetTimer();
+    }
+
+
+    timerInterval =
+        setInterval(
+            () => {
+
+                timerSeconds--;
+
+                updateTimerDisplay();
+
+
+                if(timerSeconds <= 0){
+
+                    clearInterval(timerInterval);
+
+                    timerInterval = null;
+
+                    timerSeconds = 0;
+
+                    updateTimerDisplay();
+
+                    showToast(
+                        "🔔 Wash cycle finished!"
+                    );
+
+                    document.getElementById(
+                        "timerStart"
+                    ).textContent =
+                        "▶ Start";
+
+                }
+
+            },
+            1000
+        );
+
+
+    document.getElementById(
+        "timerStart"
+    ).textContent =
+        "⏸ Running";
+
+}
+
+
+function resetTimer(){
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    timerSeconds = timerInitial;
+
+    updateTimerDisplay();
+
+    document.getElementById(
+        "timerStart"
+    ).textContent =
+        "▶ Start";
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+
+    const dark =
+        document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "laundryFlowDark",
+        dark ? "1" : "0"
+    );
+
+
+    document.getElementById("themeBtn")
+        .textContent =
+        dark ? "☀️" : "🌙";
+
+}
+
+
+function loadTheme(){
+
+    const dark =
+        localStorage.getItem(
+            "laundryFlowDark"
+        ) === "1";
+
+
+    if(dark){
+
+        document.body.classList.add("dark");
+
+        document.getElementById("themeBtn")
+            .textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+                toast.classList.remove("show");
+            },
+            2200
+        );
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   MODAL CLICK
+========================= */
+
+document
+    .getElementById("overlay")
+    .addEventListener(
+        "click",
+        event => {
+
+            if(
+                event.target.id === "overlay"
+            ){
+                closeModal();
+            }
+
+        }
+    );
+
+
+/* =========================
+   ESC KEY
+========================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Escape"){
+            closeModal();
+        }
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadTheme();
+
+renderLoads();
+
+renderDetergent();
+
+updateTimerDisplay();
+
+</script>
+
+</body>
+</html>

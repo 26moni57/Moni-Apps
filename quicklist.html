@@ -1,0 +1,1200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickList</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7f4;
+    color: #202820;
+}
+
+.app {
+    max-width: 420px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 100px;
+}
+
+/* HEADER */
+
+.header {
+    padding: 28px 20px 30px;
+    color: white;
+    background: linear-gradient(135deg, #16805b, #36a878);
+    border-radius: 0 0 30px 30px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.item-count {
+    background: rgba(255,255,255,.18);
+    padding: 8px 11px;
+    border-radius: 20px;
+    font-size: 10px;
+}
+
+.header h1 {
+    margin: 27px 0 5px;
+    font-size: 30px;
+}
+
+.header p {
+    margin: 0;
+    opacity: .85;
+}
+
+/* TOTAL */
+
+.total-card {
+    margin: -2px 20px 0;
+    padding: 18px;
+    background: white;
+    border-radius: 21px;
+    box-shadow: 0 8px 25px rgba(30,70,45,.1);
+}
+
+.total-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-label {
+    color: #7d857d;
+    font-size: 11px;
+}
+
+.total {
+    font-size: 24px;
+    font-weight: 800;
+    margin-top: 4px;
+}
+
+.clear {
+    border: 0;
+    background: #edf6f1;
+    color: #16805b;
+    padding: 9px 11px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+/* CONTENT */
+
+.content {
+    padding: 20px;
+}
+
+/* SEARCH */
+
+.search {
+    position: relative;
+}
+
+.search input {
+    width: 100%;
+    padding: 15px 17px 15px 43px;
+    border: 0;
+    background: white;
+    border-radius: 16px;
+    outline: none;
+    box-shadow: 0 4px 14px rgba(30,60,40,.05);
+}
+
+.search span {
+    position: absolute;
+    left: 15px;
+    top: 13px;
+}
+
+/* FILTERS */
+
+.filters {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 15px 0 4px;
+}
+
+.filter {
+    white-space: nowrap;
+    border: 0;
+    padding: 9px 13px;
+    border-radius: 12px;
+    background: white;
+    color: #7d857d;
+    cursor: pointer;
+}
+
+.filter.active {
+    background: #16805b;
+    color: white;
+}
+
+/* ITEMS */
+
+.item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: white;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 18px;
+    box-shadow: 0 4px 14px rgba(30,60,40,.05);
+}
+
+.check {
+    width: 25px;
+    height: 25px;
+    border: 2px solid #d8dfd9;
+    border-radius: 8px;
+    background: white;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.check.done {
+    background: #16805b;
+    border-color: #16805b;
+    color: white;
+}
+
+.item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.item-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.item.done .item-name {
+    text-decoration: line-through;
+    color: #9ca39d;
+}
+
+.item-meta {
+    margin-top: 5px;
+    color: #858d85;
+    font-size: 10px;
+}
+
+.item-price {
+    text-align: right;
+    min-width: 50px;
+}
+
+.price {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.quantity {
+    color: #8b938b;
+    font-size: 9px;
+    margin-top: 3px;
+}
+
+.item-actions {
+    display: flex;
+    gap: 2px;
+}
+
+.item-actions button {
+    border: 0;
+    background: transparent;
+    color: #9ba29c;
+    cursor: pointer;
+}
+
+/* EMPTY */
+
+.empty {
+    text-align: center;
+    padding: 50px 20px;
+    color: #899189;
+}
+
+.empty-icon {
+    font-size: 48px;
+}
+
+/* ADD */
+
+.add {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 60px;
+    height: 60px;
+    border: 0;
+    border-radius: 20px;
+    background: #16805b;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(22,128,91,.3);
+}
+
+/* MODAL */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(420px,100%);
+    background: white;
+    padding: 24px 20px 30px;
+    border-radius: 28px 28px 0 0;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal input,
+.modal select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #dce4dd;
+    border-radius: 13px;
+    margin-bottom: 10px;
+    outline: none;
+    font-family: inherit;
+    background: white;
+}
+
+.row {
+    display: flex;
+    gap: 8px;
+}
+
+.row > * {
+    flex: 1;
+}
+
+.save {
+    width: 100%;
+    padding: 15px;
+    border: 0;
+    border-radius: 14px;
+    background: #16805b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    background: transparent;
+    color: #777f78;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="top">
+
+            <div class="logo">
+                🛒 QuickList
+            </div>
+
+            <div
+                class="item-count"
+                id="itemCount"
+            >
+                0 items
+            </div>
+
+        </div>
+
+        <h1>
+            Shop smarter.
+        </h1>
+
+        <p>
+            Everything you need, in one quick list.
+        </p>
+
+    </header>
+
+
+    <!-- TOTAL -->
+
+    <section class="total-card">
+
+        <div class="total-top">
+
+            <div>
+
+                <div class="total-label">
+                    ESTIMATED TOTAL
+                </div>
+
+                <div
+                    class="total"
+                    id="total"
+                >
+                    ৳0
+                </div>
+
+            </div>
+
+            <button
+                class="clear"
+                onclick="clearCompleted()"
+            >
+                Clear bought
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <main class="content">
+
+        <!-- SEARCH -->
+
+        <div class="search">
+
+            <span>🔍</span>
+
+            <input
+                id="search"
+                type="text"
+                placeholder="Search shopping list..."
+                oninput="renderItems()"
+            >
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="filters">
+
+            <button
+                class="filter active"
+                onclick="setFilter('all',this)"
+            >
+                All
+            </button>
+
+            <button
+                class="filter"
+                onclick="setFilter('grocery',this)"
+            >
+                🥦 Grocery
+            </button>
+
+            <button
+                class="filter"
+                onclick="setFilter('home',this)"
+            >
+                🏠 Home
+            </button>
+
+            <button
+                class="filter"
+                onclick="setFilter('personal',this)"
+            >
+                🧴 Personal
+            </button>
+
+            <button
+                class="filter"
+                onclick="setFilter('other',this)"
+            >
+                📦 Other
+            </button>
+
+        </div>
+
+
+        <!-- ITEMS -->
+
+        <section id="items"></section>
+
+    </main>
+
+</div>
+
+
+<!-- ADD BUTTON -->
+
+<button
+    class="add"
+    onclick="openModal()"
+>
+    +
+</button>
+
+
+<!-- MODAL -->
+
+<div
+    class="overlay"
+    id="overlay"
+>
+
+    <div class="modal">
+
+        <h2 id="modalTitle">
+            Add Item
+        </h2>
+
+        <input
+            id="itemName"
+            type="text"
+            placeholder="What do you need?"
+        >
+
+        <div class="row">
+
+            <input
+                id="quantity"
+                type="number"
+                min="1"
+                value="1"
+                placeholder="Qty"
+            >
+
+            <input
+                id="price"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Price"
+            >
+
+        </div>
+
+        <select id="category">
+
+            <option value="grocery">
+                🥦 Grocery
+            </option>
+
+            <option value="home">
+                🏠 Home
+            </option>
+
+            <option value="personal">
+                🧴 Personal
+            </option>
+
+            <option value="other">
+                📦 Other
+            </option>
+
+        </select>
+
+        <button
+            class="save"
+            onclick="saveItem()"
+        >
+            Save Item
+        </button>
+
+        <button
+            class="cancel"
+            onclick="closeModal()"
+        >
+            Cancel
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+    QuickList
+    Simple shopping list
+*/
+
+
+let items =
+    JSON.parse(
+        localStorage.getItem("quickListItems")
+    ) || [
+
+        {
+            id: 1,
+            name: "Milk",
+            quantity: 2,
+            price: 90,
+            category: "grocery",
+            done: false
+        },
+
+        {
+            id: 2,
+            name: "Toothpaste",
+            quantity: 1,
+            price: 120,
+            category: "personal",
+            done: false
+        }
+
+    ];
+
+
+let activeFilter =
+    "all";
+
+
+let editingId =
+    null;
+
+
+/* CATEGORY */
+
+const categoryInfo = {
+
+    grocery: {
+        icon: "🥦",
+        name: "Grocery"
+    },
+
+    home: {
+        icon: "🏠",
+        name: "Home"
+    },
+
+    personal: {
+        icon: "🧴",
+        name: "Personal"
+    },
+
+    other: {
+        icon: "📦",
+        name: "Other"
+    }
+
+};
+
+
+/* SAVE */
+
+function saveData() {
+
+    localStorage.setItem(
+        "quickListItems",
+        JSON.stringify(items)
+    );
+
+}
+
+
+/* RENDER */
+
+function renderItems() {
+
+    const container =
+        document.getElementById("items");
+
+
+    const query =
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        items.filter(item => {
+
+            const searchMatch =
+                item.name
+                    .toLowerCase()
+                    .includes(query);
+
+
+            const categoryMatch =
+                activeFilter === "all"
+                    ? true
+                    : item.category === activeFilter;
+
+
+            return (
+                searchMatch &&
+                categoryMatch
+            );
+
+        });
+
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🛒
+                </div>
+
+                <h3>
+                    Your list is empty
+                </h3>
+
+                <p>
+                    Tap + to add something.
+                </p>
+
+            </div>
+
+        `;
+
+        updateSummary();
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        filtered
+            .map(item => {
+
+                const info =
+                    categoryInfo[item.category]
+                    || categoryInfo.other;
+
+
+                const subtotal =
+                    Number(item.price || 0) *
+                    Number(item.quantity || 1);
+
+
+                return `
+
+                    <article
+                        class="item ${
+                            item.done ? "done" : ""
+                        }"
+                    >
+
+                        <button
+                            class="check ${
+                                item.done ? "done" : ""
+                            }"
+                            onclick="toggleItem(${item.id})"
+                        >
+                            ${
+                                item.done
+                                    ? "✓"
+                                    : ""
+                            }
+                        </button>
+
+
+                        <div class="item-info">
+
+                            <div class="item-name">
+                                ${escapeHTML(item.name)}
+                            </div>
+
+                            <div class="item-meta">
+                                ${info.icon}
+                                ${info.name}
+                            </div>
+
+                        </div>
+
+
+                        <div class="item-price">
+
+                            <div class="price">
+                                ৳${subtotal.toFixed(0)}
+                            </div>
+
+                            <div class="quantity">
+                                × ${item.quantity}
+                            </div>
+
+                        </div>
+
+
+                        <div class="item-actions">
+
+                            <button
+                                onclick="editItem(${item.id})"
+                            >
+                                ✏️
+                            </button>
+
+                            <button
+                                onclick="deleteItem(${item.id})"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                `;
+
+            })
+            .join("");
+
+
+    updateSummary();
+
+}
+
+
+/* SUMMARY */
+
+function updateSummary() {
+
+    const total =
+        items.reduce(
+            (sum,item) => {
+
+                return sum +
+                    Number(item.price || 0) *
+                    Number(item.quantity || 1);
+
+            },
+            0
+        );
+
+
+    const remaining =
+        items.filter(
+            item => !item.done
+        ).length;
+
+
+    document.getElementById("total")
+        .innerText =
+        "৳" + total.toFixed(0);
+
+
+    document.getElementById("itemCount")
+        .innerText =
+        remaining +
+        (
+            remaining === 1
+                ? " item"
+                : " items"
+        );
+
+}
+
+
+/* FILTER */
+
+function setFilter(filter, button) {
+
+    activeFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+
+    button.classList.add("active");
+
+
+    renderItems();
+
+}
+
+
+/* OPEN */
+
+function openModal() {
+
+    editingId =
+        null;
+
+
+    document.getElementById("modalTitle")
+        .innerText =
+        "Add Item";
+
+
+    document.getElementById("itemName")
+        .value =
+        "";
+
+    document.getElementById("quantity")
+        .value =
+        "1";
+
+    document.getElementById("price")
+        .value =
+        "";
+
+    document.getElementById("category")
+        .value =
+        "grocery";
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+
+    document.getElementById("itemName")
+        .focus();
+
+}
+
+
+/* CLOSE */
+
+function closeModal() {
+
+    document.getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* SAVE ITEM */
+
+function saveItem() {
+
+    const name =
+        document.getElementById("itemName")
+            .value
+            .trim();
+
+
+    const quantity =
+        Number(
+            document.getElementById("quantity")
+                .value
+        ) || 1;
+
+
+    const price =
+        Number(
+            document.getElementById("price")
+                .value
+        ) || 0;
+
+
+    const category =
+        document.getElementById("category")
+            .value;
+
+
+    if (!name) {
+
+        alert(
+            "Please enter an item name."
+        );
+
+        return;
+
+    }
+
+
+    if (editingId !== null) {
+
+        const item =
+            items.find(
+                item =>
+                    item.id === editingId
+            );
+
+
+        if (item) {
+
+            item.name =
+                name;
+
+            item.quantity =
+                quantity;
+
+            item.price =
+                price;
+
+            item.category =
+                category;
+
+        }
+
+    } else {
+
+        items.unshift({
+
+            id: Date.now(),
+
+            name: name,
+
+            quantity: quantity,
+
+            price: price,
+
+            category: category,
+
+            done: false
+
+        });
+
+    }
+
+
+    saveData();
+
+    closeModal();
+
+    renderItems();
+
+}
+
+
+/* TOGGLE */
+
+function toggleItem(id) {
+
+    const item =
+        items.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!item) return;
+
+
+    item.done =
+        !item.done;
+
+
+    saveData();
+
+    renderItems();
+
+}
+
+
+/* EDIT */
+
+function editItem(id) {
+
+    const item =
+        items.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!item) return;
+
+
+    editingId =
+        id;
+
+
+    document.getElementById("modalTitle")
+        .innerText =
+        "Edit Item";
+
+
+    document.getElementById("itemName")
+        .value =
+        item.name;
+
+
+    document.getElementById("quantity")
+        .value =
+        item.quantity;
+
+
+    document.getElementById("price")
+        .value =
+        item.price;
+
+
+    document.getElementById("category")
+        .value =
+        item.category;
+
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+}
+
+
+/* DELETE */
+
+function deleteItem(id) {
+
+    const item =
+        items.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!item) return;
+
+
+    if (
+        !confirm(
+            'Remove "' +
+            item.name +
+            '"?'
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    items =
+        items.filter(
+            item =>
+                item.id !== id
+        );
+
+
+    saveData();
+
+    renderItems();
+
+}
+
+
+/* CLEAR COMPLETED */
+
+function clearCompleted() {
+
+    const bought =
+        items.filter(
+            item => item.done
+        ).length;
+
+
+    if (!bought) {
+
+        alert(
+            "No bought items to clear."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !confirm(
+            "Remove all bought items?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    items =
+        items.filter(
+            item => !item.done
+        );
+
+
+    saveData();
+
+    renderItems();
+
+}
+
+
+/* ESCAPE */
+
+function escapeHTML(text) {
+
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* OUTSIDE MODAL */
+
+document
+    .getElementById("overlay")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === this) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+/* START */
+
+renderItems();
+
+</script>
+
+</body>
+</html>
